@@ -129,7 +129,6 @@ publishing {
 }
 /* Maven publish - end */
 
-
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
