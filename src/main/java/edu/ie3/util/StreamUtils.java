@@ -20,7 +20,7 @@ import java.util.function.Predicate;
  */
 public class StreamUtils {
   /**
-   * Usage: Stream.filter(StreamUtils.distinctByKey(node -> node.getSubnet[0]))
+   * Usage: Stream.filter(StreamUtils.distinctByKey(node to node.getSubnet[0]))
    *
    * @param key The key to filter for
    * @param <T> Type of the Element to filter for

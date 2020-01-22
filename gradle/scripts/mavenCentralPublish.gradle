@@ -1,0 +1,143 @@
+/* Maven publish - start */
+task sourceJar(type: Jar) {
+    classifier "sources"
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier "javadoc"
+    from javadoc.destinationDir
+}
+
+
+artifacts {
+    archives jar
+    archives sourceJar
+    archives javadocJar
+}
+signing {
+    sign configurations.archives
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+
+            versionMapping { // resolves dynamic versioning to current version number
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+
+            pom {
+                description = 'Utility library that is used by several projects @ the Institute of Energy Systems, Energy Efficiency and Energy Economics (ie3) @ TU Dortmund University'
+                name = 'Power System Utils'
+                url = 'https:github.com/ie3-institute/PowerSystemUtils'
+                organization {
+                    name = 'Institute of Energy Systems, Energy Efficiency and Energy Economics (ie3)/TU Dortmund University'
+                    url = 'http:www.ie3.tu-dortmund.de/'
+                }
+                issueManagement {
+                    system = 'GitHub'
+                    url = 'https:github.com/ie3-institute/PowerSystemUtils/issues'
+                }
+                licenses {
+                    license {
+                        name = 'BSD 3-Clause License'
+                        url = 'https:github.com/ie3-institute/PowerSystemUtils/blob/master/LICENSE'
+                    }
+                    scm {
+                        connection = 'scm:git:git:github.com/ie3-institute/PowerSystemUtils.git'
+                        developerConnection = 'scm:git:ssh:github.com:ie3-institute/PowerSystemUtils.git'
+                        url = 'https:github.com/ie3-institute/PowerSystemUtils'
+                    }
+                    developers {
+                        developer {
+                            id = 'johanneshiry'
+                            name = 'Johannes Hiry'
+                            email = 'johannes.hiry@tu-dortmund.de'
+                        }
+                    }
+                }
+            }
+
+            removeTestDependenciesFromPom(pom)
+            groupId group
+            artifactId 'util'
+            version version
+
+            from components.java
+
+            // create the signed pom artifact
+            pom.withXml {
+                def pomFile = file("${project.buildDir}/generated-pom.xml")
+                writeTo(pomFile)
+                def pomAscFile = signing.sign(pomFile).signatureFiles[0]
+                artifact(pomAscFile) {
+                    classifier = null
+                    extension = 'pom.asc'
+                }
+            }
+
+            artifact(sourceJar) {
+                classifier = 'sources'
+            }
+            artifact(javadocJar) {
+                classifier = 'javadoc'
+            }
+
+            // create the signed artifacts
+            project.tasks.signArchives.signatureFiles.each {
+                artifact(it) {
+                    def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
+                    if (matcher.find()) {
+                        classifier = matcher.group(1)
+                    } else {
+                        classifier = null
+                    }
+                    extension = 'jar.asc'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username System.getenv('SONATYPE_USERNAME')
+                password System.getenv('SONATYPE_PASSWORD')
+            }
+        }
+    }
+}
+
+def removeTestDependenciesFromPom(pom) {
+
+    pom.withXml {
+        def root = asNode()
+        // eliminate test-scoped dependencies (no need in maven central POMs)
+        root.dependencies.removeAll { dep ->
+            dep.scope == "test"
+        }
+    }
+}
+
+model {
+    tasks.generatePomFileForMavenJavaPublication {
+        destination = file("$buildDir/generated-pom.xml")
+    }
+    tasks.publishMavenJavaPublicationToMavenLocal {
+        dependsOn project.tasks.signArchives
+    }
+    tasks.publishMavenJavaPublicationToMavenRepository {
+        dependsOn project.tasks.signArchives
+    }
+}
+
+
+/* Maven publish - end */
