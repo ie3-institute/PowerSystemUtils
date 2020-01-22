@@ -20,14 +20,11 @@ projects = ['powersystemutils']
 orgNames = ['ie3-institute']
 urls = ['git@github.com:' + orgNames.get(0)]
 
+def sonarqubeProjectKey = "edu.ie3:utils"
 
 //// git webhook trigger token
 //// http://JENKINS_URL/generic-webhook-trigger/invoke?token=<webhookTriggerToken>
 webhookTriggerToken = "b0ba1564ca8c4d12ffun639b160d2e76c1bauhk86"
-
-//// jenkins artifactory credentials
-//// requires the credentials to be stored in the internal jenkins credentials keystore
-def artifactoryCredentialsId = "0bafad7b-a080-4271-abac-b45ea0f3209f"
 
 //// internal jenkins credentials link for git ssh keys
 //// requires the ssh key to be stored in the internal jenkins credentials keystore
@@ -263,7 +260,7 @@ if (env.BRANCH_NAME == "master") {
 
                     stage('SonarQube analysis') {
                         withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube
-                            gradle("-p ${projects.get(0)} sonarqube -Dsonar.branch.name=master ")
+                            gradle("-p ${projects.get(0)} sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey ")
                         }
                     }
 
@@ -452,7 +449,7 @@ if (env.BRANCH_NAME == "master") {
 
                 stage('SonarQube analysis') {
                     withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube
-                        gradle("-p ${projects.get(0)} sonarqube -Dsonar.pullrequest.branch=${featureBranchName} -Dsonar.pullrequest.key=${resolveBranchNo(env.BRANCH_NAME)} -Dsonar.pullrequest.base=master -Dsonar.pullrequest.github.repository=${orgNames.get(0)}/${projects.get(0)} -Dsonar.pullrequest.provider=Github")
+                        gradle("-p ${projects.get(0)} sonarqube -Dsonar.projectKey=$sonarqubeProjectKey -Dsonar.pullrequest.branch=${featureBranchName} -Dsonar.pullrequest.key=${resolveBranchNo(env.BRANCH_NAME)} -Dsonar.pullrequest.base=master -Dsonar.pullrequest.github.repository=${orgNames.get(0)}/${projects.get(0)} -Dsonar.pullrequest.provider=Github")
                     }
                 }
 
