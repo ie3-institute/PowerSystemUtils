@@ -118,7 +118,7 @@ if (env.BRANCH_NAME == "master") {
                     withCredentials([usernamePassword(credentialsId: artifactoryCredentialsId, usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password')]) {
                         println("test2")
                         println("${env.mavencentral_username}")
-                        println("${env.mavencentral_username}")
+                        println("${env.mavencentral_password}")
                         deployGradleTasks = "--refresh-dependencies clean allTests " + deployGradleTasks + "publish -Puser=${env.mavencentral_username} -Ppassword=${env.mavencentral_password} -Psigning.keyId=${env.signingKeyId} -Psigning.password=${env.signingPassword} -Psigning.secretKeyRingFile=${env.mavenCentralKeyFile}"
 
                         stage('checkout from scm') {
