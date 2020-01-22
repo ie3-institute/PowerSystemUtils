@@ -30,7 +30,7 @@ ext {
 }
 
 group = 'com.github.ie3-institute'
-version = '1.3'
+version = '1.3-SNAPSHOT'
 description = 'PowerSystemUtils'
 sourceCompatibility = javaVersion
 targetCompatibility = javaVersion
