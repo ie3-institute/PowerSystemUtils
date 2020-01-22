@@ -119,6 +119,7 @@ if (env.BRANCH_NAME == "master") {
                                       usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password'],
                                      file(credentialsId: mavenCentralSignKeyFileId, variable: 'mavenCentralKeyFile'),
                                      usernamePassword(credentialsId: mavenCentralSignKeyId, passwordVariable: 'signingPassword', usernameVariable: 'signingKeyId')]) {
+                        println("test")
                         deployGradleTasks = "--refresh-dependencies clean allTests " + deployGradleTasks + "publish -Puser=${env.mavencentral_username} -Ppassword=${env.mavencentral_password} -Psigning.keyId=${env.signingKeyId} -Psigning.password=${env.signingPassword} -Psigning.secretKeyRingFile=${env.mavenCentralKeyFile}"
 
                         stage('checkout from scm') {
