@@ -15,11 +15,13 @@ artifacts {
 	archives sourceJar
 	archives javadocJar
 }
-signing {
-	sign configurations.archives
-}
 
 if (project.hasProperty('user') && project.hasProperty('password')) {
+	signing {
+		sign configurations.archives
+	}
+
+
 	publishing {
 		publications {
 			mavenJava(MavenPublication) {
