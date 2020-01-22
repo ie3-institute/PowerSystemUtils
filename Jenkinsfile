@@ -116,64 +116,63 @@ if (env.BRANCH_NAME == "master") {
 
                     // get the artifactory credentials stored in the jenkins secure keychain
                     withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: mavenCentralCredentialsId,
-                                      usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password']]) {
-                        withCredentials([file(credentialsId: mavenCentralSignKeyFileId, variable: 'mavenCentralKeyFile')]) {
-                            withCredentials([usernamePassword(credentialsId: mavenCentralSignKeyId, passwordVariable: 'signingPassword', usernameVariable: 'signingKeyId')]) {
+                                      usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password'],
+                                     file(credentialsId: mavenCentralSignKeyFileId, variable: 'mavenCentralKeyFile'),
+                                     usernamePassword(credentialsId: mavenCentralSignKeyId, passwordVariable: 'signingPassword', usernameVariable: 'signingKeyId')]) {
+                        deployGradleTasks = "--refresh-dependencies clean allTests " + deployGradleTasks + "publish -Puser=${env.mavencentral_username} -Ppassword=${env.mavencentral_password} -Psigning.keyId=${env.signingKeyId} -Psigning.password=${env.signingPassword} -Psigning.secretKeyRingFile=${env.mavenCentralKeyFile}"
 
-                                deployGradleTasks = "--refresh-dependencies clean allTests " + deployGradleTasks + "publish -Puser=${env.mavencentral_username} -Ppassword=${env.mavencentral_password} -Psigning.keyId=${env.signingKeyId} -Psigning.password=${env.signingPassword} -Psigning.secretKeyRingFile=${env.mavenCentralKeyFile}"
+                        stage('checkout from scm') {
+                            // first we try to get branches from each repo
+                            // the checkout is done in parallel to speed up things a bit
 
-                            stage('checkout from scm') {
-                                // first we try to get branches from each repo
-                                // the checkout is done in parallel to speed up things a bit
-
-                                log(i, "getting ${projects.get(0)} ...")
-                                try {
-                                    log(i, "Deploy mode. Trying to get ${projects.get(0)} master branch ...")
-                                    gitCheckout(projects.get(0), urls.get(0), 'refs/heads/master', sshCredentialsId)
-                                } catch (exc) {
-                                    // our target repo failed during checkout
-                                    stageErrorMessage = "checkout of master branch of ${projects.get(0)} repo failed!"
-                                    sh 'exit 1' // failure due to not found master branch
-                                }
-
+                            log(i, "getting ${projects.get(0)} ...")
+                            try {
+                                log(i, "Deploy mode. Trying to get ${projects.get(0)} master branch ...")
+                                gitCheckout(projects.get(0), urls.get(0), 'refs/heads/master', sshCredentialsId)
+                            } catch (exc) {
+                                // our target repo failed during checkout
+                                stageErrorMessage = "checkout of master branch of ${projects.get(0)} repo failed!"
+                                sh 'exit 1' // failure due to not found master branch
                             }
 
-                            stage('deploy') {
-                                log(i, "Deploying ${projects.get(0)} to artifactory ...")
-                                gradle("-p ${projects.get(0)} ${deployGradleTasks}")
-
-                                deployedArtifacts = "${projects.get(0)}, "
-                            }
-
-                            /**
-                             * Post processing
-                             * Publish reports and notify rocket chat
-                             * Future clean workspace processes should be declared here
-                             */
-                            stage('post processing') {
-                                // publish reports
-                                // publishReports()
-
-                                // notify rocket chat about success
-                                String buildMode = "deploy"
-                                String branchName = params.pull_request_head_label
-
-                                rocketSend attachments: [
-                                        [$class: 'MessageAttachment', color: 'green', title: 'go to logs', titleLink: env.BUILD_URL],],
-                                        channel: rocketChatChannel,
-                                        message: ":jenkins_party: \n" +
-                                                "${buildMode} successful!\n" +
-                                                "*repo:* ${urls.get(0)}/${projects.get(0)}\n" +
-                                                "*branch:* ${branchName} \n" +
-                                                "*deployedArtifacts:* ${deployedArtifacts}\n"
-                                rawMessage: true
-
-                                // set build to successfull
-                                currentBuild.result = 'SUCCESS'
-                            }
                         }
+
+                        stage('deploy') {
+                            log(i, "Deploying ${projects.get(0)} to artifactory ...")
+                            gradle("-p ${projects.get(0)} ${deployGradleTasks}")
+
+                            deployedArtifacts = "${projects.get(0)}, "
+                        }
+
+                        /**
+                         * Post processing
+                         * Publish reports and notify rocket chat
+                         * Future clean workspace processes should be declared here
+                         */
+                        stage('post processing') {
+                            // publish reports
+                            // publishReports()
+
+                            // notify rocket chat about success
+                            String buildMode = "deploy"
+                            String branchName = params.pull_request_head_label
+
+                            rocketSend attachments: [
+                                    [$class: 'MessageAttachment', color: 'green', title: 'go to logs', titleLink: env.BUILD_URL],],
+                                    channel: rocketChatChannel,
+                                    message: ":jenkins_party: \n" +
+                                            "${buildMode} successful!\n" +
+                                            "*repo:* ${urls.get(0)}/${projects.get(0)}\n" +
+                                            "*branch:* ${branchName} \n" +
+                                            "*deployedArtifacts:* ${deployedArtifacts}\n"
+                            rawMessage: true
+
+                            // set build to successfull
+                            currentBuild.result = 'SUCCESS'
+                        }
+
+
                     }
-                }
 
                 } catch (Exception exc) {
                     currentBuild.result = 'FAILURE'
