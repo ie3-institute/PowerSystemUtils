@@ -113,12 +113,10 @@ if (env.BRANCH_NAME == "master") {
                 try {
                     // set java version
                     setJavaVersion(javaVersionId)
-                    println("test")
+                    println("test1")
                     // get the artifactory credentials stored in the jenkins secure keychain
-                    withCredentials([usernamePassword(credentialsId: mavenCentralCredentialsId, usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password'),
-                                     file(credentialsId: mavenCentralSignKeyFileId, variable: 'mavenCentralKeyFile'),
-                                     usernamePassword(credentialsId: mavenCentralSignKeyId, passwordVariable: 'signingPassword', usernameVariable: 'signingKeyId')]) {
-                        println("test")
+                    withCredentials([usernamePassword(credentialsId: mavenCentralCredentialsId, usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password')]) {
+                        println("test2")
                         deployGradleTasks = "--refresh-dependencies clean allTests " + deployGradleTasks + "publish -Puser=${env.mavencentral_username} -Ppassword=${env.mavencentral_password} -Psigning.keyId=${env.signingKeyId} -Psigning.password=${env.signingPassword} -Psigning.secretKeyRingFile=${env.mavenCentralKeyFile}"
 
                         stage('checkout from scm') {
