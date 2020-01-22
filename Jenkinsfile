@@ -140,7 +140,7 @@ if (env.BRANCH_NAME == "master") {
                         }
 
                         stage('deploy') {
-                            log(i, "Deploying ${projects.get(0)} to artifactory ...")
+                            log(i, "Deploying ${projects.get(0)} to maven central ...")
                             gradle("-p ${projects.get(0)} ${deployGradleTasks}")
 
                             deployedArtifacts = "${projects.get(0)}, "
@@ -283,12 +283,16 @@ if (env.BRANCH_NAME == "master") {
                      */
                     stage('deploy') {
                         // get the artifactory credentials stored in the jenkins secure keychain
-                        withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: mavenCentralCredentialsId,
-                                          usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password']]) {
+                        withCredentials([usernamePassword(credentialsId: mavenCentralCredentialsId, usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password'),
+                                         file(credentialsId: mavenCentralSignKeyFileId, variable: 'mavenCentralKeyFile'),
+                                         usernamePassword(credentialsId: mavenCentralSignKeyId, passwordVariable: 'signingPassword', usernameVariable: 'signingKeyId')]) {
+                            println("test2")
+                            println("${env.mavencentral_username}")
+                            println("${env.mavencentral_password}")
+                            deployGradleTasks = "--refresh-dependencies clean allTests " + deployGradleTasks + "publish -Puser=${env.mavencentral_username} -Ppassword=${env.mavencentral_password} -Psigning.keyId=${env.signingKeyId} -Psigning.password=${env.signingPassword} -Psigning.secretKeyRingFile=${env.mavenCentralKeyFile}"
 
-                            deployGradleTasks = deployGradleTasks + "artifactoryPublish -Puser=${env.mavencentral_username} -Ppassword=${env.mavencentral_password}"
 
-                            log(i, "Deploying ${projects.get(0)} to artifactory ...")
+                            log(i, "Deploying ${projects.get(0)} to maven central ...")
                             gradle("-p ${projects.get(0)} --parallel ${deployGradleTasks}")
 
                             deployedArtifacts = "${projects.get(0)}, "
