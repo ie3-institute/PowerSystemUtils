@@ -16,7 +16,6 @@ plugins {
 	id 'com.github.onslip.gradle-one-jar' version '1.0.5' // pack a self contained jar
 	id 'jacoco' // java code coverage plugin
 	id "org.sonarqube" version "2.7.1" // sonarqube
-	id "io.codearte.nexus-staging" version "0.21.2" // automatically nexus stagging + releasing
 }
 
 ext {
