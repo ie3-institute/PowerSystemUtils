@@ -32,6 +32,14 @@ def artifactoryCredentialsId = "0bafad7b-a080-4271-abac-b45ea0f3209f"
 //// internal jenkins credentials link for git ssh keys
 //// requires the ssh key to be stored in the internal jenkins credentials keystore
 def sshCredentialsId = "5470eb14-b7a1-4247-baba-1e0f9a907666"
+
+//// internal maven central credentials
+def mavenCentralCredentialsId = "87bfb2d4-7613-4816-9fe1-70dfd7e6dec2"
+
+def mavenCentralSignKeyFileId = "dc96216c-d20a-48ff-98c0-1c7ba096d08d"
+
+def mavenCentralSignKeyId = "a1357827-1516-4fa2-ab8e-72cdea07a692"
+
 //// define and setjava version ////
 //// requires the java version to be set in the internal jenkins java version management
 //// use identifier accordingly
@@ -81,7 +89,7 @@ def log(String level, String message) {
 }
 
 // disable scan
-if(isBranchIndexingCause())
+if (isBranchIndexingCause())
     return
 
 /////////////////////////
@@ -107,61 +115,65 @@ if (env.BRANCH_NAME == "master") {
                     setJavaVersion(javaVersionId)
 
                     // get the artifactory credentials stored in the jenkins secure keychain
-                    withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: artifactoryCredentialsId,
-                                      usernameVariable: 'artifactory_username', passwordVariable: 'artifactory_password']]) {
+                    withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: mavenCentralCredentialsId,
+                                      usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password']]) {
+                        withCredentials([file(credentialsId: mavenCentralSignKeyFileId, variable: 'mavenCentralKeyFile')]) {
+                            withCredentials([usernamePassword(credentialsId: mavenCentralSignKeyId, passwordVariable: 'signingPassword', usernameVariable: 'signingKeyId')]) {
 
-                        deployGradleTasks = "--refresh-dependencies clean allTests " + deployGradleTasks + "artifactoryPublish -Puser=${env.artifactory_username} -Ppassword=${env.artifactory_password}"
+                                deployGradleTasks = "--refresh-dependencies clean allTests " + deployGradleTasks + "publish -Puser=${env.mavencentral_username} -Ppassword=${env.mavencentral_password} -Psigning.keyId=${env.signingKeyId} -Psigning.password=${env.signingPassword} -Psigning.secretKeyRingFile=${env.mavenCentralKeyFile}"
 
-                        stage('checkout from scm') {
-                            // first we try to get branches from each repo
-                            // the checkout is done in parallel to speed up things a bit
+                            stage('checkout from scm') {
+                                // first we try to get branches from each repo
+                                // the checkout is done in parallel to speed up things a bit
 
-                            log(i, "getting ${projects.get(0)} ...")
-                            try {
-                                log(i, "Deploy mode. Trying to get ${projects.get(0)} master branch ...")
-                                gitCheckout(projects.get(0), urls.get(0), 'refs/heads/master', sshCredentialsId)
-                            } catch (exc) {
-                                // our target repo failed during checkout
-                                stageErrorMessage = "checkout of master branch of ${projects.get(0)} repo failed!"
-                                sh 'exit 1' // failure due to not found master branch
+                                log(i, "getting ${projects.get(0)} ...")
+                                try {
+                                    log(i, "Deploy mode. Trying to get ${projects.get(0)} master branch ...")
+                                    gitCheckout(projects.get(0), urls.get(0), 'refs/heads/master', sshCredentialsId)
+                                } catch (exc) {
+                                    // our target repo failed during checkout
+                                    stageErrorMessage = "checkout of master branch of ${projects.get(0)} repo failed!"
+                                    sh 'exit 1' // failure due to not found master branch
+                                }
+
                             }
 
-                        }
+                            stage('deploy') {
+                                log(i, "Deploying ${projects.get(0)} to artifactory ...")
+                                gradle("-p ${projects.get(0)} ${deployGradleTasks}")
 
-                        stage('deploy') {
-                            log(i, "Deploying ${projects.get(0)} to artifactory ...")
-                            gradle("-p ${projects.get(0)} ${deployGradleTasks}")
+                                deployedArtifacts = "${projects.get(0)}, "
+                            }
 
-                            deployedArtifacts = "${projects.get(0)}, "
-                        }
+                            /**
+                             * Post processing
+                             * Publish reports and notify rocket chat
+                             * Future clean workspace processes should be declared here
+                             */
+                            stage('post processing') {
+                                // publish reports
+                                // publishReports()
 
-                        /**
-                         * Post processing
-                         * Publish reports and notify rocket chat
-                         * Future clean workspace processes should be declared here
-                         */
-                        stage('post processing') {
-                            // publish reports
-                            // publishReports()
+                                // notify rocket chat about success
+                                String buildMode = "deploy"
+                                String branchName = params.pull_request_head_label
 
-                            // notify rocket chat about success
-                            String buildMode = "deploy"
-                            String branchName = params.pull_request_head_label
+                                rocketSend attachments: [
+                                        [$class: 'MessageAttachment', color: 'green', title: 'go to logs', titleLink: env.BUILD_URL],],
+                                        channel: rocketChatChannel,
+                                        message: ":jenkins_party: \n" +
+                                                "${buildMode} successful!\n" +
+                                                "*repo:* ${urls.get(0)}/${projects.get(0)}\n" +
+                                                "*branch:* ${branchName} \n" +
+                                                "*deployedArtifacts:* ${deployedArtifacts}\n"
+                                rawMessage: true
 
-                            rocketSend attachments: [
-                                    [$class: 'MessageAttachment', color: 'green', title: 'go to logs', titleLink: env.BUILD_URL],],
-                                    channel: rocketChatChannel,
-                                    message: ":jenkins_party: \n" +
-                                            "${buildMode} successful!\n" +
-                                            "*repo:* ${urls.get(0)}/${projects.get(0)}\n" +
-                                            "*branch:* ${branchName} \n" +
-                                            "*deployedArtifacts:* ${deployedArtifacts}\n"
-                            rawMessage: true
-
-                            // set build to successfull
-                            currentBuild.result = 'SUCCESS'
+                                // set build to successfull
+                                currentBuild.result = 'SUCCESS'
+                            }
                         }
                     }
+                }
 
                 } catch (Exception exc) {
                     currentBuild.result = 'FAILURE'
@@ -270,10 +282,10 @@ if (env.BRANCH_NAME == "master") {
                      */
                     stage('deploy') {
                         // get the artifactory credentials stored in the jenkins secure keychain
-                        withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: artifactoryCredentialsId,
-                                          usernameVariable: 'artifactory_username', passwordVariable: 'artifactory_password']]) {
+                        withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: mavenCentralCredentialsId,
+                                          usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password']]) {
 
-                            deployGradleTasks = deployGradleTasks + "artifactoryPublish -Puser=${env.artifactory_username} -Ppassword=${env.artifactory_password}"
+                            deployGradleTasks = deployGradleTasks + "artifactoryPublish -Puser=${env.mavencentral_username} -Ppassword=${env.mavencentral_password}"
 
                             log(i, "Deploying ${projects.get(0)} to artifactory ...")
                             gradle("-p ${projects.get(0)} --parallel ${deployGradleTasks}")
@@ -358,7 +370,8 @@ if (env.BRANCH_NAME == "master") {
         if (params.triggered != "true" && params.comment_body != "!test") {
 
             log(i, "Scan mode. Doing nothing!")
-            currentBuild.result = 'FAILURE' // signals github that this branch hasn't build yet -> fail before first build
+            currentBuild.result = 'FAILURE'
+            // signals github that this branch hasn't build yet -> fail before first build
             return
         }
 
