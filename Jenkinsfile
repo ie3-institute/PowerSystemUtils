@@ -60,7 +60,7 @@ def gradleTasks = "--refresh-dependencies clean spotlessCheck pmdMain pmdTest sp
 def mainProjectGradleTasks = "jacocoTestReport jacocoTestCoverageVerification" // additional tasks that are only executed on project 0 (== main project)
 // if you need additional tasks for deployment add them here
 // NOTE: artifactory task with credentials will be added below
-def deployGradleTasks = "javadocJar sourcesJar "
+def deployGradleTasks = ""
 
 //// error message catch variable
 String stageErrorMessage = "Caught error without setting the errorMessage -> new error!"
