@@ -15,11 +15,13 @@ artifacts {
 	archives sourceJar
 	archives javadocJar
 }
-signing {
-	sign configurations.archives
-}
 
 if (project.hasProperty('user') && project.hasProperty('password')) {
+	signing {
+		sign configurations.archives
+	}
+
+
 	publishing {
 		publications {
 			mavenJava(MavenPublication) {
@@ -66,7 +68,7 @@ if (project.hasProperty('user') && project.hasProperty('password')) {
 
 				removeTestDependenciesFromPom(pom)
 				groupId group
-				artifactId 'util'
+				artifactId 'PowerSystemUtils'
 				version version
 
 				from components.java

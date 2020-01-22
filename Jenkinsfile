@@ -20,14 +20,11 @@ projects = ['powersystemutils']
 orgNames = ['ie3-institute']
 urls = ['git@github.com:' + orgNames.get(0)]
 
+def sonarqubeProjectKey = "edu.ie3:utils"
 
 //// git webhook trigger token
 //// http://JENKINS_URL/generic-webhook-trigger/invoke?token=<webhookTriggerToken>
 webhookTriggerToken = "b0ba1564ca8c4d12ffun639b160d2e76c1bauhk86"
-
-//// jenkins artifactory credentials
-//// requires the credentials to be stored in the internal jenkins credentials keystore
-def artifactoryCredentialsId = "0bafad7b-a080-4271-abac-b45ea0f3209f"
 
 //// internal jenkins credentials link for git ssh keys
 //// requires the ssh key to be stored in the internal jenkins credentials keystore
@@ -60,7 +57,7 @@ def gradleTasks = "--refresh-dependencies clean spotlessCheck pmdMain pmdTest sp
 def mainProjectGradleTasks = "jacocoTestReport jacocoTestCoverageVerification" // additional tasks that are only executed on project 0 (== main project)
 // if you need additional tasks for deployment add them here
 // NOTE: artifactory task with credentials will be added below
-def deployGradleTasks = "javadocJar sourcesJar "
+def deployGradleTasks = ""
 
 //// error message catch variable
 String stageErrorMessage = "Caught error without setting the errorMessage -> new error!"
@@ -113,67 +110,68 @@ if (env.BRANCH_NAME == "master") {
                 try {
                     // set java version
                     setJavaVersion(javaVersionId)
-
+                    println("test1")
                     // get the artifactory credentials stored in the jenkins secure keychain
-                    withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: mavenCentralCredentialsId,
-                                      usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password']]) {
-                        withCredentials([file(credentialsId: mavenCentralSignKeyFileId, variable: 'mavenCentralKeyFile')]) {
-                            withCredentials([usernamePassword(credentialsId: mavenCentralSignKeyId, passwordVariable: 'signingPassword', usernameVariable: 'signingKeyId')]) {
+                    withCredentials([usernamePassword(credentialsId: mavenCentralCredentialsId, usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password'),
+                                     file(credentialsId: mavenCentralSignKeyFileId, variable: 'mavenCentralKeyFile'),
+                                     usernamePassword(credentialsId: mavenCentralSignKeyId, passwordVariable: 'signingPassword', usernameVariable: 'signingKeyId')]) {
+                        println("test2")
+                        println("${env.mavencentral_username}")
+                        println("${env.mavencentral_password}")
+                        deployGradleTasks = "--refresh-dependencies clean allTests " + deployGradleTasks + "publish -Puser=${env.mavencentral_username} -Ppassword=${env.mavencentral_password} -Psigning.keyId=${env.signingKeyId} -Psigning.password=${env.signingPassword} -Psigning.secretKeyRingFile=${env.mavenCentralKeyFile}"
 
-                                deployGradleTasks = "--refresh-dependencies clean allTests " + deployGradleTasks + "publish -Puser=${env.mavencentral_username} -Ppassword=${env.mavencentral_password} -Psigning.keyId=${env.signingKeyId} -Psigning.password=${env.signingPassword} -Psigning.secretKeyRingFile=${env.mavenCentralKeyFile}"
+                        stage('checkout from scm') {
+                            // first we try to get branches from each repo
+                            // the checkout is done in parallel to speed up things a bit
 
-                            stage('checkout from scm') {
-                                // first we try to get branches from each repo
-                                // the checkout is done in parallel to speed up things a bit
-
-                                log(i, "getting ${projects.get(0)} ...")
-                                try {
-                                    log(i, "Deploy mode. Trying to get ${projects.get(0)} master branch ...")
-                                    gitCheckout(projects.get(0), urls.get(0), 'refs/heads/master', sshCredentialsId)
-                                } catch (exc) {
-                                    // our target repo failed during checkout
-                                    stageErrorMessage = "checkout of master branch of ${projects.get(0)} repo failed!"
-                                    sh 'exit 1' // failure due to not found master branch
-                                }
-
+                            log(i, "getting ${projects.get(0)} ...")
+                            try {
+                                log(i, "Deploy mode. Trying to get ${projects.get(0)} master branch ...")
+                                gitCheckout(projects.get(0), urls.get(0), 'refs/heads/master', sshCredentialsId)
+                            } catch (exc) {
+                                // our target repo failed during checkout
+                                stageErrorMessage = "checkout of master branch of ${projects.get(0)} repo failed!"
+                                sh 'exit 1' // failure due to not found master branch
                             }
 
-                            stage('deploy') {
-                                log(i, "Deploying ${projects.get(0)} to artifactory ...")
-                                gradle("-p ${projects.get(0)} ${deployGradleTasks}")
-
-                                deployedArtifacts = "${projects.get(0)}, "
-                            }
-
-                            /**
-                             * Post processing
-                             * Publish reports and notify rocket chat
-                             * Future clean workspace processes should be declared here
-                             */
-                            stage('post processing') {
-                                // publish reports
-                                // publishReports()
-
-                                // notify rocket chat about success
-                                String buildMode = "deploy"
-                                String branchName = params.pull_request_head_label
-
-                                rocketSend attachments: [
-                                        [$class: 'MessageAttachment', color: 'green', title: 'go to logs', titleLink: env.BUILD_URL],],
-                                        channel: rocketChatChannel,
-                                        message: ":jenkins_party: \n" +
-                                                "${buildMode} successful!\n" +
-                                                "*repo:* ${urls.get(0)}/${projects.get(0)}\n" +
-                                                "*branch:* ${branchName} \n" +
-                                                "*deployedArtifacts:* ${deployedArtifacts}\n"
-                                rawMessage: true
-
-                                // set build to successfull
-                                currentBuild.result = 'SUCCESS'
-                            }
                         }
+
+                        stage('deploy') {
+                            log(i, "Deploying ${projects.get(0)} to maven central ...")
+                            gradle("-p ${projects.get(0)} ${deployGradleTasks}")
+
+                            deployedArtifacts = "${projects.get(0)}, "
+                        }
+
+                        /**
+                         * Post processing
+                         * Publish reports and notify rocket chat
+                         * Future clean workspace processes should be declared here
+                         */
+                        stage('post processing') {
+                            // publish reports
+                            // publishReports()
+
+                            // notify rocket chat about success
+                            String buildMode = "deploy"
+                            String branchName = params.pull_request_head_label
+
+                            rocketSend attachments: [
+                                    [$class: 'MessageAttachment', color: 'green', title: 'go to logs', titleLink: env.BUILD_URL],],
+                                    channel: rocketChatChannel,
+                                    message: ":jenkins_party: \n" +
+                                            "${buildMode} successful!\n" +
+                                            "*repo:* ${urls.get(0)}/${projects.get(0)}\n" +
+                                            "*branch:* ${branchName} \n" +
+                                            "*deployedArtifacts:* ${deployedArtifacts}\n"
+                            rawMessage: true
+
+                            // set build to successfull
+                            currentBuild.result = 'SUCCESS'
+                        }
+
+
                     }
-                }
 
                 } catch (Exception exc) {
                     currentBuild.result = 'FAILURE'
@@ -262,7 +260,7 @@ if (env.BRANCH_NAME == "master") {
 
                     stage('SonarQube analysis') {
                         withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube
-                            gradle("-p ${projects.get(0)} sonarqube -Dsonar.branch.name=master ")
+                            gradle("-p ${projects.get(0)} sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey ")
                         }
                     }
 
@@ -282,12 +280,16 @@ if (env.BRANCH_NAME == "master") {
                      */
                     stage('deploy') {
                         // get the artifactory credentials stored in the jenkins secure keychain
-                        withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: mavenCentralCredentialsId,
-                                          usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password']]) {
+                        withCredentials([usernamePassword(credentialsId: mavenCentralCredentialsId, usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password'),
+                                         file(credentialsId: mavenCentralSignKeyFileId, variable: 'mavenCentralKeyFile'),
+                                         usernamePassword(credentialsId: mavenCentralSignKeyId, passwordVariable: 'signingPassword', usernameVariable: 'signingKeyId')]) {
+                            println("test2")
+                            println("${env.mavencentral_username}")
+                            println("${env.mavencentral_password}")
+                            deployGradleTasks = "--refresh-dependencies clean allTests " + deployGradleTasks + "publish -Puser=${env.mavencentral_username} -Ppassword=${env.mavencentral_password} -Psigning.keyId=${env.signingKeyId} -Psigning.password=${env.signingPassword} -Psigning.secretKeyRingFile=${env.mavenCentralKeyFile}"
 
-                            deployGradleTasks = deployGradleTasks + "artifactoryPublish -Puser=${env.mavencentral_username} -Ppassword=${env.mavencentral_password}"
 
-                            log(i, "Deploying ${projects.get(0)} to artifactory ...")
+                            log(i, "Deploying ${projects.get(0)} to maven central ...")
                             gradle("-p ${projects.get(0)} --parallel ${deployGradleTasks}")
 
                             deployedArtifacts = "${projects.get(0)}, "
@@ -447,7 +449,7 @@ if (env.BRANCH_NAME == "master") {
 
                 stage('SonarQube analysis') {
                     withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube
-                        gradle("-p ${projects.get(0)} sonarqube -Dsonar.pullrequest.branch=${featureBranchName} -Dsonar.pullrequest.key=${resolveBranchNo(env.BRANCH_NAME)} -Dsonar.pullrequest.base=master -Dsonar.pullrequest.github.repository=${orgNames.get(0)}/${projects.get(0)} -Dsonar.pullrequest.provider=Github")
+                        gradle("-p ${projects.get(0)} sonarqube -Dsonar.projectKey=$sonarqubeProjectKey -Dsonar.pullrequest.branch=${featureBranchName} -Dsonar.pullrequest.key=${resolveBranchNo(env.BRANCH_NAME)} -Dsonar.pullrequest.base=master -Dsonar.pullrequest.github.repository=${orgNames.get(0)}/${projects.get(0)} -Dsonar.pullrequest.provider=Github")
                     }
                 }
 
