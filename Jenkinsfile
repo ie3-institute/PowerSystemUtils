@@ -142,7 +142,7 @@ if (env.BRANCH_NAME == "master") {
                          */
                         stage('post processing') {
                             // publish reports
-                            publishReports()
+                            // publishReports()
 
                             // notify rocket chat about success
                             String buildMode = "deploy"
