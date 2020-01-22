@@ -31,7 +31,6 @@ publishing {
 					fromResolutionResult()
 				}
 			}
-
 			pom {
 				description = 'Utility library that is used by several projects @ the Institute of Energy Systems, Energy Efficiency and Energy Economics (ie3) @ TU Dortmund University'
 				name = 'Power System Utils'
