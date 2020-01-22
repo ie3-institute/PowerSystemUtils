@@ -16,6 +16,7 @@ branches:
   only:
     - master
     - dev
+dist: trusty
 language: java
 jdk:
   - oraclejdk8
