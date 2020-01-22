@@ -113,10 +113,9 @@ if (env.BRANCH_NAME == "master") {
                 try {
                     // set java version
                     setJavaVersion(javaVersionId)
-
+                    println("test")
                     // get the artifactory credentials stored in the jenkins secure keychain
-                    withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: mavenCentralCredentialsId,
-                                      usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password'],
+                    withCredentials([usernamePassword(credentialsId: mavenCentralCredentialsId, usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password'),
                                      file(credentialsId: mavenCentralSignKeyFileId, variable: 'mavenCentralKeyFile'),
                                      usernamePassword(credentialsId: mavenCentralSignKeyId, passwordVariable: 'signingPassword', usernameVariable: 'signingKeyId')]) {
                         println("test")
