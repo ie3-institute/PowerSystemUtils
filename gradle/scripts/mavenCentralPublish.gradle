@@ -9,10 +9,11 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 	from javadoc.destinationDir
 }
 
-
 if (project.hasProperty('user') && project.hasProperty('password')) {
 	signing {
-		sign(publishing.publications)
+		required { !version.endsWith('SNAPSHOT') }
+		if(required)
+			sign(publishing.publications)
 	}
 
 	publishing {
