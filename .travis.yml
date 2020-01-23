@@ -6,6 +6,5 @@ jdk:
 script:
   - chmod -R ug+x .travis
   - .travis/build.sh
-
 after_success:
       - bash <(curl -s https://codecov.io/bash)
