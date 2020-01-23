@@ -1,4 +1,4 @@
-if: (type = push AND branch IN (master, dev)) OR (type = pull_request AND NOT branch =~ /no-ci/)
+sudo: true
 dist: trusty
 language: java
 jdk:
