@@ -1,5 +1,5 @@
 /* Maven publish - start */
-task sourceJar(type: Jar) {
+task sourcesJar(type: Jar) {
 	classifier "sources"
 	from sourceSets.main.allJava
 }
@@ -10,17 +10,10 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 
-artifacts {
-	archives jar
-	archives sourceJar
-	archives javadocJar
-}
-
 if (project.hasProperty('user') && project.hasProperty('password')) {
 	signing {
-		sign configurations.archives
+		sign(publishing.publications)
 	}
-
 
 	publishing {
 		publications {
@@ -72,37 +65,9 @@ if (project.hasProperty('user') && project.hasProperty('password')) {
 				version version
 
 				from components.java
+				artifact sourcesJar
+				artifact javadocJar
 
-				// create the signed pom artifact
-				pom.withXml {
-					def pomFile = file("${project.buildDir}/generated-pom.xml")
-					writeTo(pomFile)
-					def pomAscFile = signing.sign(pomFile).signatureFiles[0]
-					artifact(pomAscFile) {
-						classifier = null
-						extension = 'pom.asc'
-					}
-				}
-
-				artifact(sourceJar) {
-					classifier = 'sources'
-				}
-				artifact(javadocJar) {
-					classifier = 'javadoc'
-				}
-
-				// create the signed artifacts
-				project.tasks.signArchives.signatureFiles.each {
-					artifact(it) {
-						def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
-						if (matcher.find()) {
-							classifier = matcher.group(1)
-						} else {
-							classifier = null
-						}
-						extension = 'jar.asc'
-					}
-				}
 			}
 		}
 		repositories {
@@ -122,12 +87,6 @@ if (project.hasProperty('user') && project.hasProperty('password')) {
 	model {
 		tasks.generatePomFileForMavenJavaPublication {
 			destination = file("$buildDir/generated-pom.xml")
-		}
-		tasks.publishMavenJavaPublicationToMavenLocal {
-			dependsOn project.tasks.signArchives
-		}
-		tasks.publishMavenJavaPublicationToMavenRepository {
-			dependsOn project.tasks.signArchives
 		}
 	}
 }
