@@ -20,10 +20,10 @@ import org.slf4j.LoggerFactory;
  * Offers some useful features to simplify file handling. Inspired by
  * https://stackoverflow.com/questions/779519/delete-directories-recursively-in-java/8685959#8685959
  */
-public class FileHelper {
-  private static final Logger logger = LoggerFactory.getLogger(FileHelper.class);
+public class FileIOUtils {
+  private static final Logger logger = LoggerFactory.getLogger(FileIOUtils.class);
 
-  private FileHelper() {
+  private FileIOUtils() {
     throw new IllegalStateException("Do not instantiate an utility class.");
   }
 

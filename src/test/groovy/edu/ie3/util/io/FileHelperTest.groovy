@@ -22,12 +22,12 @@ class FileHelperTest extends Specification {
      * @return
      */
     def cleanupSpec(){
-        FileHelper.deleteRecursively(TestFileCreator.testFolderTree)
+        FileIOUtils.deleteRecursively(TestFileCreator.testFolderTree)
     }
 
     def "The whole test tree is deleted correctly"() {
         when:
-        FileHelper.deleteRecursively(TestFileCreator.testFolderTree)
+        FileIOUtils.deleteRecursively(TestFileCreator.testFolderTree)
 
         then:
         !Files.exists(TestFileCreator.thirdLevelFile)
@@ -40,7 +40,7 @@ class FileHelperTest extends Specification {
 
     def "The whole test tree is deleted correctly (based on the path's string)"() {
         when:
-        FileHelper.deleteRecursively(TestFileCreator.testFolderTree.toString())
+        FileIOUtils.deleteRecursively(TestFileCreator.testFolderTree.toString())
 
         then:
         !Files.exists(TestFileCreator.thirdLevelFile)
@@ -53,7 +53,7 @@ class FileHelperTest extends Specification {
 
     def "The lowest level file is deleted correctly"(){
         when:
-        FileHelper.deleteRecursively(TestFileCreator.thirdLevelFile)
+        FileIOUtils.deleteRecursively(TestFileCreator.thirdLevelFile)
 
         then:
         !Files.exists(TestFileCreator.thirdLevelFile)
@@ -66,7 +66,7 @@ class FileHelperTest extends Specification {
 
     def "The lowest level file is deleted correctly (based on the path's string)"(){
         when:
-        FileHelper.deleteRecursively(TestFileCreator.thirdLevelFile.toString())
+        FileIOUtils.deleteRecursively(TestFileCreator.thirdLevelFile.toString())
 
         then:
         !Files.exists(TestFileCreator.thirdLevelFile)
@@ -79,7 +79,7 @@ class FileHelperTest extends Specification {
 
     def "The lowest level folder is deleted correctly"(){
         when:
-        FileHelper.deleteRecursively(TestFileCreator.thirdLevel)
+        FileIOUtils.deleteRecursively(TestFileCreator.thirdLevel)
 
         then:
         !Files.exists(TestFileCreator.thirdLevelFile)
@@ -92,7 +92,7 @@ class FileHelperTest extends Specification {
 
     def "The lowest level folder is deleted correctly (based on the path's string)"(){
         when:
-        FileHelper.deleteRecursively(TestFileCreator.thirdLevel.toString())
+        FileIOUtils.deleteRecursively(TestFileCreator.thirdLevel.toString())
 
         then:
         !Files.exists(TestFileCreator.thirdLevelFile)
@@ -105,7 +105,7 @@ class FileHelperTest extends Specification {
 
     def "The second level file is deleted correctly"(){
         when:
-        FileHelper.deleteRecursively(TestFileCreator.secondLevelFile)
+        FileIOUtils.deleteRecursively(TestFileCreator.secondLevelFile)
 
         then:
         Files.exists(TestFileCreator.thirdLevelFile)
@@ -118,7 +118,7 @@ class FileHelperTest extends Specification {
 
     def "The second level file is deleted correctly (based on the path's string)"(){
         when:
-        FileHelper.deleteRecursively(TestFileCreator.secondLevelFile.toString())
+        FileIOUtils.deleteRecursively(TestFileCreator.secondLevelFile.toString())
 
         then:
         Files.exists(TestFileCreator.thirdLevelFile)
@@ -131,7 +131,7 @@ class FileHelperTest extends Specification {
 
     def "The second level folder is deleted correctly"(){
         when:
-        FileHelper.deleteRecursively(TestFileCreator.secondLevel)
+        FileIOUtils.deleteRecursively(TestFileCreator.secondLevel)
 
         then:
         !Files.exists(TestFileCreator.thirdLevelFile)
