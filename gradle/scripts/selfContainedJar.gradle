@@ -2,5 +2,5 @@
 
 tasks.register('selfContainedJar', OneJar){
 	mainClass = mainClass
-	archiveName = 'simona_selfcontained.jar'
+	archiveName = 'powersystemutils_selfcontained.jar'
 }
