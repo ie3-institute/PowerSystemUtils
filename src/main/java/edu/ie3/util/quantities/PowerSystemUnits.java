@@ -144,6 +144,10 @@ public class PowerSystemUnits extends Units {
   public static final Unit<SpecificConductance> SIEMENS_PER_KILOMETRE =
       new ProductUnit<>(SIEMENS.divide(KILOMETRE));
 
+  /** Micro Siemens per kilometre */
+  public static final Unit<SpecificConductance> MICRO_SIEMENS_PER_KILOMETRE =
+      new ProductUnit<>(MetricPrefix.MICRO(SIEMENS).divide(KILOMETRE));
+
   /** Farad per metre */
   public static final Unit<SpecificCapacitance> FARAD_PER_METRE = new BaseUnit<>("F/m");
 
