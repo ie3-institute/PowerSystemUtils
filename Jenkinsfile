@@ -261,7 +261,7 @@ if (env.BRANCH_NAME == "master") {
                             deployGradleTasks = "--refresh-dependencies clean allTests " + deployGradleTasks + "publish -Puser=${env.mavencentral_username} -Ppassword=${env.mavencentral_password} -Psigning.keyId=${env.signingKeyId} -Psigning.password=${env.signingPassword} -Psigning.secretKeyRingFile=${env.mavenCentralKeyFile}"
 
                             gradle("${deployGradleTasks}")
-                            
+
                         }
 
                         // notify rocket chat
@@ -428,10 +428,11 @@ def getFeatureBranchProps() {
 
 
 def getMasterBranchProps() {
-    properties(
-            [[$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
-             [$class: 'ThrottleJobProperty', categories: [], limitOneJobWithMatchingParams: false, maxConcurrentPerNode: 0, maxConcurrentTotal: 0, paramsToUseForLimit: '', throttleEnabled: true, throttleOption: 'project']
-            ])
+    properties([parameters(
+            [string(defaultValue: '', description: '', name: 'release', trim: true)]),
+                [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
+                [$class: 'ThrottleJobProperty', categories: [], limitOneJobWithMatchingParams: false, maxConcurrentPerNode: 0, maxConcurrentTotal: 0, paramsToUseForLimit: '', throttleEnabled: true, throttleOption: 'project']
+    ])
 }
 
 
