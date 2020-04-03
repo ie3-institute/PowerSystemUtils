@@ -17,7 +17,7 @@ import java.util.TimeZone;
  */
 class TimeUtil {
 
-  public static TimeUtil DEFAULT =
+  public static final TimeUtil DEFAULT =
       new TimeUtil(ZoneId.of("UTC"), Locale.GERMANY, "yyyy-MM-dd HH:mm:ss");
 
   private final ZoneId zoneId;
@@ -34,19 +34,6 @@ class TimeUtil {
     this.dtfPattern = dtfPattern;
     this.dateTimeFormatter =
         DateTimeFormatter.ofPattern(dtfPattern).withZone(zoneId).withLocale(locale);
-  }
-
-  /**
-   * Calculate differences between two {@link ZonedDateTime}s and returns the duration in Seconds
-   *
-   * @param startDateTime
-   * @param endDateTime
-   * @param unit
-   * @return
-   */
-  public double zonedDateTimeDifference(
-      final ZonedDateTime startDateTime, final ZonedDateTime endDateTime, ChronoUnit unit) {
-    return unit.between(startDateTime, endDateTime);
   }
 
   /**
