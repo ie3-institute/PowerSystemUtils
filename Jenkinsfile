@@ -363,7 +363,7 @@ if (env.BRANCH_NAME == "master") {
                     withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube
 
                         // do we have a PR?
-                        String gradleCommand = "sonarqube -Dsonar.projectKey=$sonarqubeProjectKey"
+                        String gradleCommand = "sonarqube -Dsonar.projectKey=$sonarqubeProjectKey -Dsonar.branch.name=$featureBranchName"
 
                         if (env.CHANGE_ID != null)
                             gradleCommand = gradleCommand + " -Dsonar.pullrequest.branch=${featureBranchName} -Dsonar.pullrequest.key=${env.CHANGE_ID} -Dsonar.pullrequest.base=master -Dsonar.pullrequest.github.repository=${orgNames.get(0)}/${projects.get(0)} -Dsonar.pullrequest.provider=Github"
