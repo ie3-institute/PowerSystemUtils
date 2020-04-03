@@ -19,6 +19,8 @@ import java.util.TimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/** @deprecated As of release 1.4, replaced by {@link TimeUtil} */
+@Deprecated
 public class TimeTools {
   private static final Logger logger = LoggerFactory.getLogger(TimeTools.class);
 
