@@ -20,7 +20,7 @@ class TimeUtilsTest extends Specification {
 
 	def "A TimeUtil should provide a default constant with expected configuration"() {
 		expect:
-		verifyAll(TimeUtil.DEFAULT) {
+		verifyAll(TimeUtil.withDefaults) {
 			zoneId == ZoneId.of("UTC")
 			locale == Locale.GERMANY
 			dtfPattern == "yyyy-MM-dd HH:mm:ss"

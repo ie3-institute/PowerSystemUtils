@@ -50,6 +50,7 @@ public class TimeTools {
    * @param dtfPattern Pattern to be interpreted by the {@link DateTimeFormatter}
    * @param locale Default {@link Locale}
    */
+
   public static void initialize(ZoneId defaultZoneId, Locale locale, String dtfPattern) {
     DEFAULT_LOCALE = locale;
     DEFAULT_TIME_ZONE = TimeZone.getTimeZone(defaultZoneId);
