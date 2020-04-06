@@ -5,6 +5,12 @@
  */
 package edu.ie3.util.quantities
 
+import static edu.ie3.util.quantities.PowerSystemUnits.DEGREE_GEOM
+import static edu.ie3.util.quantities.PowerSystemUnits.KILOWATT
+import static edu.ie3.util.quantities.PowerSystemUnits.KILOWATTHOUR_PER_SQUAREMETRE
+import static tec.uom.se.unit.Units.METRE
+import static tec.uom.se.unit.Units.METRE_PER_SECOND
+
 import edu.ie3.util.quantities.interfaces.Irradiation
 
 import javax.measure.quantity.Angle
@@ -12,16 +18,9 @@ import javax.measure.quantity.Length
 import javax.measure.quantity.Power
 import javax.measure.quantity.Speed
 
-import static edu.ie3.util.quantities.PowerSystemUnits.DEGREE_GEOM
-import static edu.ie3.util.quantities.PowerSystemUnits.KILOWATT
-
 import spock.lang.Specification
 import tec.uom.se.ComparableQuantity
 import tec.uom.se.quantity.Quantities
-
-import static edu.ie3.util.quantities.PowerSystemUnits.KILOWATTHOUR_PER_SQUAREMETRE
-import static tec.uom.se.unit.Units.METRE
-import static tec.uom.se.unit.Units.METRE_PER_SECOND
 
 class QuantityUtilTest extends Specification {
 	def "The QuantityUtil converts different quantities correctly to comparable quantities of same value and unit"() {
