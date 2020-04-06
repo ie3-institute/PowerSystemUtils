@@ -12,7 +12,7 @@ import tec.uom.se.quantity.Quantities;
 /** Offers useful methods to handle {@link Quantity}s */
 public class QuantityUtil {
   private QuantityUtil() {
-    throw new IllegalStateException("Do not instantiate a utility class.");
+    throw new IllegalStateException("Utility classes cannot be instantiated.");
   }
 
   /**
