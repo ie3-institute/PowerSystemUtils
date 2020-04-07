@@ -14,7 +14,7 @@ import java.util.TimeZone;
  * Utility class that can either be used with default values {@link TimeUtil#withDefaults} or as a
  * self parametrized class.
  */
-class TimeUtil {
+public class TimeUtil {
 
   public static final TimeUtil withDefaults =
       new TimeUtil(ZoneId.of("UTC"), Locale.GERMANY, "yyyy-MM-dd HH:mm:ss");
