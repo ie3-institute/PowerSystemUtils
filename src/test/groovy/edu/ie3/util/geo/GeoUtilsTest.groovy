@@ -5,9 +5,8 @@
  */
 package edu.ie3.util.geo
 
-import static edu.ie3.util.quantities.PowerSystemUnits.METRE;
+import static edu.ie3.util.quantities.PowerSystemUnits.METRE
 
-import edu.ie3.util.quantities.PowerSystemUnits
 import net.morbz.osmonaut.geometry.Polygon
 import net.morbz.osmonaut.osm.LatLon
 import spock.lang.Specification
@@ -30,7 +29,7 @@ class GeoUtilsTest extends Specification {
 		ComparableQuantity<Length> actual = GeoUtils.haversine(start.lat, start.lon, end.lat, end.lon)
 
 		then:
-		Math.abs(actual.subtract(expected).to(METRE).getValue().doubleValue()) < tolerance.getValue().doubleValue()
+		Math.abs(actual.subtract(expected).to(METRE).value.doubleValue()) < tolerance.value.doubleValue()
 	}
 
 	def "Test radius with circle as polygon"() {
@@ -51,7 +50,7 @@ class GeoUtilsTest extends Specification {
 		circlePoints.size() == 361
 		// rounded distance should be 50 meters
 		circlePoints.forEach({ point ->
-			Double distance = GeoUtils.haversine(center.lat, center.lon, point.lat, point.lon).to(METRE).getValue().doubleValue()
+			Double distance = GeoUtils.haversine(center.lat, center.lon, point.lat, point.lon).to(METRE).value.doubleValue()
 			Math.round(distance) == 50
 		})
 
