@@ -8,8 +8,6 @@ package edu.ie3.util.geo;
 import static edu.ie3.util.quantities.PowerSystemUnits.*;
 
 import com.google.common.collect.Lists;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
 import edu.ie3.util.copy.DeepCopy;
 import edu.ie3.util.exceptions.GeoPreparationException;
 import edu.ie3.util.quantities.PowerSystemUnits;
@@ -24,16 +22,29 @@ import javax.measure.quantity.Length;
 import net.morbz.osmonaut.geometry.Bounds;
 import net.morbz.osmonaut.geometry.Polygon;
 import net.morbz.osmonaut.osm.*;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.PrecisionModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tec.uom.se.ComparableQuantity;
 import tec.uom.se.quantity.Quantities;
 
-/** Functionality to deal with geographical information */
+/** Functionality to deal with geographical and geometric information */
 public class GeoUtils {
   private static final Logger logger = LoggerFactory.getLogger(GeoUtils.class);
 
   /** radius of the earth in m */
-  private static final Quantity<Length> EARTH_RADIUS = Quantities.getQuantity(6378137.0, METRE);
+  public static final ComparableQuantity<Length> EARTH_RADIUS =
+      Quantities.getQuantity(6378137.0, METRE);
+
+  /** Offer a default geometry factory for the WGS84 coordinate system */
+  public static final GeometryFactory DEFAULT_GEOMETRY_FACTORY =
+      new GeometryFactory(new PrecisionModel(), 4326);
+
+  private GeoUtils() {
+    throw new IllegalStateException("Utility classes cannot be instantiated");
+  }
 
   /**
    * Calculates the distance in km between two lat/long points using the haversine formula
@@ -44,12 +55,12 @@ public class GeoUtils {
    * @param lng2 Longitude value of the second coordinate
    * @return The distance between both coordinates in {@link PowerSystemUnits#KILOMETRE}
    */
-  public static Quantity<Length> haversine(double lat1, double lng1, double lat2, double lng2) {
-    Quantity<Length> r =
-        Quantities.getQuantity(6371.0, KILOMETRE); // average radius of the earth in km
+  public static ComparableQuantity<Length> haversine(
+      double lat1, double lng1, double lat2, double lng2) {
+    ComparableQuantity<Length> r = EARTH_RADIUS.to(KILOMETRE); // average radius of the earth in km
 
-    Quantity<Angle> dLat = Quantities.getQuantity(Math.toRadians(lat2 - lat1), RADIAN);
-    Quantity<Angle> dLon = Quantities.getQuantity(Math.toRadians(lng2 - lng1), RADIAN);
+    ComparableQuantity<Angle> dLat = Quantities.getQuantity(Math.toRadians(lat2 - lat1), RADIAN);
+    ComparableQuantity<Angle> dLon = Quantities.getQuantity(Math.toRadians(lng2 - lng1), RADIAN);
     double a =
         Math.sin(dLat.getValue().doubleValue() / 2) * Math.sin(dLat.getValue().doubleValue() / 2)
             + Math.cos(Math.toRadians(lat1))
@@ -61,12 +72,37 @@ public class GeoUtils {
   }
 
   /**
+   * Calculates the geo position as a Point from a given Latlon (net.morbz.osmonaut.osm). Uses the
+   * WGS84 reference system.
+   *
+   * @param latLon Latlon from which the geo position shall be calculated
+   * @return calculated Point from the given Latlon
+   */
+  public static org.locationtech.jts.geom.Point latlonToPoint(LatLon latLon) {
+    return xyToPoint(latLon.getLon(), latLon.getLat());
+  }
+
+  /**
+   * Wraps XY values in a JTS geometry point
+   *
+   * @param x longitude value
+   * @param y latitude value
+   * @return JTS geometry Point
+   */
+  public static org.locationtech.jts.geom.Point xyToPoint(double x, double y) {
+    Coordinate coordinate = new Coordinate(x, y, 0);
+    return DEFAULT_GEOMETRY_FACTORY.createPoint(coordinate);
+  }
+
+  /**
    * This method takes all {@link RelationMember}s and joins the given ways to have closed ways.
    * This only works, if the ways are connected all in a line.
    *
    * @param relation {@link Relation} relation to treat
    * @return Deep copy of the {@code relation} with closed ways
+   * @deprecated This method is currently not under test and has to be revised thoroughly
    */
+  @Deprecated
   public static Relation buildClosedWays(Relation relation) throws GeoPreparationException {
     /* Copy relation and empty the Members */
     Relation closedRelation = DeepCopy.copy(relation);
@@ -198,7 +234,9 @@ public class GeoUtils {
    * @throws GeoPreparationException If points got missing, no boundary can be found, too few points
    *     are provided or anything else wents wron
    * @throws NullPointerException If there is null
+   * @deprecated This method is currently not under test and has to be revised thoroughly
    */
+  @Deprecated
   public static Polygon buildConvexHull(
       Set<com.vividsolutions.jts.geom.Point> points, int precision, ConvexHullAlgorithm algorithm)
       throws GeoPreparationException {
@@ -375,7 +413,9 @@ public class GeoUtils {
    * @param a First {@link Polygon}
    * @param b Second {@link Polygon}
    * @return A {@link Polygon} if the intersection exists and null if not
+   * @deprecated This method is currently not under test and has to be revised thoroughly
    */
+  @Deprecated
   public static Polygon getIntersection(Polygon a, Polygon b) {
     List<LatLon> sharedCoords =
         a.getCoords().stream().filter(b::contains).collect(Collectors.toList());
@@ -421,7 +461,9 @@ public class GeoUtils {
    * @param w Closed way, that surrounds the area
    * @return The covered area in {@link PowerSystemUnits#SQUARE_METRE}
    * @throws GeoPreparationException If some serious shit happens
+   * @deprecated This method is currently not under test and has to be revised thoroughly
    */
+  @Deprecated
   public static Quantity<Area> getArea(Way w) throws GeoPreparationException {
     if (!w.isClosed())
       throw new GeoPreparationException(
@@ -436,7 +478,9 @@ public class GeoUtils {
    * @param p {@link Polygon} whos area may be calculated
    * @return The spanned area in {@link PowerSystemUnits#SQUARE_METRE}
    * @throws GeoPreparationException If some serious shit happens
+   * @deprecated This method is currently not under test and has to be revised thoroughly
    */
+  @Deprecated
   public static Quantity<Area> getArea(Polygon p) throws GeoPreparationException {
     /* Get the boundary of the Polygon */
     Bounds bounds = p.getBounds();
@@ -538,7 +582,9 @@ public class GeoUtils {
    * @param b Node B
    * @param c Node C
    * @return True if node c is between node a and node b
+   * @deprecated This method is currently not under test and has to be revised thoroughly
    */
+  @Deprecated
   public static boolean isBetween(Node a, Node b, Node c) {
     double crossProduct;
     double dotProduct;
@@ -582,7 +628,9 @@ public class GeoUtils {
    *
    * @param geoArea: the area of the building based on geo coordinates
    * @param cor: the optional correction factor
+   * @deprecated This method is currently not under test and has to be revised thoroughly
    */
+  @Deprecated
   public static Quantity<Area> calcGeo2qm(double geoArea, Quantity<Area> cor) {
     double width = 51.5;
     double length = 7.401;
@@ -616,6 +664,8 @@ public class GeoUtils {
     return area;
   }
 
+  /** @deprecated This method is currently not under test and has to be revised thoroughly */
+  @Deprecated
   public static boolean isInsideLanduse(LatLon node, List<Way> landUses) {
     for (Way landUse : landUses) {
       if (rayCasting(new Polygon(landUse), node)) return true;
@@ -623,6 +673,8 @@ public class GeoUtils {
     return false;
   }
 
+  /** @deprecated This method is currently not under test and has to be revised thoroughly */
+  @Deprecated
   public static boolean rayCasting(Polygon shape, LatLon node) {
     boolean inside = false;
 
@@ -635,6 +687,8 @@ public class GeoUtils {
     return inside;
   }
 
+  /** @deprecated This method is currently not under test and has to be revised thoroughly */
+  @Deprecated
   private static boolean intersects(LatLon a, LatLon b, LatLon n) {
 
     // convert LatLons to arrays
@@ -663,7 +717,9 @@ public class GeoUtils {
    *
    * @param building
    * @return polygon area A
+   * @deprecated This method is currently not under test and has to be revised thoroughly
    */
+  @Deprecated
   public static double calculateBuildingArea(Way building) {
     double area = 0.0;
 
@@ -686,21 +742,6 @@ public class GeoUtils {
     area = Math.abs(area);
 
     return area / 2;
-  }
-
-  /**
-   * Calculates the geo position as a Point from a given Latlon (net.morbz.osmonaut.osm). Uses the
-   * WGS84 reference system.
-   *
-   * @param latLon Latlon from which the geo position shall be calculated
-   * @return calculated Point from the given Latlon
-   */
-  public static com.vividsolutions.jts.geom.Point latlonToPoint(LatLon latLon) {
-    GeometryFactory geoFactory = new GeometryFactory();
-    com.vividsolutions.jts.geom.Point geoPosition =
-        geoFactory.createPoint(new Coordinate(latLon.getLon(), latLon.getLat()));
-    geoPosition.setSRID(4326); // Use WGS84 reference system.
-    return geoPosition;
   }
 
   /**
@@ -732,7 +773,9 @@ public class GeoUtils {
    * @param center
    * @param radius
    * @return a list with all coordinates of the circle points
+   * @deprecated This method is currently not under test and has to be revised thoroughly
    */
+  @Deprecated
   public static List<LatLon> radiusWithCircle(LatLon center, Quantity<Length> radius) {
 
     double lat1 = Math.toRadians(center.getLat());
@@ -769,7 +812,9 @@ public class GeoUtils {
    *     between two ways
    * @param wayId the id of the newly created way
    * @return
+   * @deprecated This method is currently not under test and has to be revised thoroughly
    */
+  @Deprecated
   public static Way wayFromWays(List<Way> waysToChain, Quantity<Length> radius, int wayId) {
 
     LinkedList<Way> waysCopy = new LinkedList<>();
