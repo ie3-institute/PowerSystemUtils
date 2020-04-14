@@ -42,7 +42,7 @@ public class GeoUtils {
   public static final GeometryFactory DEFAULT_GEOMETRY_FACTORY =
       new GeometryFactory(new PrecisionModel(), 4326);
 
-  private GeoUtils() {
+  protected GeoUtils() {
     throw new IllegalStateException("Utility classes cannot be instantiated");
   }
 
