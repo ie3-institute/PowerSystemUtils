@@ -20,14 +20,47 @@ public class StringUtils {
    * @return the resulting snake case representation
    */
   public static String camelCaseToSnakeCase(String camelCaseString) {
-    String regularCamelCaseRegex = "([a-z])([A-Z]+)";
-    String regularSnakeCaseReplacement = "$1_$2";
+    String regularCamelCaseRegex = "([a-z0-9])([A-Z0-9]+)";
     String specialCamelCaseRegex = "((?<!_)[A-Z]?)((?<!^)[A-Z]+)";
-    String specialSnakeCaseReplacement = "$1_$2";
+    String snakeCaseReplacement = "$1_$2";
     return camelCaseString
-        .replaceAll(regularCamelCaseRegex, regularSnakeCaseReplacement)
-        .replaceAll(specialCamelCaseRegex, specialSnakeCaseReplacement)
+        .replaceAll(regularCamelCaseRegex, snakeCaseReplacement)
+        .replaceAll(specialCamelCaseRegex, snakeCaseReplacement)
         .toLowerCase();
+  }
+
+  /**
+   * Converts a given snake case string to its lower camel case representation
+   *
+   * @param snakeCaseString the camel case string
+   * @return the resulting lower camel case representation
+   */
+  public static String snakeCaseToCamelCase(String snakeCaseString) {
+    StringBuilder sb = new StringBuilder(snakeCaseString);
+    for (int i = 0; i < sb.length(); i++) {
+      if (sb.charAt(i) == '_') {
+        sb.deleteCharAt(i);
+        sb.replace(i, i + 1, String.valueOf(Character.toUpperCase(sb.charAt(i))));
+      }
+    }
+    return sb.toString();
+  }
+
+  /**
+   * Converts a given snake case string to its upper camel case (= pascal case) representation
+   *
+   * @param snakeCaseString the camel case string
+   * @return the resulting upper camel case (= pascal case)
+   */
+  public static String snakeCaseToPascalCase(String snakeCaseString) {
+    StringBuilder sb = new StringBuilder();
+    for (String s : snakeCaseString.split("_")) {
+      sb.append(Character.toUpperCase(s.charAt(0)));
+      if (s.length() > 1) {
+        sb.append(s.substring(1).toLowerCase());
+      }
+    }
+    return sb.toString();
   }
 
   /**

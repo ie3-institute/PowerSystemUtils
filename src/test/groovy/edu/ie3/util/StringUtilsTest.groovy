@@ -17,11 +17,11 @@ class StringUtilsTest extends Specification {
 		actual == expected
 
 		where:
-		input 		|| expected
-		"test" 		|| "\"test\""
-		"\"test" 	|| "\"test\""
-		"test\"" 	|| "\"test\""
-		"\"test\""	|| "\"test\""
+		input      || expected
+		"test"     || "\"test\""
+		"\"test"   || "\"test\""
+		"test\""   || "\"test\""
+		"\"test\"" || "\"test\""
 	}
 
 	def "The StringUtils are able to quote each element of an array of Strings"() {
@@ -68,13 +68,43 @@ class StringUtilsTest extends Specification {
 		actual == expected
 
 		where:
-		input 		|| expected
-		"helloDude"	|| "hello_dude"
-		"2Be"		|| "2_be"
+		input       || expected
+		"helloDude" || "hello_dude"
+		"2Be"       || "2_be"
+		"orBe2"     || "or_be_2"
 		//		"came2win"	|| "came_2_win" // currently not covered by the method
 		//		"2be"		|| "2_be"		// currently not covered by the method
-		//		"orBe2"		|| "or_be_2" 	// currently not covered by the method
 		//		"orBE2"		|| "or_be_2" 	// currently not covered by the method
+	}
+
+	def "The StringUtils convert a given snake case correctly to lower camel case"() {
+		when:
+		def actual = StringUtils.snakeCaseToCamelCase(input)
+
+		then:
+		actual == expected
+
+		where:
+		input        || expected
+		"hello_dude" || "helloDude"
+		"2_be"       || "2Be"
+		"or_be_2"    || "orBe2"
+		"came_2_win" || "came2Win"
+	}
+
+	def "The StringUtils convert a given snake case correctly to upper camel case (=pascal case)"() {
+		when:
+		def actual = StringUtils.snakeCaseToPascalCase(input)
+
+		then:
+		actual == expected
+
+		where:
+		input        || expected
+		"hello_dude" || "HelloDude"
+		"2_be"       || "2Be"
+		"or_be_2"    || "OrBe2"
+		"came_2_win" || "Came2Win"
 	}
 
 	def "The StringUtils convert a given Array of camel case Strings correctly to snake case"() {
@@ -121,64 +151,64 @@ class StringUtilsTest extends Specification {
 		actual == expected
 
 		where:
-		input 		|| expected
-		"ab123" 	|| "ab123"
-		"ab.123" 	|| "ab_123"
-		"ab-123" 	|| "ab_123"
-		"ab_123" 	|| "ab_123"
-		"ab/123" 	|| "ab_123"
-		"ab\\123" 	|| "ab_123"
-		"ab!123" 	|| "ab_123"
-		"ab\"123" 	|| "ab_123"
-		"ab§123" 	|| "ab_123"
-		"ab\$123" 	|| "ab_123"
-		"ab&123" 	|| "ab_123"
-		"ab{123" 	|| "ab_123"
-		"ab[123" 	|| "ab_123"
-		"ab}123" 	|| "ab_123"
-		"ab]123" 	|| "ab_123"
-		"ab(123" 	|| "ab_123"
-		"ab)123" 	|| "ab_123"
-		"ab=123" 	|| "ab_123"
-		"ab?123" 	|| "ab_123"
-		"abß123" 	|| "ab_123"
-		"ab123." 	|| "ab123_"
-		"ab123-" 	|| "ab123_"
-		"ab123_" 	|| "ab123_"
-		"ab123/" 	|| "ab123_"
-		"ab123\\" 	|| "ab123_"
-		"ab123!" 	|| "ab123_"
-		"ab123\"" 	|| "ab123_"
-		"ab123§" 	|| "ab123_"
-		"ab123\$" 	|| "ab123_"
-		"ab123&" 	|| "ab123_"
-		"ab123{" 	|| "ab123_"
-		"ab123[" 	|| "ab123_"
-		"ab123}" 	|| "ab123_"
-		"ab123]" 	|| "ab123_"
-		"ab123(" 	|| "ab123_"
-		"ab123)" 	|| "ab123_"
-		"ab123=" 	|| "ab123_"
-		"ab123?" 	|| "ab123_"
-		"ab123ß" 	|| "ab123_"
-		".ab123" 	|| "_ab123"
-		"-ab123" 	|| "_ab123"
-		"_ab123" 	|| "_ab123"
-		"/ab123" 	|| "_ab123"
-		"\\ab123" 	|| "_ab123"
-		"!ab123" 	|| "_ab123"
-		"\"ab123" 	|| "_ab123"
-		"§ab123" 	|| "_ab123"
-		"\$ab123"	|| "_ab123"
-		"&ab123" 	|| "_ab123"
-		"{ab123" 	|| "_ab123"
-		"[ab123" 	|| "_ab123"
-		"}ab123" 	|| "_ab123"
-		"]ab123" 	|| "_ab123"
-		"(ab123" 	|| "_ab123"
-		")ab123" 	|| "_ab123"
-		"=ab123" 	|| "_ab123"
-		"?ab123" 	|| "_ab123"
-		"ßab123" 	|| "_ab123"
+		input     || expected
+		"ab123"   || "ab123"
+		"ab.123"  || "ab_123"
+		"ab-123"  || "ab_123"
+		"ab_123"  || "ab_123"
+		"ab/123"  || "ab_123"
+		"ab\\123" || "ab_123"
+		"ab!123"  || "ab_123"
+		"ab\"123" || "ab_123"
+		"ab§123"  || "ab_123"
+		"ab\$123" || "ab_123"
+		"ab&123"  || "ab_123"
+		"ab{123"  || "ab_123"
+		"ab[123"  || "ab_123"
+		"ab}123"  || "ab_123"
+		"ab]123"  || "ab_123"
+		"ab(123"  || "ab_123"
+		"ab)123"  || "ab_123"
+		"ab=123"  || "ab_123"
+		"ab?123"  || "ab_123"
+		"abß123"  || "ab_123"
+		"ab123."  || "ab123_"
+		"ab123-"  || "ab123_"
+		"ab123_"  || "ab123_"
+		"ab123/"  || "ab123_"
+		"ab123\\" || "ab123_"
+		"ab123!"  || "ab123_"
+		"ab123\"" || "ab123_"
+		"ab123§"  || "ab123_"
+		"ab123\$" || "ab123_"
+		"ab123&"  || "ab123_"
+		"ab123{"  || "ab123_"
+		"ab123["  || "ab123_"
+		"ab123}"  || "ab123_"
+		"ab123]"  || "ab123_"
+		"ab123("  || "ab123_"
+		"ab123)"  || "ab123_"
+		"ab123="  || "ab123_"
+		"ab123?"  || "ab123_"
+		"ab123ß"  || "ab123_"
+		".ab123"  || "_ab123"
+		"-ab123"  || "_ab123"
+		"_ab123"  || "_ab123"
+		"/ab123"  || "_ab123"
+		"\\ab123" || "_ab123"
+		"!ab123"  || "_ab123"
+		"\"ab123" || "_ab123"
+		"§ab123"  || "_ab123"
+		"\$ab123" || "_ab123"
+		"&ab123"  || "_ab123"
+		"{ab123"  || "_ab123"
+		"[ab123"  || "_ab123"
+		"}ab123"  || "_ab123"
+		"]ab123"  || "_ab123"
+		"(ab123"  || "_ab123"
+		")ab123"  || "_ab123"
+		"=ab123"  || "_ab123"
+		"?ab123"  || "_ab123"
+		"ßab123"  || "_ab123"
 	}
 }
