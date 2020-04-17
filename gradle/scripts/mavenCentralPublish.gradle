@@ -62,6 +62,11 @@ if (project.hasProperty('user') && project.hasProperty('password')) {
 									id = 'ckittl'
 									name = 'Chris Kittl'
 									email = 'chris.kittl@tu-dortmund.de'
+								},
+								developer {
+									id = 'sensarmad'
+									name = 'Debopama Sen Sarma'
+									email = 'debopama-sen.sarma@tu-dortmund.de'
 								}
 							]
 						}
