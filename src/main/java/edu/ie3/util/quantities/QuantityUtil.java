@@ -40,9 +40,6 @@ public class QuantityUtil {
   public static <Q extends Quantity<Q>> boolean considerablyAbsEqual(
       Quantity<Q> a, Quantity<Q> b, double absQuantityTolerance) {
 
-    // if units differ, return false
-    if (!a.getUnit().equals(b.getUnit())) return false;
-
     double aVal = a.getValue().doubleValue();
     double bVal = b.to(a.getUnit()).getValue().doubleValue();
 
@@ -63,9 +60,6 @@ public class QuantityUtil {
    */
   public static <Q extends Quantity<Q>> boolean considerablyRelEqual(
       Quantity<Q> a, Quantity<Q> b, double relQuantityTolerance) {
-
-    // if units differ, return false
-    if (!a.getUnit().equals(b.getUnit())) return false;
 
     double aVal = a.getValue().doubleValue();
     double bVal = b.to(a.getUnit()).getValue().doubleValue();

@@ -58,7 +58,6 @@ class QuantityUtilTest extends Specification {
 		Quantities.getQuantity(10d, KILOWATT)           | Quantities.getQuantity(0.010, MEGAWATT)  || true
 		Quantities.getQuantity(15.0000001, DEGREE_GEOM) | Quantities.getQuantity(15d, DEGREE_GEOM) || true
 		Quantities.getQuantity(15.1, DEGREE_GEOM)       | Quantities.getQuantity(15d, DEGREE_GEOM) || false
-		Quantities.getQuantity(20d, METRE_PER_SECOND)   | Quantities.getQuantity(10d, KILOWATT)    || false
 	}
 
 	@Unroll
@@ -75,6 +74,5 @@ class QuantityUtilTest extends Specification {
 		Quantities.getQuantity(10d, KILOWATT)           | Quantities.getQuantity(0.010, MEGAWATT)  || true
 		Quantities.getQuantity(15.0000001, DEGREE_GEOM) | Quantities.getQuantity(15d, DEGREE_GEOM) || true
 		Quantities.getQuantity(15.9, DEGREE_GEOM)       | Quantities.getQuantity(14d, DEGREE_GEOM) || false
-		Quantities.getQuantity(20d, METRE_PER_SECOND)   | Quantities.getQuantity(10d, KILOWATT)    || false
 	}
 }
