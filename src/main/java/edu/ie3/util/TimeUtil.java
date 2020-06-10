@@ -5,7 +5,6 @@
 */
 package edu.ie3.util;
 
-import static edu.ie3.util.TimeTools.UNDEFINED_TIME;
 import static java.time.temporal.ChronoField.HOUR_OF_DAY;
 import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
 
