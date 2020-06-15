@@ -107,19 +107,15 @@ public class TimeUtil {
 
   /**
    * Calculate the difference between two given [[ZonedDateTime]]s and return the difference in
-   * seconds or {@link this#UNDEFINED_TIME} if the provided string is empty or equals to `undefined`
+   * seconds
    *
    * @param startDateTime the start date time
    * @param endDateTime the end date time
    * @return the difference between the provided start and end date time in seconds
    */
-  public double zonedDateTimeDifferenceInSeconds(String startDateTime, String endDateTime) {
-    if (startDateTime.length() == 0 || "undefined".equals(startDateTime)) return UNDEFINED_TIME;
-    if (endDateTime.length() == 0 || "undefined".equals(endDateTime)) return UNDEFINED_TIME;
-    return zonedDateTimeDifference(
-        TimeUtil.withDefaults.toZonedDateTime(startDateTime),
-        TimeUtil.withDefaults.toZonedDateTime(endDateTime),
-        ChronoUnit.SECONDS);
+  public long zonedDateTimeDifferenceInSeconds(
+      ZonedDateTime startDateTime, ZonedDateTime endDateTime) {
+    return zonedDateTimeDifference(startDateTime, endDateTime, ChronoUnit.SECONDS);
   }
 
   /**
@@ -131,7 +127,7 @@ public class TimeUtil {
    * @param unit the chrono unit that should be used returned
    * @return the difference between the provided start and end date time in the provided chrono unit
    */
-  public double zonedDateTimeDifference(
+  public long zonedDateTimeDifference(
       ZonedDateTime startDateTime, ZonedDateTime endDateTime, ChronoUnit unit) {
     return unit.between(startDateTime, endDateTime);
   }

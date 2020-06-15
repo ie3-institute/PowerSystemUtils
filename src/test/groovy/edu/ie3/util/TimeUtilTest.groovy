@@ -14,9 +14,6 @@ import java.time.ZonedDateTime
 
 class TimeUtilTest extends Specification {
 
-	@Shared
-	TimeUtil timeUtil = new TimeUtil(ZoneId.of("UTC"), Locale.GERMANY, "dd/MM/yyyy HH:mm:ss")
-
 	def "A TimeUtil should provide a default constant with expected configuration"() {
 		expect:
 		verifyAll(TimeUtil.withDefaults) {
@@ -28,6 +25,7 @@ class TimeUtilTest extends Specification {
 
 	def "A TimeUtil should convert given instances to a String correctly"() {
 		given:
+		TimeUtil timeUtil = new TimeUtil(ZoneId.of("UTC"), Locale.GERMANY, "dd/MM/yyyy HH:mm:ss")
 		ZonedDateTime testDate = ZonedDateTime.of(1990, 1, 1, 0, 15, 0, 0, ZoneId.of("UTC"))
 
 
