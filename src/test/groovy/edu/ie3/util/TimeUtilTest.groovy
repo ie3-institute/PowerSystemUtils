@@ -5,7 +5,6 @@
  */
 package edu.ie3.util
 
-import spock.lang.Shared
 import spock.lang.Specification
 
 import java.time.ZoneId
