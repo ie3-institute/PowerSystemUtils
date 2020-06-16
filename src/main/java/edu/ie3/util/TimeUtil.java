@@ -23,8 +23,6 @@ public class TimeUtil {
   public static final TimeUtil withDefaults =
       new TimeUtil(ZoneId.of("UTC"), Locale.GERMANY, "yyyy-MM-dd HH:mm:ss");
 
-  public static final double UNDEFINED_TIME = Double.NEGATIVE_INFINITY;
-
   private final ZoneId zoneId;
   private final TimeZone timeZone;
   private final Locale locale;
