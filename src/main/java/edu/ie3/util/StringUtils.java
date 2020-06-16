@@ -6,14 +6,12 @@
 package edu.ie3.util;
 
 import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /** Some useful functions to manipulate Strings */
 public class StringUtils {
 
-  private static final String STARTOFSTRINGREGEX = "^([^\"])";
-  private static final String ENDOFSTRINGREGEX = "([^\"])$";
+  private static final String START_OF_STRING_REGEX = "^([^\"])";
+  private static final String END_OF_STRING_REGEX = "([^\"])$";
 
   private StringUtils() {
     throw new IllegalStateException("Utility classes cannot be instantiated.");
@@ -86,7 +84,15 @@ public class StringUtils {
    * @return Quoted String
    */
   public static String quote(String input) {
-    return input.replaceAll(STARTOFSTRINGREGEX, "\"$1").replaceAll(ENDOFSTRINGREGEX, "$1\"");
+    return quoteEnd(quoteStart(input));
+  }
+
+  private static String quoteStart(String input) {
+    return input.replaceAll(START_OF_STRING_REGEX, "\"$1");
+  }
+
+  private static String quoteEnd(String input) {
+    return input.replaceAll(END_OF_STRING_REGEX, "$1\"");
   }
 
   /**
@@ -110,61 +116,40 @@ public class StringUtils {
   }
 
   /**
-   * Quotes header elements to predefine a valid CsvFileDefinition
+   * Quotes a given string that contains special characters to comply with the csv specification RFC
+   * 4180 (https://tools.ietf.org/html/rfc4180). Double quotes in JSON strings are escaped with the
+   * same character to make the csv data readable later.
    *
-   * @param headerElements Array of csv header elements
-   * @param csvSep Csv separator to check if it appears within the header element
-   * @return Quoted header elements
+   * @param inputString string that should be converted to a valid rfc 4180 string
+   * @param csvSep separator of the csv file
+   * @return a csv string that is valid according to rfc 4180
    */
-  public static String[] quoteHeaderElements(String[] headerElements, String csvSep) {
-    for (int index = 0; index <= headerElements.length - 1; index++) {
-      if (headerElements[index].contains(csvSep)
-          || headerElements[index].contains(",")
-          || headerElements[index].contains("\"")
-          || headerElements[index].contains("\n")) {
-        headerElements[index] =
-            headerElements[index]
-                .replaceAll("\"", "\"\"")
-                .replaceAll(STARTOFSTRINGREGEX, "\"$1")
-                .replaceAll(ENDOFSTRINGREGEX, "$1\"");
-      }
-    }
-    return headerElements;
+  public static String csvString(String inputString, String csvSep) {
+    if (needsCsvRFC4180Quote(inputString, csvSep)) {
+      /* clean the string by first quoting start and end of the string and then replace all double quotes
+       * that are followed by one or more double quotes with single double quotes */
+      String quotedStartEndString = quote(inputString).replaceAll("\"\"*", "\"");
+      /* get everything in between the start and end quotes and replace single quotes with double quotes */
+      String stringWOStartEndQuotes =
+          quotedStartEndString
+              .substring(1, quotedStartEndString.length() - 1)
+              .replaceAll("\"", "\"\"");
+      /* finally add quotes to the strings start and end again */
+      return quote(stringWOStartEndQuotes);
+    } else return inputString;
   }
 
   /**
-   * Quotes all fields that contain special characters to comply with the CSV specification RFC 4180
-   * (https://tools.ietf.org/html/rfc4180) The " contained in the JSON strings are escaped with the
-   * same character to make the CSV data readable later
+   * Check if the provided string needs to be quoted according to the csv specification RFC 4180
    *
-   * @param entityFieldData LinkedHashMap containing all entityData
-   * @param csvSep Csv separator to check if it appears within the data
-   * @return LinkedHashMap containing all entityData with the relevant data quoted
+   * @param inputString the string that should be checked
+   * @param csvSep separator of the csv file
+   * @return true of the string needs to be quoted, false otherwise
    */
-  public static LinkedHashMap<String, String> quoteCSVStrings(
-      LinkedHashMap<String, String> entityFieldData, String csvSep) {
-    LinkedHashMap<String, String> quotedEntityFieldData = new LinkedHashMap<>();
-    for (Map.Entry<String, String> entry : entityFieldData.entrySet()) {
-      String key = entry.getKey();
-      String value = entry.getValue();
-      if (key.contains(csvSep) || key.contains(",") || key.contains("\"") || key.contains("\n")) {
-        key =
-            key.replaceAll("\"", "\"\"")
-                .replaceAll(STARTOFSTRINGREGEX, "\"$1")
-                .replaceAll(ENDOFSTRINGREGEX, "$1\"");
-      }
-      if (value.contains(csvSep)
-          || value.contains(",")
-          || value.contains("\"")
-          || value.contains("\n")) {
-        value =
-            value
-                .replaceAll("\"", "\"\"")
-                .replaceAll(STARTOFSTRINGREGEX, "\"$1")
-                .replaceAll(ENDOFSTRINGREGEX, "$1\"");
-      }
-      quotedEntityFieldData.put(key, value);
-    }
-    return quotedEntityFieldData;
+  private static boolean needsCsvRFC4180Quote(String inputString, String csvSep) {
+    return inputString.contains(csvSep)
+        || inputString.contains(",")
+        || inputString.contains("\"")
+        || inputString.contains("\n");
   }
 }

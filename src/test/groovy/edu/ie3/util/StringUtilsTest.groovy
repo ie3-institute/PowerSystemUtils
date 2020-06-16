@@ -7,6 +7,8 @@ package edu.ie3.util
 
 import spock.lang.Specification
 
+import java.util.stream.Collectors
+
 class StringUtilsTest extends Specification {
 
 	def "The StringUtils quote a single String correctly"() {
@@ -226,7 +228,8 @@ class StringUtilsTest extends Specification {
 			"Höchstspannung",
 			"380.0",
 			"olm:{(0.00,1.00)}",
-			"cosPhiP:{(0.0,1.0),(0.9,1.0),(1.2,-0.3)}"] as String[]
+			"cosPhiP:{(0.0,1.0),(0.9,1.0),(1.2,-0.3)}"
+		]
 		def expected = [
 			"4ca90220-74c2-4369-9afa-a18bf068840d",
 			"\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528],\"\"crs\"\":{\"\"type\"\":\"\"name\"\",\"\"properties\"\":{\"\"name\"\":\"\"EPSG:4326\"\"}}}\"",
@@ -239,10 +242,10 @@ class StringUtilsTest extends Specification {
 			"Höchstspannung",
 			"380.0",
 			"\"olm:{(0.00,1.00)}\"",
-			"\"cosPhiP:{(0.0,1.0),(0.9,1.0),(1.2,-0.3)}\""] as String[]
+			"\"cosPhiP:{(0.0,1.0),(0.9,1.0),(1.2,-0.3)}\""] as Set
 
 		when:
-		def actual = StringUtils.quoteHeaderElements(input, ",")
+		def actual = input.stream().map({ inputElement -> StringUtils.csvString(inputElement, ",") }).collect(Collectors.toSet()) as Set
 
 		then:
 		actual == expected
@@ -251,37 +254,68 @@ class StringUtilsTest extends Specification {
 	def "The StringUtils converts a given LinkedHashMap of csv data to match the csv specification RFC 4180 "() {
 		given:
 		def input = [
-			"activePowerGradient"	: "25.0",
-			"capex"             	: "100,0",
-			"cosphiRated"       	: "0.95",
-			"etaConv"           	: "98.0",
-			"id"              		: "test \n bmTypeInput",
-			"opex"               	: "50.0",
-			"sRated"             	: "25.0",
-			"uu,id"              	: "5ebd8f7e-dedb-4017-bb86-6373c4b68eb8",
-			"geoPosition"			: "{\"type\":\"Point\",\"coordinates\":[7.411111,51.492528],\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"EPSG:4326\"}}}",
-			"olm\"characteristic" 	: "olm:{(0.0,1.0)}",
-			"cosPhiFixed"       	: "cosPhiFixed:{(0.0,1.0)}"
-		] as LinkedHashMap
+			"activePowerGradient": "25.0",
+			"capex"              : "100,0",
+			"cosphiRated"        : "0.95",
+			"etaConv"            : "98.0",
+			"id"                 : "test \n bmTypeInput",
+			"opex"               : "50.0",
+			"sRated"             : "25.0",
+			"uu,id"              : "5ebd8f7e-dedb-4017-bb86-6373c4b68eb8",
+			"geoPosition"        : "{\"type\":\"Point\",\"coordinates\":[7.411111,51.492528],\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"EPSG:4326\"}}}",
+			"olm\"characteristic": "olm:{(0.0,1.0)}",
+			"cosPhiFixed"        : "cosPhiFixed:{(0.0,1.0)}"
+		] as LinkedHashMap<String, String>
 
 		def expected = [
-			"activePowerGradient"		: "25.0",
-			"capex"              		: "\"100,0\"",
-			"cosphiRated"        		: "0.95",
-			"etaConv"            		: "98.0",
-			"id"           	 			: "\"test \n bmTypeInput\"",
-			"opex"               		: "50.0",
-			"sRated"             		: "25.0",
-			"\"uu,id\""             	: "5ebd8f7e-dedb-4017-bb86-6373c4b68eb8",
-			"geoPosition"		   		: "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528],\"\"crs\"\":{\"\"type\"\":\"\"name\"\",\"\"properties\"\":{\"\"name\"\":\"\"EPSG:4326\"\"}}}\"",
-			"\"olm\"\"characteristic\"" : "\"olm:{(0.0,1.0)}\"",
-			"cosPhiFixed"        		: "\"cosPhiFixed:{(0.0,1.0)}\""
-		] as LinkedHashMap
+			"activePowerGradient"      : "25.0",
+			"capex"                    : "\"100,0\"",
+			"cosphiRated"              : "0.95",
+			"etaConv"                  : "98.0",
+			"id"                       : "\"test \n bmTypeInput\"",
+			"opex"                     : "50.0",
+			"sRated"                   : "25.0",
+			"\"uu,id\""                : "5ebd8f7e-dedb-4017-bb86-6373c4b68eb8",
+			"geoPosition"              : "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528],\"\"crs\"\":{\"\"type\"\":\"\"name\"\",\"\"properties\"\":{\"\"name\"\":\"\"EPSG:4326\"\"}}}\"",
+			"\"olm\"\"characteristic\"": "\"olm:{(0.0,1.0)}\"",
+			"cosPhiFixed"              : "\"cosPhiFixed:{(0.0,1.0)}\""
+		] as LinkedHashMap<String, String>
 
 		when:
-		def actual = StringUtils.quoteCSVStrings(input, ",")
+		def actualList = input.entrySet().stream().map({ mapEntry ->
+			return new AbstractMap.SimpleEntry<String, String>(StringUtils.csvString(mapEntry.key, ","), StringUtils.csvString(mapEntry.value, ","))
+		}) as Set
+
+		def actual = actualList.collectEntries {
+			[it.key, it.value]
+		}
 
 		then:
 		actual == expected
+	}
+
+	def "The StringUtils converts a given Array of csv header elements to match the csv specification RFC "() {
+		expect:
+		StringUtils.csvString(inputString, csvSep) == expect
+
+		where:
+		inputString                                                                         | csvSep || expect
+		"activePowerGradient"                                                               | ","    || "activePowerGradient"
+		"\"100,0\""                                                                         | ","    || "\"100,0\""
+		"100,0"                                                                             | ","    || "\"100,0\""
+		"100,0"                                                                             | ";"    || "\"100,0\""
+		"100;0"                                                                             | ";"    || "\"100;0\""
+		"\"100;0\""                                                                         | ";"    || "\"100;0\""
+		"100;0"                                                                             | ","    || "100;0"
+		"olm:{(0.00,1.00)}"                                                                 | ","    || "\"olm:{(0.00,1.00)}\""
+		"olm:{(0.00,1.00)}"                                                                 | ";"    || "\"olm:{(0.00,1.00)}\""
+		"{\"type\":\"Point\",\"coordinates\":[7.411111,51.492528]}"                         | ","    || "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""
+		"{\"type\":\"Point\",\"coordinates\":[7.411111,51.492528]}"                         | ";"    || "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""
+		"\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""         | ","    || "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""
+		"\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""         | ";"    || "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""
+		"\"{\"\"type\"\"\":\"\"Point\"\"\"\",\"\"coordinates\"\"\":[7.411111,51.492528]}\"" | ","    || "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""
+		"\"{\"\"type\"\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""       | ";"    || "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""
+		"uu,id"                                                                             | ","    || "\"uu,id\""
+		"uu,id"                                                                             | ";"    || "\"uu,id\""
 	}
 }
