@@ -147,10 +147,7 @@ public class StringUtils {
     for (Map.Entry<String, String> entry : entityFieldData.entrySet()) {
       String key = entry.getKey();
       String value = entry.getValue();
-      if (key.contains(csvSep)
-          || key.contains(",")
-          || key.contains("\"")
-          || key.contains("\n")) {
+      if (key.contains(csvSep) || key.contains(",") || key.contains("\"") || key.contains("\n")) {
         key =
             key.replaceAll("\"", "\"\"")
                 .replaceAll(STARTOFSTRINGREGEX, "\"$1")
