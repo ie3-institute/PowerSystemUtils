@@ -12,9 +12,9 @@ import java.util.Map;
 /** Some useful functions to manipulate Strings */
 public class StringUtils {
 
-  private static final String jsonRegex = "(?:.*)\\{(?:.*)}";
-  private static final String beginningOfStringRegex = "^([^\"])";
-  private static final String endOfStringRegex = "([^\"])$";
+  private static final String JSONREGEX = "(?:.*)\\{(?:.*)}";
+  private static final String STARTOFSTRINGREGEX = "^([^\"])";
+  private static final String ENDOFSTRINGREGEX = "([^\"])$";
 
   private StringUtils() {
     throw new IllegalStateException("Utility classes cannot be instantiated.");
@@ -87,7 +87,7 @@ public class StringUtils {
    * @return Quoted String
    */
   public static String quote(String input) {
-    return input.replaceAll(beginningOfStringRegex, "\"$1").replaceAll(endOfStringRegex, "$1\"");
+    return input.replaceAll(STARTOFSTRINGREGEX, "\"$1").replaceAll(ENDOFSTRINGREGEX, "$1\"");
   }
 
   /**
@@ -119,7 +119,7 @@ public class StringUtils {
    */
   public static String[] quoteHeaderElements(String[] headerElements, String csvSep) {
     for (int index = 0; index <= headerElements.length - 1; index++) {
-      if (headerElements[index].matches(jsonRegex)
+      if (headerElements[index].matches(JSONREGEX)
           || headerElements[index].contains(csvSep)
           || headerElements[index].contains(",")
           || headerElements[index].contains("\"")
@@ -127,8 +127,8 @@ public class StringUtils {
         headerElements[index] =
             headerElements[index]
                 .replaceAll("\"", "\"\"")
-                .replaceAll(beginningOfStringRegex, "\"$1")
-                .replaceAll(endOfStringRegex, "$1\"");
+                .replaceAll(STARTOFSTRINGREGEX, "\"$1")
+                .replaceAll(ENDOFSTRINGREGEX, "$1\"");
       }
     }
     return headerElements;
@@ -149,17 +149,17 @@ public class StringUtils {
     for (Map.Entry<String, String> entry : entityFieldData.entrySet()) {
       String key = entry.getKey();
       String value = entry.getValue();
-      if (key.matches(jsonRegex)
+      if (key.matches(JSONREGEX)
           || key.contains(csvSep)
           || key.contains(",")
           || key.contains("\"")
           || key.contains("\n")) {
         key =
             key.replaceAll("\"", "\"\"")
-                .replaceAll(beginningOfStringRegex, "\"$1")
-                .replaceAll(endOfStringRegex, "$1\"");
+                .replaceAll(STARTOFSTRINGREGEX, "\"$1")
+                .replaceAll(ENDOFSTRINGREGEX, "$1\"");
       }
-      if (value.matches(jsonRegex)
+      if (value.matches(JSONREGEX)
           || value.contains(csvSep)
           || value.contains(",")
           || value.contains("\"")
@@ -167,8 +167,8 @@ public class StringUtils {
         value =
             value
                 .replaceAll("\"", "\"\"")
-                .replaceAll(beginningOfStringRegex, "\"$1")
-                .replaceAll(endOfStringRegex, "$1\"");
+                .replaceAll(STARTOFSTRINGREGEX, "\"$1")
+                .replaceAll(ENDOFSTRINGREGEX, "$1\"");
       }
       quotedEntityFieldData.put(key, value);
     }
