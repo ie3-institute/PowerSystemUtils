@@ -12,7 +12,6 @@ import java.util.Map;
 /** Some useful functions to manipulate Strings */
 public class StringUtils {
 
-  private static final String JSONREGEX = "(?:.*)\\{(?:.*)}";
   private static final String STARTOFSTRINGREGEX = "^([^\"])";
   private static final String ENDOFSTRINGREGEX = "([^\"])$";
 
@@ -119,8 +118,7 @@ public class StringUtils {
    */
   public static String[] quoteHeaderElements(String[] headerElements, String csvSep) {
     for (int index = 0; index <= headerElements.length - 1; index++) {
-      if (headerElements[index].matches(JSONREGEX)
-          || headerElements[index].contains(csvSep)
+      if (headerElements[index].contains(csvSep)
           || headerElements[index].contains(",")
           || headerElements[index].contains("\"")
           || headerElements[index].contains("\n")) {
@@ -149,8 +147,7 @@ public class StringUtils {
     for (Map.Entry<String, String> entry : entityFieldData.entrySet()) {
       String key = entry.getKey();
       String value = entry.getValue();
-      if (key.matches(JSONREGEX)
-          || key.contains(csvSep)
+      if (key.contains(csvSep)
           || key.contains(",")
           || key.contains("\"")
           || key.contains("\n")) {
@@ -159,8 +156,7 @@ public class StringUtils {
                 .replaceAll(STARTOFSTRINGREGEX, "\"$1")
                 .replaceAll(ENDOFSTRINGREGEX, "$1\"");
       }
-      if (value.matches(JSONREGEX)
-          || value.contains(csvSep)
+      if (value.contains(csvSep)
           || value.contains(",")
           || value.contains("\"")
           || value.contains("\n")) {
