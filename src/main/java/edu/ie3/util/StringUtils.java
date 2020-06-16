@@ -15,6 +15,10 @@ public class StringUtils {
     throw new IllegalStateException("Utility classes cannot be instantiated.");
   }
 
+  private static final String jsonRegex = "(?:.*)\\{(?:.*)}";
+  private static final String beginningOfStringRegex = "^([^\"])";
+  private static final String endOfStringRegex = "([^\"])$";
+
   /**
    * Converts a given camel case string to its snake case representation
    *
@@ -82,7 +86,7 @@ public class StringUtils {
    * @return Quoted String
    */
   public static String quote(String input) {
-    return input.replaceAll("^([^\"])", "\"$1").replaceAll("([^\"])$", "$1\"");
+    return input.replaceAll(beginningOfStringRegex, "\"$1").replaceAll(endOfStringRegex, "$1\"");
   }
 
   /**
@@ -114,7 +118,7 @@ public class StringUtils {
    */
   public static String[] quoteHeaderElements(String[] headerElements, String csvSep) {
     for (int index = 0; index <= headerElements.length - 1; index++) {
-      if (headerElements[index].matches("(?:.*)\\{(?:.*)}")
+      if (headerElements[index].matches(jsonRegex)
           || headerElements[index].contains(csvSep)
           || headerElements[index].contains(",")
           || headerElements[index].contains("\"")
@@ -122,8 +126,8 @@ public class StringUtils {
         headerElements[index] =
             headerElements[index]
                 .replaceAll("\"", "\"\"")
-                .replaceAll("^([^\"])", "\"$1")
-                .replaceAll("([^\"])$", "$1\"");
+                .replaceAll(beginningOfStringRegex, "\"$1")
+                .replaceAll(endOfStringRegex, "$1\"");
       }
     }
     return headerElements;
@@ -138,23 +142,23 @@ public class StringUtils {
    * @param csvSep Csv separator to check if it appears within the data
    * @return LinkedHashMap containing all entityData with the relevant data quoted
    */
-  public static LinkedHashMap<String, String> quoteCSVStrings(
-      LinkedHashMap<String, String> entityFieldData, String csvSep) {
+  public static Map<String, String> quoteCSVStrings(
+      Map<String, String> entityFieldData, String csvSep) {
     LinkedHashMap<String, String> quotedEntityFieldData = new LinkedHashMap<>();
     for (Map.Entry<String, String> entry : entityFieldData.entrySet()) {
       String key = entry.getKey();
       String value = entry.getValue();
-      if (key.matches("(?:.*)\\{(?:.*)}")
+      if (key.matches(jsonRegex)
           || key.contains(csvSep)
           || key.contains(",")
           || key.contains("\"")
           || key.contains("\n")) {
         key =
             key.replaceAll("\"", "\"\"")
-                .replaceAll("^([^\"])", "\"$1")
-                .replaceAll("([^\"])$", "$1\"");
+                .replaceAll(beginningOfStringRegex, "\"$1")
+                .replaceAll(endOfStringRegex, "$1\"");
       }
-      if (value.matches("(?:.*)\\{(?:.*)}")
+      if (value.matches(jsonRegex)
           || value.contains(csvSep)
           || value.contains(",")
           || value.contains("\"")
@@ -162,8 +166,8 @@ public class StringUtils {
         value =
             value
                 .replaceAll("\"", "\"\"")
-                .replaceAll("^([^\"])", "\"$1")
-                .replaceAll("([^\"])$", "$1\"");
+                .replaceAll(beginningOfStringRegex, "\"$1")
+                .replaceAll(endOfStringRegex, "$1\"");
       }
       quotedEntityFieldData.put(key, value);
     }

@@ -251,31 +251,31 @@ class StringUtilsTest extends Specification {
 	def "The StringUtils converts a given LinkedHashMap of csv data to match the csv specification RFC 4180 "() {
 		given:
 		def input = [
-			activePowerGradient: "25.0",
-			capex              : "100,0",
-			cosphiRated        : "0.95",
-			etaConv            : "98.0",
-			id                 : "test \n bmTypeInput",
-			opex               : "50.0",
-			sRated             : "25.0",
-			uuid               : "5ebd8f7e-dedb-4017-bb86-6373c4b68eb8",
-			geoPosition		   : "{\"type\":\"Point\",\"coordinates\":[7.411111,51.492528],\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"EPSG:4326\"}}}",
-			olmcharacteristic  : "olm:{(0.0,1.0)}",
-			cosPhiFixed        : "cosPhiFixed:{(0.0,1.0)}"
+			"activePowerGradient"	: "25.0",
+			"capex"             	: "100,0",
+			"cosphiRated"       	: "0.95",
+			"etaConv"           	: "98.0",
+			"id"              		: "test \n bmTypeInput",
+			"opex"               	: "50.0",
+			"sRated"             	: "25.0",
+			"uu,id"              	: "5ebd8f7e-dedb-4017-bb86-6373c4b68eb8",
+			"geoPosition"			: "{\"type\":\"Point\",\"coordinates\":[7.411111,51.492528],\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"EPSG:4326\"}}}",
+			"olm\"characteristic" 	: "olm:{(0.0,1.0)}",
+			"cosPhiFixed"       	: "cosPhiFixed:{(0.0,1.0)}"
 		] as LinkedHashMap
 
 		def expected = [
-			activePowerGradient: "25.0",
-			capex              : "\"100,0\"",
-			cosphiRated        : "0.95",
-			etaConv            : "98.0",
-			id                 : "\"test \n bmTypeInput\"",
-			opex               : "50.0",
-			sRated             : "25.0",
-			uuid               : "5ebd8f7e-dedb-4017-bb86-6373c4b68eb8",
-			geoPosition		   : "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528],\"\"crs\"\":{\"\"type\"\":\"\"name\"\",\"\"properties\"\":{\"\"name\"\":\"\"EPSG:4326\"\"}}}\"",
-			olmcharacteristic  : "\"olm:{(0.0,1.0)}\"",
-			cosPhiFixed        : "\"cosPhiFixed:{(0.0,1.0)}\""
+			"activePowerGradient"		: "25.0",
+			"capex"              		: "\"100,0\"",
+			"cosphiRated"        		: "0.95",
+			"etaConv"            		: "98.0",
+			"id"           	 			: "\"test \n bmTypeInput\"",
+			"opex"               		: "50.0",
+			"sRated"             		: "25.0",
+			"\"uu,id\""             	: "5ebd8f7e-dedb-4017-bb86-6373c4b68eb8",
+			"geoPosition"		   		: "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528],\"\"crs\"\":{\"\"type\"\":\"\"name\"\",\"\"properties\"\":{\"\"name\"\":\"\"EPSG:4326\"\"}}}\"",
+			"\"olm\"\"characteristic\"" : "\"olm:{(0.0,1.0)}\"",
+			"cosPhiFixed"        		: "\"cosPhiFixed:{(0.0,1.0)}\""
 		] as LinkedHashMap
 
 		when:
