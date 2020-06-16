@@ -11,13 +11,14 @@ import java.util.Map;
 
 /** Some useful functions to manipulate Strings */
 public class StringUtils {
-  private StringUtils() {
-    throw new IllegalStateException("Utility classes cannot be instantiated.");
-  }
 
   private static final String jsonRegex = "(?:.*)\\{(?:.*)}";
   private static final String beginningOfStringRegex = "^([^\"])";
   private static final String endOfStringRegex = "([^\"])$";
+
+  private StringUtils() {
+    throw new IllegalStateException("Utility classes cannot be instantiated.");
+  }
 
   /**
    * Converts a given camel case string to its snake case representation
@@ -142,8 +143,8 @@ public class StringUtils {
    * @param csvSep Csv separator to check if it appears within the data
    * @return LinkedHashMap containing all entityData with the relevant data quoted
    */
-  public static Map<String, String> quoteCSVStrings(
-      Map<String, String> entityFieldData, String csvSep) {
+  public static LinkedHashMap<String, String> quoteCSVStrings(
+      LinkedHashMap<String, String> entityFieldData, String csvSep) {
     LinkedHashMap<String, String> quotedEntityFieldData = new LinkedHashMap<>();
     for (Map.Entry<String, String> entry : entityFieldData.entrySet()) {
       String key = entry.getKey();
