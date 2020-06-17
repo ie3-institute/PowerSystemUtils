@@ -41,8 +41,7 @@ apply from: scriptsLocation + 'mavenCentralPublish.gradle'
 
 
 repositories {
-	mavenLocal()
-	maven { url = 'https://repo.maven.apache.org/maven2' }
+	jcenter()
 	maven { url = "https://www.jitpack.io" } // allows for github repos as dependencies
 }
 
