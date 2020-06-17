@@ -294,7 +294,7 @@ class StringUtilsTest extends Specification {
 		actual == expected
 	}
 
-	def "The StringUtils converts a given Array of csv header elements to match the csv specification RFC "() {
+	def "The StringUtils converts a given String to match the csv specification RFC 4180 "() {
 		expect:
 		StringUtils.csvString(inputString, csvSep) == expect
 
