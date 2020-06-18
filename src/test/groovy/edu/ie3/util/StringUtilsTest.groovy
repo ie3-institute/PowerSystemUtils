@@ -19,11 +19,14 @@ class StringUtilsTest extends Specification {
 		actual == expected
 
 		where:
-		input      || expected
-		"test"     || "\"test\""
-		"\"test"   || "\"test\""
-		"test\""   || "\"test\""
-		"\"test\"" || "\"test\""
+		input                || expected
+		"test"               || "\"test\""
+		"\"test"             || "\"\"test\""
+		"test\""             || "\"test\"\""
+		"\"test\""           || "\"test\""
+		"\"This\" is a test" || "\"\"This\" is a test\""
+		"This is \"a\" test" || "\"This is \"a\" test\""
+		"This is a \"test\"" || "\"This is a \"test\"\""
 	}
 
 	def "The StringUtils are able to quote each element of an array of Strings"() {
@@ -311,10 +314,6 @@ class StringUtilsTest extends Specification {
 		"olm:{(0.00,1.00)}"                                                                 | ";"    || "\"olm:{(0.00,1.00)}\""
 		"{\"type\":\"Point\",\"coordinates\":[7.411111,51.492528]}"                         | ","    || "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""
 		"{\"type\":\"Point\",\"coordinates\":[7.411111,51.492528]}"                         | ";"    || "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""
-		"\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""         | ","    || "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""
-		"\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""         | ";"    || "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""
-		"\"{\"\"type\"\"\":\"\"Point\"\"\"\",\"\"coordinates\"\"\":[7.411111,51.492528]}\"" | ","    || "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""
-		"\"{\"\"type\"\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""       | ";"    || "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""
 		"uu,id"                                                                             | ","    || "\"uu,id\""
 		"uu,id"                                                                             | ";"    || "\"uu,id\""
 	}

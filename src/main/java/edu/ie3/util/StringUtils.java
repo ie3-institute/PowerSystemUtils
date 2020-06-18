@@ -10,9 +10,6 @@ import java.util.Arrays;
 /** Some useful functions to manipulate Strings */
 public class StringUtils {
 
-  private static final String START_OF_STRING_REGEX = "^([^\"])";
-  private static final String END_OF_STRING_REGEX = "([^\"])$";
-
   private StringUtils() {
     throw new IllegalStateException("Utility classes cannot be instantiated.");
   }
@@ -84,15 +81,7 @@ public class StringUtils {
    * @return Quoted String
    */
   public static String quote(String input) {
-    return quoteEnd(quoteStart(input));
-  }
-
-  private static String quoteStart(String input) {
-    return input.replaceAll(START_OF_STRING_REGEX, "\"$1");
-  }
-
-  private static String quoteEnd(String input) {
-    return input.replaceAll(END_OF_STRING_REGEX, "$1\"");
+    return input.matches("^\".*\"$") ? input : "\"" + input + "\"";
   }
 
   /**
@@ -117,8 +106,8 @@ public class StringUtils {
 
   /**
    * Quotes a given string that contains special characters to comply with the csv specification RFC
-   * 4180 (https://tools.ietf.org/html/rfc4180). Double quotes in JSON strings are escaped with the
-   * same character to make the csv data readable later.
+   * 4180 (https://tools.ietf.org/html/rfc4180). Double quotes are escaped according to
+   * specification.
    *
    * @param inputString string that should be converted to a valid rfc 4180 string
    * @param csvSep separator of the csv file
@@ -126,17 +115,23 @@ public class StringUtils {
    */
   public static String csvString(String inputString, String csvSep) {
     if (needsCsvRFC4180Quote(inputString, csvSep)) {
-      /* clean the string by first quoting start and end of the string and then replace all double quotes
-       * that are followed by one or more double quotes with single double quotes */
-      String quotedStartEndString = quote(inputString).replaceAll("\"\"*", "\"");
-      /* get everything in between the start and end quotes and replace single quotes with double quotes */
-      String stringWOStartEndQuotes =
-          quotedStartEndString
-              .substring(1, quotedStartEndString.length() - 1)
-              .replaceAll("\"", "\"\"");
+      /* Get rid of first and last quotation if there is some. */
+      String inputUnquoted = unquoteStartEnd(inputString);
+      /* Escape every double quotation mark within the String by doubling it */
+      String withEscapedQuotes = inputUnquoted.replaceAll("\"", "\"\"");
       /* finally add quotes to the strings start and end again */
-      return quote(stringWOStartEndQuotes);
+      return quote(withEscapedQuotes);
     } else return inputString;
+  }
+
+  /**
+   * Removes double quotes at start and end position of the provided string, if any
+   *
+   * @param input string that should be unquoted
+   * @return copy of the provided string without start and end double quotes
+   */
+  public static String unquoteStartEnd(String input) {
+    return input.matches("^\".*\"$") ? input.substring(1, input.length() - 1) : input;
   }
 
   /**
