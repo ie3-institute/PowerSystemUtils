@@ -7,6 +7,8 @@ package edu.ie3.util
 
 import spock.lang.Specification
 
+import java.util.stream.Collectors
+
 class StringUtilsTest extends Specification {
 
 	def "The StringUtils quote a single String correctly"() {
@@ -17,11 +19,14 @@ class StringUtilsTest extends Specification {
 		actual == expected
 
 		where:
-		input      || expected
-		"test"     || "\"test\""
-		"\"test"   || "\"test\""
-		"test\""   || "\"test\""
-		"\"test\"" || "\"test\""
+		input                || expected
+		"test"               || "\"test\""
+		"\"test"             || "\"\"test\""
+		"test\""             || "\"test\"\""
+		"\"test\""           || "\"test\""
+		"\"This\" is a test" || "\"\"This\" is a test\""
+		"This is \"a\" test" || "\"This is \"a\" test\""
+		"This is a \"test\"" || "\"This is a \"test\"\""
 	}
 
 	def "The StringUtils are able to quote each element of an array of Strings"() {
@@ -210,5 +215,106 @@ class StringUtilsTest extends Specification {
 		"=ab123"  || "_ab123"
 		"?ab123"  || "_ab123"
 		"ßab123"  || "_ab123"
+	}
+
+	def "The StringUtils converts a given Array of csv header elements to match the csv specification RFC 4180 "() {
+		given:
+		def input = [
+			"4ca90220-74c2-4369-9afa-a18bf068840d",
+			"{\"type\":\"Point\",\"coordinates\":[7.411111,51.492528],\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"EPSG:4326\"}}}",
+			"node_a",
+			"2020-03-25T15:11:31Z[UTC] \n 2020-03-24T15:11:31Z[UTC]",
+			"8f9682df-0744-4b58-a122-f0dc730f6510",
+			"true",
+			"1,0",
+			"1.0",
+			"Höchstspannung",
+			"380.0",
+			"olm:{(0.00,1.00)}",
+			"cosPhiP:{(0.0,1.0),(0.9,1.0),(1.2,-0.3)}"
+		]
+		def expected = [
+			"4ca90220-74c2-4369-9afa-a18bf068840d",
+			"\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528],\"\"crs\"\":{\"\"type\"\":\"\"name\"\",\"\"properties\"\":{\"\"name\"\":\"\"EPSG:4326\"\"}}}\"",
+			"node_a",
+			"\"2020-03-25T15:11:31Z[UTC] \n 2020-03-24T15:11:31Z[UTC]\"",
+			"8f9682df-0744-4b58-a122-f0dc730f6510",
+			"true",
+			"\"1,0\"",
+			"1.0",
+			"Höchstspannung",
+			"380.0",
+			"\"olm:{(0.00,1.00)}\"",
+			"\"cosPhiP:{(0.0,1.0),(0.9,1.0),(1.2,-0.3)}\""] as Set
+
+		when:
+		def actual = input.stream().map({ inputElement -> StringUtils.csvString(inputElement, ",") }).collect(Collectors.toSet()) as Set
+
+		then:
+		actual == expected
+	}
+
+	def "The StringUtils converts a given LinkedHashMap of csv data to match the csv specification RFC 4180 "() {
+		given:
+		def input = [
+			"activePowerGradient": "25.0",
+			"capex"              : "100,0",
+			"cosphiRated"        : "0.95",
+			"etaConv"            : "98.0",
+			"id"                 : "test \n bmTypeInput",
+			"opex"               : "50.0",
+			"sRated"             : "25.0",
+			"uu,id"              : "5ebd8f7e-dedb-4017-bb86-6373c4b68eb8",
+			"geoPosition"        : "{\"type\":\"Point\",\"coordinates\":[7.411111,51.492528],\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"EPSG:4326\"}}}",
+			"olm\"characteristic": "olm:{(0.0,1.0)}",
+			"cosPhiFixed"        : "cosPhiFixed:{(0.0,1.0)}"
+		] as LinkedHashMap<String, String>
+
+		def expected = [
+			"activePowerGradient"      : "25.0",
+			"capex"                    : "\"100,0\"",
+			"cosphiRated"              : "0.95",
+			"etaConv"                  : "98.0",
+			"id"                       : "\"test \n bmTypeInput\"",
+			"opex"                     : "50.0",
+			"sRated"                   : "25.0",
+			"\"uu,id\""                : "5ebd8f7e-dedb-4017-bb86-6373c4b68eb8",
+			"geoPosition"              : "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528],\"\"crs\"\":{\"\"type\"\":\"\"name\"\",\"\"properties\"\":{\"\"name\"\":\"\"EPSG:4326\"\"}}}\"",
+			"\"olm\"\"characteristic\"": "\"olm:{(0.0,1.0)}\"",
+			"cosPhiFixed"              : "\"cosPhiFixed:{(0.0,1.0)}\""
+		] as LinkedHashMap<String, String>
+
+		when:
+		def actualList = input.entrySet().stream().map({ mapEntry ->
+			return new AbstractMap.SimpleEntry<String, String>(StringUtils.csvString(mapEntry.key, ","), StringUtils.csvString(mapEntry.value, ","))
+		}) as Set
+
+		def actual = actualList.collectEntries {
+			[it.key, it.value]
+		}
+
+		then:
+		actual == expected
+	}
+
+	def "The StringUtils converts a given String to match the csv specification RFC 4180 "() {
+		expect:
+		StringUtils.csvString(inputString, csvSep) == expect
+
+		where:
+		inputString                                                                         | csvSep || expect
+		"activePowerGradient"                                                               | ","    || "activePowerGradient"
+		"\"100,0\""                                                                         | ","    || "\"100,0\""
+		"100,0"                                                                             | ","    || "\"100,0\""
+		"100,0"                                                                             | ";"    || "\"100,0\""
+		"100;0"                                                                             | ";"    || "\"100;0\""
+		"\"100;0\""                                                                         | ";"    || "\"100;0\""
+		"100;0"                                                                             | ","    || "100;0"
+		"olm:{(0.00,1.00)}"                                                                 | ","    || "\"olm:{(0.00,1.00)}\""
+		"olm:{(0.00,1.00)}"                                                                 | ";"    || "\"olm:{(0.00,1.00)}\""
+		"{\"type\":\"Point\",\"coordinates\":[7.411111,51.492528]}"                         | ","    || "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""
+		"{\"type\":\"Point\",\"coordinates\":[7.411111,51.492528]}"                         | ";"    || "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""
+		"uu,id"                                                                             | ","    || "\"uu,id\""
+		"uu,id"                                                                             | ";"    || "\"uu,id\""
 	}
 }

@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 /** Some useful functions to manipulate Strings */
 public class StringUtils {
+
   private StringUtils() {
     throw new IllegalStateException("Utility classes cannot be instantiated.");
   }
@@ -80,7 +81,7 @@ public class StringUtils {
    * @return Quoted String
    */
   public static String quote(String input) {
-    return input.replaceAll("^([^\"])", "\"$1").replaceAll("([^\"])$", "$1\"");
+    return input.matches("^\".*\"$") ? input : "\"" + input + "\"";
   }
 
   /**
@@ -101,5 +102,49 @@ public class StringUtils {
    */
   public static String cleanString(String input) {
     return input.replaceAll("[^\\w]", "_");
+  }
+
+  /**
+   * Quotes a given string that contains special characters to comply with the csv specification RFC
+   * 4180 (https://tools.ietf.org/html/rfc4180). Double quotes are escaped according to
+   * specification.
+   *
+   * @param inputString string that should be converted to a valid rfc 4180 string
+   * @param csvSep separator of the csv file
+   * @return a csv string that is valid according to rfc 4180
+   */
+  public static String csvString(String inputString, String csvSep) {
+    if (needsCsvRFC4180Quote(inputString, csvSep)) {
+      /* Get rid of first and last quotation if there is some. */
+      String inputUnquoted = unquoteStartEnd(inputString);
+      /* Escape every double quotation mark within the String by doubling it */
+      String withEscapedQuotes = inputUnquoted.replaceAll("\"", "\"\"");
+      /* finally add quotes to the strings start and end again */
+      return quote(withEscapedQuotes);
+    } else return inputString;
+  }
+
+  /**
+   * Removes double quotes at start and end position of the provided string, if any
+   *
+   * @param input string that should be unquoted
+   * @return copy of the provided string without start and end double quotes
+   */
+  public static String unquoteStartEnd(String input) {
+    return input.matches("^\".*\"$") ? input.substring(1, input.length() - 1) : input;
+  }
+
+  /**
+   * Check if the provided string needs to be quoted according to the csv specification RFC 4180
+   *
+   * @param inputString the string that should be checked
+   * @param csvSep separator of the csv file
+   * @return true of the string needs to be quoted, false otherwise
+   */
+  private static boolean needsCsvRFC4180Quote(String inputString, String csvSep) {
+    return inputString.contains(csvSep)
+        || inputString.contains(",")
+        || inputString.contains("\"")
+        || inputString.contains("\n");
   }
 }
