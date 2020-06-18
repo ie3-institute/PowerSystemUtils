@@ -5,7 +5,11 @@
 */
 package edu.ie3.util.quantities;
 
+import static edu.ie3.util.quantities.PowerSystemUnits.DEGREE_GEOM;
+import static java.lang.StrictMath.abs;
+
 import javax.measure.Quantity;
+import javax.measure.quantity.Angle;
 import tec.uom.se.ComparableQuantity;
 import tec.uom.se.quantity.Quantities;
 
@@ -65,5 +69,32 @@ public class QuantityUtil {
     double bVal = b.to(a.getUnit()).getValue().doubleValue();
 
     return (Math.abs(aVal - bVal) / Math.abs(aVal)) <= relQuantityTolerance;
+  }
+
+  /**
+   * Compares two {@link Angle} {@link Quantity}s, if they are considerably equal. This is foremost
+   * important for {@link tec.uom.se.quantity.DoubleQuantity}s. The comparison is made on the
+   * absolute difference of both quantities' value. As of the repetitive nature of angles, they have
+   * to be treated separately, e.g. -170° is semantically the same angle as 190°. To ensure this,
+   * all quantities are converted to {@link PowerSystemUnits#DEGREE_GEOM}.
+   *
+   * @param a First quantity to compare
+   * @param b Second quantity to compare
+   * @param quantityTolerance Permissible absolute tolerance
+   * @return true, if both quantities' values differ less then the given tolerance else false
+   */
+  public static boolean considerablyEqualAngle(
+      Quantity<Angle> a, Quantity<Angle> b, double quantityTolerance) {
+    double aVal = a.to(DEGREE_GEOM).getValue().doubleValue();
+    double bVal = b.to(DEGREE_GEOM).getValue().doubleValue();
+
+    /* When they match on the first trial, return true */
+    boolean isConsiderablyEqual = abs(aVal - bVal) <= quantityTolerance;
+    if (isConsiderablyEqual) return true;
+    else {
+      /* Compare, if the distance to 180° is the same, preserving the sign of the distance */
+      if (aVal > bVal) return abs((aVal - 180) - (bVal + 180)) <= quantityTolerance;
+      else return abs((aVal + 180) - (bVal - 180)) <= quantityTolerance;
+    }
   }
 }
