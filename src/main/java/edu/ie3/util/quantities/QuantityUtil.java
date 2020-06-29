@@ -10,8 +10,8 @@ import static java.lang.StrictMath.abs;
 
 import javax.measure.Quantity;
 import javax.measure.quantity.Angle;
-import tec.uom.se.ComparableQuantity;
-import tec.uom.se.quantity.Quantities;
+import tech.units.indriya.ComparableQuantity;
+import tech.units.indriya.quantity.Quantities;
 
 /** Offers useful methods to handle {@link Quantity}s */
 public class QuantityUtil {
@@ -31,9 +31,9 @@ public class QuantityUtil {
   }
 
   /**
-   * Compares two {@link Quantity}s, if they are considerably equal. This is foremost important for
-   * {@link tec.uom.se.quantity.DoubleQuantity}s. The comparison is made on the absolute difference
-   * of both quantities' value. Both quantities are converted into a's unit before the comparison.
+   * Compares two {@link Quantity}s, if they are considerably equal. The comparison is made on the
+   * absolute difference of both quantities' value. Both quantities are converted into a's unit
+   * before the comparison.
    *
    * @param a First quantity to compare
    * @param b Second quantity to compare
@@ -51,10 +51,9 @@ public class QuantityUtil {
   }
 
   /**
-   * Compares two {@link Quantity}s, if they are considerably equal. This is foremost important for
-   * {@link tec.uom.se.quantity.DoubleQuantity}s. The comparison is made on the relative difference
-   * of both quantities' value with regard to a's value. Both quantities are converted into a's unit
-   * before the comparison.
+   * Compares two {@link Quantity}s, if they are considerably equal. The comparison is made on the
+   * relative difference of both quantities' value with regard to a's value. Both quantities are
+   * converted into a's unit before the comparison.
    *
    * @param a First quantity to compare
    * @param b Second quantity to compare
@@ -72,11 +71,10 @@ public class QuantityUtil {
   }
 
   /**
-   * Compares two {@link Angle} {@link Quantity}s, if they are considerably equal. This is foremost
-   * important for {@link tec.uom.se.quantity.DoubleQuantity}s. The comparison is made on the
-   * absolute difference of both quantities' value. As of the repetitive nature of angles, they have
-   * to be treated separately, e.g. -170° is semantically the same angle as 190°. To ensure this,
-   * all quantities are converted to {@link PowerSystemUnits#DEGREE_GEOM}.
+   * Compares two {@link Angle} {@link Quantity}s, if they are considerably equal. The comparison is
+   * made on the absolute difference of both quantities' value. As of the repetitive nature of
+   * angles, they have to be treated separately, e.g. -170° is semantically the same angle as 190°.
+   * To ensure this, all quantities are converted to {@link PowerSystemUnits#DEGREE_GEOM}.
    *
    * @param a First quantity to compare
    * @param b Second quantity to compare

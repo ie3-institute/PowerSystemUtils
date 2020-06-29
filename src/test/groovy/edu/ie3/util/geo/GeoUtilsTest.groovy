@@ -10,8 +10,8 @@ import static edu.ie3.util.quantities.PowerSystemUnits.METRE
 import net.morbz.osmonaut.geometry.Polygon
 import net.morbz.osmonaut.osm.LatLon
 import spock.lang.Specification
-import tec.uom.se.ComparableQuantity
-import tec.uom.se.quantity.Quantities
+import tech.units.indriya.ComparableQuantity
+import tech.units.indriya.quantity.Quantities
 
 import javax.measure.Quantity
 import javax.measure.quantity.Length

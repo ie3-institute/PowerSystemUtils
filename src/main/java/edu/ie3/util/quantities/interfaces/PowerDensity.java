@@ -5,7 +5,7 @@
 */
 package edu.ie3.util.quantities.interfaces;
 
-import tec.uom.se.ComparableQuantity;
+import tech.units.indriya.ComparableQuantity;
 
 /** Rate of {@link javax.measure.quantity.Power} and {@link javax.measure.quantity.Area} */
 public interface PowerDensity extends ComparableQuantity<PowerDensity> {}

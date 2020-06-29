@@ -11,8 +11,8 @@ import static edu.ie3.util.quantities.PowerSystemUnits.DEGREE_GEOM
 import static edu.ie3.util.quantities.PowerSystemUnits.KILOWATT
 import static edu.ie3.util.quantities.PowerSystemUnits.MEGAWATT
 import static edu.ie3.util.quantities.PowerSystemUnits.KILOWATTHOUR_PER_SQUAREMETRE
-import static tec.uom.se.unit.Units.METRE
-import static tec.uom.se.unit.Units.METRE_PER_SECOND
+import static tech.units.indriya.unit.Units.METRE
+import static tech.units.indriya.unit.Units.METRE_PER_SECOND
 
 import edu.ie3.util.quantities.interfaces.Irradiation
 
@@ -22,8 +22,8 @@ import javax.measure.quantity.Power
 import javax.measure.quantity.Speed
 
 import spock.lang.Specification
-import tec.uom.se.ComparableQuantity
-import tec.uom.se.quantity.Quantities
+import tech.units.indriya.ComparableQuantity
+import tech.units.indriya.quantity.Quantities
 
 class QuantityUtilTest extends Specification {
 	def "The QuantityUtil converts different quantities correctly to comparable quantities of same value and unit"() {

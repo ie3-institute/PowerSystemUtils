@@ -9,7 +9,7 @@ import edu.ie3.util.quantities.PowerSystemUnits;
 import javax.measure.Quantity;
 import javax.measure.quantity.Angle;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
-import tec.uom.se.quantity.Quantities;
+import tech.units.indriya.quantity.Quantities;
 
 /**
  * Adapter to convert Double into {@link Quantity} type {@link Angle}

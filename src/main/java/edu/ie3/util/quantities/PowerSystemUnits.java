@@ -8,12 +8,13 @@ package edu.ie3.util.quantities;
 import edu.ie3.util.quantities.interfaces.*;
 import java.util.HashSet;
 import java.util.logging.Level;
+import javax.measure.MetricPrefix;
 import javax.measure.Unit;
 import javax.measure.quantity.*;
-import tec.uom.se.format.SimpleUnitFormat;
-import tec.uom.se.function.MultiplyConverter;
-import tec.uom.se.quantity.QuantityDimension;
-import tec.uom.se.unit.*;
+import tech.units.indriya.format.SimpleUnitFormat;
+import tech.units.indriya.function.MultiplyConverter;
+import tech.units.indriya.unit.*;
+import tech.units.indriya.unit.Units;
 
 /**
  * Defines the physical units used in the simulation. They can be used like this: private
@@ -37,10 +38,10 @@ public class PowerSystemUnits extends Units {
 
   /** Per Unit */
   public static final Unit<Dimensionless> PU =
-      new TransformedUnit<>("p.u.", PERCENT, new MultiplyConverter(100));
+      new TransformedUnit<>("p.u.", PERCENT, MultiplyConverter.of(100));
 
   /** Euro */
-  public static final Unit<Currency> EURO = new BaseUnit<>("€", QuantityDimension.NONE);
+  public static final Unit<Currency> EURO = new BaseUnit<>("€", UnitDimension.NONE);
 
   /** Euro / km */
   public static final Unit<PricePerLength> EURO_PER_KILOMETRE =
@@ -65,10 +66,10 @@ public class PowerSystemUnits extends Units {
 
   /** Watthour */
   public static final Unit<Energy> WATTHOUR =
-      new TransformedUnit<>("Wh", JOULE, new MultiplyConverter(3600));
+      new TransformedUnit<>("Wh", JOULE, MultiplyConverter.of(3600));
 
   public static final Unit<Energy> VARHOUR =
-      new TransformedUnit<>("VArh", JOULE, new MultiplyConverter(3600));
+      new TransformedUnit<>("VArh", JOULE, MultiplyConverter.of(3600));
 
   /** Kilowatthour */
   public static final Unit<Energy> KILOWATTHOUR = MetricPrefix.KILO(WATTHOUR);
@@ -125,7 +126,7 @@ public class PowerSystemUnits extends Units {
       new ProductUnit<>(PERCENT.divide(HOUR));
 
   public static final Unit<DimensionlessRate> PU_PER_HOUR =
-      new TransformedUnit<>("p.u./h", PERCENT_PER_HOUR, new MultiplyConverter(100));
+      new TransformedUnit<>("p.u./h", PERCENT_PER_HOUR, MultiplyConverter.of(100));
 
   /* ==== Basic electric units ==== */
 
@@ -152,11 +153,11 @@ public class PowerSystemUnits extends Units {
 
   /** F / km */
   public static final Unit<SpecificCapacitance> FARAD_PER_KILOMETRE =
-      new TransformedUnit<>("F/km", FARAD_PER_METRE, new MultiplyConverter(1 / 1E3));
+      new TransformedUnit<>("F/km", FARAD_PER_METRE, MultiplyConverter.of(1 / 1E3));
 
   /** µF / km */
   public static final Unit<SpecificCapacitance> MICROFARAD_PER_KILOMETRE =
-      new TransformedUnit<>("µF/km", FARAD_PER_KILOMETRE, new MultiplyConverter(1 / 1E6));
+      new TransformedUnit<>("µF/km", FARAD_PER_KILOMETRE, MultiplyConverter.of(1 / 1E6));
 
   /* ==== Heat Capacity ==== */
   /** kWh/K */

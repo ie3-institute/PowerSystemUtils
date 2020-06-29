@@ -5,6 +5,6 @@
 */
 package edu.ie3.util.quantities.interfaces;
 
-import tec.uom.se.ComparableQuantity;
+import tech.units.indriya.ComparableQuantity;
 
 public interface SpecificCapacitance extends ComparableQuantity<SpecificCapacitance> {}

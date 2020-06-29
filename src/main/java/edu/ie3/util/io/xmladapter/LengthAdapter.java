@@ -9,7 +9,7 @@ import edu.ie3.util.quantities.PowerSystemUnits;
 import javax.measure.Quantity;
 import javax.measure.quantity.Length;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
-import tec.uom.se.quantity.Quantities;
+import tech.units.indriya.quantity.Quantities;
 
 /**
  * @author Kittl

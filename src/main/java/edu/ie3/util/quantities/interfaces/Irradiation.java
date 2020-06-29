@@ -5,7 +5,7 @@
 */
 package edu.ie3.util.quantities.interfaces;
 
-import tec.uom.se.ComparableQuantity;
+import tech.units.indriya.ComparableQuantity;
 
 /** Interface to describe the Quantity of an (solar) Irradiation */
 public interface Irradiation extends ComparableQuantity<Irradiation> {}

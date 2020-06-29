@@ -5,12 +5,12 @@
 */
 package edu.ie3.util.io.xmladapter;
 
-import static tec.uom.se.unit.Units.PERCENT;
+import static tech.units.indriya.unit.Units.PERCENT;
 
 import javax.measure.Quantity;
 import javax.measure.quantity.Dimensionless;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
-import tec.uom.se.quantity.Quantities;
+import tech.units.indriya.quantity.Quantities;
 
 /**
  * @author Kittl
