@@ -5,7 +5,7 @@
 */
 package edu.ie3.util.quantities;
 
-import static edu.ie3.util.quantities.PowerSystemUnits.DEGREE_GEOM;
+import static edu.ie3.util.quantities.PowerSystemUnitsNew.DEGREE_GEOM;
 import static java.lang.StrictMath.abs;
 
 import javax.measure.Quantity;
@@ -14,8 +14,8 @@ import tech.units.indriya.ComparableQuantity;
 import tech.units.indriya.quantity.Quantities;
 
 /** Offers useful methods to handle {@link Quantity}s */
-public class QuantityUtil {
-  private QuantityUtil() {
+public class QuantityUtilNew {
+  private QuantityUtilNew() {
     throw new IllegalStateException("Utility classes cannot be instantiated.");
   }
 
@@ -74,7 +74,7 @@ public class QuantityUtil {
    * Compares two {@link Angle} {@link Quantity}s, if they are considerably equal. The comparison is
    * made on the absolute difference of both quantities' value. As of the repetitive nature of
    * angles, they have to be treated separately, e.g. -170° is semantically the same angle as 190°.
-   * To ensure this, all quantities are converted to {@link PowerSystemUnits#DEGREE_GEOM}.
+   * To ensure this, all quantities are converted to {@link PowerSystemUnitsNew#DEGREE_GEOM}.
    *
    * @param a First quantity to compare
    * @param b Second quantity to compare

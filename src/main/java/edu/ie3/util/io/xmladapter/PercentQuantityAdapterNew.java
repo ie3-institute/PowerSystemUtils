@@ -16,7 +16,7 @@ import tech.units.indriya.quantity.Quantities;
  * @author Kittl
  * @since 27.03.2018
  */
-public class PercentQuantityAdapter extends XmlAdapter<Double, Quantity<Dimensionless>> {
+public class PercentQuantityAdapterNew extends XmlAdapter<Double, Quantity<Dimensionless>> {
   @Override
   public Quantity<Dimensionless> unmarshal(Double v) {
     return Quantities.getQuantity(v, PERCENT);

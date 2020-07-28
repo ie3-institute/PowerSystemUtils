@@ -5,7 +5,7 @@
  */
 package edu.ie3.util.geo
 
-import static edu.ie3.util.quantities.PowerSystemUnits.METRE
+import static edu.ie3.util.quantities.PowerSystemUnitsNew.METRE
 
 import net.morbz.osmonaut.geometry.Polygon
 import net.morbz.osmonaut.osm.LatLon
@@ -16,7 +16,7 @@ import tech.units.indriya.quantity.Quantities
 import javax.measure.Quantity
 import javax.measure.quantity.Length
 
-class GeoUtilsTest extends Specification {
+class GeoUtilsTestNew extends Specification {
 
 	def "Test haversine (distance between two points given lat/lon)"() {
 		given:
@@ -26,7 +26,7 @@ class GeoUtilsTest extends Specification {
 		ComparableQuantity<Length> expected = Quantities.getQuantity(450.18011568984845, METRE)
 
 		when:
-		ComparableQuantity<Length> actual = GeoUtils.haversine(start.lat, start.lon, end.lat, end.lon)
+		ComparableQuantity<Length> actual = GeoUtilsNew.haversine(start.lat, start.lon, end.lat, end.lon)
 
 		then:
 		Math.abs(actual.subtract(expected).to(METRE).value.doubleValue()) < tolerance.value.doubleValue()
@@ -38,7 +38,7 @@ class GeoUtilsTest extends Specification {
 		Quantity radius = Quantities.getQuantity(50, METRE)
 
 		when:
-		Polygon poly = GeoUtils.radiusWithCircleAsPolygon(center, radius)
+		Polygon poly = GeoUtilsNew.radiusWithCircleAsPolygon(center, radius)
 		List<LatLon> circlePoints = poly.getCoords()
 
 		then:
@@ -50,7 +50,7 @@ class GeoUtilsTest extends Specification {
 		circlePoints.size() == 361
 		// rounded distance should be 50 meters
 		circlePoints.forEach({ point ->
-			Double distance = GeoUtils.haversine(center.lat, center.lon, point.lat, point.lon).to(METRE).value.doubleValue()
+			Double distance = GeoUtilsNew.haversine(center.lat, center.lon, point.lat, point.lon).to(METRE).value.doubleValue()
 			Math.round(distance) == 50
 		})
 

@@ -7,4 +7,4 @@ package edu.ie3.util.quantities.interfaces;
 
 import tech.units.indriya.ComparableQuantity;
 
-public interface SpecificResistance extends ComparableQuantity<SpecificResistance> {}
+public interface SpecificResistanceNew extends ComparableQuantity<SpecificResistanceNew> {}

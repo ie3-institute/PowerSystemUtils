@@ -7,5 +7,4 @@ package edu.ie3.util.quantities.interfaces;
 
 import tech.units.indriya.ComparableQuantity;
 
-/** Interface to describe a price per distance */
-public interface PricePerLength extends ComparableQuantity<PricePerLength> {}
+public interface SpecificHeatCapacityNew extends ComparableQuantity<SpecificHeatCapacityNew> {}

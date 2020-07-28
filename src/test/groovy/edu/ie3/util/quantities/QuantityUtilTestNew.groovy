@@ -7,14 +7,14 @@ package edu.ie3.util.quantities
 
 import spock.lang.Unroll
 
-import static edu.ie3.util.quantities.PowerSystemUnits.DEGREE_GEOM
-import static edu.ie3.util.quantities.PowerSystemUnits.KILOWATT
-import static edu.ie3.util.quantities.PowerSystemUnits.MEGAWATT
-import static edu.ie3.util.quantities.PowerSystemUnits.KILOWATTHOUR_PER_SQUAREMETRE
+import static PowerSystemUnitsNew.DEGREE_GEOM
+import static PowerSystemUnitsNew.KILOWATT
+import static PowerSystemUnitsNew.MEGAWATT
+import static PowerSystemUnitsNew.KILOWATTHOUR_PER_SQUAREMETRE
 import static tech.units.indriya.unit.Units.METRE
 import static tech.units.indriya.unit.Units.METRE_PER_SECOND
 
-import edu.ie3.util.quantities.interfaces.Irradiation
+import edu.ie3.util.quantities.interfaces.IrradiationNew
 
 import javax.measure.quantity.Angle
 import javax.measure.quantity.Length
@@ -25,10 +25,10 @@ import spock.lang.Specification
 import tech.units.indriya.ComparableQuantity
 import tech.units.indriya.quantity.Quantities
 
-class QuantityUtilTest extends Specification {
+class QuantityUtilTestNew extends Specification {
 	def "The QuantityUtil converts different quantities correctly to comparable quantities of same value and unit"() {
 		when:
-		def actual = QuantityUtil.makeComparable(input)
+		def actual = QuantityUtilNew.makeComparable(input)
 
 		then:
 		actual instanceof ComparableQuantity
@@ -40,14 +40,14 @@ class QuantityUtilTest extends Specification {
 		Quantities.getQuantity(10d, KILOWATT)                     || Quantities.getQuantity(10d, KILOWATT) as ComparableQuantity<Power>
 		Quantities.getQuantity(15d, DEGREE_GEOM)                  || Quantities.getQuantity(15d, DEGREE_GEOM) as ComparableQuantity<Angle>
 		Quantities.getQuantity(20d, METRE_PER_SECOND)             || Quantities.getQuantity(20d, METRE_PER_SECOND) as ComparableQuantity<Speed>
-		Quantities.getQuantity(25d, KILOWATTHOUR_PER_SQUAREMETRE) || Quantities.getQuantity(25d, KILOWATTHOUR_PER_SQUAREMETRE) as ComparableQuantity<Irradiation>
+		Quantities.getQuantity(25d, KILOWATTHOUR_PER_SQUAREMETRE) || Quantities.getQuantity(25d, KILOWATTHOUR_PER_SQUAREMETRE) as ComparableQuantity<IrradiationNew>
 		Quantities.getQuantity(30d, METRE)                        || Quantities.getQuantity(30d, METRE) as ComparableQuantity<Length>
 	}
 
 	@Unroll
 	def "The QuantityUtil calculates absolute considerably equal values correctly (a = #a, b = #b, expected result = #expected)"() {
 		when:
-		def actual = QuantityUtil.considerablyAbsEqual(a, b, 0.001)
+		def actual = QuantityUtilNew.considerablyAbsEqual(a, b, 0.001)
 
 		then:
 		actual == expected
@@ -63,7 +63,7 @@ class QuantityUtilTest extends Specification {
 	@Unroll
 	def "The QuantityUtil calculates relative considerably equal values correctly (a = #a, b = #b, expected result = #expected)"() {
 		when:
-		def actual = QuantityUtil.considerablyRelEqual(a, b, 0.1)
+		def actual = QuantityUtilNew.considerablyRelEqual(a, b, 0.1)
 
 		then:
 		actual == expected
@@ -82,7 +82,7 @@ class QuantityUtilTest extends Specification {
 		def b = Quantities.getQuantity(1.1d, DEGREE_GEOM)
 
 		then:
-		!QuantityUtil.considerablyEqualAngle(a, b, 1e-3)
+		!QuantityUtilNew.considerablyEqualAngle(a, b, 1e-3)
 	}
 
 	def "Comparing two angle quantities absolutely shows considerably equal values"() {
@@ -91,12 +91,12 @@ class QuantityUtilTest extends Specification {
 		def b = Quantities.getQuantity(1.001d, DEGREE_GEOM)
 
 		then:
-		QuantityUtil.considerablyEqualAngle(a, b, 1e-3)
+		QuantityUtilNew.considerablyEqualAngle(a, b, 1e-3)
 	}
 
 	def "Comparing two angle quantities absolutely shows considerably different values close to 180 degree"() {
 		expect:
-		!QuantityUtil.considerablyEqualAngle(a, b, 1e-3)
+		!QuantityUtilNew.considerablyEqualAngle(a, b, 1e-3)
 
 		where:
 		a 											| b
@@ -108,7 +108,7 @@ class QuantityUtilTest extends Specification {
 
 	def "Comparing two angle quantities absolutely shows considerably equal values close to 180 degree"() {
 		expect:
-		QuantityUtil.considerablyEqualAngle(a, b, 1e-3)
+		QuantityUtilNew.considerablyEqualAngle(a, b, 1e-3)
 
 		where:
 		a                                          | b

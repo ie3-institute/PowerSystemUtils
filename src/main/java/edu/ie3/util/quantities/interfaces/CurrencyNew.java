@@ -7,4 +7,4 @@ package edu.ie3.util.quantities.interfaces;
 
 import tech.units.indriya.ComparableQuantity;
 
-public interface SpecificHeatCapacity extends ComparableQuantity<SpecificHeatCapacity> {}
+public interface CurrencyNew extends ComparableQuantity<CurrencyNew> {}

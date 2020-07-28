@@ -27,7 +27,7 @@ import tech.units.indriya.unit.Units;
  * @version 0.1
  * @since 17.07.2017
  */
-public class PowerSystemUnits extends Units {
+public class PowerSystemUnitsNew extends Units {
 
   /* ==== Basic non electric units ==== */
   /** Kilometre */
@@ -41,22 +41,22 @@ public class PowerSystemUnits extends Units {
       new TransformedUnit<>("p.u.", PERCENT, MultiplyConverter.of(100));
 
   /** Euro */
-  public static final Unit<Currency> EURO = new BaseUnit<>("€", UnitDimension.NONE);
+  public static final Unit<CurrencyNew> EURO = new BaseUnit<>("€", UnitDimension.NONE);
 
   /** Euro / km */
-  public static final Unit<PricePerLength> EURO_PER_KILOMETRE =
+  public static final Unit<PricePerLengthNew> EURO_PER_KILOMETRE =
       new ProductUnit<>(EURO.divide(MetricPrefix.KILO(METRE)));
 
   /** Euro / Wh */
-  public static final Unit<EnergyPrice> EURO_PER_WATTHOUR =
+  public static final Unit<EnergyPriceNew> EURO_PER_WATTHOUR =
       new ProductUnit<>(EURO.divide(Units.WATT.multiply(Units.HOUR)));
 
   /** Euro / kWh */
-  public static final Unit<EnergyPrice> EURO_PER_KILOWATTHOUR =
+  public static final Unit<EnergyPriceNew> EURO_PER_KILOWATTHOUR =
       MetricPrefix.MILLI(EURO_PER_WATTHOUR);
 
   /** Euro / MWh */
-  public static final Unit<EnergyPrice> EURO_PER_MEGAWATTHOUR =
+  public static final Unit<EnergyPriceNew> EURO_PER_MEGAWATTHOUR =
       MetricPrefix.MICRO(EURO_PER_WATTHOUR);
 
   /** Degree */
@@ -77,18 +77,18 @@ public class PowerSystemUnits extends Units {
   public static final Unit<Energy> KILOVARHOUR = MetricPrefix.KILO(VARHOUR);
 
   /** Watthour per metre */
-  public static final Unit<SpecificEnergy> WATTHOUR_PER_METRE = new BaseUnit<>("Wh/m");
+  public static final Unit<SpecificEnergyNew> WATTHOUR_PER_METRE = new BaseUnit<>("Wh/m");
 
   /** Kilowatthour per Kilometre */
-  public static final Unit<SpecificEnergy> KILOWATTHOUR_PER_KILOMETRE =
+  public static final Unit<SpecificEnergyNew> KILOWATTHOUR_PER_KILOMETRE =
       new AlternateUnit<>(WATTHOUR_PER_METRE, "kWh/km");
 
   /** Watthour per squaremetre */
-  public static final Unit<Irradiation> WATTHOUR_PER_SQUAREMETRE =
+  public static final Unit<IrradiationNew> WATTHOUR_PER_SQUAREMETRE =
       new ProductUnit<>(WATT.multiply(HOUR).divide(SQUARE_METRE));
 
   /** Kilowatthour per squaremetre */
-  public static final Unit<Irradiation> KILOWATTHOUR_PER_SQUAREMETRE =
+  public static final Unit<IrradiationNew> KILOWATTHOUR_PER_SQUAREMETRE =
       MetricPrefix.KILO(WATTHOUR_PER_SQUAREMETRE);
 
   /* ==== Power ==== */
@@ -118,14 +118,14 @@ public class PowerSystemUnits extends Units {
   public static final Unit<Power> MEGAWATT = MetricPrefix.MEGA(WATT);
 
   /** Watt per square metre */
-  public static final Unit<PowerDensity> WATT_PER_SQUAREMETRE =
+  public static final Unit<PowerDensityNew> WATT_PER_SQUAREMETRE =
       new ProductUnit<>(WATT.divide(SQUARE_METRE));
 
   /* ==== Composed units ==== */
-  public static final Unit<DimensionlessRate> PERCENT_PER_HOUR =
+  public static final Unit<DimensionlessRateNew> PERCENT_PER_HOUR =
       new ProductUnit<>(PERCENT.divide(HOUR));
 
-  public static final Unit<DimensionlessRate> PU_PER_HOUR =
+  public static final Unit<DimensionlessRateNew> PU_PER_HOUR =
       new TransformedUnit<>("p.u./h", PERCENT_PER_HOUR, MultiplyConverter.of(100));
 
   /* ==== Basic electric units ==== */
@@ -137,41 +137,41 @@ public class PowerSystemUnits extends Units {
   public static final Unit<ElectricPotential> MEGAVOLT = MetricPrefix.MEGA(VOLT);
 
   /** Ohm per kilometre */
-  public static final Unit<SpecificResistance> OHM_PER_KILOMETRE =
+  public static final Unit<SpecificResistanceNew> OHM_PER_KILOMETRE =
       new ProductUnit<>(OHM.divide(KILOMETRE));
 
   /** Siemens per kilometre */
-  public static final Unit<SpecificConductance> SIEMENS_PER_KILOMETRE =
+  public static final Unit<SpecificConductanceNew> SIEMENS_PER_KILOMETRE =
       new ProductUnit<>(SIEMENS.divide(KILOMETRE));
 
   /** Micro Siemens per kilometre */
-  public static final Unit<SpecificConductance> MICRO_SIEMENS_PER_KILOMETRE =
+  public static final Unit<SpecificConductanceNew> MICRO_SIEMENS_PER_KILOMETRE =
       new ProductUnit<>(MetricPrefix.MICRO(SIEMENS).divide(KILOMETRE));
 
   /** Farad per metre */
-  public static final Unit<SpecificCapacitance> FARAD_PER_METRE = new BaseUnit<>("F/m");
+  public static final Unit<SpecificCapacitanceNew> FARAD_PER_METRE = new BaseUnit<>("F/m");
 
   /** F / km */
-  public static final Unit<SpecificCapacitance> FARAD_PER_KILOMETRE =
+  public static final Unit<SpecificCapacitanceNew> FARAD_PER_KILOMETRE =
       new TransformedUnit<>("F/km", FARAD_PER_METRE, MultiplyConverter.of(1 / 1E3));
 
   /** µF / km */
-  public static final Unit<SpecificCapacitance> MICROFARAD_PER_KILOMETRE =
+  public static final Unit<SpecificCapacitanceNew> MICROFARAD_PER_KILOMETRE =
       new TransformedUnit<>("µF/km", FARAD_PER_KILOMETRE, MultiplyConverter.of(1 / 1E6));
 
   /* ==== Heat Capacity ==== */
   /** kWh/K */
-  public static final Unit<HeatCapacity> KILOWATTHOUR_PER_KELVIN =
+  public static final Unit<HeatCapacityNew> KILOWATTHOUR_PER_KELVIN =
       new ProductUnit<>(KILOWATTHOUR.divide(KELVIN));
 
   /** kWh/K*m³ */
-  public static final Unit<SpecificHeatCapacity> KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE =
+  public static final Unit<SpecificHeatCapacityNew> KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE =
       new ProductUnit<>(KILOWATTHOUR_PER_KELVIN.divide(CUBIC_METRE));
 
   /* ==== Thermal Conductance ==== */
 
   /** kW/K */
-  public static final Unit<ThermalConductance> KILOWATT_PER_KELVIN = new BaseUnit<>("kW/K");
+  public static final Unit<ThermalConductanceNew> KILOWATT_PER_KELVIN = new BaseUnit<>("kW/K");
 
   private static HashSet<String> registeredLabels = new HashSet<>();
 

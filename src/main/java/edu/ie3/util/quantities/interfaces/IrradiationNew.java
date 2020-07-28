@@ -7,4 +7,5 @@ package edu.ie3.util.quantities.interfaces;
 
 import tech.units.indriya.ComparableQuantity;
 
-public interface SpecificCapacitance extends ComparableQuantity<SpecificCapacitance> {}
+/** Interface to describe the Quantity of an (solar) Irradiation */
+public interface IrradiationNew extends ComparableQuantity<IrradiationNew> {}

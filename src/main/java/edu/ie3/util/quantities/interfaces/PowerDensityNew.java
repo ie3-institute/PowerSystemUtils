@@ -7,5 +7,5 @@ package edu.ie3.util.quantities.interfaces;
 
 import tech.units.indriya.ComparableQuantity;
 
-/** Interface to describe the Quantity of an (solar) Irradiation */
-public interface Irradiation extends ComparableQuantity<Irradiation> {}
+/** Rate of {@link javax.measure.quantity.Power} and {@link javax.measure.quantity.Area} */
+public interface PowerDensityNew extends ComparableQuantity<PowerDensityNew> {}

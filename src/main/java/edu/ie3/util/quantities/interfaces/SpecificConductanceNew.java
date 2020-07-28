@@ -7,4 +7,4 @@ package edu.ie3.util.quantities.interfaces;
 
 import tech.units.indriya.ComparableQuantity;
 
-public interface SpecificEnergy extends ComparableQuantity<SpecificEnergy> {}
+public interface SpecificConductanceNew extends ComparableQuantity<SpecificConductanceNew> {}

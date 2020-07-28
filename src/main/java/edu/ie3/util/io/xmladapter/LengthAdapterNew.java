@@ -5,7 +5,7 @@
 */
 package edu.ie3.util.io.xmladapter;
 
-import edu.ie3.util.quantities.PowerSystemUnits;
+import edu.ie3.util.quantities.PowerSystemUnitsNew;
 import javax.measure.Quantity;
 import javax.measure.quantity.Length;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
@@ -15,14 +15,14 @@ import tech.units.indriya.quantity.Quantities;
  * @author Kittl
  * @since 26.09.2018
  */
-public class LengthAdapter extends XmlAdapter<Double, Quantity<Length>> {
+public class LengthAdapterNew extends XmlAdapter<Double, Quantity<Length>> {
   @Override
   public Quantity<Length> unmarshal(Double v) throws Exception {
-    return Quantities.getQuantity(v, PowerSystemUnits.KILOMETRE);
+    return Quantities.getQuantity(v, PowerSystemUnitsNew.KILOMETRE);
   }
 
   @Override
   public Double marshal(Quantity<Length> v) throws Exception {
-    return v.to(PowerSystemUnits.KILOMETRE).getValue().doubleValue();
+    return v.to(PowerSystemUnitsNew.KILOMETRE).getValue().doubleValue();
   }
 }

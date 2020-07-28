@@ -7,4 +7,4 @@ package edu.ie3.util.quantities.interfaces;
 
 import tech.units.indriya.ComparableQuantity;
 
-public interface DimensionlessRate extends ComparableQuantity<DimensionlessRate> {}
+public interface ThermalConductanceNew extends ComparableQuantity<ThermalConductanceNew> {}

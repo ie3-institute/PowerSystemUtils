@@ -5,12 +5,12 @@
 */
 package edu.ie3.util.geo;
 
-import static edu.ie3.util.quantities.PowerSystemUnits.*;
+import static edu.ie3.util.quantities.PowerSystemUnitsNew.*;
 
 import com.google.common.collect.Lists;
 import edu.ie3.util.copy.DeepCopy;
 import edu.ie3.util.exceptions.GeoPreparationException;
-import edu.ie3.util.quantities.PowerSystemUnits;
+import edu.ie3.util.quantities.PowerSystemUnitsNew;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -31,8 +31,8 @@ import tech.units.indriya.ComparableQuantity;
 import tech.units.indriya.quantity.Quantities;
 
 /** Functionality to deal with geographical and geometric information */
-public class GeoUtils {
-  private static final Logger logger = LoggerFactory.getLogger(GeoUtils.class);
+public class GeoUtilsNew {
+  private static final Logger logger = LoggerFactory.getLogger(GeoUtilsNew.class);
 
   /** radius of the earth in m */
   public static final ComparableQuantity<Length> EARTH_RADIUS =
@@ -42,7 +42,7 @@ public class GeoUtils {
   public static final GeometryFactory DEFAULT_GEOMETRY_FACTORY =
       new GeometryFactory(new PrecisionModel(), 4326);
 
-  protected GeoUtils() {
+  protected GeoUtilsNew() {
     throw new IllegalStateException("Utility classes cannot be instantiated");
   }
 
@@ -53,7 +53,7 @@ public class GeoUtils {
    * @param lng1 Longitude value of the first coordinate
    * @param lat2 Latitude value of the second coordinate
    * @param lng2 Longitude value of the second coordinate
-   * @return The distance between both coordinates in {@link PowerSystemUnits#KILOMETRE}
+   * @return The distance between both coordinates in {@link PowerSystemUnitsNew#KILOMETRE}
    */
   public static ComparableQuantity<Length> haversine(
       double lat1, double lng1, double lat2, double lng2) {
@@ -456,10 +456,10 @@ public class GeoUtils {
 
   /**
    * Calculates the area, which is surrounded by a closed way by the help of {@link
-   * GeoUtils#getArea(Polygon)}
+   * GeoUtilsNew#getArea(Polygon)}
    *
    * @param w Closed way, that surrounds the area
-   * @return The covered area in {@link PowerSystemUnits#SQUARE_METRE}
+   * @return The covered area in {@link PowerSystemUnitsNew#SQUARE_METRE}
    * @throws GeoPreparationException If some serious shit happens
    * @deprecated This method is currently not under test and has to be revised thoroughly
    */
@@ -476,7 +476,7 @@ public class GeoUtils {
    * and the line segments on the polygon
    *
    * @param p {@link Polygon} whos area may be calculated
-   * @return The spanned area in {@link PowerSystemUnits#SQUARE_METRE}
+   * @return The spanned area in {@link PowerSystemUnitsNew#SQUARE_METRE}
    * @throws GeoPreparationException If some serious shit happens
    * @deprecated This method is currently not under test and has to be revised thoroughly
    */
