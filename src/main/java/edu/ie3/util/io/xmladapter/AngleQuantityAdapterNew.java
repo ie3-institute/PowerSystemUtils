@@ -5,7 +5,7 @@
 */
 package edu.ie3.util.io.xmladapter;
 
-import edu.ie3.util.quantities.PowerSystemUnitsNew;
+import edu.ie3.util.quantities.PowerSystemUnits;
 import javax.measure.Quantity;
 import javax.measure.quantity.Angle;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
@@ -20,11 +20,11 @@ import tech.units.indriya.quantity.Quantities;
 public class AngleQuantityAdapterNew extends XmlAdapter<Double, Quantity<Angle>> {
   @Override
   public Quantity<Angle> unmarshal(Double v) throws Exception {
-    return Quantities.getQuantity(v, PowerSystemUnitsNew.DEGREE_GEOM);
+    return Quantities.getQuantity(v, PowerSystemUnits.DEGREE_GEOM);
   }
 
   @Override
   public Double marshal(Quantity<Angle> v) throws Exception {
-    return v.to(PowerSystemUnitsNew.DEGREE_GEOM).getValue().doubleValue();
+    return v.to(PowerSystemUnits.DEGREE_GEOM).getValue().doubleValue();
   }
 }

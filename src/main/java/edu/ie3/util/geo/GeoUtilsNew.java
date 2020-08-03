@@ -5,12 +5,12 @@
 */
 package edu.ie3.util.geo;
 
-import static edu.ie3.util.quantities.PowerSystemUnitsNew.*;
+import static edu.ie3.util.quantities.PowerSystemUnits.*;
 
 import com.google.common.collect.Lists;
 import edu.ie3.util.copy.DeepCopy;
 import edu.ie3.util.exceptions.GeoPreparationException;
-import edu.ie3.util.quantities.PowerSystemUnitsNew;
+import edu.ie3.util.quantities.PowerSystemUnits;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -53,7 +53,7 @@ public class GeoUtilsNew {
    * @param lng1 Longitude value of the first coordinate
    * @param lat2 Latitude value of the second coordinate
    * @param lng2 Longitude value of the second coordinate
-   * @return The distance between both coordinates in {@link PowerSystemUnitsNew#KILOMETRE}
+   * @return The distance between both coordinates in {@link PowerSystemUnits#KILOMETRE}
    */
   public static ComparableQuantity<Length> haversine(
       double lat1, double lng1, double lat2, double lng2) {
@@ -459,7 +459,7 @@ public class GeoUtilsNew {
    * GeoUtilsNew#getArea(Polygon)}
    *
    * @param w Closed way, that surrounds the area
-   * @return The covered area in {@link PowerSystemUnitsNew#SQUARE_METRE}
+   * @return The covered area in {@link PowerSystemUnits#SQUARE_METRE}
    * @throws GeoPreparationException If some serious shit happens
    * @deprecated This method is currently not under test and has to be revised thoroughly
    */
@@ -476,7 +476,7 @@ public class GeoUtilsNew {
    * and the line segments on the polygon
    *
    * @param p {@link Polygon} whos area may be calculated
-   * @return The spanned area in {@link PowerSystemUnitsNew#SQUARE_METRE}
+   * @return The spanned area in {@link PowerSystemUnits#SQUARE_METRE}
    * @throws GeoPreparationException If some serious shit happens
    * @deprecated This method is currently not under test and has to be revised thoroughly
    */

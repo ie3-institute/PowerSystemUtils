@@ -5,11 +5,13 @@
 */
 package edu.ie3.util.quantities;
 
-import static edu.ie3.util.quantities.PowerSystemUnits.DEGREE_GEOM;
+import static edu.ie3.util.quantities.dep.PowerSystemUnits.DEGREE_GEOM;
 import static java.lang.StrictMath.abs;
 
 import javax.measure.Quantity;
 import javax.measure.quantity.Angle;
+
+import edu.ie3.util.quantities.dep.PowerSystemUnits;
 import tec.uom.se.ComparableQuantity;
 import tec.uom.se.quantity.Quantities;
 

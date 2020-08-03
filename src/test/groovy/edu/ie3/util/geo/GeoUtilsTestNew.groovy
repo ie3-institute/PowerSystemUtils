@@ -5,7 +5,7 @@
  */
 package edu.ie3.util.geo
 
-import static edu.ie3.util.quantities.PowerSystemUnitsNew.METRE
+import static edu.ie3.util.quantities.PowerSystemUnits.METRE
 
 import net.morbz.osmonaut.geometry.Polygon
 import net.morbz.osmonaut.osm.LatLon

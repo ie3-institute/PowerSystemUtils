@@ -5,7 +5,7 @@
 */
 package edu.ie3.util.io.xmladapter;
 
-import edu.ie3.util.quantities.PowerSystemUnits;
+import edu.ie3.util.quantities.dep.PowerSystemUnits;
 import javax.measure.Quantity;
 import javax.measure.quantity.Length;
 import javax.xml.bind.annotation.adapters.XmlAdapter;

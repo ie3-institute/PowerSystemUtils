@@ -5,12 +5,12 @@
 */
 package edu.ie3.util.geo;
 
-import static edu.ie3.util.quantities.PowerSystemUnits.*;
+import static edu.ie3.util.quantities.dep.PowerSystemUnits.*;
 
 import com.google.common.collect.Lists;
 import edu.ie3.util.copy.DeepCopy;
 import edu.ie3.util.exceptions.GeoPreparationException;
-import edu.ie3.util.quantities.PowerSystemUnits;
+import edu.ie3.util.quantities.dep.PowerSystemUnits;
 import java.awt.*;
 import java.util.*;
 import java.util.List;

@@ -7,10 +7,10 @@ package edu.ie3.util.quantities
 
 import spock.lang.Unroll
 
-import static edu.ie3.util.quantities.PowerSystemUnits.DEGREE_GEOM
-import static edu.ie3.util.quantities.PowerSystemUnits.KILOWATT
-import static edu.ie3.util.quantities.PowerSystemUnits.MEGAWATT
-import static edu.ie3.util.quantities.PowerSystemUnits.KILOWATTHOUR_PER_SQUAREMETRE
+import static edu.ie3.util.quantities.dep.PowerSystemUnits.DEGREE_GEOM
+import static edu.ie3.util.quantities.dep.PowerSystemUnits.KILOWATT
+import static edu.ie3.util.quantities.dep.PowerSystemUnits.MEGAWATT
+import static edu.ie3.util.quantities.dep.PowerSystemUnits.KILOWATTHOUR_PER_SQUAREMETRE
 import static tec.uom.se.unit.Units.METRE
 import static tec.uom.se.unit.Units.METRE_PER_SECOND
 
