@@ -8,14 +8,15 @@ package edu.ie3.util.quantities;
 import static edu.ie3.util.quantities.dep.PowerSystemUnits.DEGREE_GEOM;
 import static java.lang.StrictMath.abs;
 
+import edu.ie3.util.quantities.dep.PowerSystemUnits;
 import javax.measure.Quantity;
 import javax.measure.quantity.Angle;
-
-import edu.ie3.util.quantities.dep.PowerSystemUnits;
 import tec.uom.se.ComparableQuantity;
 import tec.uom.se.quantity.Quantities;
 
 /** Offers useful methods to handle {@link Quantity}s */
+/** @deprecated As of release 1.4, replaced by {@link QuantityUtilNew} */
+@Deprecated
 public class QuantityUtil {
   private QuantityUtil() {
     throw new IllegalStateException("Utility classes cannot be instantiated.");

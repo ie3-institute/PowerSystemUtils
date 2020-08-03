@@ -25,6 +25,8 @@ import spock.lang.Specification
 import tec.uom.se.ComparableQuantity
 import tec.uom.se.quantity.Quantities
 
+/** @deprecated As of release 1.4, replaced by {@link QuantityUtilTestNew} */
+@Deprecated
 class QuantityUtilTest extends Specification {
 	def "The QuantityUtil converts different quantities correctly to comparable quantities of same value and unit"() {
 		when:

@@ -16,6 +16,8 @@ import tec.uom.se.quantity.Quantities
 import javax.measure.Quantity
 import javax.measure.quantity.Length
 
+/** @deprecated As of release 1.4, replaced by {@link GeoUtilsNew} */
+@Deprecated
 class GeoUtilsTest extends Specification {
 
 	def "Test haversine (distance between two points given lat/lon)"() {

@@ -16,6 +16,8 @@ import tec.uom.se.quantity.Quantities;
  * @author Kittl
  * @since 27.03.2018
  */
+/** @deprecated As of release 1.4, replaced by {@link PercentQuantityAdapterNew} */
+@Deprecated
 public class PercentQuantityAdapter extends XmlAdapter<Double, Quantity<Dimensionless>> {
   @Override
   public Quantity<Dimensionless> unmarshal(Double v) {

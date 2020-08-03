@@ -31,6 +31,8 @@ import tec.uom.se.ComparableQuantity;
 import tec.uom.se.quantity.Quantities;
 
 /** Functionality to deal with geographical and geometric information */
+/** @deprecated As of release 1.4, replaced by {@link GeoUtilsNew} */
+@Deprecated
 public class GeoUtils {
   private static final Logger logger = LoggerFactory.getLogger(GeoUtils.class);
 

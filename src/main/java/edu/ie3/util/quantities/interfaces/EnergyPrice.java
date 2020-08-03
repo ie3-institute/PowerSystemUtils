@@ -7,4 +7,6 @@ package edu.ie3.util.quantities.interfaces;
 
 import tec.uom.se.ComparableQuantity;
 
+/** @deprecated As of release 1.4, replaced by {@link EnergyPriceNew} */
+@Deprecated
 public interface EnergyPrice extends ComparableQuantity<EnergyPrice> {}
