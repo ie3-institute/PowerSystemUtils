@@ -5,18 +5,17 @@
 */
 package edu.ie3.util.quantities;
 
-import static edu.ie3.util.quantities.dep.PowerSystemUnits.DEGREE_GEOM;
+import static edu.ie3.util.quantities.PowerSystemUnits.DEGREE_GEOM;
 import static java.lang.StrictMath.abs;
 
 import edu.ie3.util.quantities.dep.PowerSystemUnits;
 import javax.measure.Quantity;
+import javax.measure.UnconvertibleException;
 import javax.measure.quantity.Angle;
 import tec.uom.se.ComparableQuantity;
 import tec.uom.se.quantity.Quantities;
 
 /** Offers useful methods to handle {@link Quantity}s */
-/** @deprecated As of release 1.4, replaced by {@link QuantityUtilNew} */
-@Deprecated
 public class QuantityUtil {
   private QuantityUtil() {
     throw new IllegalStateException("Utility classes cannot be instantiated.");
@@ -88,8 +87,19 @@ public class QuantityUtil {
    */
   public static boolean considerablyEqualAngle(
       Quantity<Angle> a, Quantity<Angle> b, double quantityTolerance) {
-    double aVal = a.to(DEGREE_GEOM).getValue().doubleValue();
-    double bVal = b.to(DEGREE_GEOM).getValue().doubleValue();
+
+    double aVal;
+    double bVal;
+    /* FIXME: Remove this catch, when the deprecated Units disappear in version 1.4 */
+    try {
+      aVal = a.to(DEGREE_GEOM).getValue().doubleValue();
+      bVal = b.to(DEGREE_GEOM).getValue().doubleValue();
+    } catch (UnconvertibleException e) {
+      aVal =
+          a.to(edu.ie3.util.quantities.dep.PowerSystemUnits.DEGREE_GEOM).getValue().doubleValue();
+      bVal =
+          b.to(edu.ie3.util.quantities.dep.PowerSystemUnits.DEGREE_GEOM).getValue().doubleValue();
+    }
 
     /* When they match on the first trial, return true */
     boolean isConsiderablyEqual = abs(aVal - bVal) <= quantityTolerance;
