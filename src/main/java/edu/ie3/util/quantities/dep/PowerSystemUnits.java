@@ -5,7 +5,7 @@
 */
 package edu.ie3.util.quantities.dep;
 
-import edu.ie3.util.quantities.interfaces.*;
+import edu.ie3.util.quantities.dep.interfaces.*;
 import java.util.HashSet;
 import java.util.logging.Level;
 import javax.measure.Unit;
@@ -25,9 +25,8 @@ import tec.uom.se.unit.*;
  * @author roemer
  * @version 0.1
  * @since 17.07.2017
+ * @deprecated As of release 1.4, replaced by {@link edu.ie3.util.quantities.PowerSystemUnits}
  */
-
-/** @deprecated As of release 1.4, replaced by {@link edu.ie3.util.quantities.PowerSystemUnits} */
 @Deprecated
 public class PowerSystemUnits extends Units {
 

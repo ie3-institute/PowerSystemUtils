@@ -14,7 +14,7 @@ import static PowerSystemUnits.KILOWATTHOUR_PER_SQUAREMETRE
 import static tech.units.indriya.unit.Units.METRE
 import static tech.units.indriya.unit.Units.METRE_PER_SECOND
 
-import edu.ie3.util.quantities.interfaces.IrradiationNew
+import edu.ie3.util.quantities.interfaces.Irradiation
 
 import javax.measure.quantity.Angle
 import javax.measure.quantity.Length
@@ -40,7 +40,7 @@ class QuantityUtilTestNew extends Specification {
 		Quantities.getQuantity(10d, KILOWATT)                     || Quantities.getQuantity(10d, KILOWATT) as ComparableQuantity<Power>
 		Quantities.getQuantity(15d, DEGREE_GEOM)                  || Quantities.getQuantity(15d, DEGREE_GEOM) as ComparableQuantity<Angle>
 		Quantities.getQuantity(20d, METRE_PER_SECOND)             || Quantities.getQuantity(20d, METRE_PER_SECOND) as ComparableQuantity<Speed>
-		Quantities.getQuantity(25d, KILOWATTHOUR_PER_SQUAREMETRE) || Quantities.getQuantity(25d, KILOWATTHOUR_PER_SQUAREMETRE) as ComparableQuantity<IrradiationNew>
+		Quantities.getQuantity(25d, KILOWATTHOUR_PER_SQUAREMETRE) || Quantities.getQuantity(25d, KILOWATTHOUR_PER_SQUAREMETRE) as ComparableQuantity<Irradiation>
 		Quantities.getQuantity(30d, METRE)                        || Quantities.getQuantity(30d, METRE) as ComparableQuantity<Length>
 	}
 

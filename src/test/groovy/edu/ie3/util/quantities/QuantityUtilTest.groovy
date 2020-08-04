@@ -14,7 +14,7 @@ import static edu.ie3.util.quantities.dep.PowerSystemUnits.KILOWATTHOUR_PER_SQUA
 import static tec.uom.se.unit.Units.METRE
 import static tec.uom.se.unit.Units.METRE_PER_SECOND
 
-import edu.ie3.util.quantities.interfaces.Irradiation
+import edu.ie3.util.quantities.dep.interfaces.Irradiation
 
 import javax.measure.quantity.Angle
 import javax.measure.quantity.Length
