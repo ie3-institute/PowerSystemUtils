@@ -16,8 +16,8 @@ import tec.uom.se.quantity.Quantities;
  *
  * @author Kittl
  * @since 27.03.2018
+ * @deprecated Will no longer be maintained and removed with version 1.4
  */
-/** @deprecated As of release 1.4, replaced by {@link AngleQuantityAdapterNew} */
 @Deprecated
 public class AngleQuantityAdapter extends XmlAdapter<Double, Quantity<Angle>> {
   @Override

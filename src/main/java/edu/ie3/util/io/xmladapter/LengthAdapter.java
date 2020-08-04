@@ -14,8 +14,8 @@ import tec.uom.se.quantity.Quantities;
 /**
  * @author Kittl
  * @since 26.09.2018
+ * @deprecated Will no longer be maintained and removed with version 1.4
  */
-/** @deprecated As of release 1.4, replaced by {@link LengthAdapterNew} */
 @Deprecated
 public class LengthAdapter extends XmlAdapter<Double, Quantity<Length>> {
   @Override
