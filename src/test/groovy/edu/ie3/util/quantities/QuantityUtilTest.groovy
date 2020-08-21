@@ -48,10 +48,10 @@ class QuantityUtilTest extends Specification {
 
 	def "The QuantityUtil converts different quantities correctly to comparable quantities of same value and unit"() {
 		when:
-		def actual = QuantityUtil.makeComparable(input)
+		def actual = QuantityUtil.asComparable(input)
 
 		then:
-		actual instanceof ComparableQuantity
+		actual instanceof tech.units.indriya.ComparableQuantity
 		actual.value == expected.value
 		actual.unit == expected.unit
 
