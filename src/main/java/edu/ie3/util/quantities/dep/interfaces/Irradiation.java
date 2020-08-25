@@ -7,7 +7,8 @@ package edu.ie3.util.quantities.dep.interfaces;
 
 import tec.uom.se.ComparableQuantity;
 
-/** Interface to describe the Quantity of an (solar) Irradiation
+/**
+ * Interface to describe the Quantity of an (solar) Irradiation
  *
  * @deprecated As of release 1.4, replaced by {@link edu.ie3.util.quantities.interfaces.Irradiation}
  */
