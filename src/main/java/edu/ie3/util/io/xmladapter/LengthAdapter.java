@@ -5,7 +5,7 @@
 */
 package edu.ie3.util.io.xmladapter;
 
-import edu.ie3.util.quantities.PowerSystemUnits;
+import edu.ie3.util.quantities.dep.PowerSystemUnits;
 import javax.measure.Quantity;
 import javax.measure.quantity.Length;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
@@ -14,7 +14,9 @@ import tec.uom.se.quantity.Quantities;
 /**
  * @author Kittl
  * @since 26.09.2018
+ * @deprecated Will no longer be maintained and removed with version 1.4
  */
+@Deprecated
 public class LengthAdapter extends XmlAdapter<Double, Quantity<Length>> {
   @Override
   public Quantity<Length> unmarshal(Double v) throws Exception {

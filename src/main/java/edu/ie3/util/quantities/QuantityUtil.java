@@ -8,10 +8,12 @@ package edu.ie3.util.quantities;
 import static edu.ie3.util.quantities.PowerSystemUnits.DEGREE_GEOM;
 import static java.lang.StrictMath.abs;
 
+import edu.ie3.util.quantities.dep.PowerSystemUnits;
 import javax.measure.Quantity;
+import javax.measure.UnconvertibleException;
 import javax.measure.quantity.Angle;
-import tec.uom.se.ComparableQuantity;
-import tec.uom.se.quantity.Quantities;
+import tech.units.indriya.ComparableQuantity;
+import tech.units.indriya.quantity.Quantities;
 
 /** Offers useful methods to handle {@link Quantity}s */
 public class QuantityUtil {
@@ -24,9 +26,23 @@ public class QuantityUtil {
    *
    * @param quantity Input quantity
    * @param <Q> Type of input quantity
+   * @return The same value and unit, but as a {@link tec.uom.se.ComparableQuantity}
+   * @deprecated Use {@link this#asComparable(Quantity)} instead. Will be removed with version 1.4
+   */
+  @Deprecated
+  public static <Q extends Quantity<Q>> tec.uom.se.ComparableQuantity<Q> makeComparable(
+      Quantity<Q> quantity) {
+    return tec.uom.se.quantity.Quantities.getQuantity(quantity.getValue(), quantity.getUnit());
+  }
+
+  /**
+   * Converts a given quantity to a comparable quantity
+   *
+   * @param quantity Input quantity
+   * @param <Q> Type of input quantity
    * @return The same value and unit, but as a {@link ComparableQuantity}
    */
-  public static <Q extends Quantity<Q>> ComparableQuantity<Q> makeComparable(Quantity<Q> quantity) {
+  public static <Q extends Quantity<Q>> ComparableQuantity<Q> asComparable(Quantity<Q> quantity) {
     return Quantities.getQuantity(quantity.getValue(), quantity.getUnit());
   }
 
@@ -85,8 +101,19 @@ public class QuantityUtil {
    */
   public static boolean considerablyEqualAngle(
       Quantity<Angle> a, Quantity<Angle> b, double quantityTolerance) {
-    double aVal = a.to(DEGREE_GEOM).getValue().doubleValue();
-    double bVal = b.to(DEGREE_GEOM).getValue().doubleValue();
+
+    double aVal;
+    double bVal;
+    /* FIXME: Remove this catch, when the deprecated Units disappear in version 1.4 */
+    try {
+      aVal = a.to(DEGREE_GEOM).getValue().doubleValue();
+      bVal = b.to(DEGREE_GEOM).getValue().doubleValue();
+    } catch (UnconvertibleException e) {
+      aVal =
+          a.to(edu.ie3.util.quantities.dep.PowerSystemUnits.DEGREE_GEOM).getValue().doubleValue();
+      bVal =
+          b.to(edu.ie3.util.quantities.dep.PowerSystemUnits.DEGREE_GEOM).getValue().doubleValue();
+    }
 
     /* When they match on the first trial, return true */
     boolean isConsiderablyEqual = abs(aVal - bVal) <= quantityTolerance;
