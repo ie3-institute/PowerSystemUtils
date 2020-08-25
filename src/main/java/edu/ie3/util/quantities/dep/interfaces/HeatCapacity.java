@@ -7,8 +7,9 @@ package edu.ie3.util.quantities.dep.interfaces;
 
 import tec.uom.se.ComparableQuantity;
 
-/** Denoting all physical quantities describing a heat capacity */
-/**
+/** 
+ * Denoting all physical quantities describing a heat capacity 
+ *
  * @deprecated As of release 1.4, replaced by {@link
  *     edu.ie3.util.quantities.interfaces.HeatCapacity}
  */
