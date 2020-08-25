@@ -7,8 +7,9 @@ package edu.ie3.util.quantities.dep.interfaces;
 
 import tec.uom.se.ComparableQuantity;
 
-/** Interface to describe a price per distance */
 /**
+ * Interface to describe a price per distance
+ *
  * @deprecated As of release 1.4, replaced by {@link
  *     edu.ie3.util.quantities.interfaces.PricePerLength}
  */
