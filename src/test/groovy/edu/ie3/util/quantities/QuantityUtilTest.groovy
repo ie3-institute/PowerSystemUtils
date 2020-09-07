@@ -5,28 +5,25 @@
  */
 package edu.ie3.util.quantities
 
-import spock.lang.Unroll
-
-import static edu.ie3.util.quantities.PowerSystemUnits.DEGREE_GEOM
-import static edu.ie3.util.quantities.dep.PowerSystemUnits.DEGREE_GEOM as DEGREE_GEOM_DEP
-import static edu.ie3.util.quantities.dep.PowerSystemUnits.KILOWATT
-import static edu.ie3.util.quantities.dep.PowerSystemUnits.MEGAWATT
-import static edu.ie3.util.quantities.dep.PowerSystemUnits.KILOWATTHOUR_PER_SQUAREMETRE
-import static tec.uom.se.unit.Units.METRE
-import static tec.uom.se.unit.Units.METRE_PER_SECOND
 import edu.ie3.util.quantities.dep.interfaces.Irradiation
+import spock.lang.Specification
+import spock.lang.Unroll
+import tec.uom.se.ComparableQuantity
+import tec.uom.se.quantity.Quantities
 
 import javax.measure.quantity.Angle
 import javax.measure.quantity.Length
 import javax.measure.quantity.Power
 import javax.measure.quantity.Speed
 
-import spock.lang.Specification
-import tec.uom.se.ComparableQuantity
-import tec.uom.se.quantity.Quantities
+import static edu.ie3.util.quantities.PowerSystemUnits.DEGREE_GEOM
+import static edu.ie3.util.quantities.dep.PowerSystemUnits.*
+import static edu.ie3.util.quantities.dep.PowerSystemUnits.DEGREE_GEOM as DEGREE_GEOM_DEP
+import static tec.uom.se.unit.Units.METRE
+import static tec.uom.se.unit.Units.METRE_PER_SECOND
 
 class QuantityUtilTest extends Specification {
-	/** @deprecated As of release 1.4 */
+	/** @deprecated As of release 1.4   */
 	@Deprecated
 	def "The QuantityUtil converts different quantities correctly to comparable quantities of same value and unit (old package)"() {
 		when:
@@ -218,11 +215,31 @@ class QuantityUtilTest extends Specification {
 		QuantityUtil.considerablyEqualAngle(a, b, 1e-3)
 
 		where:
-		a                                          | b
+		a                                                                      | b
 		tech.units.indriya.quantity.Quantities.getQuantity(175d, DEGREE_GEOM)  | tech.units.indriya.quantity.Quantities.getQuantity(-185d, DEGREE_GEOM)
 		tech.units.indriya.quantity.Quantities.getQuantity(-185d, DEGREE_GEOM) | tech.units.indriya.quantity.Quantities.getQuantity(175d, DEGREE_GEOM)
 		tech.units.indriya.quantity.Quantities.getQuantity(185d, DEGREE_GEOM)  | tech.units.indriya.quantity.Quantities.getQuantity(-175d, DEGREE_GEOM)
 		tech.units.indriya.quantity.Quantities.getQuantity(-175d, DEGREE_GEOM) | tech.units.indriya.quantity.Quantities.getQuantity(185d, DEGREE_GEOM)
 		tech.units.indriya.quantity.Quantities.getQuantity(185d, DEGREE_GEOM)  | tech.units.indriya.quantity.Quantities.getQuantity(-174.9995d, DEGREE_GEOM)
 	}
+
+	@Unroll
+	def "The QuantityUtil provides a correct equality check"() {
+		when:
+		def actual = QuantityUtil.equals(a, b)
+
+		then:
+		actual == expected
+
+		where:
+		a                                                                     | b                                                                    || expected
+		null                                                                  | null                                                                 || true
+		null                                                                  | tech.units.indriya.quantity.Quantities.getQuantity(10d, KILOWATT)    || false
+		tech.units.indriya.quantity.Quantities.getQuantity(10d, KILOWATT)     | null                                                                 || false
+		tech.units.indriya.quantity.Quantities.getQuantity(10d, KILOWATT)     | tech.units.indriya.quantity.Quantities.getQuantity(10d, KILOWATT)    || true
+		tech.units.indriya.quantity.Quantities.getQuantity(10d, KILOWATT)     | tech.units.indriya.quantity.Quantities.getQuantity(0.010, MEGAWATT)  || true
+		tech.units.indriya.quantity.Quantities.getQuantity(15i, DEGREE_GEOM)  | tech.units.indriya.quantity.Quantities.getQuantity(15d, DEGREE_GEOM) || true
+		tech.units.indriya.quantity.Quantities.getQuantity(15.1, DEGREE_GEOM) | tech.units.indriya.quantity.Quantities.getQuantity(15d, DEGREE_GEOM) || false
+	}
+
 }
