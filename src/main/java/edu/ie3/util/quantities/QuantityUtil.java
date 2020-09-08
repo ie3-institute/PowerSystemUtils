@@ -5,16 +5,15 @@
 */
 package edu.ie3.util.quantities;
 
-import edu.ie3.util.quantities.dep.PowerSystemUnits;
-import tech.units.indriya.ComparableQuantity;
-import tech.units.indriya.quantity.Quantities;
+import static edu.ie3.util.quantities.PowerSystemUnits.DEGREE_GEOM;
+import static java.lang.StrictMath.abs;
 
+import edu.ie3.util.quantities.dep.PowerSystemUnits;
 import javax.measure.Quantity;
 import javax.measure.UnconvertibleException;
 import javax.measure.quantity.Angle;
-
-import static edu.ie3.util.quantities.PowerSystemUnits.DEGREE_GEOM;
-import static java.lang.StrictMath.abs;
+import tech.units.indriya.ComparableQuantity;
+import tech.units.indriya.quantity.Quantities;
 
 /** Offers useful methods to handle {@link Quantity}s */
 public class QuantityUtil {
@@ -130,13 +129,13 @@ public class QuantityUtil {
    * * Compares two {@link Quantity}s, if they are equal. Replaces Objects.equals for Quantities, as
    * they cannot be checked on semantic equality with Quantity.equals(Quantity)
    *
-   * @param a   First quantity to compare
-   * @param b   Second quantity to compare
+   * @param a First quantity to compare
+   * @param b Second quantity to compare
    * @param <Q> Type of Quantity
    * @return true, if both quantities are semantically equal
    */
   public static <Q extends Quantity<Q>> boolean equals(
-          ComparableQuantity<Q> a, ComparableQuantity<Q> b) {
+      ComparableQuantity<Q> a, ComparableQuantity<Q> b) {
     if (a == null) return b == null;
     if (b == null) return false;
     return a.isEquivalentTo(b);
