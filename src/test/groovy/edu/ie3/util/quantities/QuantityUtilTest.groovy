@@ -5,6 +5,12 @@
  */
 package edu.ie3.util.quantities
 
+
+import static tec.uom.se.unit.Units.METRE
+import static tec.uom.se.unit.Units.METRE_PER_SECOND
+import static edu.ie3.util.quantities.dep.PowerSystemUnits.*
+import static edu.ie3.util.quantities.dep.PowerSystemUnits.DEGREE_GEOM as DEGREE_GEOM_DEP
+import static edu.ie3.util.quantities.PowerSystemUnits.DEGREE_GEOM
 import edu.ie3.util.quantities.dep.interfaces.Irradiation
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -15,12 +21,6 @@ import javax.measure.quantity.Angle
 import javax.measure.quantity.Length
 import javax.measure.quantity.Power
 import javax.measure.quantity.Speed
-
-import static edu.ie3.util.quantities.PowerSystemUnits.DEGREE_GEOM
-import static edu.ie3.util.quantities.dep.PowerSystemUnits.*
-import static edu.ie3.util.quantities.dep.PowerSystemUnits.DEGREE_GEOM as DEGREE_GEOM_DEP
-import static tec.uom.se.unit.Units.METRE
-import static tec.uom.se.unit.Units.METRE_PER_SECOND
 
 class QuantityUtilTest extends Specification {
 	/** @deprecated As of release 1.4   */
