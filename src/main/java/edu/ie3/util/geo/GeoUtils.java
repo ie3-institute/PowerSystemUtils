@@ -37,7 +37,7 @@ public class GeoUtils {
 
   /** radius of the earth in m */
   public static final ComparableQuantity<Length> EARTH_RADIUS_OLD =
-      Quantities.getQuantity(6378137.0, PowerSystemUnits.METRE);
+      Quantities.getQuantity(6378137.0, METRE);
 
   public static final ComparableQuantity<Length> EARTH_RADIUS =
       Quantities.getQuantity(6378137.0, METRE);
