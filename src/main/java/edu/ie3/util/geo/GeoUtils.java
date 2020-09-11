@@ -10,6 +10,7 @@ import static edu.ie3.util.quantities.PowerSystemUnits.*;
 import com.google.common.collect.Lists;
 import edu.ie3.util.copy.DeepCopy;
 import edu.ie3.util.exceptions.GeoPreparationException;
+import edu.ie3.util.quantities.PowerSystemUnits;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -36,7 +37,7 @@ public class GeoUtils {
 
   /** radius of the earth in m */
   public static final ComparableQuantity<Length> EARTH_RADIUS_OLD =
-      Quantities.getQuantity(6378137.0, edu.ie3.util.quantities.PowerSystemUnits.METRE);
+      Quantities.getQuantity(6378137.0, PowerSystemUnits.METRE);
 
   public static final ComparableQuantity<Length> EARTH_RADIUS =
       Quantities.getQuantity(6378137.0, METRE);
@@ -539,8 +540,7 @@ public class GeoUtils {
      * as well as the distance of both latitudes does do form the partial areas.
      * Those of the right hand side (distance of lats > 0) do form positive areas, whereas the left hand side
      * is subtracted. */
-    Quantity<Area> area =
-        Quantities.getQuantity(0d, edu.ie3.util.quantities.PowerSystemUnits.SQUARE_METRE);
+    Quantity<Area> area = Quantities.getQuantity(0d, SQUARE_METRE);
     /* Go through the coordinates and calculate the partial areas */
     int idxPrevious = orderedCoords.size() - 1;
     for (int idx = 0; idx < orderedCoords.size(); idx++) {
@@ -562,10 +562,7 @@ public class GeoUtils {
 
       Quantity<Length> dX = calcHaversine(maxLat, meanLon, maxLat, lonMinGlobal);
       Quantity<Length> dY = calcHaversine(maxLat, meanLon, minLat, meanLon);
-      Quantity<Area> partialArea =
-          dX.multiply(dY)
-              .asType(Area.class)
-              .to(edu.ie3.util.quantities.PowerSystemUnits.SQUARE_METRE);
+      Quantity<Area> partialArea = dX.multiply(dY).asType(Area.class).to(SQUARE_METRE);
       if (coord.getLat() < coordPrev.getLat()) {
         /* Right hand side*/
         area = area.add(partialArea);
@@ -810,8 +807,8 @@ public class GeoUtils {
 
     /* (e1 * e2) - cor */
     Quantity<Area> area =
-        Quantities.getQuantity(e1, edu.ie3.util.quantities.PowerSystemUnits.METRE)
-            .multiply(Quantities.getQuantity(e2, edu.ie3.util.quantities.PowerSystemUnits.METRE))
+        Quantities.getQuantity(e1, METRE)
+            .multiply(Quantities.getQuantity(e2, METRE))
             .asType(Area.class)
             .subtract(cor);
 
