@@ -8,7 +8,6 @@ package edu.ie3.util.quantities;
 import static edu.ie3.util.quantities.PowerSystemUnits.DEGREE_GEOM;
 import static java.lang.StrictMath.abs;
 
-import edu.ie3.util.quantities.dep.PowerSystemUnits;
 import javax.measure.Quantity;
 import javax.measure.quantity.Angle;
 import tech.units.indriya.ComparableQuantity;
