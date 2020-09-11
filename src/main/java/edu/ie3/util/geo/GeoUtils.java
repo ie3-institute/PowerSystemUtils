@@ -462,7 +462,7 @@ public class GeoUtils {
 
   /**
    * Calculates the area, which is surrounded by a closed way by the help of {@link
-   * GeoUtils#getArea(Polygon)}
+   * GeoUtils#calcArea(Polygon)}
    *
    * @param w Closed way, that surrounds the area
    * @return The covered area in {@link edu.ie3.util.quantities.PowerSystemUnits#SQUARE_METRE}
@@ -470,114 +470,11 @@ public class GeoUtils {
    * @deprecated This method is currently not under test and has to be revised thoroughly
    */
   @Deprecated
-  public static Quantity<Area> getArea(Way w) throws GeoPreparationException {
+  public static Quantity<Area> calcArea(Way w) throws GeoPreparationException {
     if (!w.isClosed())
       throw new GeoPreparationException(
           "Cannot determine the area covered by a way, that is not closed");
-    return getArea(new Polygon(w));
-  }
-
-  /**
-   * Calculate the area of an {@link Polygon} by adding subareas spanned between the longitude axis
-   * and the line segments on the polygon
-   *
-   * @param p {@link Polygon} whos area may be calculated
-   * @return The spanned area in {@link edu.ie3.util.quantities.PowerSystemUnits#SQUARE_METRE}
-   * @throws GeoPreparationException If some serious shit happens
-   * @deprecated Use {@link this#calcArea(Polygon)} instead. Will be removed with version 1.4
-   */
-  @Deprecated
-  public static Quantity<Area> getArea(Polygon p) throws GeoPreparationException {
-    /* Get the boundary of the Polygon */
-    Bounds bounds = p.getBounds();
-    double latMaxGlobal = bounds.getMaxLat();
-    double lonMinGlobal = bounds.getMinLon();
-
-    /* Order the points in clockwise direction starting with the one with the highest y coordinate..
-     * The "way" has to be closed (containing the start coordinate twice). But it may not be the "original" start
-     * coordinate, but the one with the highest latitutde. Otherwise the partial areas would be added incorrect.
-     * Therefore remove the duplicate coordinates (original start coordinate) and add the one with highest latitude
-     * once again.*/
-    List<LatLon> coords = new LinkedList<>(p.getCoords());
-    Map<LatLon, Integer> duplicateCoords =
-        coords.stream()
-            .filter(coord -> Collections.frequency(coords, coord) > 1)
-            .distinct()
-            .collect(
-                Collectors.toMap(coord -> coord, coord -> Collections.frequency(coords, coord)));
-    // Only remove one of the duplicate coords
-    Iterator<LatLon> it = coords.iterator();
-    while (it.hasNext()) {
-      LatLon coord = it.next();
-      if (duplicateCoords.containsKey(coord) && duplicateCoords.get(coord) > 1) {
-        duplicateCoords.put(coord, duplicateCoords.get(coord) - 1);
-        it.remove();
-      }
-    }
-    Optional<LatLon> optStartCoord =
-        coords.stream().filter(c -> c.getLat() == latMaxGlobal).findFirst();
-    if (!optStartCoord.isPresent())
-      throw new GeoPreparationException(
-          "Did not find a suitable coordinate although a defined maximum latitude has been found...");
-
-    LinkedList<LatLon> orderedCoords = new LinkedList<>();
-    LatLon startCoord = optStartCoord.get();
-    int idxStart = coords.indexOf(startCoord);
-    int idxNext = idxStart + 1 == coords.size() ? 0 : idxStart + 1;
-    if (coords.get(idxNext).getLon() > coords.get(idxStart).getLon()) {
-      /* Order is already clockwise */
-      orderedCoords.addAll(coords.subList(idxStart, coords.size()));
-      orderedCoords.addAll(coords.subList(0, idxStart));
-    } else {
-      /* Order is counterclockwise */
-      orderedCoords.addAll(Lists.reverse(coords.subList(0, idxNext)));
-      orderedCoords.addAll(Lists.reverse(coords.subList(idxNext, coords.size())));
-    }
-    orderedCoords.addLast(orderedCoords.get(0));
-
-    /* Calculate the area by summing up the partial areas.
-     * Take two points. The distance between the mean of their longitudes and the polygons global longitude
-     * as well as the distance of both latitudes does do form the partial areas.
-     * Those of the right hand side (distance of lats > 0) do form positive areas, whereas the left hand side
-     * is subtracted. */
-    Quantity<Area> area = Quantities.getQuantity(0d, SQUARE_METRE);
-    /* Go through the coordinates and calculate the partial areas */
-    int idxPrevious = orderedCoords.size() - 1;
-    for (int idx = 0; idx < orderedCoords.size(); idx++) {
-      LatLon coord = orderedCoords.get(idx);
-      LatLon coordPrev = orderedCoords.get(idxPrevious);
-
-      double maxLat = Math.max(coord.getLat(), coordPrev.getLat());
-      double minLat = Math.min(coord.getLat(), coordPrev.getLat());
-      double maxLon = Math.max(coord.getLon(), coordPrev.getLon());
-      double minLon = Math.min(coord.getLon(), coordPrev.getLon());
-
-      /* This partial area obviously would be zero. */
-      if (maxLat == minLat || maxLon == minLon) {
-        idxPrevious = idx;
-        continue;
-      }
-
-      double meanLon = (maxLon + minLon) / 2;
-
-      Quantity<Length> dX = calcHaversine(maxLat, meanLon, maxLat, lonMinGlobal);
-      Quantity<Length> dY = calcHaversine(maxLat, meanLon, minLat, meanLon);
-      Quantity<Area> partialArea = dX.multiply(dY).asType(Area.class).to(SQUARE_METRE);
-      if (coord.getLat() < coordPrev.getLat()) {
-        /* Right hand side*/
-        area = area.add(partialArea);
-      } else {
-        /* Left hand side */
-        area = area.subtract(partialArea);
-      }
-
-      /* logger.debug("Partial area: (" + dX + " * " + (coord.getLat() > coordPrev.getLat() ? dY.multiply(-1) : dY) +
-      " = " + partialArea + "), current total area: " + area); */
-
-      idxPrevious = idx;
-    }
-
-    return area;
+    return calcArea(new Polygon(w));
   }
 
   /**
@@ -768,50 +665,6 @@ public class GeoUtils {
             .multiply(Quantities.getQuantity(e2, METRE))
             .asType(Area.class)
             .subtract(cor);
-    return area;
-  }
-
-  /**
-   * Calculates the area of a polygon in geo coordinates to an area in square kilometers NOTE: It
-   * may be possible, that (compared to the real building area), the size of the building area may
-   * be overestimated. To take this into account an optional correction factor might be used.
-   *
-   * @param geoArea: the area of the building based on geo coordinates
-   * @param cor: the optional correction factor
-   * @deprecated Use {@link this#calcGeo2qmNew(double, Quantity)} instead. Will be removed with
-   *     version 1.4
-   */
-  @Deprecated
-  public static Quantity<Area> calcGeo2qm(double geoArea, Quantity<Area> cor) {
-    double width = 51.5;
-    double length = 7.401;
-
-    double square = Math.sqrt(geoArea);
-    double width2 = (width + square) / 180 * Math.PI;
-    double length2 = length / 180 * Math.PI;
-    double width3 = width / 180 * Math.PI;
-    double length3 = (length + square) / 180 * Math.PI;
-    width = width / 180 * Math.PI;
-    length = length / 180 * Math.PI;
-
-    double e1 =
-        Math.acos(
-                Math.sin(width) * Math.sin(width2)
-                    + Math.cos(width) * Math.cos(width2) * Math.cos(length2 - length))
-            * EARTH_RADIUS_OLD.getValue().doubleValue();
-    double e2 =
-        Math.acos(
-                Math.sin(width) * Math.sin(width3)
-                    + Math.cos(width) * Math.cos(width3) * Math.cos(length3 - length))
-            * EARTH_RADIUS_OLD.getValue().doubleValue();
-
-    /* (e1 * e2) - cor */
-    Quantity<Area> area =
-        Quantities.getQuantity(e1, METRE)
-            .multiply(Quantities.getQuantity(e2, METRE))
-            .asType(Area.class)
-            .subtract(cor);
-
     return area;
   }
 
