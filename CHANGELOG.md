@@ -10,21 +10,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-## Fixed
+### Fixed
 
-## Version 1.3.2
+## [1.3.2]
 
-## Added
-- Introdcution of new quantity library (+ deprecation of old implementations)
+### Added
+- Introduction of new quantity library (+ deprecation of old implementations)
 
-## Changed
+### Changed
 - Adaptions in QuantityUtil
 - Improved version of TimUtils
 - Improved building of csv strings
 
-## Fixed
+### Fixed
 
-## Version 1.3.1
+## [1.3.1] 
 
 ### Added
 - added more functionalities to FileIOUtils
