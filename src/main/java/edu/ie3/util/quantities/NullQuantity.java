@@ -2,14 +2,13 @@
  * © 2020. TU Dortmund University,
  * Institute of Energy Systems, Energy Efficiency and Energy Economics,
  * Research group Distribution grid planning and operation
- */
+*/
 package edu.ie3.util.quantities;
-
-import tech.units.indriya.AbstractQuantity;
-import tech.units.indriya.ComparableQuantity;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;
+import tech.units.indriya.AbstractQuantity;
+import tech.units.indriya.ComparableQuantity;
 
 /**
  * This class represents a Quantity with the value null. So i.e. instead of "{@code Quantity<Length>
@@ -23,7 +22,7 @@ import javax.measure.Unit;
 public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<Q> {
 
   private static final String EXCEPTION_MESSAGE =
-          "The NullQuantity represents a 'null' value, so you should not perform any operations on this Quantity.";
+      "The NullQuantity represents a 'null' value, so you should not perform any operations on this Quantity.";
 
   private NullQuantity(Unit<Q> unit) {
     super(unit);
@@ -33,7 +32,7 @@ public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<
    * Initializes a NullQuantity with the specified Unit
    *
    * @param unit The Unit for the NullQuantity
-   * @param <U>  The Unit/Quantity type of the NullQuantity object
+   * @param <U> The Unit/Quantity type of the NullQuantity object
    * @return NullQuantity with specified unit
    */
   public static <U extends Quantity<U>> NullQuantity<U> of(Unit<U> unit) {
