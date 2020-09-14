@@ -16,7 +16,6 @@ plugins {
 ext {
 	// version (changing these should be considered thoroughly!)
 	hibernateVersion = '5.3.3.Final'
-	unitsOfMeasurementVersion = '1.0.10'
 	slf4jVersion = '1.7.26'
 	javaVersion = JavaVersion.VERSION_1_8
 
@@ -54,8 +53,7 @@ dependencies {
 	compile 'org.apache.logging.log4j:log4j-slf4j-impl:+' // log4j -> slf4j
 
 	compile 'javax.measure:unit-api:+' // quantities
-	compile "tec.uom:uom-se:$unitsOfMeasurementVersion" // quantities, TODO: Remove with one of next versions
-	compile 'tech.units:indriya:2.0'  // quantities
+	compile 'tech.units:indriya:2.0.4'  // quantities
 	compile 'com.google.code.gson:gson:+' // java serialization, POJOs -> JSON
 	compile 'org.apache.commons:commons-lang3:+' // for HashCodeBuilder
 	compile 'com.github.johanneshiry:OSMonaut:+' // pbf parser

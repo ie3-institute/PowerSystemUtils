@@ -34,11 +34,9 @@ import tech.units.indriya.quantity.Quantities;
 public class GeoUtils {
   private static final Logger logger = LoggerFactory.getLogger(GeoUtils.class);
 
-  /* FIXME: Remove this UNIT, when the deprecated Units disappear in version 1.4 */
   /** radius of the earth in m */
-  public static final tec.uom.se.ComparableQuantity<Length> EARTH_RADIUS_OLD =
-      tec.uom.se.quantity.Quantities.getQuantity(
-          6378137.0, edu.ie3.util.quantities.dep.PowerSystemUnits.METRE);
+  public static final ComparableQuantity<Length> EARTH_RADIUS_OLD =
+      Quantities.getQuantity(6378137.0, METRE);
 
   public static final ComparableQuantity<Length> EARTH_RADIUS =
       Quantities.getQuantity(6378137.0, METRE);
@@ -59,48 +57,13 @@ public class GeoUtils {
    * @param lat2 Latitude value of the second coordinate
    * @param lng2 Longitude value of the second coordinate
    * @return The distance between both coordinates in {@link
-   *     edu.ie3.util.quantities.dep.PowerSystemUnits#KILOMETRE}
-   * @deprecated Use {@link this#calcHaversine(double, double, double, double)} instead. Will be
-   *     removed with version 1.4
-   */
-  @Deprecated
-  public static tec.uom.se.ComparableQuantity<Length> haversine(
-      double lat1, double lng1, double lat2, double lng2) {
-
-    tec.uom.se.ComparableQuantity<Length> r =
-        EARTH_RADIUS_OLD.to(
-            edu.ie3.util.quantities.dep.PowerSystemUnits
-                .KILOMETRE); // average radius of the earth in km;
-    tec.uom.se.ComparableQuantity<Angle> dLat =
-        tec.uom.se.quantity.Quantities.getQuantity(
-            Math.toRadians(lat2 - lat1), edu.ie3.util.quantities.dep.PowerSystemUnits.RADIAN);
-    tec.uom.se.ComparableQuantity<Angle> dLon =
-        tec.uom.se.quantity.Quantities.getQuantity(
-            Math.toRadians(lng2 - lng1), edu.ie3.util.quantities.dep.PowerSystemUnits.RADIAN);
-    double a =
-        Math.sin(dLat.getValue().doubleValue() / 2) * Math.sin(dLat.getValue().doubleValue() / 2)
-            + Math.cos(Math.toRadians(lat1))
-                * Math.cos(Math.toRadians(lat2))
-                * Math.sin(dLon.getValue().doubleValue() / 2)
-                * Math.sin(dLon.getValue().doubleValue() / 2);
-    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return r.multiply(c);
-  }
-
-  /**
-   * Calculates the distance in km between two lat/long points using the haversine formula
-   *
-   * @param lat1 Latitude value of the first coordinate
-   * @param lng1 Longitude value of the first coordinate
-   * @param lat2 Latitude value of the second coordinate
-   * @param lng2 Longitude value of the second coordinate
-   * @return The distance between both coordinates in {@link
-   *     edu.ie3.util.quantities.dep.PowerSystemUnits#KILOMETRE}
+   *     edu.ie3.util.quantities.PowerSystemUnits#KILOMETRE}
    */
   public static ComparableQuantity<Length> calcHaversine(
       double lat1, double lng1, double lat2, double lng2) {
 
-    ComparableQuantity<Length> r = EARTH_RADIUS.to(KILOMETRE); // average radius of the earth in km;
+    // average radius of the earth in km
+    ComparableQuantity<Length> r = EARTH_RADIUS.to(KILOMETRE);
     ComparableQuantity<Angle> dLat = Quantities.getQuantity(Math.toRadians(lat2 - lat1), RADIAN);
     ComparableQuantity<Angle> dLon = Quantities.getQuantity(Math.toRadians(lng2 - lng1), RADIAN);
     double a =
@@ -472,14 +435,14 @@ public class GeoUtils {
        */
       if (sharedCoords.isEmpty()) sharedCoords.addAll(additionalCoords);
       else if (!additionalCoords.isEmpty()
-          && haversine(
+          && calcHaversine(
                       additionalCoords.get(0).getLat(),
                       additionalCoords.get(0).getLon(),
                       sharedCoords.get(sharedCoords.size() - 1).getLat(),
                       sharedCoords.get(sharedCoords.size() - 1).getLon())
                   .getValue()
                   .doubleValue()
-              > haversine(
+              > calcHaversine(
                       additionalCoords.get(0).getLat(),
                       additionalCoords.get(0).getLon(),
                       sharedCoords.get(0).getLat(),
@@ -498,19 +461,19 @@ public class GeoUtils {
 
   /**
    * Calculates the area, which is surrounded by a closed way by the help of {@link
-   * GeoUtils#getArea(Polygon)}
+   * GeoUtils#calcArea(Polygon)}
    *
    * @param w Closed way, that surrounds the area
-   * @return The covered area in {@link edu.ie3.util.quantities.dep.PowerSystemUnits#SQUARE_METRE}
+   * @return The covered area in {@link edu.ie3.util.quantities.PowerSystemUnits#SQUARE_METRE}
    * @throws GeoPreparationException If some serious shit happens
    * @deprecated This method is currently not under test and has to be revised thoroughly
    */
   @Deprecated
-  public static Quantity<Area> getArea(Way w) throws GeoPreparationException {
+  public static Quantity<Area> calcArea(Way w) throws GeoPreparationException {
     if (!w.isClosed())
       throw new GeoPreparationException(
           "Cannot determine the area covered by a way, that is not closed");
-    return getArea(new Polygon(w));
+    return calcArea(new Polygon(w));
   }
 
   /**
@@ -518,116 +481,7 @@ public class GeoUtils {
    * and the line segments on the polygon
    *
    * @param p {@link Polygon} whos area may be calculated
-   * @return The spanned area in {@link edu.ie3.util.quantities.dep.PowerSystemUnits#SQUARE_METRE}
-   * @throws GeoPreparationException If some serious shit happens
-   * @deprecated This method is currently not under test and has to be revised thoroughly
-   * @deprecated Use {@link this#calcArea(Polygon)} instead. Will be removed with version 1.4
-   */
-  @Deprecated
-  public static Quantity<Area> getArea(Polygon p) throws GeoPreparationException {
-    /* Get the boundary of the Polygon */
-    Bounds bounds = p.getBounds();
-    double latMaxGlobal = bounds.getMaxLat();
-    double lonMinGlobal = bounds.getMinLon();
-
-    /* Order the points in clockwise direction starting with the one with the highest y coordinate..
-     * The "way" has to be closed (containing the start coordinate twice). But it may not be the "original" start
-     * coordinate, but the one with the highest latitutde. Otherwise the partial areas would be added incorrect.
-     * Therefore remove the duplicate coordinates (original start coordinate) and add the one with highest latitude
-     * once again.*/
-    List<LatLon> coords = new LinkedList<>(p.getCoords());
-    Map<LatLon, Integer> duplicateCoords =
-        coords.stream()
-            .filter(coord -> Collections.frequency(coords, coord) > 1)
-            .distinct()
-            .collect(
-                Collectors.toMap(coord -> coord, coord -> Collections.frequency(coords, coord)));
-    // Only remove one of the duplicate coords
-    Iterator<LatLon> it = coords.iterator();
-    while (it.hasNext()) {
-      LatLon coord = it.next();
-      if (duplicateCoords.containsKey(coord) && duplicateCoords.get(coord) > 1) {
-        duplicateCoords.put(coord, duplicateCoords.get(coord) - 1);
-        it.remove();
-      }
-    }
-    Optional<LatLon> optStartCoord =
-        coords.stream().filter(c -> c.getLat() == latMaxGlobal).findFirst();
-    if (!optStartCoord.isPresent())
-      throw new GeoPreparationException(
-          "Did not find a suitable coordinate although a defined maximum latitude has been found...");
-
-    LinkedList<LatLon> orderedCoords = new LinkedList<>();
-    LatLon startCoord = optStartCoord.get();
-    int idxStart = coords.indexOf(startCoord);
-    int idxNext = idxStart + 1 == coords.size() ? 0 : idxStart + 1;
-    if (coords.get(idxNext).getLon() > coords.get(idxStart).getLon()) {
-      /* Order is already clockwise */
-      orderedCoords.addAll(coords.subList(idxStart, coords.size()));
-      orderedCoords.addAll(coords.subList(0, idxStart));
-    } else {
-      /* Order is counterclockwise */
-      orderedCoords.addAll(Lists.reverse(coords.subList(0, idxNext)));
-      orderedCoords.addAll(Lists.reverse(coords.subList(idxNext, coords.size())));
-    }
-    orderedCoords.addLast(orderedCoords.get(0));
-
-    /* Calculate the area by summing up the partial areas.
-     * Take two points. The distance between the mean of their longitudes and the polygons global longitude
-     * as well as the distance of both latitudes does do form the partial areas.
-     * Those of the right hand side (distance of lats > 0) do form positive areas, whereas the left hand side
-     * is subtracted. */
-    Quantity<Area> area =
-        tec.uom.se.quantity.Quantities.getQuantity(
-            0d, edu.ie3.util.quantities.dep.PowerSystemUnits.SQUARE_METRE);
-    /* Go through the coordinates and calculate the partial areas */
-    int idxPrevious = orderedCoords.size() - 1;
-    for (int idx = 0; idx < orderedCoords.size(); idx++) {
-      LatLon coord = orderedCoords.get(idx);
-      LatLon coordPrev = orderedCoords.get(idxPrevious);
-
-      double maxLat = Math.max(coord.getLat(), coordPrev.getLat());
-      double minLat = Math.min(coord.getLat(), coordPrev.getLat());
-      double maxLon = Math.max(coord.getLon(), coordPrev.getLon());
-      double minLon = Math.min(coord.getLon(), coordPrev.getLon());
-
-      /* This partial area obviously would be zero. */
-      if (maxLat == minLat || maxLon == minLon) {
-        idxPrevious = idx;
-        continue;
-      }
-
-      double meanLon = (maxLon + minLon) / 2;
-
-      Quantity<Length> dX = haversine(maxLat, meanLon, maxLat, lonMinGlobal);
-      Quantity<Length> dY = haversine(maxLat, meanLon, minLat, meanLon);
-      Quantity<Area> partialArea =
-          dX.multiply(dY)
-              .asType(Area.class)
-              .to(edu.ie3.util.quantities.dep.PowerSystemUnits.SQUARE_METRE);
-      if (coord.getLat() < coordPrev.getLat()) {
-        /* Right hand side*/
-        area = area.add(partialArea);
-      } else {
-        /* Left hand side */
-        area = area.subtract(partialArea);
-      }
-
-      /* logger.debug("Partial area: (" + dX + " * " + (coord.getLat() > coordPrev.getLat() ? dY.multiply(-1) : dY) +
-      " = " + partialArea + "), current total area: " + area); */
-
-      idxPrevious = idx;
-    }
-
-    return area;
-  }
-
-  /**
-   * Calculate the area of an {@link Polygon} by adding subareas spanned between the longitude axis
-   * and the line segments on the polygon
-   *
-   * @param p {@link Polygon} whos area may be calculated
-   * @return The spanned area in {@link edu.ie3.util.quantities.dep.PowerSystemUnits#SQUARE_METRE}
+   * @return The spanned area in {@link edu.ie3.util.quantities.PowerSystemUnits#SQUARE_METRE}
    * @throws GeoPreparationException If some serious shit happens
    * @deprecated This method is currently not under test and has to be revised thoroughly
    */
@@ -705,8 +559,8 @@ public class GeoUtils {
 
       double meanLon = (maxLon + minLon) / 2;
 
-      Quantity<Length> dX = haversine(maxLat, meanLon, maxLat, lonMinGlobal);
-      Quantity<Length> dY = haversine(maxLat, meanLon, minLat, meanLon);
+      Quantity<Length> dX = calcHaversine(maxLat, meanLon, maxLat, lonMinGlobal);
+      Quantity<Length> dY = calcHaversine(maxLat, meanLon, minLat, meanLon);
       Quantity<Area> partialArea = dX.multiply(dY).asType(Area.class).to(SQUARE_METRE);
       if (coord.getLat() < coordPrev.getLat()) {
         /* Right hand side*/
@@ -810,54 +664,6 @@ public class GeoUtils {
             .multiply(Quantities.getQuantity(e2, METRE))
             .asType(Area.class)
             .subtract(cor);
-    return area;
-  }
-
-  /**
-   * Calculates the area of a polygon in geo coordinates to an area in square kilometers NOTE: It
-   * may be possible, that (compared to the real building area), the size of the building area may
-   * be overestimated. To take this into account an optional correction factor might be used.
-   *
-   * @param geoArea: the area of the building based on geo coordinates
-   * @param cor: the optional correction factor
-   * @deprecated This method is currently not under test and has to be revised thoroughly
-   * @deprecated Use {@link this#calcGeo2qmNew(double, Quantity)} instead. Will be removed with
-   *     version 1.4
-   */
-  @Deprecated
-  public static Quantity<Area> calcGeo2qm(double geoArea, Quantity<Area> cor) {
-    double width = 51.5;
-    double length = 7.401;
-
-    double square = Math.sqrt(geoArea);
-    double width2 = (width + square) / 180 * Math.PI;
-    double length2 = length / 180 * Math.PI;
-    double width3 = width / 180 * Math.PI;
-    double length3 = (length + square) / 180 * Math.PI;
-    width = width / 180 * Math.PI;
-    length = length / 180 * Math.PI;
-
-    double e1 =
-        Math.acos(
-                Math.sin(width) * Math.sin(width2)
-                    + Math.cos(width) * Math.cos(width2) * Math.cos(length2 - length))
-            * EARTH_RADIUS_OLD.getValue().doubleValue();
-    double e2 =
-        Math.acos(
-                Math.sin(width) * Math.sin(width3)
-                    + Math.cos(width) * Math.cos(width3) * Math.cos(length3 - length))
-            * EARTH_RADIUS_OLD.getValue().doubleValue();
-
-    /* (e1 * e2) - cor */
-    Quantity<Area> area =
-        tec.uom.se.quantity.Quantities.getQuantity(
-                e1, edu.ie3.util.quantities.dep.PowerSystemUnits.METRE)
-            .multiply(
-                tec.uom.se.quantity.Quantities.getQuantity(
-                    e2, edu.ie3.util.quantities.dep.PowerSystemUnits.METRE))
-            .asType(Area.class)
-            .subtract(cor);
-
     return area;
   }
 
@@ -1046,28 +852,15 @@ public class GeoUtils {
         Node node = it.next();
         if (rayCasting(circle, node.getLatlon())) {
           double tempDistance;
-          try {
-            tempDistance =
-                haversine(
-                        lastNode.getLatlon().getLat(),
-                        lastNode.getLatlon().getLon(),
-                        node.getLatlon().getLat(),
-                        node.getLatlon().getLon())
-                    .to(KILOMETRE)
-                    .getValue()
-                    .doubleValue();
-            /* FIXME: Remove this catch, when the deprecated Units disappear in version 1.4 */
-          } catch (UnconvertibleException e) {
-            tempDistance =
-                haversine(
-                        lastNode.getLatlon().getLat(),
-                        lastNode.getLatlon().getLon(),
-                        node.getLatlon().getLat(),
-                        node.getLatlon().getLon())
-                    .to(edu.ie3.util.quantities.dep.PowerSystemUnits.KILOMETRE)
-                    .getValue()
-                    .doubleValue();
-          }
+          tempDistance =
+              calcHaversine(
+                      lastNode.getLatlon().getLat(),
+                      lastNode.getLatlon().getLon(),
+                      node.getLatlon().getLat(),
+                      node.getLatlon().getLon())
+                  .to(KILOMETRE)
+                  .getValue()
+                  .doubleValue();
           if (tempDistance < distance) {
             distance = tempDistance;
             nextWay = nodeToWayMap.get(node);
