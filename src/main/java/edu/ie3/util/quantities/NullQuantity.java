@@ -57,7 +57,7 @@ public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<
    * @param that Quantity to perform the operation on
    * @return nothing, ever. Throws NullPointer instead.
    * @deprecated NullQuantity represents a 'null' value, so you should not perform any operations on
-   * this Quantity
+   *     this Quantity
    */
   @Override
   @Deprecated
@@ -72,7 +72,7 @@ public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<
    * @param that Quantity to perform the operation on
    * @return nothing, ever. Throws NullPointer instead.
    * @deprecated NullQuantity represents a 'null' value, so you should not perform any operations on
-   * this Quantity
+   *     this Quantity
    */
   @Override
   @Deprecated
@@ -87,7 +87,7 @@ public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<
    * @param that Quantity to perform the operation on
    * @return nothing, ever. Throws NullPointer instead.
    * @deprecated NullQuantity represents a 'null' value, so you should not perform any operations on
-   * this Quantity
+   *     this Quantity
    */
   @Override
   @Deprecated
@@ -102,7 +102,7 @@ public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<
    * @param that Quantity to perform the operation on
    * @return nothing, ever. Throws NullPointer instead.
    * @deprecated NullQuantity represents a 'null' value, so you should not perform any operations on
-   * this Quantity
+   *     this Quantity
    */
   @Override
   @Deprecated
@@ -117,7 +117,7 @@ public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<
    * @param multiplier Quantity to perform the operation on
    * @return nothing, ever. Throws NullPointer instead.
    * @deprecated NullQuantity represents a 'null' value, so you should not perform any operations on
-   * this Quantity
+   *     this Quantity
    */
   @Override
   @Deprecated
@@ -132,7 +132,7 @@ public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<
    * @param multiplier Quantity to perform the operation on
    * @return nothing, ever. Throws NullPointer instead.
    * @deprecated NullQuantity represents a 'null' value, so you should not perform any operations on
-   * this Quantity
+   *     this Quantity
    */
   @Override
   @Deprecated
@@ -146,7 +146,7 @@ public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<
    *
    * @return nothing, ever. Throws NullPointer instead.
    * @deprecated NullQuantity represents a 'null' value, so you should not perform any operations on
-   * this Quantity
+   *     this Quantity
    */
   @Override
   @Deprecated
@@ -160,7 +160,7 @@ public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<
    *
    * @return nothing, ever. Throws NullPointer instead.
    * @deprecated NullQuantity represents a 'null' value, so you should not perform any operations on
-   * this Quantity
+   *     this Quantity
    */
   @Override
   @Deprecated
@@ -199,7 +199,7 @@ public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<
    *
    * @return nothing, ever. Throws NullPointer instead.
    * @deprecated NullQuantity represents a 'null' value, so you should not perform any operations on
-   * this Quantity
+   *     this Quantity
    */
   @Override
   @Deprecated
