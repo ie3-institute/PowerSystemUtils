@@ -12,35 +12,35 @@ import tech.units.indriya.ComparableQuantity;
 
 /**
  * This class represents a Quantity with the value null. So i.e. instead of "{@code Quantity<Length>
- * length = null;}" you should use "{@code Quantity<Length> length = NullQuantity.of(Units.METRE);}"
- * <br>
+ * length = null;}" you should use "{@code Quantity<Length> length =
+ * EmptyQuantity.of(Units.METRE);}" <br>
  * Any arithmetic operations you perform on this class will throw a NullPointerException as you're
  * not intended to do so.
  *
  * @param <Q> Unit of this quantity
  */
-public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<Q> {
+public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity<Q> {
 
   private static final String EXCEPTION_MESSAGE =
-      "The NullQuantity represents a 'null' value, so you should not perform any operations on this Quantity.";
+      "The EmptyQuantity represents a 'null' value, so you should not perform any operations on this Quantity.";
 
-  private NullQuantity(Unit<Q> unit) {
+  private EmptyQuantity(Unit<Q> unit) {
     super(unit);
   }
 
   /**
-   * Initializes a NullQuantity with the specified Unit
+   * Initializes an EmptyQuantity with the specified Unit
    *
-   * @param unit The Unit for the NullQuantity
-   * @param <U> The Unit/Quantity type of the NullQuantity object
-   * @return NullQuantity with specified unit
+   * @param unit The Unit for the EmptyQuantity
+   * @param <U> The Unit/Quantity type of the EmptyQuantity object
+   * @return EmptyQuantity with specified unit
    */
-  public static <U extends Quantity<U>> NullQuantity<U> of(Unit<U> unit) {
-    return new NullQuantity<>(unit);
+  public static <U extends Quantity<U>> EmptyQuantity<U> of(Unit<U> unit) {
+    return new EmptyQuantity<>(unit);
   }
 
   /**
-   * Returns always null, as that is the only value a NullQuantity can and should have
+   * Returns always null, as that is the only value an EmptyQuantity can and should have
    *
    * @return null, always
    */
@@ -55,8 +55,8 @@ public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<
    *
    * @param that Quantity to perform the operation on
    * @return nothing, ever. Throws NullPointer instead.
-   * @deprecated NullQuantity represents a 'null' value, so you should not perform any operations on
-   *     this Quantity
+   * @deprecated EmptyQuantity represents a 'null' value, so you should not perform any operations
+   *     on this Quantity
    */
   @Override
   @Deprecated
@@ -70,8 +70,8 @@ public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<
    *
    * @param that Quantity to perform the operation on
    * @return nothing, ever. Throws NullPointer instead.
-   * @deprecated NullQuantity represents a 'null' value, so you should not perform any operations on
-   *     this Quantity
+   * @deprecated EmptyQuantity represents a 'null' value, so you should not perform any operations
+   *     on this Quantity
    */
   @Override
   @Deprecated
@@ -85,8 +85,8 @@ public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<
    *
    * @param that Quantity to perform the operation on
    * @return nothing, ever. Throws NullPointer instead.
-   * @deprecated NullQuantity represents a 'null' value, so you should not perform any operations on
-   *     this Quantity
+   * @deprecated EmptyQuantity represents a 'null' value, so you should not perform any operations
+   *     on this Quantity
    */
   @Override
   @Deprecated
@@ -100,8 +100,8 @@ public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<
    *
    * @param that Quantity to perform the operation on
    * @return nothing, ever. Throws NullPointer instead.
-   * @deprecated NullQuantity represents a 'null' value, so you should not perform any operations on
-   *     this Quantity
+   * @deprecated EmptyQuantity represents a 'null' value, so you should not perform any operations
+   *     on this Quantity
    */
   @Override
   @Deprecated
@@ -115,8 +115,8 @@ public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<
    *
    * @param multiplier Quantity to perform the operation on
    * @return nothing, ever. Throws NullPointer instead.
-   * @deprecated NullQuantity represents a 'null' value, so you should not perform any operations on
-   *     this Quantity
+   * @deprecated EmptyQuantity represents a 'null' value, so you should not perform any operations
+   *     on this Quantity
    */
   @Override
   @Deprecated
@@ -130,8 +130,8 @@ public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<
    *
    * @param multiplier Quantity to perform the operation on
    * @return nothing, ever. Throws NullPointer instead.
-   * @deprecated NullQuantity represents a 'null' value, so you should not perform any operations on
-   *     this Quantity
+   * @deprecated EmptyQuantity represents a 'null' value, so you should not perform any operations
+   *     on this Quantity
    */
   @Override
   @Deprecated
@@ -144,8 +144,8 @@ public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<
    * perform operations on this Quantity
    *
    * @return nothing, ever. Throws NullPointer instead.
-   * @deprecated NullQuantity represents a 'null' value, so you should not perform any operations on
-   *     this Quantity
+   * @deprecated EmptyQuantity represents a 'null' value, so you should not perform any operations
+   *     on this Quantity
    */
   @Override
   @Deprecated
@@ -158,8 +158,8 @@ public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<
    * perform operations on this Quantity
    *
    * @return nothing, ever. Throws NullPointer instead.
-   * @deprecated NullQuantity represents a 'null' value, so you should not perform any operations on
-   *     this Quantity
+   * @deprecated EmptyQuantity represents a 'null' value, so you should not perform any operations
+   *     on this Quantity
    */
   @Override
   @Deprecated
@@ -168,37 +168,25 @@ public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<
   }
 
   /**
-   * Decides equality based <b>only</b> on the type of the object: If it is a NullQuantity, it is
+   * Decides equality based <b>only</b> on the type of the object: If it is an EmptyQuantity, it is
    * equal. This is based on the thought that nothing is always equals to nothing.
    *
    * @param that object to compare
-   * @return true, if the object is a NullQuantity
+   * @return true, if the object is an EmptyQuantity
    */
   @Override
   public boolean equals(Object that) {
-    return that.getClass().isAssignableFrom(NullQuantity.class);
-  }
-
-  /**
-   * Decides equality based on the type of the Quantity: If it is a NullQuantity, it is equal.
-   * Otherwise, as opposed to {@link NullQuantity#equals(Object)} we know that we are supposed to
-   * evaluate a Quantity, so a null here represents a NullQuantity.
-   *
-   * @param that object to compare
-   * @return true, if the object is a NullQuantity or null
-   */
-  public static boolean quantityIsNull(Quantity<?> that) {
-    if (that == null) return true;
-    return that.getClass().isAssignableFrom(NullQuantity.class);
+    if (that == null) return false;
+    return that.getClass().isAssignableFrom(EmptyQuantity.class);
   }
 
   /**
    * Overrides the super method, only to throw a NullPointer in <b>any</b> case as you can't create
-   * a hashcode representing null
+   * a hashcode representing null.
    *
    * @return nothing, ever. Throws NullPointer instead.
-   * @deprecated NullQuantity represents a 'null' value, so you should not perform any operations on
-   *     this Quantity
+   * @deprecated EmptyQuantity represents a 'null' value, so you should not perform any operations
+   *     on this Quantity
    */
   @Override
   @Deprecated
@@ -207,16 +195,15 @@ public final class NullQuantity<Q extends Quantity<Q>> extends AbstractQuantity<
   }
 
   /**
-   * Decides equality based on the type of the Quantity: If it is a NullQuantity, it is equal.
-   * Otherwise, as opposed to {@link NullQuantity#equals(Object)} we know that we are supposed to
-   * evaluate a Quantity, so a null here represents a NullQuantity.
+   * Decides equality based <b>only</b> on the type of the quantity: If it is an EmptyQuantity, it
+   * is equal. An EmptyQuantity does not have a value, so equality is checked using the {@link
+   * EmptyQuantity#equals(Object)} method.
    *
    * @param that object to compare
-   * @return true, if the object is a NullQuantity or null
+   * @return true, if the object is an EmptyQuantity
    */
   @Override
   public boolean isEquivalentTo(Quantity that) {
-    if (that == null) return true;
-    return that.getClass().isAssignableFrom(NullQuantity.class);
+    return equals(that);
   }
 }

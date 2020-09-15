@@ -114,4 +114,20 @@ class QuantityUtilTest extends Specification {
 		Quantities.getQuantity(-175d, DEGREE_GEOM) | Quantities.getQuantity(185d, DEGREE_GEOM)
 		Quantities.getQuantity(185d, DEGREE_GEOM)  | Quantities.getQuantity(-174.9995d, DEGREE_GEOM)
 	}
+
+
+	def "A Quantity will only be evaluated as empty, if it is an EmptyQuantity" () {
+		when:
+		quantity
+
+		then:
+		QuantityUtil.quantityIsEmpty(quantity) == expectedResult
+
+		where:
+		quantity                                             || expectedResult
+		null                                                 || false
+		EmptyQuantity.of(METRE)                              || true
+		Quantities.getQuantity(17.1, METRE) 				 || false
+		Quantities.getQuantity(0, METRE)    				 || false
+	}
 }
