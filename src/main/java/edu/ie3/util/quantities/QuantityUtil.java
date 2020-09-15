@@ -103,4 +103,15 @@ public class QuantityUtil {
       else return abs((aVal + 180) - (bVal - 180)) <= quantityTolerance;
     }
   }
+
+  /**
+   * Checks if the given quantity is empty by returning positive if it is an EmptyQuantity.
+   *
+   * @param that quantity to compare
+   * @return true, if the object is a EmptyQuantity - false otherwise, even if the quantity is null
+   */
+  public static boolean quantityIsEmpty(Quantity<?> that) {
+    if (that == null) return false;
+    return that.getClass().isAssignableFrom(EmptyQuantity.class);
+  }
 }
