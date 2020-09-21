@@ -7,6 +7,7 @@ package edu.ie3.util.quantities
 
 import edu.ie3.util.quantities.interfaces.Irradiation
 import spock.lang.Unroll
+import tec.uom.se.unit.MetricPrefix
 import tech.units.indriya.ComparableQuantity
 import tech.units.indriya.quantity.Quantities
 
@@ -48,11 +49,11 @@ class QuantityUtilTest extends Specification {
 		actual == expected
 
 		where:
-		a                                               	| b                                            || expected
-		Quantities.getQuantity(10d, KILOWATT)           	| Quantities.getQuantity(10d, KILOWATT)        || true
-		Quantities.getQuantity(10d, KILOWATT)           	| Quantities.getQuantity(0.010, MEGAWATT)      || true
-		Quantities.getQuantity(15.0000001, DEGREE_GEOM) | Quantities.getQuantity(15d, DEGREE_GEOM) || true
-		Quantities.getQuantity(15.1, DEGREE_GEOM)       | Quantities.getQuantity(15d, DEGREE_GEOM) || false
+		a                                               	| b                                            	|| expected
+		Quantities.getQuantity(10d, KILOWATT)           	| Quantities.getQuantity(10d, KILOWATT)        	|| true
+		Quantities.getQuantity(10d, KILOWATT)           	| Quantities.getQuantity(0.010, MEGAWATT)      	|| true
+		Quantities.getQuantity(15.0000001, DEGREE_GEOM) 	| Quantities.getQuantity(15d, DEGREE_GEOM) 		|| true
+		Quantities.getQuantity(15.1, DEGREE_GEOM)       	| Quantities.getQuantity(15d, DEGREE_GEOM) 		|| false
 	}
 
 	@Unroll
@@ -64,11 +65,11 @@ class QuantityUtilTest extends Specification {
 		actual == expected
 
 		where:
-		a                                               	| b                                            || expected
-		Quantities.getQuantity(10d, KILOWATT)           	| Quantities.getQuantity(10d, KILOWATT)        || true
-		Quantities.getQuantity(10d, KILOWATT)           	| Quantities.getQuantity(0.010, MEGAWATT)      || true
-		Quantities.getQuantity(15.0000001, DEGREE_GEOM) | Quantities.getQuantity(15d, DEGREE_GEOM) || true
-		Quantities.getQuantity(15.9, DEGREE_GEOM)       | Quantities.getQuantity(14d, DEGREE_GEOM) || false
+		a                                               	| b                                            	|| expected
+		Quantities.getQuantity(10d, KILOWATT)           	| Quantities.getQuantity(10d, KILOWATT)        	|| true
+		Quantities.getQuantity(10d, KILOWATT)           	| Quantities.getQuantity(0.010, MEGAWATT)      	|| true
+		Quantities.getQuantity(15.0000001, DEGREE_GEOM) 	| Quantities.getQuantity(15d, DEGREE_GEOM) 		|| true
+		Quantities.getQuantity(15.9, DEGREE_GEOM)       	| Quantities.getQuantity(14d, DEGREE_GEOM) 		|| false
 	}
 
 	def "Comparing two angle quantities absolutely shows considerably different values (old package)"() {
@@ -116,7 +117,7 @@ class QuantityUtilTest extends Specification {
 	}
 
 
-	def "A Quantity will only be evaluated as empty, if it is an EmptyQuantity" () {
+	def "A Quantity will only be evaluated as empty if it is an EmptyQuantity" () {
 		when:
 		quantity
 
@@ -129,5 +130,49 @@ class QuantityUtilTest extends Specification {
 		EmptyQuantity.of(METRE)                              || true
 		Quantities.getQuantity(17.1, METRE) 				 || false
 		Quantities.getQuantity(0, METRE)    				 || false
+	}
+
+
+	def "Comparing two quantities for equality behaves as expected" () {
+		when:
+		quantityA
+		quantityB
+
+		then:
+		QuantityUtil.isTheSameConsideringEmpty(quantityA, quantityB) == expectedResult
+		QuantityUtil.isTheSameConsideringEmpty(quantityB, quantityA) == expectedResult
+
+		where:
+		quantityA                                   		| quantityB                           		|| expectedResult
+		Quantities.getQuantity(1000, METRE)         		| Quantities.getQuantity(1000, METRE) 		|| true
+		Quantities.getQuantity(1000d, METRE)        		| Quantities.getQuantity(1000, METRE) 		|| true
+		Quantities.getQuantity(1, MetricPrefix.KILO(METRE)) | Quantities.getQuantity(1000, METRE) 		|| false
+		Quantities.getQuantity(1d, MetricPrefix.KILO(METRE))| Quantities.getQuantity(1000, METRE) 		|| false
+		Quantities.getQuantity(1000, METRE)        			| EmptyQuantity.of(METRE) 					|| false
+		Quantities.getQuantity(1000d, METRE)        		| EmptyQuantity.of(METRE) 					|| false
+		EmptyQuantity.of(METRE)        						| Quantities.getQuantity(1000d, METRE) 		|| false
+		EmptyQuantity.of(METRE)        						| EmptyQuantity.of(METRE) 					|| true
+	}
+
+
+	def "Comparing two quantities for equivalence behaves as expected" () {
+		when:
+		quantityA
+		quantityB
+
+		then:
+		QuantityUtil.isEquivalentConsideringEmpty(quantityA, quantityB) == expectedResult
+		QuantityUtil.isEquivalentConsideringEmpty(quantityB, quantityA) == expectedResult
+
+		where:
+		quantityA                                   		| quantityB                           		|| expectedResult
+		Quantities.getQuantity(1000, METRE)         		| Quantities.getQuantity(1000, METRE) 		|| true
+		Quantities.getQuantity(1000d, METRE)        		| Quantities.getQuantity(1000, METRE) 		|| true
+		Quantities.getQuantity(1, MetricPrefix.KILO(METRE)) | Quantities.getQuantity(1000, METRE) 		|| true
+		Quantities.getQuantity(1d, MetricPrefix.KILO(METRE))| Quantities.getQuantity(1000, METRE) 		|| true
+		Quantities.getQuantity(1000, METRE)        			| EmptyQuantity.of(METRE) 					|| false
+		Quantities.getQuantity(1000d, METRE)        		| EmptyQuantity.of(METRE) 					|| false
+		EmptyQuantity.of(METRE)        						| Quantities.getQuantity(1000d, METRE) 		|| false
+		EmptyQuantity.of(METRE)        						| EmptyQuantity.of(METRE) 					|| true
 	}
 }
