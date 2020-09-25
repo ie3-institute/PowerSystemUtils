@@ -5,6 +5,7 @@
  */
 package edu.ie3.util.quantities
 
+import edu.ie3.util.exceptions.EmptyQuantityException
 import spock.lang.Specification
 import tech.units.indriya.quantity.Quantities
 
@@ -16,8 +17,8 @@ class EmptyQuantityTest extends Specification {
 
 		then:
 		emptyQuantity != null
-		emptyQuantity.getUnit() == expectedUnit
-		emptyQuantity.getValue() == null
+		emptyQuantity.unit == expectedUnit
+		emptyQuantity.value == null
 
 		where:
 		emptyQuantity                            || expectedUnit
@@ -65,7 +66,7 @@ class EmptyQuantityTest extends Specification {
 		nullMetreQuantity.add(filledMetreQuantity)
 
 		then:
-		def exception = thrown(NullPointerException)
+		def exception = thrown(EmptyQuantityException)
 		exception.message == EmptyQuantity.EXCEPTION_MESSAGE
 	}
 
@@ -76,7 +77,7 @@ class EmptyQuantityTest extends Specification {
 		nullMetreQuantity.subtract(filledMetreQuantity)
 
 		then:
-		def exception = thrown(NullPointerException)
+		def exception = thrown(EmptyQuantityException)
 		exception.message == EmptyQuantity.EXCEPTION_MESSAGE
 	}
 
@@ -87,7 +88,7 @@ class EmptyQuantityTest extends Specification {
 		nullMetreQuantity.divide(filledMetreQuantity)
 
 		then:
-		def exception = thrown(NullPointerException)
+		def exception = thrown(EmptyQuantityException)
 		exception.message == EmptyQuantity.EXCEPTION_MESSAGE
 	}
 
@@ -98,7 +99,7 @@ class EmptyQuantityTest extends Specification {
 		nullMetreQuantity.divide(divisor)
 
 		then:
-		def exception = thrown(NullPointerException)
+		def exception = thrown(EmptyQuantityException)
 		exception.message == EmptyQuantity.EXCEPTION_MESSAGE
 	}
 
@@ -106,10 +107,10 @@ class EmptyQuantityTest extends Specification {
 		when:
 		def nullMetreQuantity = EmptyQuantity.of(PowerSystemUnits.METRE)
 		def filledMetreQuantity = Quantities.getQuantity(17.1, PowerSystemUnits.METRE)
-		nullMetreQuantity.multiply(filledMetreQuantity)
+		nullMetreQuantity * filledMetreQuantity
 
 		then:
-		def exception = thrown(NullPointerException)
+		def exception = thrown(EmptyQuantityException)
 		exception.message == EmptyQuantity.EXCEPTION_MESSAGE
 	}
 
@@ -117,10 +118,10 @@ class EmptyQuantityTest extends Specification {
 		when:
 		def nullMetreQuantity = EmptyQuantity.of(PowerSystemUnits.METRE)
 		def multiplier = 17.1
-		nullMetreQuantity.multiply(multiplier)
+		nullMetreQuantity * multiplier
 
 		then:
-		def exception = thrown(NullPointerException)
+		def exception = thrown(EmptyQuantityException)
 		exception.message == EmptyQuantity.EXCEPTION_MESSAGE
 	}
 
@@ -130,7 +131,7 @@ class EmptyQuantityTest extends Specification {
 		nullMetreQuantity.inverse()
 
 		then:
-		def exception = thrown(NullPointerException)
+		def exception = thrown(EmptyQuantityException)
 		exception.message == EmptyQuantity.EXCEPTION_MESSAGE
 	}
 
@@ -140,7 +141,7 @@ class EmptyQuantityTest extends Specification {
 		nullMetreQuantity.negate()
 
 		then:
-		def exception = thrown(NullPointerException)
+		def exception = thrown(EmptyQuantityException)
 		exception.message == EmptyQuantity.EXCEPTION_MESSAGE
 	}
 
