@@ -5,14 +5,13 @@
  */
 package edu.ie3.util.quantities
 
+import static edu.ie3.util.quantities.PowerSystemUnits.*
 import edu.ie3.util.quantities.interfaces.Irradiation
 import spock.lang.Unroll
 import tech.units.indriya.ComparableQuantity
 import tech.units.indriya.quantity.Quantities
 
 import javax.measure.MetricPrefix
-
-import static edu.ie3.util.quantities.PowerSystemUnits.*
 
 import javax.measure.quantity.Angle
 import javax.measure.quantity.Length
@@ -28,7 +27,7 @@ class QuantityUtilTest extends Specification {
 		def actual = QuantityUtil.asComparable(input)
 
 		then:
-		actual instanceof tech.units.indriya.ComparableQuantity
+		actual instanceof ComparableQuantity
 		actual.value == expected.value
 		actual.unit == expected.unit
 
@@ -166,14 +165,14 @@ class QuantityUtilTest extends Specification {
 		QuantityUtil.isEquivalentConsideringEmpty(quantityB, quantityA) == expectedResult
 
 		where:
-		quantityA                                   		| quantityB                           		|| expectedResult
-		Quantities.getQuantity(1000, METRE)         		| Quantities.getQuantity(1000, METRE) 		|| true
-		Quantities.getQuantity(1000d, METRE)        		| Quantities.getQuantity(1000, METRE) 		|| true
-		Quantities.getQuantity(1, MetricPrefix.KILO(METRE)) | Quantities.getQuantity(1000, METRE) 		|| true
-		Quantities.getQuantity(1d, MetricPrefix.KILO(METRE))| Quantities.getQuantity(1000, METRE) 		|| true
-		Quantities.getQuantity(1000, METRE)        			| EmptyQuantity.of(METRE) 					|| false
-		Quantities.getQuantity(1000d, METRE)        		| EmptyQuantity.of(METRE) 					|| false
-		EmptyQuantity.of(METRE)        						| Quantities.getQuantity(1000d, METRE) 		|| false
-		EmptyQuantity.of(METRE)        						| EmptyQuantity.of(METRE) 					|| true
+		quantityA                                   			| quantityB                           		|| expectedResult
+		Quantities.getQuantity(1000, METRE)         			| Quantities.getQuantity(1000, METRE) 		|| true
+		Quantities.getQuantity(1000d, METRE)        			| Quantities.getQuantity(1000, METRE) 		|| true
+		Quantities.getQuantity(1, MetricPrefix.KILO(METRE)) 	| Quantities.getQuantity(1000, METRE) 		|| true
+		Quantities.getQuantity(1d, MetricPrefix.KILO(METRE))	| Quantities.getQuantity(1000, METRE) 		|| true
+		Quantities.getQuantity(1000, METRE)        				| EmptyQuantity.of(METRE) 					|| false
+		Quantities.getQuantity(1000d, METRE)        			| EmptyQuantity.of(METRE) 					|| false
+		EmptyQuantity.of(METRE)        							| Quantities.getQuantity(1000d, METRE) 		|| false
+		EmptyQuantity.of(METRE)        							| EmptyQuantity.of(METRE) 					|| true
 	}
 }
