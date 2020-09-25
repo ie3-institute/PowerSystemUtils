@@ -19,21 +19,6 @@ import tech.units.indriya.quantity.Quantities
 
 
 class GeoUtilsTest extends Specification {
-	/** @deprecated As of release 1.4 */
-	@Deprecated
-	def "Test haversine (distance between two points given lat/lon) (old package)"() {
-		given:
-		LatLon start = new LatLon(37.87532764735112, -122.25311279296875)
-		LatLon end = new LatLon(37.87934174490509, -122.2537350654602)
-		tec.uom.se.ComparableQuantity<Length> tolerance = tec.uom.se.quantity.Quantities.getQuantity(1d, edu.ie3.util.quantities.dep.PowerSystemUnits.METRE)
-		tec.uom.se.ComparableQuantity<Length> expected = tec.uom.se.quantity.Quantities.getQuantity(450.18011568984845, edu.ie3.util.quantities.dep.PowerSystemUnits.METRE)
-
-		when:
-		tec.uom.se.ComparableQuantity<Length> actual = GeoUtils.haversine(start.lat, start.lon, end.lat, end.lon)
-
-		then:
-		Math.abs(actual.subtract(expected).to(edu.ie3.util.quantities.dep.PowerSystemUnits.METRE).value.doubleValue()) < tolerance.value.doubleValue()
-	}
 
 	def "Test haversine (distance between two points given lat/lon)"() {
 		given:
@@ -47,32 +32,6 @@ class GeoUtilsTest extends Specification {
 
 		then:
 		Math.abs(actual.subtract(expected).to(METRE).value.doubleValue()) < tolerance.value.doubleValue()
-	}
-
-	/** @deprecated As of release 1.4 */
-	@Deprecated
-	def "Test radius with circle as polygon (old package)"() {
-		given:
-		LatLon center = new LatLon(52.02083574, 7.40110716)
-		Quantity radius = tec.uom.se.quantity.Quantities.getQuantity(50, edu.ie3.util.quantities.dep.PowerSystemUnits.METRE)
-
-		when:
-		Polygon poly = GeoUtils.radiusWithCircleAsPolygon(center, radius)
-		List<LatLon> circlePoints = poly.getCoords()
-
-		then:
-		// polygon should contain a center that is the provided center
-		Math.round(poly.center.lat * 100000000) / 100000000 == Math.round(center.lat * 100000000) / 100000000
-		Math.round(poly.center.lon * 100000000) / 100000000 == Math.round(center.lon * 100000000) / 100000000
-
-		// number of expected circle points
-		circlePoints.size() == 361
-		// rounded distance should be 50 meters
-		circlePoints.forEach({ point ->
-			Double distance = GeoUtils.haversine(center.lat, center.lon, point.lat, point.lon).to(edu.ie3.util.quantities.dep.PowerSystemUnits.METRE).value.doubleValue()
-			Math.round(distance) == 50
-		})
-
 	}
 
 	def "Test radius with circle as polygon"() {
