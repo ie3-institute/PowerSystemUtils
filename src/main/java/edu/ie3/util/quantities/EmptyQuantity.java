@@ -5,6 +5,7 @@
 */
 package edu.ie3.util.quantities;
 
+import edu.ie3.util.exceptions.EmptyQuantityException;
 import javax.measure.Quantity;
 import javax.measure.Unit;
 import tech.units.indriya.AbstractQuantity;
@@ -14,8 +15,16 @@ import tech.units.indriya.ComparableQuantity;
  * This class represents a Quantity with the value null. So i.e. instead of "{@code Quantity<Length>
  * length = null;}" you should use "{@code Quantity<Length> length =
  * EmptyQuantity.of(Units.METRE);}" <br>
- * Any arithmetic operations you perform on this class will throw a NullPointerException as you're
- * not intended to do so.
+ * Any arithmetic operations you perform on this class will throw a EmptyQuantityException as you're
+ * not intended to do so. The reason to have this quantity instead of using null directly is to
+ * provide a more obvious way to deal with empty quantities instead of just using null for an empty
+ * quantity.
+ *
+ * <p>Possible application cases are e.g. time series consisting of several quantities based on real
+ * data. As real time series sometimes might lack some values, it is preferred to indicate that that
+ * these values are missing in the input data by providing an instance of {@link EmptyQuantity}
+ * instead of using null. This is motivated by making the missing value explicit, instead of
+ * implicitly assuming that null represents a missing value.
  *
  * @param <Q> Unit of this quantity
  */
@@ -61,7 +70,7 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
   @Override
   @Deprecated
   public ComparableQuantity<Q> add(Quantity<Q> that) {
-    throw new NullPointerException(EXCEPTION_MESSAGE);
+    throw new EmptyQuantityException(EXCEPTION_MESSAGE);
   }
 
   /**
@@ -76,7 +85,7 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
   @Override
   @Deprecated
   public ComparableQuantity<Q> subtract(Quantity<Q> that) {
-    throw new NullPointerException(EXCEPTION_MESSAGE);
+    throw new EmptyQuantityException(EXCEPTION_MESSAGE);
   }
 
   /**
@@ -91,7 +100,7 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
   @Override
   @Deprecated
   public ComparableQuantity<?> divide(Quantity<?> that) {
-    throw new NullPointerException(EXCEPTION_MESSAGE);
+    throw new EmptyQuantityException(EXCEPTION_MESSAGE);
   }
 
   /**
@@ -106,7 +115,7 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
   @Override
   @Deprecated
   public ComparableQuantity<Q> divide(Number that) {
-    throw new NullPointerException(EXCEPTION_MESSAGE);
+    throw new EmptyQuantityException(EXCEPTION_MESSAGE);
   }
 
   /**
@@ -121,7 +130,7 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
   @Override
   @Deprecated
   public ComparableQuantity<?> multiply(Quantity<?> multiplier) {
-    throw new NullPointerException(EXCEPTION_MESSAGE);
+    throw new EmptyQuantityException(EXCEPTION_MESSAGE);
   }
 
   /**
@@ -136,7 +145,7 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
   @Override
   @Deprecated
   public ComparableQuantity<Q> multiply(Number multiplier) {
-    throw new NullPointerException(EXCEPTION_MESSAGE);
+    throw new EmptyQuantityException(EXCEPTION_MESSAGE);
   }
 
   /**
@@ -150,7 +159,7 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
   @Override
   @Deprecated
   public ComparableQuantity<?> inverse() {
-    throw new NullPointerException(EXCEPTION_MESSAGE);
+    throw new EmptyQuantityException(EXCEPTION_MESSAGE);
   }
 
   /**
@@ -164,7 +173,7 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
   @Override
   @Deprecated
   public Quantity<Q> negate() {
-    throw new NullPointerException(EXCEPTION_MESSAGE);
+    throw new EmptyQuantityException(EXCEPTION_MESSAGE);
   }
 
   /**
@@ -191,7 +200,7 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
   @Override
   @Deprecated
   public int hashCode() {
-    throw new NullPointerException(EXCEPTION_MESSAGE);
+    throw new EmptyQuantityException(EXCEPTION_MESSAGE);
   }
 
   /**
