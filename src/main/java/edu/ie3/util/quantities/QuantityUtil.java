@@ -118,7 +118,7 @@ public class QuantityUtil {
   /**
    * Compares two {@link Quantity}s, if they are equal. Returns true only if both quantities are of
    * type {@link EmptyQuantity} or if they are equal in value <b>and</b> Unit. The type of the value
-   * does not matter. Throws a NullPointerException if the first Quantity is null, as null is not to
+   * does not matter. Throws a NullPointerException if the any quantity is null, as null is not to
    * be expected as any known empty value should be replaced by an EmptyQuantity.
    *
    * <p>isTheSameConsideringEmpty(1 km, 1000 m) // false <br>
@@ -128,11 +128,13 @@ public class QuantityUtil {
    * @param b Second quantity to compare
    * @param <Q> Type of the Quantity
    * @return true, if both are an EmptyQuantity or if they are equal
-   * @throws NullPointerException if a is null
+   * @throws NullPointerException if any quantity is null
    */
   public static <Q extends Quantity<Q>> boolean isTheSameConsideringEmpty(
       Quantity<Q> a, Quantity<Q> b) {
-    if (a == null) throw new NullPointerException();
+    if (a == null || b == null)
+      throw new NullPointerException(
+          "There was an error while comparing quantities: at least one quantity was not set");
     if (!QuantityUtil.quantityIsEmpty(a)) {
       if (QuantityUtil.quantityIsEmpty(b)) return false;
       return a.equals(b);
@@ -142,7 +144,7 @@ public class QuantityUtil {
   /**
    * Compares two {@link Quantity}s, if they are equivalent. Returns true only if both quantities
    * are of type {@link EmptyQuantity} or if they represent equivalent values. Throws a
-   * NullPointerException if the first Quantity is null, as null is not to be expected as any known
+   * NullPointerException if the any quantity is null, as null is not to be expected as any known
    * empty value should be replaced by an EmptyQuantity.
    *
    * <p>isEquivalentConsideringEmpty(1 km, 1000 m)// true <br>
@@ -152,11 +154,13 @@ public class QuantityUtil {
    * @param b Second quantity to compare
    * @param <Q> Type of the Quantity
    * @return true, if both are an EmptyQuantity or if they are equivalent
-   * @throws NullPointerException if a is null
+   * @throws NullPointerException if any quantity is null
    */
   public static <Q extends Quantity<Q>> boolean isEquivalentConsideringEmpty(
       ComparableQuantity<Q> a, ComparableQuantity<Q> b) {
-    if (a == null) throw new NullPointerException();
+    if (a == null || b == null)
+      throw new NullPointerException(
+          "There was an error while comparing quantities: at least one quantity was not set");
     if (!QuantityUtil.quantityIsEmpty(a)) {
       if (QuantityUtil.quantityIsEmpty(b)) return false;
       return a.isEquivalentTo(b);
