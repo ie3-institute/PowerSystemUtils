@@ -132,6 +132,7 @@ public class QuantityUtil {
    */
   public static <Q extends Quantity<Q>> boolean isTheSameConsideringEmpty(
       Quantity<Q> a, Quantity<Q> b) {
+    if (a == null) throw new NullPointerException();
     if (!QuantityUtil.quantityIsEmpty(a)) {
       if (QuantityUtil.quantityIsEmpty(b)) return false;
       return a.equals(b);
@@ -155,6 +156,7 @@ public class QuantityUtil {
    */
   public static <Q extends Quantity<Q>> boolean isEquivalentConsideringEmpty(
       ComparableQuantity<Q> a, ComparableQuantity<Q> b) {
+    if (a == null) throw new NullPointerException();
     if (!QuantityUtil.quantityIsEmpty(a)) {
       if (QuantityUtil.quantityIsEmpty(b)) return false;
       return a.isEquivalentTo(b);
