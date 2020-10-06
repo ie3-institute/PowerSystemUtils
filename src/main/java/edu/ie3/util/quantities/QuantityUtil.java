@@ -8,6 +8,7 @@ package edu.ie3.util.quantities;
 import static edu.ie3.util.quantities.PowerSystemUnits.DEGREE_GEOM;
 import static java.lang.StrictMath.abs;
 
+import java.util.Objects;
 import javax.measure.Quantity;
 import javax.measure.quantity.Angle;
 import tech.units.indriya.ComparableQuantity;
@@ -132,9 +133,10 @@ public class QuantityUtil {
    */
   public static <Q extends Quantity<Q>> boolean isTheSameConsideringEmpty(
       Quantity<Q> a, Quantity<Q> b) {
-    if (a == null || b == null)
-      throw new NullPointerException(
-          "There was an error while comparing quantities: at least one quantity was not set");
+    Objects.requireNonNull(
+        a, "There was an error while comparing quantities: quantity a was not set");
+    Objects.requireNonNull(
+        b, "There was an error while comparing quantities: quantity b was not set");
     if (!QuantityUtil.quantityIsEmpty(a)) {
       if (QuantityUtil.quantityIsEmpty(b)) return false;
       return a.equals(b);
@@ -158,9 +160,10 @@ public class QuantityUtil {
    */
   public static <Q extends Quantity<Q>> boolean isEquivalentConsideringEmpty(
       ComparableQuantity<Q> a, ComparableQuantity<Q> b) {
-    if (a == null || b == null)
-      throw new NullPointerException(
-          "There was an error while comparing quantities: at least one quantity was not set");
+    Objects.requireNonNull(
+        a, "There was an error while comparing quantities: quantity a was not set");
+    Objects.requireNonNull(
+        b, "There was an error while comparing quantities: quantity b was not set");
     if (!QuantityUtil.quantityIsEmpty(a)) {
       if (QuantityUtil.quantityIsEmpty(b)) return false;
       return a.isEquivalentTo(b);
