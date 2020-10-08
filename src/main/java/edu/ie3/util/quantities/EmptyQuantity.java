@@ -59,11 +59,11 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
   }
 
   /**
-   * Overrides the super method, only to throw a NullPointer in <b>any</b> case as you should not
-   * perform operations on this Quantity
+   * Overrides the super method, only to throw a EmptyQuantityException in <b>any</b> case as you
+   * should not perform operations on this Quantity
    *
    * @param that Quantity to perform the operation on
-   * @return nothing, ever. Throws NullPointer instead.
+   * @return nothing, ever. Throws EmptyQuantityException instead.
    * @deprecated EmptyQuantity represents a 'null' value, so you should not perform any operations
    *     on this Quantity
    */
@@ -74,11 +74,11 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
   }
 
   /**
-   * Overrides the super method, only to throw a NullPointer in <b>any</b> case as you should not
-   * perform operations on this Quantity
+   * Overrides the super method, only to throw a EmptyQuantityException in <b>any</b> case as you
+   * should not perform operations on this Quantity
    *
    * @param that Quantity to perform the operation on
-   * @return nothing, ever. Throws NullPointer instead.
+   * @return nothing, ever. Throws EmptyQuantityException instead.
    * @deprecated EmptyQuantity represents a 'null' value, so you should not perform any operations
    *     on this Quantity
    */
@@ -89,11 +89,11 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
   }
 
   /**
-   * Overrides the super method, only to throw a NullPointer in <b>any</b> case as you should not
-   * perform operations on this Quantity
+   * Overrides the super method, only to throw a EmptyQuantityException in <b>any</b> case as you
+   * should not perform operations on this Quantity
    *
    * @param that Quantity to perform the operation on
-   * @return nothing, ever. Throws NullPointer instead.
+   * @return nothing, ever. Throws EmptyQuantityException instead.
    * @deprecated EmptyQuantity represents a 'null' value, so you should not perform any operations
    *     on this Quantity
    */
@@ -104,11 +104,11 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
   }
 
   /**
-   * Overrides the super method, only to throw a NullPointer in <b>any</b> case as you should not
-   * perform operations on this Quantity
+   * Overrides the super method, only to throw a EmptyQuantityException in <b>any</b> case as you
+   * should not perform operations on this Quantity
    *
    * @param that Quantity to perform the operation on
-   * @return nothing, ever. Throws NullPointer instead.
+   * @return nothing, ever. Throws EmptyQuantityException instead.
    * @deprecated EmptyQuantity represents a 'null' value, so you should not perform any operations
    *     on this Quantity
    */
@@ -119,11 +119,11 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
   }
 
   /**
-   * Overrides the super method, only to throw a NullPointer in <b>any</b> case as you should not
-   * perform operations on this Quantity
+   * Overrides the super method, only to throw a EmptyQuantityException in <b>any</b> case as you
+   * should not perform operations on this Quantity
    *
    * @param multiplier Quantity to perform the operation on
-   * @return nothing, ever. Throws NullPointer instead.
+   * @return nothing, ever. Throws EmptyQuantityException instead.
    * @deprecated EmptyQuantity represents a 'null' value, so you should not perform any operations
    *     on this Quantity
    */
@@ -134,11 +134,11 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
   }
 
   /**
-   * Overrides the super method, only to throw a NullPointer in <b>any</b> case as you should not
-   * perform operations on this Quantity
+   * Overrides the super method, only to throw a EmptyQuantityException in <b>any</b> case as you
+   * should not perform operations on this Quantity
    *
    * @param multiplier Quantity to perform the operation on
-   * @return nothing, ever. Throws NullPointer instead.
+   * @return nothing, ever. Throws EmptyQuantityException instead.
    * @deprecated EmptyQuantity represents a 'null' value, so you should not perform any operations
    *     on this Quantity
    */
@@ -149,10 +149,10 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
   }
 
   /**
-   * Overrides the super method, only to throw a NullPointer in <b>any</b> case as you should not
-   * perform operations on this Quantity
+   * Overrides the super method, only to throw a EmptyQuantityException in <b>any</b> case as you
+   * should not perform operations on this Quantity
    *
-   * @return nothing, ever. Throws NullPointer instead.
+   * @return nothing, ever. Throws EmptyQuantityException instead.
    * @deprecated EmptyQuantity represents a 'null' value, so you should not perform any operations
    *     on this Quantity
    */
@@ -163,10 +163,10 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
   }
 
   /**
-   * Overrides the super method, only to throw a NullPointer in <b>any</b> case as you should not
-   * perform operations on this Quantity
+   * Overrides the super method, only to throw a EmptyQuantityException in <b>any</b> case as you
+   * should not perform operations on this Quantity
    *
-   * @return nothing, ever. Throws NullPointer instead.
+   * @return nothing, ever. Throws EmptyQuantityException instead.
    * @deprecated EmptyQuantity represents a 'null' value, so you should not perform any operations
    *     on this Quantity
    */
@@ -190,10 +190,10 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
   }
 
   /**
-   * Overrides the super method, only to throw a NullPointer in <b>any</b> case as you can't create
-   * a hashcode representing null.
+   * Overrides the super method, only to throw a EmptyQuantityException in <b>any</b> case as you
+   * can't create a hashcode representing null.
    *
-   * @return nothing, ever. Throws NullPointer instead.
+   * @return nothing, ever. Throws EmptyQuantityException instead.
    * @deprecated EmptyQuantity represents a 'null' value, so you should not perform any operations
    *     on this Quantity
    */

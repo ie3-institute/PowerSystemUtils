@@ -7,8 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased/Snapshot]
 
 ### Added
+- Introduction of EmptyQuantity, a representation for null value Quantities
 
 ### Changed
+- Adaptions in QuantityUtil
 
 ### Fixed
 

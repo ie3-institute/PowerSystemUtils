@@ -8,6 +8,7 @@ package edu.ie3.util.quantities;
 import static edu.ie3.util.quantities.PowerSystemUnits.DEGREE_GEOM;
 import static java.lang.StrictMath.abs;
 
+import java.util.Objects;
 import javax.measure.Quantity;
 import javax.measure.quantity.Angle;
 import tech.units.indriya.ComparableQuantity;
@@ -113,5 +114,59 @@ public class QuantityUtil {
   public static boolean quantityIsEmpty(Quantity<?> that) {
     if (that == null) return false;
     return that.getClass().isAssignableFrom(EmptyQuantity.class);
+  }
+
+  /**
+   * Compares two {@link Quantity}s, if they are equal. Returns true only if both quantities are of
+   * type {@link EmptyQuantity} or if they are equal in value <b>and</b> Unit. The type of the value
+   * does not matter. Throws a NullPointerException if the any quantity is null, as null is not to
+   * be expected as any known empty value should be replaced by an EmptyQuantity.
+   *
+   * <p>isTheSameConsideringEmpty(1 km, 1000 m) // false <br>
+   * isTheSameConsideringEmpty(1.0 km, 1 km) //true
+   *
+   * @param a First quantity to compare
+   * @param b Second quantity to compare
+   * @param <Q> Type of the Quantity
+   * @return true, if both are an EmptyQuantity or if they are equal
+   * @throws NullPointerException if any quantity is null
+   */
+  public static <Q extends Quantity<Q>> boolean isTheSameConsideringEmpty(
+      Quantity<Q> a, Quantity<Q> b) {
+    Objects.requireNonNull(
+        a, "There was an error while comparing quantities: quantity a was not set");
+    Objects.requireNonNull(
+        b, "There was an error while comparing quantities: quantity b was not set");
+    if (!QuantityUtil.quantityIsEmpty(a)) {
+      if (QuantityUtil.quantityIsEmpty(b)) return false;
+      return a.equals(b);
+    } else return QuantityUtil.quantityIsEmpty(b);
+  }
+
+  /**
+   * Compares two {@link Quantity}s, if they are equivalent. Returns true only if both quantities
+   * are of type {@link EmptyQuantity} or if they represent equivalent values. Throws a
+   * NullPointerException if the any quantity is null, as null is not to be expected as any known
+   * empty value should be replaced by an EmptyQuantity.
+   *
+   * <p>isEquivalentConsideringEmpty(1 km, 1000 m)// true <br>
+   * isEquivalentConsideringEmpty(1.0 km, 1 km) // true
+   *
+   * @param a First quantity to compare
+   * @param b Second quantity to compare
+   * @param <Q> Type of the Quantity
+   * @return true, if both are an EmptyQuantity or if they are equivalent
+   * @throws NullPointerException if any quantity is null
+   */
+  public static <Q extends Quantity<Q>> boolean isEquivalentConsideringEmpty(
+      ComparableQuantity<Q> a, ComparableQuantity<Q> b) {
+    Objects.requireNonNull(
+        a, "There was an error while comparing quantities: quantity a was not set");
+    Objects.requireNonNull(
+        b, "There was an error while comparing quantities: quantity b was not set");
+    if (!QuantityUtil.quantityIsEmpty(a)) {
+      if (QuantityUtil.quantityIsEmpty(b)) return false;
+      return a.isEquivalentTo(b);
+    } else return QuantityUtil.quantityIsEmpty(b);
   }
 }
