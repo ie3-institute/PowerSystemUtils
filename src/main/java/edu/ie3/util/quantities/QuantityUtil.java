@@ -16,6 +16,11 @@ import tech.units.indriya.quantity.Quantities;
 
 /** Offers useful methods to handle {@link Quantity}s */
 public class QuantityUtil {
+
+  private static final double DEFAULT_ABSOLUTE_TOLERANCE = 0d;
+  private static final double DEFAULT_RELATIVE_TOLERANCE = 0.00000001d;
+  private static final double DEFAULT_ANGLE_TOLERANCE = 0.001d;
+
   private QuantityUtil() {
     throw new IllegalStateException("Utility classes cannot be instantiated.");
   }
@@ -35,13 +40,32 @@ public class QuantityUtil {
    * Compares two {@link Quantity}s, if they are considerably equal. This is foremost important for
    * {@link tech.units.indriya.quantity.NumberQuantity}s with internal big decimal or double values.
    * The comparison is made on the absolute difference of both quantities' value. Both quantities
+   * are converted into a's unit before the comparison. Internally calls {@link
+   * QuantityUtil#considerablyAbsEqual(Quantity, Quantity, double)} with a default tolerance of
+   * {@value DEFAULT_ABSOLUTE_TOLERANCE}
+   *
+   * @param a First quantity to compare
+   * @param b Second quantity to compare
+   * @param <Q> Type of Quantity
+   * @return true, if both quantities' values differ less then the given tolerance else false (based
+   *     on a's unit)
+   */
+  public static <Q extends Quantity<Q>> boolean considerablyAbsEqual(Quantity<Q> a, Quantity<Q> b) {
+    return considerablyAbsEqual(a, b, DEFAULT_ABSOLUTE_TOLERANCE);
+  }
+
+  /**
+   * Compares two {@link Quantity}s, if they are considerably equal. This is foremost important for
+   * {@link tech.units.indriya.quantity.NumberQuantity}s with internal big decimal or double values.
+   * The comparison is made on the absolute difference of both quantities' value. Both quantities
    * are converted into a's unit before the comparison.
    *
    * @param a First quantity to compare
    * @param b Second quantity to compare
    * @param absQuantityTolerance Permissible absolute tolerance
    * @param <Q> Type of Quantity
-   * @return true, if both quantities' values differ less then the given tolerance else false
+   * @return true, if both quantities' values differ less then the given tolerance else false (based
+   *     on a's unit)
    */
   public static <Q extends Quantity<Q>> boolean considerablyAbsEqual(
       Quantity<Q> a, Quantity<Q> b, double absQuantityTolerance) {
@@ -50,6 +74,23 @@ public class QuantityUtil {
     double bVal = b.to(a.getUnit()).getValue().doubleValue();
 
     return Math.abs(aVal - bVal) <= absQuantityTolerance;
+  }
+
+  /**
+   * Compares two {@link Quantity}s, if they are considerably equal. This is foremost important for
+   * {@link tech.units.indriya.quantity.NumberQuantity}s with internal big decimal or double values.
+   * The comparison is made on the relative difference of both quantities' value with regard to a's
+   * value. Both quantities are converted into a's unit before the comparison. Internally calls
+   * {@link QuantityUtil#considerablyRelEqual(Quantity, Quantity, double)} with a default tolerance
+   * of {@value DEFAULT_RELATIVE_TOLERANCE}
+   *
+   * @param a First quantity to compare
+   * @param b Second quantity to compare
+   * @param <Q> Type of Quantity
+   * @return true, if both quantities' values differ less then the given tolerance else false
+   */
+  public static <Q extends Quantity<Q>> boolean considerablyRelEqual(Quantity<Q> a, Quantity<Q> b) {
+    return considerablyRelEqual(a, b, DEFAULT_RELATIVE_TOLERANCE);
   }
 
   /**
@@ -71,6 +112,24 @@ public class QuantityUtil {
     double bVal = b.to(a.getUnit()).getValue().doubleValue();
 
     return (Math.abs(aVal - bVal) / Math.abs(aVal)) <= relQuantityTolerance;
+  }
+
+  /**
+   * Compares two {@link Angle} {@link Quantity}s, if they are considerably equal. This is foremost
+   * important for {@link tech.units.indriya.quantity.NumberQuantity}s with internal big decimal or
+   * double values. The comparison is made on the absolute difference of both quantities' value. As
+   * of the repetitive nature of angles, they have to be treated separately, e.g. -170° is
+   * semantically the same angle as 190°. To ensure this, all quantities are converted to {@link
+   * PowerSystemUnits#DEGREE_GEOM}. Internally calls {@link
+   * QuantityUtil#considerablyEqualAngle(Quantity, Quantity, double)} with a default tolerance of
+   * {@value DEFAULT_ABSOLUTE_TOLERANCE}
+   *
+   * @param a First quantity to compare
+   * @param b Second quantity to compare
+   * @return true, if both quantities' values differ less then the given tolerance else false
+   */
+  public static boolean considerablyEqualAngle(Quantity<Angle> a, Quantity<Angle> b) {
+    return considerablyEqualAngle(a, b, DEFAULT_ANGLE_TOLERANCE);
   }
 
   /**
@@ -119,8 +178,10 @@ public class QuantityUtil {
   /**
    * Compares two {@link Quantity}s, if they are equal. Returns true only if both quantities are of
    * type {@link EmptyQuantity} or if they are equal in value <b>and</b> Unit. The type of the value
-   * does not matter. Throws a NullPointerException if the any quantity is null, as null is not to
-   * be expected as any known empty value should be replaced by an EmptyQuantity.
+   * does not matter. Throws a NullPointerException if any quantity is null, as null is not to be
+   * expected as any known empty value should be replaced by an EmptyQuantity.<br>
+   * Internally calls {@link QuantityUtil#isTheSameConsideringEmpty(Quantity, Quantity, double)}
+   * with a default tolerance of {@value DEFAULT_ABSOLUTE_TOLERANCE}
    *
    * <p>isTheSameConsideringEmpty(1 km, 1000 m) // false <br>
    * isTheSameConsideringEmpty(1.0 km, 1 km) //true
@@ -133,40 +194,88 @@ public class QuantityUtil {
    */
   public static <Q extends Quantity<Q>> boolean isTheSameConsideringEmpty(
       Quantity<Q> a, Quantity<Q> b) {
+    return isTheSameConsideringEmpty(a, b, DEFAULT_ABSOLUTE_TOLERANCE);
+  }
+
+  /**
+   * Compares two {@link Quantity}s, if they are equal. Returns true only if both quantities are of
+   * type {@link EmptyQuantity} or if they are equal in value <b>and</b> Unit. The type of the value
+   * does not matter. Throws a NullPointerException if any quantity is null, as null is not to be
+   * expected as any known empty value should be replaced by an EmptyQuantity.
+   *
+   * <p>isTheSameConsideringEmpty(1 km, 1000 m) // false <br>
+   * isTheSameConsideringEmpty(1.0 km, 1 km) //true
+   *
+   * @param a First quantity to compare
+   * @param b Second quantity to compare
+   * @param quantityTolerance permissible absolute tolerance
+   * @param <Q> Type of the Quantity
+   * @return true, if both are an EmptyQuantity or if they are equal
+   * @throws NullPointerException if any quantity is null
+   */
+  public static <Q extends Quantity<Q>> boolean isTheSameConsideringEmpty(
+      Quantity<Q> a, Quantity<Q> b, double quantityTolerance) {
     Objects.requireNonNull(
         a, "There was an error while comparing quantities: quantity a was not set");
     Objects.requireNonNull(
         b, "There was an error while comparing quantities: quantity b was not set");
     if (!QuantityUtil.quantityIsEmpty(a)) {
       if (QuantityUtil.quantityIsEmpty(b)) return false;
-      return a.equals(b);
+      if (!a.getUnit().equals(b.getUnit())) return false;
+      return Math.abs(a.getValue().doubleValue() - b.getValue().doubleValue()) <= quantityTolerance;
     } else return QuantityUtil.quantityIsEmpty(b);
   }
 
   /**
    * Compares two {@link Quantity}s, if they are equivalent. Returns true only if both quantities
    * are of type {@link EmptyQuantity} or if they represent equivalent values. Throws a
-   * NullPointerException if the any quantity is null, as null is not to be expected as any known
-   * empty value should be replaced by an EmptyQuantity.
+   * NullPointerException if any quantity is null, as null is not to be expected as any known empty
+   * value should be replaced by an EmptyQuantity. Internally calls {@link
+   * QuantityUtil#isEquivalentConsideringEmpty(ComparableQuantity, ComparableQuantity, double)} with
+   * a default tolerance of {@value DEFAULT_ABSOLUTE_TOLERANCE}
    *
-   * <p>isEquivalentConsideringEmpty(1 km, 1000 m)// true <br>
-   * isEquivalentConsideringEmpty(1.0 km, 1 km) // true
+   * <p>isEquivalentConsideringEmpty(1 km, 1000 m, 0)// true <br>
+   * isEquivalentConsideringEmpty(1.0 km, 1 km, 0) // true
    *
    * @param a First quantity to compare
    * @param b Second quantity to compare
    * @param <Q> Type of the Quantity
-   * @return true, if both are an EmptyQuantity or if they are equivalent
+   * @return true, if both are an EmptyQuantity or both quantities' values differ less then the
+   *     given tolerance else false (based on a's unit)
    * @throws NullPointerException if any quantity is null
    */
   public static <Q extends Quantity<Q>> boolean isEquivalentConsideringEmpty(
       ComparableQuantity<Q> a, ComparableQuantity<Q> b) {
+    return isEquivalentConsideringEmpty(a, b, DEFAULT_ABSOLUTE_TOLERANCE);
+  }
+
+  /**
+   * Compares two {@link Quantity}s, if they are equivalent. Returns true only if both quantities
+   * are of type {@link EmptyQuantity} or if they represent equivalent values. Throws a
+   * NullPointerException if any quantity is null, as null is not to be expected as any known empty
+   * value should be replaced by an EmptyQuantity.
+   *
+   * <p>isEquivalentConsideringEmpty(1 km, 1000 m, 0)// true <br>
+   * isEquivalentConsideringEmpty(1.0 km, 1 km, 0) // true
+   *
+   * @param a First quantity to compare
+   * @param b Second quantity to compare
+   * @param quantityTolerance permissible absolute tolerance - applied in a's units
+   * @param <Q> Type of the Quantity
+   * @return true, if both are an EmptyQuantity or both quantities' values differ less then the
+   *     given tolerance else false (based on a's unit)
+   * @throws NullPointerException if any quantity is null
+   */
+  public static <Q extends Quantity<Q>> boolean isEquivalentConsideringEmpty(
+      ComparableQuantity<Q> a, ComparableQuantity<Q> b, double quantityTolerance) {
     Objects.requireNonNull(
         a, "There was an error while comparing quantities: quantity a was not set");
     Objects.requireNonNull(
         b, "There was an error while comparing quantities: quantity b was not set");
     if (!QuantityUtil.quantityIsEmpty(a)) {
       if (QuantityUtil.quantityIsEmpty(b)) return false;
-      return a.isEquivalentTo(b);
+      if (a.isEquivalentTo(b)) return true;
+      return considerablyAbsEqual(a, b, quantityTolerance);
     } else return QuantityUtil.quantityIsEmpty(b);
   }
 }
