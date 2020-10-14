@@ -5,6 +5,8 @@
 */
 package edu.ie3.util.quantities;
 
+import static tech.units.indriya.AbstractUnit.*;
+
 import edu.ie3.util.quantities.interfaces.*;
 import java.util.HashSet;
 import java.util.logging.Level;
@@ -37,8 +39,7 @@ public class PowerSystemUnits extends Units {
   public static final Unit<Time> MILLISECOND = MetricPrefix.MILLI(SECOND);
 
   /** Per Unit */
-  public static final Unit<Dimensionless> PU =
-      new TransformedUnit<>("p.u.", PERCENT, MultiplyConverter.of(100));
+  public static final Unit<Dimensionless> PU = new AlternateUnit<>(ONE, "p.u.");
 
   /** Euro */
   public static final Unit<Currency> EURO = new BaseUnit<>("€", UnitDimension.NONE);
