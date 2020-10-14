@@ -5,7 +5,7 @@
 */
 package edu.ie3.util.quantities;
 
-import static tech.units.indriya.AbstractUnit.*;
+import static tech.units.indriya.AbstractUnit.ONE;
 
 import edu.ie3.util.quantities.interfaces.*;
 import java.util.HashSet;

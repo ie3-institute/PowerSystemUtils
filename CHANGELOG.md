@@ -7,35 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased/Snapshot]
 
 ### Added
-- Introduction of EmptyQuantity, a representation for null value Quantities
+-  Introduction of EmptyQuantity, a representation for null value Quantities
 
 ### Changed
-- Adaptions in QuantityUtil
-- Improved implementation of `StandardUnits.PU`
+-  Adaptions in QuantityUtil
+-  Improved implementation of `StandardUnits.PU`
 
 ### Fixed
 
 ## [1.3.2]
 
 ### Added
-- Introduction of new quantity library (+ deprecation of old implementations)
+-  Introduction of new quantity library (+ deprecation of old implementations)
 
 ### Changed
-- Adaptions in QuantityUtil
-- Improved version of TimUtils
-- Improved building of csv strings
+-  Adaptions in QuantityUtil
+-  Improved version of TimUtils
+-  Improved building of csv strings
 
 ### Fixed
 
 ## [1.3.1]
 
 ### Added
-- added more functionalities to FileIOUtils
-- introduction of QuantityUtil
+-  added more functionalities to FileIOUtils
+-  introduction of QuantityUtil
 
 ### Changed
-- renamed FileHelper -> FileIOUtils
-- minor extensions in StringUtils (snake, camel and pascal case)
+-  renamed FileHelper -> FileIOUtils
+-  minor extensions in StringUtils (snake, camel and pascal case)
 
 ### Fixed
-- fixes + extensions in StandardUnits
+-  fixes + extensions in StandardUnits
