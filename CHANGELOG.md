@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 -   Adaptions in QuantityUtil
--   Improved version of TimUtils
+-   Improved version of TimeUtils
 -   Improved building of csv strings
 
 ### Fixed
