@@ -16,7 +16,7 @@ class OneToOneMapTest extends Specification {
 
 		expect:
 		oneToOneMap.size() == 0
-		oneToOneMap.put("Key","Value") == null
+		oneToOneMap.put("Key", "Value") == null
 		oneToOneMap.put("Key", "Value") == "Value"
 
 		oneToOneMap.size() == 1
