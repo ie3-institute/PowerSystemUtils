@@ -17,9 +17,7 @@ import tech.units.indriya.quantity.Quantities;
 /** Offers useful methods to handle {@link Quantity}s */
 public class QuantityUtil {
 
-  private static final double DEFAULT_ABSOLUTE_TOLERANCE = 0d;
-  private static final double DEFAULT_RELATIVE_TOLERANCE = 0.00000001d;
-  private static final double DEFAULT_ANGLE_TOLERANCE = 0.001d;
+  private static final double DEFAULT_TOLERANCE = 0d;
 
   private QuantityUtil() {
     throw new IllegalStateException("Utility classes cannot be instantiated.");
@@ -42,7 +40,7 @@ public class QuantityUtil {
    * The comparison is made on the absolute difference of both quantities' value. Both quantities
    * are converted into a's unit before the comparison. Internally calls {@link
    * QuantityUtil#considerablyAbsEqual(Quantity, Quantity, double)} with a default tolerance of
-   * {@value DEFAULT_ABSOLUTE_TOLERANCE}
+   * {@value DEFAULT_TOLERANCE}
    *
    * @param a First quantity to compare
    * @param b Second quantity to compare
@@ -51,7 +49,7 @@ public class QuantityUtil {
    *     on a's unit)
    */
   public static <Q extends Quantity<Q>> boolean considerablyAbsEqual(Quantity<Q> a, Quantity<Q> b) {
-    return considerablyAbsEqual(a, b, DEFAULT_ABSOLUTE_TOLERANCE);
+    return considerablyAbsEqual(a, b, DEFAULT_TOLERANCE);
   }
 
   /**
@@ -82,7 +80,7 @@ public class QuantityUtil {
    * The comparison is made on the relative difference of both quantities' value with regard to a's
    * value. Both quantities are converted into a's unit before the comparison. Internally calls
    * {@link QuantityUtil#considerablyRelEqual(Quantity, Quantity, double)} with a default tolerance
-   * of {@value DEFAULT_RELATIVE_TOLERANCE}
+   * of {@value DEFAULT_TOLERANCE}
    *
    * @param a First quantity to compare
    * @param b Second quantity to compare
@@ -90,7 +88,7 @@ public class QuantityUtil {
    * @return true, if both quantities' values differ less then the given tolerance else false
    */
   public static <Q extends Quantity<Q>> boolean considerablyRelEqual(Quantity<Q> a, Quantity<Q> b) {
-    return considerablyRelEqual(a, b, DEFAULT_RELATIVE_TOLERANCE);
+    return considerablyRelEqual(a, b, DEFAULT_TOLERANCE);
   }
 
   /**
@@ -122,14 +120,14 @@ public class QuantityUtil {
    * semantically the same angle as 190°. To ensure this, all quantities are converted to {@link
    * PowerSystemUnits#DEGREE_GEOM}. Internally calls {@link
    * QuantityUtil#considerablyEqualAngle(Quantity, Quantity, double)} with a default tolerance of
-   * {@value DEFAULT_ABSOLUTE_TOLERANCE}
+   * {@value DEFAULT_TOLERANCE}
    *
    * @param a First quantity to compare
    * @param b Second quantity to compare
    * @return true, if both quantities' values differ less then the given tolerance else false
    */
   public static boolean considerablyEqualAngle(Quantity<Angle> a, Quantity<Angle> b) {
-    return considerablyEqualAngle(a, b, DEFAULT_ANGLE_TOLERANCE);
+    return considerablyEqualAngle(a, b, DEFAULT_TOLERANCE);
   }
 
   /**
@@ -181,7 +179,7 @@ public class QuantityUtil {
    * does not matter. Throws a NullPointerException if any quantity is null, as null is not to be
    * expected as any known empty value should be replaced by an EmptyQuantity.<br>
    * Internally calls {@link QuantityUtil#isTheSameConsideringEmpty(Quantity, Quantity, double)}
-   * with a default tolerance of {@value DEFAULT_ABSOLUTE_TOLERANCE}
+   * with a default tolerance of {@value DEFAULT_TOLERANCE}
    *
    * <p>isTheSameConsideringEmpty(1 km, 1000 m) // false <br>
    * isTheSameConsideringEmpty(1.0 km, 1 km) //true
@@ -194,7 +192,7 @@ public class QuantityUtil {
    */
   public static <Q extends Quantity<Q>> boolean isTheSameConsideringEmpty(
       Quantity<Q> a, Quantity<Q> b) {
-    return isTheSameConsideringEmpty(a, b, DEFAULT_ABSOLUTE_TOLERANCE);
+    return isTheSameConsideringEmpty(a, b, DEFAULT_TOLERANCE);
   }
 
   /**
@@ -232,7 +230,7 @@ public class QuantityUtil {
    * NullPointerException if any quantity is null, as null is not to be expected as any known empty
    * value should be replaced by an EmptyQuantity. Internally calls {@link
    * QuantityUtil#isEquivalentConsideringEmpty(ComparableQuantity, ComparableQuantity, double)} with
-   * a default tolerance of {@value DEFAULT_ABSOLUTE_TOLERANCE}
+   * a default tolerance of {@value DEFAULT_TOLERANCE}
    *
    * <p>isEquivalentConsideringEmpty(1 km, 1000 m, 0)// true <br>
    * isEquivalentConsideringEmpty(1.0 km, 1 km, 0) // true
@@ -246,7 +244,7 @@ public class QuantityUtil {
    */
   public static <Q extends Quantity<Q>> boolean isEquivalentConsideringEmpty(
       ComparableQuantity<Q> a, ComparableQuantity<Q> b) {
-    return isEquivalentConsideringEmpty(a, b, DEFAULT_ABSOLUTE_TOLERANCE);
+    return isEquivalentConsideringEmpty(a, b, DEFAULT_TOLERANCE);
   }
 
   /**
