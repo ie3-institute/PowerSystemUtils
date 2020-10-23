@@ -43,7 +43,7 @@ class QuantityUtilTest extends Specification {
 	@Unroll
 	def "The QuantityUtil calculates absolute considerably equal values correctly (a = #a, b = #b, expected result = #expected)"() {
 		when:
-		def actual = QuantityUtil.considerablyAbsEqual(a, b, 0.001)
+		def actual = QuantityUtil.isAbsolutelyEquivalent(a, b, 0.001)
 
 		then:
 		actual == expected
@@ -59,7 +59,7 @@ class QuantityUtilTest extends Specification {
 	@Unroll
 	def "The QuantityUtil calculates relative considerably equal values correctly (a = #a, b = #b, expected result = #expected) (old package)"() {
 		when:
-		def actual = QuantityUtil.considerablyRelEqual(a, b, 0.1)
+		def actual = QuantityUtil.isRelativelyEquivalent(a, b, 0.1)
 
 		then:
 		actual == expected
@@ -78,7 +78,7 @@ class QuantityUtilTest extends Specification {
 		def b = Quantities.getQuantity(1.1d, DEGREE_GEOM)
 
 		then:
-		!QuantityUtil.considerablyEqualAngle(a, b, 1e-3)
+		!QuantityUtil.isEquivalentAngle(a, b, 1e-3)
 	}
 
 	def "Comparing two angle quantities absolutely shows considerably equal values (old package)"() {
@@ -87,13 +87,13 @@ class QuantityUtilTest extends Specification {
 		def b = Quantities.getQuantity(1.001d, DEGREE_GEOM)
 
 		then:
-		QuantityUtil.considerablyEqualAngle(a, b, 1e-3)
+		QuantityUtil.isEquivalentAngle(a, b, 1e-3)
 	}
 
 
 	def "Comparing two angle quantities absolutely shows considerably different values close to 180 degree (old package)"() {
 		expect:
-		!QuantityUtil.considerablyEqualAngle(a, b, 1e-3)
+		!QuantityUtil.isEquivalentAngle(a, b, 1e-3)
 
 		where:
 		a 												| b
@@ -105,7 +105,7 @@ class QuantityUtilTest extends Specification {
 
 	def "Comparing two angle quantities absolutely shows considerably equal values close to 180 degree (old package)"() {
 		expect:
-		QuantityUtil.considerablyEqualAngle(a, b, 1e-3)
+		QuantityUtil.isEquivalentAngle(a, b, 1e-3)
 
 		where:
 		a                                          | b
@@ -122,7 +122,7 @@ class QuantityUtilTest extends Specification {
 		quantity
 
 		then:
-		QuantityUtil.quantityIsEmpty(quantity) == expectedResult
+		QuantityUtil.isEmpty(quantity) == expectedResult
 
 		where:
 		quantity                                             || expectedResult
@@ -140,8 +140,8 @@ class QuantityUtilTest extends Specification {
 		tolerance
 
 		then:
-		QuantityUtil.isTheSameConsideringEmpty(quantityA, quantityB, tolerance) == expectedResult
-		QuantityUtil.isTheSameConsideringEmpty(quantityB, quantityA, tolerance) == expectedResult
+		QuantityUtil.equals(quantityA, quantityB, tolerance) == expectedResult
+		QuantityUtil.equals(quantityB, quantityA, tolerance) == expectedResult
 
 		where:
 		quantityA                                                 | quantityB                            						| tolerance	|| expectedResult
@@ -193,10 +193,10 @@ class QuantityUtilTest extends Specification {
 		quantityB
 
 		then:
-		QuantityUtil.considerablyAbsEqual(quantityA, quantityB) == QuantityUtil.considerablyAbsEqual(quantityA, quantityB, QuantityUtil.DEFAULT_ABSOLUTE_TOLERANCE)
-		QuantityUtil.considerablyRelEqual(quantityA, quantityB) == QuantityUtil.considerablyRelEqual(quantityA, quantityB, QuantityUtil.DEFAULT_RELATIVE_TOLERANCE)
-		QuantityUtil.isTheSameConsideringEmpty(quantityA, quantityB) == QuantityUtil.isTheSameConsideringEmpty(quantityA, quantityB, QuantityUtil.DEFAULT_ABSOLUTE_TOLERANCE)
-		QuantityUtil.isEquivalentConsideringEmpty(quantityA, quantityB) == QuantityUtil.isEquivalentConsideringEmpty(quantityA, quantityB, QuantityUtil.DEFAULT_ABSOLUTE_TOLERANCE)
+		QuantityUtil.isAbsolutelyEquivalent(quantityA, quantityB) == QuantityUtil.isAbsolutelyEquivalent(quantityA, quantityB, QuantityUtil.DEFAULT_TOLERANCE)
+		QuantityUtil.isRelativelyEquivalent(quantityA, quantityB) == QuantityUtil.isRelativelyEquivalent(quantityA, quantityB, QuantityUtil.DEFAULT_TOLERANCE)
+		QuantityUtil.equals(quantityA, quantityB) == QuantityUtil.equals(quantityA, quantityB, QuantityUtil.DEFAULT_TOLERANCE)
+		QuantityUtil.isEquivalentConsideringEmpty(quantityA, quantityB) == QuantityUtil.isEquivalentConsideringEmpty(quantityA, quantityB, QuantityUtil.DEFAULT_TOLERANCE)
 
 		where:
 		quantityA                                   			| quantityB
@@ -215,7 +215,7 @@ class QuantityUtilTest extends Specification {
 		b
 
 		then:
-		QuantityUtil.considerablyEqualAngle(a, b) == QuantityUtil.considerablyEqualAngle(a, b, QuantityUtil.DEFAULT_ANGLE_TOLERANCE)
+		QuantityUtil.isEquivalentAngle(a, b) == QuantityUtil.isEquivalentAngle(a, b, QuantityUtil.DEFAULT_TOLERANCE)
 
 		where:
 		a                                          | b
