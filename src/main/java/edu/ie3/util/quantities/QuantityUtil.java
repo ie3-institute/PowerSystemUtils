@@ -267,9 +267,9 @@ public class QuantityUtil {
 
   /**
    * Compares two {@link Quantity}s, if they are equivalent. Returns true only if both quantities
-   * are of type {@link EmptyQuantity} or if they represent equivalent values. Throws a
-   * NullPointerException if any quantity is null, as null is not to be expected as any known empty
-   * value should be replaced by an EmptyQuantity.
+   * are of type {@link EmptyQuantity} or if they represent equivalent values, considering the given
+   * tolerance. Throws a NullPointerException if any quantity is null, as null is not to be expected
+   * as any known empty value should be replaced by an EmptyQuantity.
    *
    * <p>QuantityUtil.isEquivalentConsideringEmpty(1 km, 1000 m, 0) //true <br>
    * QuantityUtil.isEquivalentConsideringEmpty(1.0 km, 1 km, 0) //true <br>
