@@ -43,7 +43,7 @@ class QuantityUtilTest extends Specification {
 	@Unroll
 	def "The QuantityUtil calculates absolute considerably equal values correctly (a = #a, b = #b, expected result = #expected)"() {
 		when:
-		def actual = QuantityUtil.isAbsolutelyEquivalent(a, b, 0.001)
+		def actual = QuantityUtil.isEquivalentAbs(a, b, 0.001)
 
 		then:
 		actual == expected
@@ -59,7 +59,7 @@ class QuantityUtilTest extends Specification {
 	@Unroll
 	def "The QuantityUtil calculates relative considerably equal values correctly (a = #a, b = #b, expected result = #expected) (old package)"() {
 		when:
-		def actual = QuantityUtil.isRelativelyEquivalent(a, b, 0.1)
+		def actual = QuantityUtil.isEquivalentRel(a, b, 0.1)
 
 		then:
 		actual == expected
@@ -193,8 +193,8 @@ class QuantityUtilTest extends Specification {
 		quantityB
 
 		then:
-		QuantityUtil.isAbsolutelyEquivalent(quantityA, quantityB) == QuantityUtil.isAbsolutelyEquivalent(quantityA, quantityB, QuantityUtil.DEFAULT_TOLERANCE)
-		QuantityUtil.isRelativelyEquivalent(quantityA, quantityB) == QuantityUtil.isRelativelyEquivalent(quantityA, quantityB, QuantityUtil.DEFAULT_TOLERANCE)
+		QuantityUtil.isEquivalentAbs(quantityA, quantityB) == QuantityUtil.isEquivalentAbs(quantityA, quantityB, QuantityUtil.DEFAULT_TOLERANCE)
+		QuantityUtil.isEquivalentRel(quantityA, quantityB) == QuantityUtil.isEquivalentRel(quantityA, quantityB, QuantityUtil.DEFAULT_TOLERANCE)
 		QuantityUtil.equals(quantityA, quantityB) == QuantityUtil.equals(quantityA, quantityB, QuantityUtil.DEFAULT_TOLERANCE)
 		QuantityUtil.isEquivalentConsideringEmpty(quantityA, quantityB) == QuantityUtil.isEquivalentConsideringEmpty(quantityA, quantityB, QuantityUtil.DEFAULT_TOLERANCE)
 
