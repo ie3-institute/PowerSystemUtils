@@ -35,18 +35,17 @@ public class QuantityUtil {
   }
 
   /**
-   * Compares two {@link Quantity}s, if they are considerably equal. This is foremost important for
+   * Compares two {@link Quantity}s, if they are <b>equivalent</b> considering both quantities magnitude. This is foremost important for
    * {@link tech.units.indriya.quantity.NumberQuantity}s with internal big decimal or double values.
    * The comparison is made on the absolute difference of both quantities' value. Both quantities
-   * are converted into a's unit before the comparison. Internally calls {@link
+   * are converted into {@code a}'s unit before the comparison. Internally calls {@link
    * QuantityUtil#isAbsolutelyEquivalent(Quantity, Quantity, double)} with a default tolerance of
    * {@value DEFAULT_TOLERANCE}
    *
    * @param a First quantity to compare
    * @param b Second quantity to compare
    * @param <Q> Type of Quantity
-   * @return true, if both quantities' values differ less then the given tolerance else false (based
-   *     on a's unit)
+   * @return true, if both quantities' do not differ in values (considering no tolerance), else false
    */
   public static <Q extends Quantity<Q>> boolean isAbsolutelyEquivalent(
       Quantity<Q> a, Quantity<Q> b) {
