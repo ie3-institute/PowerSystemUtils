@@ -153,7 +153,13 @@ public class FileIOUtils {
         () -> {
           File f = new File(filename);
           if (f.exists()) {
-            return f.delete();
+            try {
+              Files.delete(Paths.get(f.getAbsolutePath()));
+              return true;
+            } catch (IOException e) {
+              logger.error("Unable to delete file '{}'.", f, e);
+              return false;
+            }
           } else {
             return false;
           }

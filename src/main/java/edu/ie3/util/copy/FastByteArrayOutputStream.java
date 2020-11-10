@@ -43,7 +43,6 @@ public class FastByteArrayOutputStream extends OutputStream {
       byte[] old = buf;
       buf = new byte[Math.max(sz, 2 * buf.length)];
       System.arraycopy(old, 0, buf, 0, old.length);
-      old = null;
     }
   }
 
@@ -61,13 +60,15 @@ public class FastByteArrayOutputStream extends OutputStream {
     return buf;
   }
 
-  public final void write(byte b[]) {
+  @Override
+  public final void write(byte[] b) {
     verifyBufferSize(size + b.length);
     System.arraycopy(b, 0, buf, size, b.length);
     size += b.length;
   }
 
-  public final void write(byte b[], int off, int len) {
+  @Override
+  public final void write(byte[] b, int off, int len) {
     verifyBufferSize(size + len);
     System.arraycopy(b, off, buf, size, len);
     size += len;
