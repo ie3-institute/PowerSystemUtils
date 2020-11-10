@@ -30,10 +30,9 @@ public class DeepCopy {
    */
   public static <C> C copy(C orig) {
     C obj = null;
-    try {
+    try (FastByteArrayOutputStream fbos = new FastByteArrayOutputStream();
+        ObjectOutputStream out = new ObjectOutputStream(fbos)) {
       // Write the object out to a byte array
-      FastByteArrayOutputStream fbos = new FastByteArrayOutputStream();
-      ObjectOutputStream out = new ObjectOutputStream(fbos);
       out.writeObject(orig);
       out.flush();
       out.close();
@@ -42,10 +41,8 @@ public class DeepCopy {
       // a copy of the object back in.
       ObjectInputStream in = new ObjectInputStream(fbos.getInputStream());
       obj = (C) in.readObject();
-    } catch (IOException e) {
+    } catch (IOException | ClassNotFoundException e) {
       e.printStackTrace();
-    } catch (ClassNotFoundException cnfe) {
-      cnfe.printStackTrace();
     }
     return obj;
   }
