@@ -11,7 +11,7 @@ import java.io.InputStream;
  * ByteArrayInputStream implementation that does not synchronize methods.
  *
  * @version 0.1
- * @author: hiry
+ * @author hiry
  * @since 13.06.2018
  */
 public class FastByteArrayInputStream extends InputStream {
@@ -48,7 +48,7 @@ public class FastByteArrayInputStream extends InputStream {
   }
 
   public final long skip(long n) {
-    if ((pos + n) > count) n = count - pos;
+    if ((pos + n) > count) n = (long) count - pos;
     if (n < 0) return 0;
     pos += n;
     return n;
