@@ -8,6 +8,8 @@ package edu.ie3.util.copy;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility for making deep copies (vs. clone()'s shallow copies) of objects. Objects are first
@@ -21,6 +23,7 @@ import java.io.ObjectOutputStream;
  * @since 13.06.2018
  */
 public class DeepCopy {
+  private static final Logger logger = LoggerFactory.getLogger(DeepCopy.class);
 
   /**
    * Returns a copy of the object, or null if the object cannot be serialized.
@@ -42,7 +45,7 @@ public class DeepCopy {
       ObjectInputStream in = new ObjectInputStream(fbos.getInputStream());
       obj = (C) in.readObject();
     } catch (IOException | ClassNotFoundException e) {
-      e.printStackTrace();
+      logger.error("Error during copy of object '{}'.", orig, e);
     }
     return obj;
   }
