@@ -14,7 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Improved implementation of `StandardUnits.PU`
 -   BREAKING: replaced Unit API 1.0 (JSR 363, tec.uom.se) with Unit API 2.0 (JSR 385, tech.units.indriya)
 
-### Fixed
+### Removed
+-   Deprecated methods in `GeoUtils`
 
 ## [1.3.2]
 

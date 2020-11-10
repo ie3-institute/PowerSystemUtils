@@ -15,7 +15,6 @@ plugins {
 
 ext {
 	// version (changing these should be considered thoroughly!)
-	hibernateVersion = '5.3.3.Final'
 	slf4jVersion = '1.7.30'
 	javaVersion = JavaVersion.VERSION_1_8
 
@@ -57,7 +56,6 @@ dependencies {
 	compile 'com.google.code.gson:gson:+' // java serialization, POJOs -> JSON
 	compile 'org.apache.commons:commons-lang3:+' // for HashCodeBuilder
 	compile 'com.github.johanneshiry:OSMonaut:+' // pbf parser
-	compile "org.hibernate:hibernate-spatial:$hibernateVersion" // spatial operations in GeoUtils
 	compile 'org.apache.commons:commons-math3:+' // mathematics and statistics components
 	// JTS Topology Suite for GeoPositions, License: EPL 1.0 / EDL 1.0
 	compile 'org.locationtech.jts:jts-core:1.16.1'
