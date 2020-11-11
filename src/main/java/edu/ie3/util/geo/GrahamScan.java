@@ -12,8 +12,12 @@ import java.util.List;
 /** */
 public final class GrahamScan {
 
+  protected GrahamScan() {
+    throw new IllegalStateException("Utility classes cannot be instantiated");
+  }
+
   /** An enum denoting a directional-turn between 3 points (vectors). */
-  protected static enum Turn {
+  protected enum Turn {
     CLOCKWISE,
     COUNTER_CLOCKWISE,
     COLLINEAR
@@ -57,13 +61,13 @@ public final class GrahamScan {
    * @throws IllegalArgumentException if <code>xs</code> and <code>ys</code> don't have the same
    *     size, if all points are collinear or if there are less than 3 unique points present.
    */
-  public static List<Point> getConvexHull(int[] xs, int[] ys) throws IllegalArgumentException {
+  public static List<Point> getConvexHull(int[] xs, int[] ys) {
 
     if (xs.length != ys.length) {
       throw new IllegalArgumentException("xs and ys don't have the same size");
     }
 
-    List<Point> points = new ArrayList<Point>();
+    List<Point> points = new ArrayList<>();
 
     for (int i = 0; i < xs.length; i++) {
       points.add(new Point(xs[i], ys[i]));
@@ -82,9 +86,9 @@ public final class GrahamScan {
    * @throws IllegalArgumentException if all points are collinear or if there are less than 3 unique
    *     points present.
    */
-  public static List<Point> getConvexHull(List<Point> points) throws IllegalArgumentException {
+  public static List<Point> getConvexHull(List<Point> points) {
 
-    List<Point> sorted = new ArrayList<Point>(getSortedPointSet(points));
+    List<Point> sorted = new ArrayList<>(getSortedPointSet(points));
 
     if (sorted.size() < 3) {
       throw new IllegalArgumentException(
@@ -95,7 +99,7 @@ public final class GrahamScan {
       throw new IllegalArgumentException("cannot create a convex hull from collinear points");
     }
 
-    Stack<Point> stack = new Stack<Point>();
+    Stack<Point> stack = new Stack<>();
     stack.push(sorted.get(0));
     stack.push(sorted.get(1));
 
@@ -124,7 +128,7 @@ public final class GrahamScan {
     // close the hull
     stack.push(sorted.get(0));
 
-    return new ArrayList<Point>(stack);
+    return new ArrayList<>(stack);
   }
 
   /**
@@ -166,41 +170,37 @@ public final class GrahamScan {
     final Point lowest = getLowestPoint(points);
 
     TreeSet<Point> set =
-        new TreeSet<Point>(
-            new Comparator<Point>() {
-              @Override
-              public int compare(Point a, Point b) {
+        new TreeSet<>(
+            (a, b) -> {
+              if (a == b || a.equals(b)) {
+                return 0;
+              }
 
-                if (a == b || a.equals(b)) {
-                  return 0;
-                }
+              // use longs to guard against int-underflow
+              double thetaA = Math.atan2((double) a.y - lowest.y, (double) a.x - lowest.x);
+              double thetaB = Math.atan2((double) b.y - lowest.y, (double) b.x - lowest.x);
 
-                // use longs to guard against int-underflow
-                double thetaA = Math.atan2((long) a.y - lowest.y, (long) a.x - lowest.x);
-                double thetaB = Math.atan2((long) b.y - lowest.y, (long) b.x - lowest.x);
+              if (thetaA < thetaB) {
+                return -1;
+              } else if (thetaA > thetaB) {
+                return 1;
+              } else {
+                // collinear with the 'lowest' point, let the point closest to it come first
 
-                if (thetaA < thetaB) {
+                // use longs to guard against int-over/underflow
+                double distanceA =
+                    Math.sqrt(
+                        (((double) lowest.x - a.x) * ((double) lowest.x - a.x))
+                            + (((double) lowest.y - a.y) * ((double) lowest.y - a.y)));
+                double distanceB =
+                    Math.sqrt(
+                        (((double) lowest.x - b.x) * ((double) lowest.x - b.x))
+                            + (((double) lowest.y - b.y) * ((double) lowest.y - b.y)));
+
+                if (distanceA < distanceB) {
                   return -1;
-                } else if (thetaA > thetaB) {
-                  return 1;
                 } else {
-                  // collinear with the 'lowest' point, let the point closest to it come first
-
-                  // use longs to guard against int-over/underflow
-                  double distanceA =
-                      Math.sqrt(
-                          (((long) lowest.x - a.x) * ((long) lowest.x - a.x))
-                              + (((long) lowest.y - a.y) * ((long) lowest.y - a.y)));
-                  double distanceB =
-                      Math.sqrt(
-                          (((long) lowest.x - b.x) * ((long) lowest.x - b.x))
-                              + (((long) lowest.y - b.y) * ((long) lowest.y - b.y)));
-
-                  if (distanceA < distanceB) {
-                    return -1;
-                  } else {
-                    return 1;
-                  }
+                  return 1;
                 }
               }
             });
