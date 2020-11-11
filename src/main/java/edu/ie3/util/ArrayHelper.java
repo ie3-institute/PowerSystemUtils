@@ -8,11 +8,13 @@ package edu.ie3.util;
 import org.apache.commons.math3.complex.Complex;
 
 /**
- * Contains convenience methos for arrays
+ * Contains convenience methods for arrays
  *
  * @author roemer
  */
 public class ArrayHelper {
+  private static final String ARRAY_DIMENSION_MISMATCH_MESSAGE =
+      "Both arrays may have the same dimension.";
 
   private ArrayHelper() {}
 
@@ -45,12 +47,12 @@ public class ArrayHelper {
   /**
    * Element wise addition of two double arrays
    *
-   * @param a Array of double values for the first summand
-   * @param b Array of double values for the second summand
+   * @param a Array of double values for the first addend
+   * @param b Array of double values for the second addend
    * @return c Double array with the summation of a and b
    */
   public static double[] add(double[] a, double[] b) {
-    assert a.length == b.length : "Both arrays may have the same dimension.";
+    if (a.length != b.length) throw new IllegalArgumentException(ARRAY_DIMENSION_MISMATCH_MESSAGE);
     double[] c = new double[a.length];
     for (int i = 0; i < c.length; i++) {
       c[i] = a[i] + b[i];
@@ -61,12 +63,12 @@ public class ArrayHelper {
   /**
    * Element wise addition of two double arrays
    *
-   * @param a Array of {@link Complex} values for the first summand
-   * @param b Array of {@link Complex} values for the second summand
+   * @param a Array of {@link Complex} values for the first addend
+   * @param b Array of {@link Complex} values for the second addend
    * @return c Double array with the summation of a and b
    */
   public static Complex[] add(Complex[] a, Complex[] b) {
-    assert a.length == b.length : "Both arrays may have the same dimension.";
+    if (a.length != b.length) throw new IllegalArgumentException(ARRAY_DIMENSION_MISMATCH_MESSAGE);
     Complex[] c = new Complex[a.length];
     for (int i = 0; i < c.length; i++) {
       c[i] = a[i].add(b[i]);
@@ -82,7 +84,7 @@ public class ArrayHelper {
    * @return The Array of double values built by subtraction
    */
   public static double[] subtract(double[] a, double[] b) {
-    assert a.length == b.length : "Both arrays may have the same dimension.";
+    if (a.length != b.length) throw new IllegalArgumentException(ARRAY_DIMENSION_MISMATCH_MESSAGE);
     double[] c = new double[a.length];
     for (int i = 0; i < c.length; i++) {
       c[i] = a[i] - b[i];
@@ -98,7 +100,7 @@ public class ArrayHelper {
    * @return The Array of {@link Complex} values built by subtraction
    */
   public static Complex[] subtract(Complex[] a, Complex[] b) {
-    assert a.length == b.length : "Both arrays may have the same dimension.";
+    if (a.length != b.length) throw new IllegalArgumentException(ARRAY_DIMENSION_MISMATCH_MESSAGE);
     Complex[] c = new Complex[a.length];
     for (int i = 0; i < c.length; i++) {
       c[i] = a[i].subtract(b[i]);

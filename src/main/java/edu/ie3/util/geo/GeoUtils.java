@@ -15,7 +15,6 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.measure.Quantity;
-import javax.measure.UnconvertibleException;
 import javax.measure.quantity.Angle;
 import javax.measure.quantity.Area;
 import javax.measure.quantity.Length;
@@ -33,10 +32,6 @@ import tech.units.indriya.quantity.Quantities;
 /** Functionality to deal with geographical and geometric information */
 public class GeoUtils {
   private static final Logger logger = LoggerFactory.getLogger(GeoUtils.class);
-
-  /** radius of the earth in m */
-  public static final ComparableQuantity<Length> EARTH_RADIUS_OLD =
-      Quantities.getQuantity(6378137.0, METRE);
 
   public static final ComparableQuantity<Length> EARTH_RADIUS =
       Quantities.getQuantity(6378137.0, METRE);
@@ -237,9 +232,10 @@ public class GeoUtils {
    *     currently not working!
    * @return The {@link Polygon} of the convex hull
    * @throws GeoPreparationException If points got missing, no boundary can be found, too few points
-   *     are provided or anything else wents wron
+   *     are provided or anything else goes wrong
    * @throws NullPointerException If there is null
-   * @deprecated This method is currently not under test and has to be revised thoroughly
+   * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
+   *     revised thoroughly
    */
   @Deprecated
   public static Polygon buildConvexHull(
@@ -271,20 +267,29 @@ public class GeoUtils {
     OptionalDouble possiblyXMax = candidatePoints.stream().mapToDouble(Point::getX).max();
     OptionalDouble possiblyYMin = candidatePoints.stream().mapToDouble(Point::getY).min();
     OptionalDouble possiblyYMax = candidatePoints.stream().mapToDouble(Point::getY).max();
-    if (!(possiblyXMax.isPresent()
-        && possiblyXMin.isPresent()
-        && possiblyYMax.isPresent()
-        && possiblyYMin.isPresent()))
+    if (!possiblyXMax.isPresent())
       throw new GeoPreparationException("Unable to get boundary rectangle of the node set.");
 
     double[] xBounds = new double[] {possiblyXMin.getAsDouble(), possiblyXMax.getAsDouble()};
     double[] yBounds = new double[] {possiblyYMin.getAsDouble(), possiblyYMax.getAsDouble()};
 
     HashSet<Point> edgePoints = new HashSet<>();
-    edgePoints.add(candidatePoints.stream().filter(p -> p.getX() == xBounds[0]).findFirst().get());
-    edgePoints.add(candidatePoints.stream().filter(p -> p.getX() == xBounds[1]).findFirst().get());
-    edgePoints.add(candidatePoints.stream().filter(p -> p.getY() == yBounds[0]).findFirst().get());
-    edgePoints.add(candidatePoints.stream().filter(p -> p.getY() == yBounds[1]).findFirst().get());
+    candidatePoints.stream()
+        .filter(p -> p.getX() == xBounds[0])
+        .findFirst()
+        .ifPresent(edgePoints::add);
+    candidatePoints.stream()
+        .filter(p -> p.getX() == xBounds[1])
+        .findFirst()
+        .ifPresent(edgePoints::add);
+    candidatePoints.stream()
+        .filter(p -> p.getY() == yBounds[0])
+        .findFirst()
+        .ifPresent(edgePoints::add);
+    candidatePoints.stream()
+        .filter(p -> p.getY() == yBounds[1])
+        .findFirst()
+        .ifPresent(edgePoints::add);
     int[] x = edgePoints.stream().mapToInt(p -> p.x).toArray();
     int[] y = edgePoints.stream().mapToInt(p -> p.y).toArray();
     java.awt.Polygon filterQuadrilateral = new java.awt.Polygon(x, y, x.length);
@@ -304,7 +309,11 @@ public class GeoUtils {
       /* TODO: Currently not working! */
       /* Chan's algorithm (https://en.wikipedia.org/wiki/Chan%27s_algorithm) */
       Point point0 = new Point(-Integer.MAX_VALUE, 0);
-      Point point1 = edgePoints.stream().filter(p -> p.getY() == yBounds[0]).findFirst().get();
+      Point point1 =
+          edgePoints.stream()
+              .filter(p -> p.getY() == yBounds[0])
+              .findFirst()
+              .orElseThrow(() -> new RuntimeException("Cannot find a second node."));
       hullPoints.addLast(point1);
 
       /* Limit the amount of iterations to at most log(log(nodeCount)) */
@@ -418,7 +427,8 @@ public class GeoUtils {
    * @param a First {@link Polygon}
    * @param b Second {@link Polygon}
    * @return A {@link Polygon} if the intersection exists and null if not
-   * @deprecated This method is currently not under test and has to be revised thoroughly
+   * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
+   *     revised thoroughly
    */
   @Deprecated
   public static Polygon getIntersection(Polygon a, Polygon b) {
@@ -466,7 +476,8 @@ public class GeoUtils {
    * @param w Closed way, that surrounds the area
    * @return The covered area in {@link edu.ie3.util.quantities.PowerSystemUnits#SQUARE_METRE}
    * @throws GeoPreparationException If some serious shit happens
-   * @deprecated This method is currently not under test and has to be revised thoroughly
+   * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
+   *     revised thoroughly
    */
   @Deprecated
   public static Quantity<Area> calcArea(Way w) throws GeoPreparationException {
@@ -483,7 +494,8 @@ public class GeoUtils {
    * @param p {@link Polygon} whos area may be calculated
    * @return The spanned area in {@link edu.ie3.util.quantities.PowerSystemUnits#SQUARE_METRE}
    * @throws GeoPreparationException If some serious shit happens
-   * @deprecated This method is currently not under test and has to be revised thoroughly
+   * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
+   *     revised thoroughly
    */
   @Deprecated
   public static Quantity<Area> calcArea(Polygon p) throws GeoPreparationException {
@@ -570,9 +582,6 @@ public class GeoUtils {
         area = area.subtract(partialArea);
       }
 
-      /* logger.debug("Partial area: (" + dX + " * " + (coord.getLat() > coordPrev.getLat() ? dY.multiply(-1) : dY) +
-      " = " + partialArea + "), current total area: " + area); */
-
       idxPrevious = idx;
     }
 
@@ -586,7 +595,8 @@ public class GeoUtils {
    * @param b Node B
    * @param c Node C
    * @return True if node c is between node a and node b
-   * @deprecated This method is currently not under test and has to be revised thoroughly
+   * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
+   *     revised thoroughly
    */
   @Deprecated
   public static boolean isBetween(Node a, Node b, Node c) {
@@ -620,9 +630,7 @@ public class GeoUtils {
             + (b.getLatlon().getLat() - a.getLatlon().getLat())
                 * (b.getLatlon().getLat() - a.getLatlon().getLat());
 
-    if (dotProduct > squaredLengthBA) return false;
-
-    return !(dotProduct > squaredLengthBA) || !(Math.abs(crossProduct) > epsilon);
+    return dotProduct > squaredLengthBA;
   }
 
   /**
@@ -632,7 +640,8 @@ public class GeoUtils {
    *
    * @param geoArea: the area of the building based on geo coordinates
    * @param cor: the optional correction factor
-   * @deprecated This method is currently not under test and has to be revised thoroughly
+   * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
+   *     revised thoroughly
    */
   @Deprecated
   public static Quantity<Area> calcGeo2qmNew(double geoArea, Quantity<Area> cor) {
@@ -659,15 +668,16 @@ public class GeoUtils {
             * EARTH_RADIUS.getValue().doubleValue();
 
     /* (e1 * e2) - cor */
-    Quantity<Area> area =
-        Quantities.getQuantity(e1, METRE)
-            .multiply(Quantities.getQuantity(e2, METRE))
-            .asType(Area.class)
-            .subtract(cor);
-    return area;
+    return Quantities.getQuantity(e1, METRE)
+        .multiply(Quantities.getQuantity(e2, METRE))
+        .asType(Area.class)
+        .subtract(cor);
   }
 
-  /** @deprecated This method is currently not under test and has to be revised thoroughly */
+  /**
+   * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
+   *     revised thoroughly
+   */
   @Deprecated
   public static boolean isInsideLanduse(LatLon node, List<Way> landUses) {
     for (Way landUse : landUses) {
@@ -676,7 +686,10 @@ public class GeoUtils {
     return false;
   }
 
-  /** @deprecated This method is currently not under test and has to be revised thoroughly */
+  /**
+   * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
+   *     revised thoroughly
+   */
   @Deprecated
   public static boolean rayCasting(Polygon shape, LatLon node) {
     boolean inside = false;
@@ -690,25 +703,28 @@ public class GeoUtils {
     return inside;
   }
 
-  /** @deprecated This method is currently not under test and has to be revised thoroughly */
+  /**
+   * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
+   *     revised thoroughly
+   */
   @Deprecated
-  private static boolean intersects(LatLon a, LatLon b, LatLon n) {
+  private static boolean intersects(LatLon aIn, LatLon bIn, LatLon nIn) {
 
     // convert LatLons to arrays
-    double[] A = {a.getLon(), a.getLat()};
-    double[] B = {b.getLon(), b.getLat()};
-    double[] P = {n.getLon(), n.getLat()};
+    double[] a = {aIn.getLon(), aIn.getLat()};
+    double[] b = {bIn.getLon(), bIn.getLat()};
+    double[] n = {nIn.getLon(), nIn.getLat()};
 
-    if (A[1] > B[1]) return intersects(b, a, n);
+    if (a[1] > b[1]) return intersects(bIn, aIn, nIn);
 
-    if (P[1] == A[1] || P[1] == B[1]) P[1] += 0.0001;
+    if (n[1] == a[1] || n[1] == b[1]) n[1] += 0.0001;
 
-    if (P[1] > B[1] || P[1] < A[1] || P[0] > Math.max(A[0], B[0])) return false;
+    if (n[1] > b[1] || n[1] < a[1] || n[0] > Math.max(a[0], b[0])) return false;
 
-    if (P[0] < Math.min(A[0], B[0])) return true;
+    if (n[0] < Math.min(a[0], b[0])) return true;
 
-    double red = (P[1] - A[1]) / (P[0] - A[0]);
-    double blue = (B[1] - A[1]) / (B[0] - A[0]);
+    double red = (n[1] - a[1]) / (n[0] - a[0]);
+    double blue = (b[1] - a[1]) / (b[0] - a[0]);
     return red >= blue;
   }
 
@@ -720,7 +736,8 @@ public class GeoUtils {
    *
    * @param building
    * @return polygon area A
-   * @deprecated This method is currently not under test and has to be revised thoroughly
+   * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
+   *     revised thoroughly
    */
   @Deprecated
   public static double calculateBuildingArea(Way building) {
@@ -764,9 +781,7 @@ public class GeoUtils {
             .map(point -> new LatLon(point.getLat(), point.getLon()))
             .collect(Collectors.toList());
 
-    Polygon res = new Polygon(circlePointsLatLon);
-
-    return res;
+    return new Polygon(circlePointsLatLon);
   }
 
   /**
@@ -776,21 +791,15 @@ public class GeoUtils {
    * @param center
    * @param radius
    * @return a list with all coordinates of the circle points
-   * @deprecated This method is currently not under test and has to be revised thoroughly
+   * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
+   *     revised thoroughly
    */
   @Deprecated
   public static List<LatLon> radiusWithCircle(LatLon center, Quantity<Length> radius) {
 
     double lat1 = Math.toRadians(center.getLat());
     double lon1 = Math.toRadians(center.getLon());
-    double d;
-
-    try {
-      d = (radius.divide(EARTH_RADIUS)).getValue().doubleValue();
-      /* FIXME: Remove this catch, when the deprecated Units disappear in version 1.4 */
-    } catch (UnconvertibleException e) {
-      d = (radius.divide(EARTH_RADIUS_OLD)).getValue().doubleValue();
-    }
+    double d = (radius.divide(EARTH_RADIUS)).getValue().doubleValue();
 
     List<LatLon> locs = new ArrayList<>();
 
@@ -821,25 +830,24 @@ public class GeoUtils {
    * @param radius the radius that should be considered for search for the next connection point
    *     between two ways
    * @param wayId the id of the newly created way
-   * @return
-   * @deprecated This method is currently not under test and has to be revised thoroughly
+   * @return A concatenated {@link Way} built from a collection of {@link Way}s
+   * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
+   *     revised thoroughly
    */
   @Deprecated
   public static Way wayFromWays(List<Way> waysToChain, Quantity<Length> radius, int wayId) {
 
-    LinkedList<Way> waysCopy = new LinkedList<>();
-    waysCopy.addAll(waysToChain);
+    LinkedList<Way> waysCopy = new LinkedList<>(waysToChain);
 
     HashMap<Node, Way> nodeToWayMap = new HashMap<>();
     for (Way way : waysToChain) {
-      way.getNodes().stream().forEach(node -> nodeToWayMap.put(node, way));
+      way.getNodes().forEach(node -> nodeToWayMap.put(node, way));
     }
 
-    LinkedList<Node> nodesList = new LinkedList<>();
-    nodesList.addAll(waysToChain.get(0).getNodes());
+    LinkedList<Node> nodesList = new LinkedList<>(waysToChain.get(0).getNodes());
     waysCopy.remove(waysToChain.get(0));
 
-    while (waysCopy.size() > 0) {
+    while (!waysCopy.isEmpty()) {
       Node lastNode = nodesList.getLast();
 
       Polygon circle = radiusWithCircleAsPolygon(lastNode.getLatlon(), radius);
@@ -880,9 +888,7 @@ public class GeoUtils {
       waysCopy.remove(nextWay);
     }
 
-    Way result = new Way(wayId, new Tags(), nodesList);
-
-    return result;
+    return new Way(wayId, new Tags(), nodesList);
   }
 
   public enum ConvexHullAlgorithm {

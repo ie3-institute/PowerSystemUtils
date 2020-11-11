@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased/Snapshot]
+## [1.4]
 
 ### Added
 -   Introduction of EmptyQuantity, a representation for null value Quantities
@@ -14,7 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Improved implementation of `StandardUnits.PU`
 -   BREAKING: replaced Unit API 1.0 (JSR 363, tec.uom.se) with Unit API 2.0 (JSR 385, tech.units.indriya)
 
-### Fixed
+### Removed
+-   Deprecated methods in `GeoUtils`
+-   Deprecated `TimeTools`
 
 ## [1.3.2]
 
@@ -40,3 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 -   fixes + extensions in StandardUnits
+
+[1.4]: https://github.com/ie3-institute/powersystemutils/compare/v1.3.2...v1.4
+[1.3.2]: https://github.com/ie3-institute/powersystemutils/compare/v1.3.1...v1.3.2
+[1.3.1]: https://github.com/ie3-institute/powersystemutils/compare/64283b769d1faeac0a6468b0f225f5e995741cdd...v1.3.1
