@@ -33,4 +33,28 @@ class GeoUtilsTest extends Specification {
 		then:
 		Math.abs(actual.subtract(expected).to(METRE).value.doubleValue()) < tolerance.value.doubleValue()
 	}
+
+	def "Test radius with circle as polygon"() {
+		given:
+		LatLon center = new LatLon(52.02083574, 7.40110716)
+		Quantity radius = Quantities.getQuantity(50, METRE)
+
+		when:
+		Polygon poly = GeoUtils.radiusWithCircleAsPolygon(center, radius)
+		List<LatLon> circlePoints = poly.getCoords()
+
+		then:
+		// polygon should contain a center that is the provided center
+		Math.round(poly.center.lat * 100000000) / 100000000 == Math.round(center.lat * 100000000) / 100000000
+		Math.round(poly.center.lon * 100000000) / 100000000 == Math.round(center.lon * 100000000) / 100000000
+
+		// number of expected circle points
+		circlePoints.size() == 361
+		// rounded distance should be 50 meters
+		circlePoints.forEach({ point ->
+			Double distance = GeoUtils.calcHaversine(center.lat, center.lon, point.lat, point.lon).to(METRE).value.doubleValue()
+			Math.round(distance) == 50
+		})
+
+	}
 }
