@@ -7,10 +7,4 @@ package edu.ie3.util.quantities.interfaces;
 
 import tech.units.indriya.ComparableQuantity;
 
-/**
- * Rate of {@link javax.measure.quantity.Power} and {@link javax.measure.quantity.Area}
- *
- * @deprecated replaced by {@link Irradiation}
- */
-@Deprecated
-public interface PowerDensity extends ComparableQuantity<PowerDensity> {}
+public interface EnergyDensity extends ComparableQuantity<EnergyDensity> {}
