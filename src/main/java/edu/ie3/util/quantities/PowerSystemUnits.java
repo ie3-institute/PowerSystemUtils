@@ -122,7 +122,7 @@ public class PowerSystemUnits extends Units {
   public static final Unit<Irradiation> WATT_PER_SQUAREMETRE =
       new ProductUnit<>(WATT.divide(SQUARE_METRE));
 
-  /** Watt per square metre */
+  /** Kilowatt per square metre */
   public static final Unit<Irradiation> KILOWATT_PER_SQUAREMETRE =
       new ProductUnit<>(KILOWATT.divide(SQUARE_METRE));
 
