@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased/Snapshot]
 
 ### Changed
--   Deprecated `PowerDensity` (will be replaced by `Irradiation`) & SI conform usage of `Irradiation` and `EnergyDensity` (#54)
+-   Deprecated `PowerDensity` (will be replaced by `Irradiation`) & SI conform usage of `Irradiation` and `EnergyDensity` ([#54](https://github.com/ie3-institute/PowerSystemUtils/issues/54))
 
 ## [1.4]
 
