@@ -61,7 +61,8 @@ public class PowerSystemUnits extends Units {
       MetricPrefix.MICRO(EURO_PER_WATTHOUR);
 
   /** Degree */
-  public static final Unit<Angle> DEGREE_GEOM = new BaseUnit<>("°");
+  public static final Unit<Angle> DEGREE_GEOM =
+      new TransformedUnit<>("°", RADIAN, MultiplyConverter.of(Math.toRadians(1.0)));
 
   /* ==== Energy ==== */
 
