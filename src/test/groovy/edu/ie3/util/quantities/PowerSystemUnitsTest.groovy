@@ -15,7 +15,7 @@ class PowerSystemUnitsTest extends Specification {
 		def degreeQuantity = Quantities.getQuantity(degree, PowerSystemUnits.DEGREE_GEOM)
 
 		when:
-		def actualValue = degreeQuantity.to(Units.RADIAN).getValue().doubleValue()
+		def actualValue = degreeQuantity.to(Units.RADIAN).value.doubleValue()
 
 		then:
 		Math.abs(actualValue - radians) < 1E-12
@@ -33,7 +33,7 @@ class PowerSystemUnitsTest extends Specification {
 		def radianQuantity = Quantities.getQuantity(radians, Units.RADIAN)
 
 		when:
-		def actualValue = radianQuantity.to(PowerSystemUnits.DEGREE_GEOM).getValue().doubleValue()
+		def actualValue = radianQuantity.to(PowerSystemUnits.DEGREE_GEOM).value.doubleValue()
 
 		then:
 		Math.abs(actualValue - degree) < 1E-12
