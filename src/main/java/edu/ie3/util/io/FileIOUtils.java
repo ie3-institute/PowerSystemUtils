@@ -207,7 +207,8 @@ public class FileIOUtils {
      * @throws FileException If unable to write to the output stream or there is some error in the input or output filename
      */
     private static boolean compress(final String dirName, File validatedOutputFile) throws FileException {
-        Path validatedOutputFileName, source;
+        Path validatedOutputFileName;
+        Path source;
 
         try {
             validatedOutputFileName = validatedOutputFile.toPath();
