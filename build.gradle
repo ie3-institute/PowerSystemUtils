@@ -1,25 +1,25 @@
 plugins {
-    id "com.jfrog.artifactory" version "4.18.0"
-    id 'groovy' // groovy support
-    id 'java' // java support
-    id 'maven-publish'
-    id 'signing'
-    id 'pmd' //code check, working on source code
-    id 'com.github.spotbugs' version '4.6.0' //code check, working on byte code
-    id 'com.diffplug.spotless' version '5.7.0'//code format
-    id 'com.simonharrer.modernizer' version '2.1.0-1' //detect deprecated APIs
-    id 'com.github.onslip.gradle-one-jar' version '1.0.5' // pack a self contained jar
-    id 'jacoco' // java code coverage plugin
-    id "org.sonarqube" version "3.0" // sonarqube
+	id "com.jfrog.artifactory" version "4.18.0"
+	id 'groovy' // groovy support
+	id 'java' // java support
+	id 'maven-publish'
+	id 'signing'
+	id 'pmd' //code check, working on source code
+	id 'com.github.spotbugs' version '4.6.0' //code check, working on byte code
+	id 'com.diffplug.spotless' version '5.7.0'//code format
+	id 'com.simonharrer.modernizer' version '2.1.0-1' //detect deprecated APIs
+	id 'com.github.onslip.gradle-one-jar' version '1.0.5' // pack a self contained jar
+	id 'jacoco' // java code coverage plugin
+	id "org.sonarqube" version "3.0" // sonarqube
 }
 
 ext {
-    // version (changing these should be considered thoroughly!)
-    hibernateVersion = '5.3.3.Final'
-    slf4jVersion = '1.7.30'
-    javaVersion = JavaVersion.VERSION_1_8
+	// version (changing these should be considered thoroughly!)
+	hibernateVersion = '5.3.3.Final'
+	slf4jVersion = '1.7.30'
+	javaVersion = JavaVersion.VERSION_1_8
 
-    scriptsLocation = 'gradle' + File.separator + 'scripts' + File.separator //location of script plugins
+	scriptsLocation = 'gradle' + File.separator + 'scripts' + File.separator //location of script plugins
 }
 
 group = 'com.github.ie3-institute'
@@ -40,48 +40,48 @@ apply from: scriptsLocation + 'mavenCentralPublish.gradle'
 
 
 repositories {
-    jcenter()
-    maven { url = "https://www.jitpack.io" } // allows for github repos as dependencies
+	jcenter()
+	maven { url = "https://www.jitpack.io" } // allows for github repos as dependencies
 }
 
 dependencies {
-    // logging
-    compile "org.slf4j:slf4j-api:$slf4jVersion"  // slf4j wrapper
-    compile 'com.lmax:disruptor:+' // async logging
-    compile 'org.apache.logging.log4j:log4j-api:+' // log4j
-    compile 'org.apache.logging.log4j:log4j-core:+' // log4j
-    compile 'org.apache.logging.log4j:log4j-slf4j-impl:+' // log4j -> slf4j
+	// logging
+	compile "org.slf4j:slf4j-api:$slf4jVersion"  // slf4j wrapper
+	compile 'com.lmax:disruptor:+' // async logging
+	compile 'org.apache.logging.log4j:log4j-api:+' // log4j
+	compile 'org.apache.logging.log4j:log4j-core:+' // log4j
+	compile 'org.apache.logging.log4j:log4j-slf4j-impl:+' // log4j -> slf4j
 
-    compile 'javax.measure:unit-api:+' // quantities
-    compile 'tech.units:indriya:2.0.4'  // quantities
-    compile 'com.google.code.gson:gson:+' // java serialization, POJOs -> JSON
-    compile 'org.apache.commons:commons-lang3:+' // for HashCodeBuilder
-    compile 'com.github.johanneshiry:OSMonaut:+' // pbf parser
-    compile "org.hibernate:hibernate-spatial:$hibernateVersion" // spatial operations in GeoUtils
-    compile 'org.apache.commons:commons-math3:+' // mathematics and statistics components
-    // JTS Topology Suite for GeoPositions, License: EPL 1.0 / EDL 1.0
-    compile 'org.locationtech.jts:jts-core:1.16.1'
-    compile 'org.locationtech.jts.io:jts-io-common:1.16.1'
+	compile 'javax.measure:unit-api:+' // quantities
+	compile 'tech.units:indriya:2.0.4'  // quantities
+	compile 'com.google.code.gson:gson:+' // java serialization, POJOs -> JSON
+	compile 'org.apache.commons:commons-lang3:+' // for HashCodeBuilder
+	compile 'com.github.johanneshiry:OSMonaut:+' // pbf parser
+	compile "org.hibernate:hibernate-spatial:$hibernateVersion" // spatial operations in GeoUtils
+	compile 'org.apache.commons:commons-math3:+' // mathematics and statistics components
+	// JTS Topology Suite for GeoPositions, License: EPL 1.0 / EDL 1.0
+	compile 'org.locationtech.jts:jts-core:1.16.1'
+	compile 'org.locationtech.jts.io:jts-io-common:1.16.1'
 
-    compile 'commons-io:commons-io:2.8.0' // I/O functionalities
-    compile 'org.apache.commons:commons-compress:+' // I/O functionalities
+	compile 'commons-io:commons-io:2.8.0' // I/O functionalities
+	compile 'org.apache.commons:commons-compress:+' // I/O functionalities
 
-    // testing
-    testCompile 'org.spockframework:spock-core:1.3-groovy-+'
+	// testing
+	testCompile 'org.spockframework:spock-core:1.3-groovy-+'
 
-    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:+' // find bugs in java programs
+	spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:+' // find bugs in java programs
 }
 
 wrapper {
-    gradleVersion = '6.0.1'
+	gradleVersion = '6.0.1'
 }
 
 tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+	options.encoding = 'UTF-8'
 }
 
 task printVersion {
-    doLast {
-        println project.version
-    }
+	doLast {
+		println project.version
+	}
 }
