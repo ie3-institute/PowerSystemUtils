@@ -115,7 +115,10 @@ public class FileIOUtils {
    * @param filename the file that should be compress (full path + filename + file extension
    *     required!)
    * @return a Future containing a boolean which is either true on success or false otherwise
+   * @deprecated replaced by #compressFile(Path, Path). Add ".gz" to the input path and pass it as
+   *     output filepath in compressFile() for a similar functionality.
    */
+  @Deprecated
   public static CompletableFuture<Boolean> gzip(final String filename) {
     return gzip(filename, "");
   }
@@ -129,7 +132,9 @@ public class FileIOUtils {
    * @param outputFileName the optional output filename (full path + filename + file extension
    *     required!) if different from the provided filename
    * @return a Future containing a boolean which is either true on success or false otherwise
+   * @deprecated replaced by #compressFile(Path, Path)
    */
+  @Deprecated
   public static CompletableFuture<Boolean> gzip(
       final String filename, final String outputFileName) {
     return CompletableFuture.supplyAsync(
@@ -151,78 +156,101 @@ public class FileIOUtils {
   }
 
   /**
-   * Compress all the files present in the provided directory (full path required! e.g. /tmp/out) or
-   * compress a single file (full path + filename required! e.g. /tmp/out/sample.csv) and returns a
-   * {@link Future} with the result.
+   * Compress all the files present in the provided directory and returns a {@link Future} with the
+   * result.
    *
-   * @param dirOrFileName path of the directory or file that should be compressed (full path
-   *     required in case of a directory / full path + filename + file extension required in case of
-   *     a file!)
-   * @param outputFileName the optional output filename (full path + filename + file extension
-   *     required!) if different from the provided filename
-   * @param isDir set to true if trying to compress a directory. Set to false if compressing a
-   *     single file. if set to true, will archive the files before compression
+   * @param dirName path of the directory that should be compressed
+   * @param outputFileName path of the output file where the compressed content will be stored (path
+   *     should be for a file and filename should have a ".tar.gz" extension)
    * @return a Future containing a boolean which is either true on success or false otherwise
-   * @throws FileException If unable to create the archive file, might happen, if unable to write to
-   *     the output stream or if there is some error in the input / output filename or if the
-   *     archive already exists
    */
-  public static CompletableFuture<Boolean> compress(
-      final String dirOrFileName, final String outputFileName, final boolean isDir)
-      throws FileException {
+  public static CompletableFuture<Boolean> compressDir(
+      final Path dirName, final Path outputFileName) {
     return CompletableFuture.supplyAsync(
         () -> {
           try {
-            File validatedOutputFile = validateOutputFileName(dirOrFileName, outputFileName, isDir);
-
-            if (isDir) {
-              return compress(dirOrFileName, validatedOutputFile);
-            } else {
-              try (GZIPOutputStream out =
-                  new GZIPOutputStream(new FileOutputStream(validatedOutputFile))) {
-                try (FileInputStream in = new FileInputStream(dirOrFileName)) {
-                  byte[] buffer = new byte[1024];
-                  int len;
-                  while ((len = in.read(buffer)) != -1) {
-                    out.write(buffer, 0, len);
-                  }
-                }
-              } catch (IOException e) {
-                return false;
-              }
-              return true;
-            }
+            File validatedInputDir = validateInputDirName(dirName);
+            File validatedOutputFile =
+                validateOutputFileName(
+                    validatedInputDir.toString(), outputFileName.toString(), true);
+            return compressDir(validatedInputDir.toPath(), validatedOutputFile);
           } catch (FileException e) {
+            logger.error(
+                "Unable to compress from directory '{}' to file '{}'. Stopping compression.",
+                dirName,
+                outputFileName,
+                e);
             return false;
           }
         });
   }
 
   /**
-   * Compress all the files present in the provided directory (full path required! e.g. /tmp/out)
-   * and returns a boolean value denoting success or failure.
+   * Compresses a single file and returns a {@link Future} with the result.
    *
-   * @param dirName path of the directory that should be compressed (full path required!)
+   * @param fileName path of the file that should be compressed
+   * @param outputFileName path of the output file where the compressed content will be stored (path
+   *     should be for a file and filename should have a ".gz" extension)
+   * @return a Future containing a boolean which is either true on success or false otherwise
+   */
+  public static CompletableFuture<Boolean> compressFile(
+      final Path fileName, final Path outputFileName) {
+    return CompletableFuture.supplyAsync(
+        () -> {
+          try {
+            File validatedInputFile = validateInputFileName(fileName);
+            File validatedOutputFile =
+                validateOutputFileName(
+                    validatedInputFile.toString(), outputFileName.toString(), false);
+
+            try (GZIPOutputStream out =
+                new GZIPOutputStream(new FileOutputStream(validatedOutputFile))) {
+              try (FileInputStream in = new FileInputStream(validatedInputFile)) {
+                byte[] buffer = new byte[1024];
+                int len;
+                while ((len = in.read(buffer)) != -1) {
+                  out.write(buffer, 0, len);
+                }
+              }
+            } catch (IOException e) {
+              logger.error(
+                  "Unable to write from file '{}' to file '{}'",
+                  validatedInputFile,
+                  validatedOutputFile,
+                  e);
+              return false;
+            }
+            return true;
+
+          } catch (FileException e) {
+            logger.error(
+                "Unable to compress from file '{}' to file '{}'. Stopping compression.",
+                fileName,
+                outputFileName,
+                e);
+            return false;
+          }
+        });
+  }
+
+  /**
+   * Compress all the files present in the provided directory and returns a boolean value denoting
+   * success or failure.
+   *
+   * @param dirName path of the directory that should be compressed
    * @param validatedOutputFile validated output file (target archive file)
    * @return a boolean which is either true on success or false otherwise
    * @throws FileException If unable to write to the output stream or there is some error in the
-   *     input or output filename
+   *     output filepath
    */
-  private static boolean compress(final String dirName, File validatedOutputFile)
+  private static boolean compressDir(final Path dirName, File validatedOutputFile)
       throws FileException {
     Path validatedOutputFileName;
-    Path source;
 
     try {
       validatedOutputFileName = validatedOutputFile.toPath();
     } catch (InvalidPathException e) {
       throw new FileException("Invalid output file path '" + validatedOutputFile + "'.", e);
-    }
-
-    try {
-      source = Paths.get(dirName);
-    } catch (InvalidPathException e) {
-      throw new FileException("Invalid input file path '" + dirName + "'.", e);
     }
 
     /* Open a stream and add content to the archive */
@@ -232,7 +260,7 @@ public class FileIOUtils {
             new GzipCompressorOutputStream(bufferedOutputStream);
         TarArchiveOutputStream tarOutputStream = new TarArchiveOutputStream(gzipOutputStream)) {
       Files.walkFileTree(
-          source,
+          dirName,
           new SimpleFileVisitor<Path>() {
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
@@ -241,7 +269,7 @@ public class FileIOUtils {
               if (attrs.isSymbolicLink()) return FileVisitResult.CONTINUE;
 
               /* Copy files to archive */
-              Path relFile = source.relativize(file);
+              Path relFile = dirName.relativize(file);
               TarArchiveEntry entry = new TarArchiveEntry(file.toFile(), relFile.toString());
               tarOutputStream.putArchiveEntry(entry);
               Files.copy(file, tarOutputStream);
@@ -267,6 +295,50 @@ public class FileIOUtils {
     } catch (IOException e) {
       throw new FileException("Unable to write to '" + validatedOutputFileName + "'.", e);
     }
+  }
+
+  /**
+   * Checks, if the input file path points to a valid directory and returns the corresponding File
+   * object.
+   *
+   * @param dirName path of the directory that should be compressed
+   * @return File object corresponding to the directory to be compressed
+   * @throws FileException If the input path is null or the input path is not of a valid directory
+   */
+  private static File validateInputDirName(final Path dirName) throws FileException {
+    if (dirName == null) {
+      throw new FileException("Input directory name is null");
+    }
+
+    File inputDir = new File(dirName.toString());
+
+    if (!inputDir.isDirectory()) {
+      throw new FileException(
+          "Input path '" + dirName.toString() + "' is not of a valid directory");
+    }
+
+    return inputDir;
+  }
+
+  /**
+   * Checks, if the input file path points to a valid file and returns an object of the input file.
+   *
+   * @param fileName path of the file that should be compressed
+   * @return File to be compressed
+   * @throws FileException If the input file name is null or the input path is not of a valid file
+   */
+  private static File validateInputFileName(final Path fileName) throws FileException {
+    if (fileName == null) {
+      throw new FileException("Input file name is null");
+    }
+
+    File inputFile = new File(fileName.toString());
+
+    if (!inputFile.isFile()) {
+      throw new FileException("Input path '" + fileName.toString() + "' is not of a valid file");
+    }
+
+    return inputFile;
   }
 
   /**
@@ -390,8 +462,8 @@ public class FileIOUtils {
       throw new FileException("There is no archive '" + archive + "' apparent.");
     if (!Files.isRegularFile(archive))
       throw new FileException("Archive '" + archive + "' is not a file.");
-    if (!archive.toString().endsWith(".tar.gz"))
-      throw new FileException("Archive '" + archive + "' does not end with '.tar.gz'.");
+    if (!archive.toString().endsWith(TARGZ))
+      throw new FileException("Archive '" + archive + "' does not end with '" + TARGZ + "'.");
 
     /* Determine the file name */
     String fileName = archive.getFileName().toString().replaceAll("\\.tar\\.gz$", "");
