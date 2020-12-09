@@ -13,6 +13,7 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.Future;
 import java.util.zip.GZIPOutputStream;
 import org.apache.commons.compress.archivers.ArchiveEntry;
@@ -163,9 +164,11 @@ public class FileIOUtils {
    * @param outputFileName path of the output file where the compressed content will be stored (path
    *     should be for a file and filename should have a ".tar.gz" extension)
    * @return a Future containing a boolean which is either true on success or false otherwise
+   * @throws CompletionException If the input path is null or the input path is not of a valid
+   *     directory or if the archive already exists or unable to create the output file
    */
   public static CompletableFuture<Boolean> compressDir(
-      final Path dirName, final Path outputFileName) {
+      final Path dirName, final Path outputFileName) throws CompletionException {
     return CompletableFuture.supplyAsync(
         () -> {
           try {
@@ -175,12 +178,7 @@ public class FileIOUtils {
                     validatedInputDir.toString(), outputFileName.toString(), true);
             return compressDir(validatedInputDir.toPath(), validatedOutputFile);
           } catch (FileException e) {
-            logger.error(
-                "Unable to compress from directory '{}' to file '{}'. Stopping compression.",
-                dirName,
-                outputFileName,
-                e);
-            return false;
+            throw new CompletionException(e.getMessage(), e.getCause());
           }
         });
   }
@@ -192,9 +190,11 @@ public class FileIOUtils {
    * @param outputFileName path of the output file where the compressed content will be stored (path
    *     should be for a file and filename should have a ".gz" extension)
    * @return a Future containing a boolean which is either true on success or false otherwise
+   * @throws CompletionException If the input file name is null or the input path is not of a valid
+   *     file or if the archive already exists or unable to create the output file
    */
   public static CompletableFuture<Boolean> compressFile(
-      final Path fileName, final Path outputFileName) {
+      final Path fileName, final Path outputFileName) throws CompletionException {
     return CompletableFuture.supplyAsync(
         () -> {
           try {
@@ -223,12 +223,7 @@ public class FileIOUtils {
             return true;
 
           } catch (FileException e) {
-            logger.error(
-                "Unable to compress from file '{}' to file '{}'. Stopping compression.",
-                fileName,
-                outputFileName,
-                e);
-            return false;
+            throw new CompletionException(e.getMessage(), e.getCause());
           }
         });
   }
@@ -307,14 +302,14 @@ public class FileIOUtils {
    */
   private static File validateInputDirName(final Path dirName) throws FileException {
     if (dirName == null) {
-      throw new FileException("Input directory name is null");
+      throw new FileException("Input directory name is null.");
     }
 
     File inputDir = new File(dirName.toString());
 
     if (!inputDir.isDirectory()) {
       throw new FileException(
-          "Input path '" + dirName.toString() + "' is not of a valid directory");
+          "Input path '" + dirName.toString() + "' is not of a valid directory.");
     }
 
     return inputDir;
@@ -329,13 +324,13 @@ public class FileIOUtils {
    */
   private static File validateInputFileName(final Path fileName) throws FileException {
     if (fileName == null) {
-      throw new FileException("Input file name is null");
+      throw new FileException("Input file name is null.");
     }
 
     File inputFile = new File(fileName.toString());
 
     if (!inputFile.isFile()) {
-      throw new FileException("Input path '" + fileName.toString() + "' is not of a valid file");
+      throw new FileException("Input path '" + fileName.toString() + "' is not of a valid file.");
     }
 
     return inputFile;
@@ -354,7 +349,7 @@ public class FileIOUtils {
    * @param isDir set to true if trying to compress a directory. Set to false if compressing a
    *     single file. if set to true, will archive the files before compression
    * @return Output file
-   * @throws FileException If the archive already exists or unable to create the file
+   * @throws FileException If the archive already exists or unable to create the output file
    */
   private static File validateOutputFileName(
       final String dirOrFileName, final String outputFileName, boolean isDir) throws FileException {
