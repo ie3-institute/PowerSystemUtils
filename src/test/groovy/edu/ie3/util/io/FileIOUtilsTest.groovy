@@ -63,7 +63,7 @@ class FileIOUtilsTest extends Specification {
 
 		then:
 		def ex = thrown(CompletionException)
-		ex.message == "Input path '"+ filePath +"' is not of a valid file."
+		ex.message == "Input path '" + filePath + "' is not of a valid file."
 	}
 
 	def "The fileio utils throws an exception, if the function which compresses a directory is sent a file"() {
@@ -77,7 +77,7 @@ class FileIOUtilsTest extends Specification {
 
 		then:
 		def ex = thrown(CompletionException)
-		ex.message == "Input path '"+ dirPath +"' is not of a valid directory."
+		ex.message == "Input path '" + dirPath + "' is not of a valid directory."
 	}
 
 
