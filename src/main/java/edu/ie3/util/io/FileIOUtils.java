@@ -367,7 +367,8 @@ public class FileIOUtils {
       throw new FileException("The target '" + finalOutputFileName + "' already exists.");
 
     try {
-      outputFile.createNewFile();
+      if (!outputFile.createNewFile())
+        throw new FileException("Cannot create file '" + finalOutputFileName + "'.");
     } catch (IOException e) {
       throw new FileException("Cannot create file '" + finalOutputFileName + "'.", e);
     }
@@ -450,8 +451,8 @@ public class FileIOUtils {
    * @param zippedFile Compressed gzip file to extract
    * @param target Path to the target folder
    * @return Path of the file, where the content is extracted to
-   * @throws FileException If the zipped file is not in a well shape or the target folder doesn't
-   *     meet the requirements
+   * @throws FileException If the zipped file is not in a well shape or the target path doesn't meet
+   *     the requirements
    * @see <a href="https://mkyong.com/java/how-to-decompress-file-from-gzip-file/">MyKong
    *     Tutorial</a>
    */
@@ -462,13 +463,15 @@ public class FileIOUtils {
     /* Get the zipped file size */
     long zippedSize = zippedFile.toFile().length();
 
-    /* Create the target folder and file */
+    /* Create the destination folder for unzipping the zip file */
     try {
       Path parentDirectoryPath = targetPath.getParent();
-      if (parentDirectoryPath != null && Files.notExists(parentDirectoryPath)) {
-        Files.createDirectories(parentDirectoryPath);
+      if (parentDirectoryPath != null) {
+        if (Files.notExists(parentDirectoryPath)) {
+          Files.createDirectories(parentDirectoryPath);
+        }
       } else {
-        throw new FileException("Cannot create target folder for the file '" + targetPath + "'.");
+        throw new FileException("Parent directory path is null for the file '" + targetPath + "'.");
       }
     } catch (IOException e) {
       throw new FileException("Cannot create target folder for the file '" + targetPath + "'.", e);
