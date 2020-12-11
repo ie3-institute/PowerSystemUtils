@@ -15,6 +15,7 @@ import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.Future;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
@@ -376,8 +377,7 @@ public class FileIOUtils {
 
   /**
    * Extracts the given archive to a sub-directory with the same name that the archive has beneath
-   * the target directory. You may toggle, if already existing files should be overridden, otherwise
-   * a {@link FileException} is thrown.
+   * the target directory.
    *
    * @param archive Compressed tarball archive to extract
    * @param target Path to the target folder
@@ -385,7 +385,7 @@ public class FileIOUtils {
    * @throws FileException If the archive is not in a well shape, the target folder doesn't meet the
    *     requirements or the archive tries to impose harm by exploiting zip slip vulnerability
    */
-  public static Path extract(Path archive, Path target) throws FileException {
+  public static Path extractDir(Path archive, Path target) throws FileException {
     /* Pre-flight checks and assembly of the target path */
     Path targetDirectory = determineTargetDirectory(archive, target);
 
@@ -444,6 +444,81 @@ public class FileIOUtils {
   }
 
   /**
+   * Extracts the given zipped file to a file with the same name that the zipped file has beneath
+   * the target directory.
+   *
+   * @param zippedFile Compressed gzip file to extract
+   * @param target Path to the target folder
+   * @return Path of the file, where the content is extracted to
+   * @throws FileException If the zipped file is not in a well shape or the target folder doesn't
+   *     meet the requirements
+   * @see <a href="https://mkyong.com/java/how-to-decompress-file-from-gzip-file/">MyKong
+   *     Tutorial</a>
+   */
+  public static Path extractFile(Path zippedFile, Path target) throws FileException {
+    /* Pre-flight checks and assembly of the target path */
+    Path targetPath = validateTargetAndZippedFile(zippedFile, target);
+
+    /* Get the zipped file size */
+    long zippedSize = zippedFile.toFile().length();
+
+    /* Create the target folder and file */
+    try {
+      Path parentDirectoryPath = targetPath.getParent();
+      if (parentDirectoryPath != null && Files.notExists(parentDirectoryPath)) {
+        Files.createDirectories(parentDirectoryPath);
+      } else {
+        throw new FileException("Cannot create target folder for the file '" + targetPath + "'.");
+      }
+    } catch (IOException e) {
+      throw new FileException("Cannot create target folder for the file '" + targetPath + "'.", e);
+    }
+
+    try (InputStream fileInputStream = new FileInputStream(zippedFile.toFile());
+        GZIPInputStream gzipInputStream = new GZIPInputStream(fileInputStream); ) {
+
+      long uncompressedSize = 0;
+
+      /*Create a temporary file for extracting contents of the zipped file*/
+      File tempFile = File.createTempFile("temp", null);
+      try (FileOutputStream tempFileOutputStream = new FileOutputStream(tempFile); ) {
+
+        /* Copy the contents of the gzip input stream to the temporary file output stream while performing size checks */
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = gzipInputStream.read(buffer)) > 0) {
+          tempFileOutputStream.write(buffer, 0, len);
+          /* Monitor uncompressed size for safety reasons */
+          uncompressedSize += len;
+          if (uncompressedSize > MAX_SIZE_UNCOMPRESSED)
+            throw new IOException(
+                "Uncompressed size of zipped file exceeds permissible "
+                    + (MAX_SIZE_UNCOMPRESSED / 1024 / 1024)
+                    + " MB. Possibly malicious file");
+
+          /* Control the compression ratio */
+          if (1 - (double) zippedSize / uncompressedSize > MAX_COMPRESSION_RATIO)
+            throw new IOException(
+                "Compression ratio exceeds its maximum permissible value "
+                    + (MAX_COMPRESSION_RATIO * 100)
+                    + " %. Possibly malicious file");
+        }
+      }
+
+      /* If everything goes well, copy the contents of the temporary file to the target file */
+      Files.copy(tempFile.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+
+      /* Delete the temporary file */
+      tempFile.deleteOnExit();
+    } catch (IOException ex) {
+      throw new FileException(
+          "Unable to extract from '" + zippedFile + "' to '" + targetPath + "'.", ex);
+    }
+
+    return targetPath;
+  }
+
+  /**
    * Runs some pre-flight checks and assembles the target directory
    *
    * @param archive Compressed tarball archive to extract
@@ -477,6 +552,43 @@ public class FileIOUtils {
     }
 
     return targetDirectory;
+  }
+
+  /**
+   * Runs some pre-flight checks and assembles the target path
+   *
+   * @param zippedFile Compressed gzip file to extract
+   * @param targetDir Path to the target directory
+   * @return Path to the folder, where the content is meant to be extracted to
+   * @throws FileException If the pre-flight checks fail
+   */
+  private static Path validateTargetAndZippedFile(Path zippedFile, Path targetDir)
+      throws FileException {
+    /* Pre-flight checks */
+    if (Files.notExists(zippedFile))
+      throw new FileException("There is no zipped file '" + zippedFile + "' apparent.");
+    if (!Files.isRegularFile(zippedFile))
+      throw new FileException("'" + zippedFile + "' is not a regular file.");
+    if (!zippedFile.toString().endsWith(GZ))
+      throw new FileException("Zipped file '" + zippedFile + "' does not end with '" + GZ + "'.");
+
+    /* Determine the file name */
+    String fileName = zippedFile.getFileName().toString().replaceAll("\\.gz$", "");
+    Path targetPath = Paths.get(FilenameUtils.concat(targetDir.toString(), fileName));
+
+    /* Some more pre-flight checks */
+    if (Files.exists(targetPath)) {
+      if (!Files.isRegularFile(targetPath))
+        throw new FileException(
+            "You intend to extract content of '"
+                + zippedFile
+                + "' to '"
+                + targetPath
+                + "', which is a directory.");
+      else throw new FileException("The target file '" + targetPath + "' already exists.");
+    }
+
+    return targetPath;
   }
 
   /**
