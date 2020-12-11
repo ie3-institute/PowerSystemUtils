@@ -156,7 +156,7 @@ class FileIOUtilsTest extends Specification {
 		def targetDirectory = Paths.get(FilenameUtils.concat(tmpDirectory.toString(), "extract"))
 
 		when:
-		FileIOUtils.extract(archiveFile, targetDirectory)
+		FileIOUtils.extractDir(archiveFile, targetDirectory)
 
 		then:
 		def ex = thrown(FileException)
@@ -169,11 +169,11 @@ class FileIOUtilsTest extends Specification {
 		def targetDirectory = Paths.get(FilenameUtils.concat(tmpDirectory.toString(), "extract"))
 
 		when:
-		FileIOUtils.extract(archiveFile, targetDirectory)
+		FileIOUtils.extractDir(archiveFile, targetDirectory)
 
 		then:
 		def ex = thrown(FileException)
-		ex.message == "Archive '" + tmpDirectory + "' is not a file."
+		ex.message == "Archive '" + archiveFile + "' is not a file."
 	}
 
 	def  "The fileio utils throws an exception, if the archive to extract, does not end on '.tar.gz'"() {
@@ -183,7 +183,7 @@ class FileIOUtilsTest extends Specification {
 		def targetDirectory = Paths.get(FilenameUtils.concat(tmpDirectory.toString(), "extract"))
 
 		when:
-		FileIOUtils.extract(archiveFile, targetDirectory)
+		FileIOUtils.extractDir(archiveFile, targetDirectory)
 
 		then:
 		def ex = thrown(FileException)
@@ -192,13 +192,13 @@ class FileIOUtilsTest extends Specification {
 
 	def  "The fileio utils throws an exception, if the target folder already is available"() {
 		given:
-		def archiveFile = Paths.get(getClass().getResource('/default_directory_hierarchy.tar.gz').toURI())
+		def archiveFile = Paths.get(getClass().getResource('/zippedFiles/default_directory_hierarchy.tar.gz').toURI())
 		def targetDirectory = Paths.get(FilenameUtils.concat(tmpDirectory.toString(), "extract"))
 		def targetPath = Paths.get(FilenameUtils.concat(targetDirectory.toString(), 'default_directory_hierarchy'))
 		Files.createDirectories(targetPath)
 
 		when:
-		FileIOUtils.extract(archiveFile, targetDirectory)
+		FileIOUtils.extractDir(archiveFile, targetDirectory)
 
 		then:
 		def ex = thrown(FileException)
@@ -215,7 +215,7 @@ class FileIOUtilsTest extends Specification {
 		Files.createFile(nestedTargetFolder)
 
 		when:
-		FileIOUtils.extract(archiveFile, targetDirectory)
+		FileIOUtils.extractDir(archiveFile, targetDirectory)
 
 		then:
 		def ex = thrown(FileException)
@@ -224,7 +224,7 @@ class FileIOUtilsTest extends Specification {
 
 	def  "The fileio utils throws an exception, if the target folder already is available and filled"() {
 		given:
-		def archiveFile = Paths.get(getClass().getResource('/default_directory_hierarchy.tar.gz').toURI())
+		def archiveFile = Paths.get(getClass().getResource('/zippedFiles/default_directory_hierarchy.tar.gz').toURI())
 		def targetDirectory = Paths.get(FilenameUtils.concat(tmpDirectory.toString(), "extract"))
 		def nestedTargetFolder = Paths.get(FilenameUtils.concat(targetDirectory.toString(), "default_directory_hierarchy"))
 		Files.createDirectories(nestedTargetFolder)
@@ -232,7 +232,7 @@ class FileIOUtilsTest extends Specification {
 		Files.createFile(oneFile)
 
 		when:
-		FileIOUtils.extract(archiveFile, targetDirectory)
+		FileIOUtils.extractDir(archiveFile, targetDirectory)
 
 		then:
 		def ex = thrown(FileException)
@@ -241,11 +241,11 @@ class FileIOUtilsTest extends Specification {
 
 	def  "The fileio utils is able to extract a tarball archive correctly"() {
 		given:
-		def archiveFile = Paths.get(getClass().getResource('/default_directory_hierarchy.tar.gz').toURI())
+		def archiveFile = Paths.get(getClass().getResource('/zippedFiles/default_directory_hierarchy.tar.gz').toURI())
 		def targetDirectory = Paths.get(FilenameUtils.concat(tmpDirectory.toString(), "extract"))
 
 		when:
-		FileIOUtils.extract(archiveFile, targetDirectory)
+		FileIOUtils.extractDir(archiveFile, targetDirectory)
 
 		then:
 		noExceptionThrown()
@@ -277,6 +277,97 @@ class FileIOUtilsTest extends Specification {
 		Files.list(participantsPath).map { it.toString() }.sorted().collect(Collectors.toList()) == [
 			tmpDirectory.toString() + "/extract/default_directory_hierarchy/participants/ev_input.csv"
 		]
+	}
+
+	def  "The fileio utils throws an exception, if the zipped file to extract, is not apparent"() {
+		given:
+		def zippedFile = Paths.get(FilenameUtils.concat(tmpDirectory.toString(), "noFile.gz"))
+		def targetDirectory = Paths.get(FilenameUtils.concat(tmpDirectory.toString(), "extract"))
+
+		when:
+		FileIOUtils.extractFile(zippedFile, targetDirectory)
+
+		then:
+		def ex = thrown(FileException)
+		ex.message == "There is no zipped file '" + zippedFile + "' apparent."
+	}
+
+	def  "The fileio utils throws an exception, if the zipped file to extract, is a directory"() {
+		given:
+		def zippedFile = tmpDirectory
+		def targetDirectory = Paths.get(FilenameUtils.concat(tmpDirectory.toString(), "extract"))
+
+		when:
+		FileIOUtils.extractFile(zippedFile, targetDirectory)
+
+		then:
+		def ex = thrown(FileException)
+		ex.message == "'" + zippedFile + "' is not a regular file."
+	}
+
+	def  "The fileio utils throws an exception, if the zipped file to extract, does not end on '.gz'"() {
+		given:
+		def zippedFile = Paths.get(FilenameUtils.concat(tmpDirectory.toString(), "someFile.txt"))
+		Files.createFile(zippedFile)
+		def targetDirectory = Paths.get(FilenameUtils.concat(tmpDirectory.toString(), "extract"))
+
+		when:
+		FileIOUtils.extractFile(zippedFile, targetDirectory)
+
+		then:
+		def ex = thrown(FileException)
+		ex.message == "Zipped file '" + zippedFile + "' does not end with '.gz'."
+	}
+
+	def  "The fileio utils throws an exception, if a file with the same name as the target file already exists"() {
+		given:
+		def zippedFile = Paths.get(getClass().getResource('/zippedFiles/line_input.csv.gz').toURI())
+		def targetDirectory = Paths.get(FilenameUtils.concat(tmpDirectory.toString(), "extract"))
+		def alreadyPresentFile = Paths.get(FilenameUtils.concat(targetDirectory.toString(), "line_input.csv"))
+		Files.createDirectories(targetDirectory)
+		Files.createFile(alreadyPresentFile)
+
+		when:
+		FileIOUtils.extractFile(zippedFile, targetDirectory)
+
+		then:
+		def ex = thrown(FileException)
+		ex.message == "The target file '" + alreadyPresentFile + "' already exists."
+	}
+
+	def  "The fileio utils throws an exception, if a directory exists at the target file path"() {
+		given:
+		def zippedFile = Paths.get(FilenameUtils.concat(tmpDirectory.toString(), "line_input.csv.gz"))
+		Files.createFile(zippedFile)
+		def targetDirectory = Paths.get(FilenameUtils.concat(tmpDirectory.toString(), "extract"))
+		def alreadyPresentFile = Paths.get(FilenameUtils.concat(targetDirectory.toString(), 'line_input.csv'))
+		Files.createDirectories(alreadyPresentFile)
+
+		when:
+		FileIOUtils.extractFile(zippedFile, targetDirectory)
+
+		then:
+		def ex = thrown(FileException)
+		ex.message == "You intend to extract content of '" + zippedFile + "' to '" + alreadyPresentFile + "', which is a directory."
+	}
+
+	def  "The fileio utils is able to unzip a zipped file correctly"() {
+		given:
+		def zippedFile = Paths.get(getClass().getResource('/zippedFiles/line_input.csv.gz').toURI())
+		def targetDirectory = Paths.get(FilenameUtils.concat(tmpDirectory.toString(), "extract"))
+		def testFile = Paths.get(getClass().getResource('/testGridFiles/grid_default_hierarchy/grid/line_input.csv').toURI())
+
+		when:
+		def unzippedFile = FileIOUtils.extractFile(zippedFile, targetDirectory)
+
+		then:
+		noExceptionThrown()
+		Files.exists(unzippedFile)
+		Files.list(targetDirectory).map { it.toString() }.sorted().collect(Collectors.toList()) == [
+			tmpDirectory.toString() + "/extract/line_input.csv"
+		]
+		/* Check unzipped file size */
+		unzippedFile.size() == testFile.size()
 	}
 
 	def "The zip slip protection detects malicious entries correctly"() {
