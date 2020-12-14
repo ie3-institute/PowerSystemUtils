@@ -129,4 +129,18 @@ public class TimeUtil {
       ZonedDateTime startDateTime, ZonedDateTime endDateTime, ChronoUnit unit) {
     return unit.between(startDateTime, endDateTime);
   }
+
+  /**
+   * Moves the given zoned date time to the next full unit (e.g. hour)
+   *
+   * @param zdt Zoned date time to alter
+   * @param chronoUnit Next full time unit
+   * @return Next full chrono unit, if it does not meet yet
+   */
+  public static ZonedDateTime toNextFull(ZonedDateTime zdt, ChronoUnit chronoUnit) {
+    ZonedDateTime truncatedToFullHour =
+        zdt.truncatedTo(chronoUnit); // Truncate all minutes and less
+    if (zdt.isAfter(truncatedToFullHour)) return truncatedToFullHour.plus(1L, chronoUnit);
+    return zdt;
+  }
 }

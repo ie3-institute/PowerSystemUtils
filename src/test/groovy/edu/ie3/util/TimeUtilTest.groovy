@@ -9,6 +9,7 @@ import spock.lang.Specification
 
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 
 
 class TimeUtilTest extends Specification {
@@ -162,6 +163,23 @@ class TimeUtilTest extends Specification {
 		"2020-04-22 23:15:00" || 93
 		"2020-04-22 23:30:00" || 94
 		"2020-04-22 23:45:00" || 95
+	}
+
+	def "A TimeUtil is able to round to the next full chrono unit"() {
+		expect:
+		def time = TimeUtil.withDefaults.toZonedDateTime(timeStamp)
+		def expectedTime = TimeUtil.withDefaults.toZonedDateTime(expected)
+		TimeUtil.toNextFull(time, chronoUnit) == expectedTime
+
+		where:
+		timeStamp             || chronoUnit         || expected
+		"2020-04-21 23:59:00" || ChronoUnit.HOURS   || "2020-04-22 00:00:00"
+		"2020-04-22 00:00:00" || ChronoUnit.HOURS   || "2020-04-22 00:00:00"
+		"2020-04-22 00:01:00" || ChronoUnit.HOURS   || "2020-04-22 01:00:00"
+		"2020-04-22 00:59:50" || ChronoUnit.HOURS   || "2020-04-22 01:00:00"
+		"2020-04-22 00:59:50" || ChronoUnit.HOURS   || "2020-04-22 01:00:00"
+		"2020-04-22 01:00:00" || ChronoUnit.DAYS    || "2020-04-23 00:00:00"
+		"2020-04-21 23:59:01" || ChronoUnit.MINUTES || "2020-04-22 00:00:00"
 	}
 }
 
