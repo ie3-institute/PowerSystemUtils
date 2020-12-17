@@ -7,5 +7,9 @@ package edu.ie3.util.quantities.interfaces;
 
 import tech.units.indriya.ComparableQuantity;
 
-/** Interface to describe the Quantity of an (solar) Irradiation */
+/**
+ * Interface to describe the radiant exposure quantity. It is the radiant energy received by a
+ * surface per unit area, or equivalently {@link Irradiance} of a surface integrated over time of
+ * irradiation. It's SI unit is J/m<sup>2</sup>.
+ */
 public interface Irradiation extends ComparableQuantity<Irradiation> {}
