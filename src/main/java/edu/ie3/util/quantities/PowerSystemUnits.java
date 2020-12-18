@@ -64,6 +64,10 @@ public class PowerSystemUnits extends Units {
   public static final Unit<Angle> DEGREE_GEOM =
       new TransformedUnit<>("°", RADIAN, MultiplyConverter.of(Math.toRadians(1.0)));
 
+  /** Density */
+  public static final Unit<Density> KILOGRAM_PER_CUBIC_METRE =
+      new ProductUnit<>(KILOGRAM.divide(CUBIC_METRE));
+
   /* ==== Energy ==== */
 
   /** Watthour */
@@ -209,6 +213,7 @@ public class PowerSystemUnits extends Units {
     addUnit(DEGREE_GEOM, "°");
     addUnit(KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE, "kWh/K*m³");
     addUnit(KILOWATT_PER_KELVIN, "kW/K");
+    addUnit(KILOGRAM_PER_CUBIC_METRE, "kg/m³");
   }
 
   /**
