@@ -66,7 +66,7 @@ public class PowerSystemUnits extends Units {
 
   /** Density */
   public static final Unit<Density> KILOGRAM_PER_CUBIC_METRE =
-          new ProductUnit<>(KILOGRAM.divide(CUBIC_METRE));
+      new ProductUnit<>(KILOGRAM.divide(CUBIC_METRE));
 
   /* ==== Energy ==== */
 
