@@ -64,6 +64,10 @@ public class PowerSystemUnits extends Units {
   public static final Unit<Angle> DEGREE_GEOM =
       new TransformedUnit<>("°", RADIAN, MultiplyConverter.of(Math.toRadians(1.0)));
 
+  /** Density */
+  public static final Unit<Density> KILOGRAM_PER_CUBIC_METRE =
+      new ProductUnit<>(KILOGRAM.divide(CUBIC_METRE));
+
   /* ==== Energy ==== */
 
   /** Watthour */
@@ -86,11 +90,11 @@ public class PowerSystemUnits extends Units {
       new AlternateUnit<>(WATTHOUR_PER_METRE, "kWh/km");
 
   /** Watthour per squaremetre */
-  public static final Unit<EnergyDensity> WATTHOUR_PER_SQUAREMETRE =
+  public static final Unit<Irradiation> WATTHOUR_PER_SQUAREMETRE =
       new ProductUnit<>(WATT.multiply(HOUR).divide(SQUARE_METRE));
 
   /** Kilowatthour per squaremetre */
-  public static final Unit<EnergyDensity> KILOWATTHOUR_PER_SQUAREMETRE =
+  public static final Unit<Irradiation> KILOWATTHOUR_PER_SQUAREMETRE =
       MetricPrefix.KILO(WATTHOUR_PER_SQUAREMETRE);
 
   /* ==== Power ==== */
@@ -120,11 +124,11 @@ public class PowerSystemUnits extends Units {
   public static final Unit<Power> MEGAWATT = MetricPrefix.MEGA(WATT);
 
   /** Watt per square metre */
-  public static final Unit<Irradiation> WATT_PER_SQUAREMETRE =
+  public static final Unit<Irradiance> WATT_PER_SQUAREMETRE =
       new ProductUnit<>(WATT.divide(SQUARE_METRE));
 
   /** Kilowatt per square metre */
-  public static final Unit<Irradiation> KILOWATT_PER_SQUAREMETRE =
+  public static final Unit<Irradiance> KILOWATT_PER_SQUAREMETRE =
       new ProductUnit<>(KILOWATT.divide(SQUARE_METRE));
 
   /* ==== Composed units ==== */
@@ -209,6 +213,7 @@ public class PowerSystemUnits extends Units {
     addUnit(DEGREE_GEOM, "°");
     addUnit(KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE, "kWh/K*m³");
     addUnit(KILOWATT_PER_KELVIN, "kW/K");
+    addUnit(KILOGRAM_PER_CUBIC_METRE, "kg/m³");
   }
 
   /**
