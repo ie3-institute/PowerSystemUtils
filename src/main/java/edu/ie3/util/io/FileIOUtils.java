@@ -397,49 +397,7 @@ public class FileIOUtils {
             /* Pre-flight checks and assembly of the target path */
             Path targetDirectory = determineTargetDirectory(archive, target);
 
-            /* Get the archive file size */
-            long archiveSize = archive.toFile().length();
-
-            /* Monitor amount of entries and their size for safety reasons */
-            int entries = 0;
-            long size = 0;
-            try (InputStream fileInputStream = Files.newInputStream(archive);
-                BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
-                GzipCompressorInputStream gzipInputStream =
-                    new GzipCompressorInputStream(bufferedInputStream);
-                TarArchiveInputStream tarInputStream = new TarArchiveInputStream(gzipInputStream)) {
-              ArchiveEntry archiveEntry;
-              while ((archiveEntry = tarInputStream.getNextEntry()) != null) {
-                /* Control the total amount of entries */
-                entries++;
-                if (entries > MAX_AMOUNT_OF_ENTRIES)
-                  throw new IOException(
-                      "The archive contains too many entries and is therefore possibly malicious.");
-
-                /* Control the size of extracted archive files */
-                long uncompressedSize = archiveEntry.getSize();
-                if (uncompressedSize == ArchiveEntry.SIZE_UNKNOWN)
-                  throw new IOException(
-                      "Unknown uncompressed file size of '" + archiveEntry.getName() + "'");
-                size += uncompressedSize;
-                if (size > MAX_SIZE_UNCOMPRESSED)
-                  throw new IOException(
-                      "Uncompressed size of archive exceeds permissible "
-                          + (MAX_SIZE_UNCOMPRESSED / 1024 / 1024)
-                          + " MB. Possibly malicious archive");
-
-                /* Control the compression ratio */
-                if (1 - (double) archiveSize / size > MAX_COMPRESSION_RATIO)
-                  throw new IOException(
-                      "Compression ratio exceeds its maximum permissible value "
-                          + (MAX_COMPRESSION_RATIO * 100)
-                          + " %. Possibly malicious archive");
-
-                handleZipEntrySafely(archiveEntry, targetDirectory, tarInputStream);
-              }
-            } catch (IOException ex) {
-              throw new FileException("Unable to extract from '" + archive + "'.", ex);
-            }
+            extractDir(archive, targetDirectory.toFile());
 
             return targetDirectory;
           } catch (FileException e) {
@@ -452,7 +410,7 @@ public class FileIOUtils {
   /**
    * Runs some pre-flight checks and assembles the target directory
    *
-   * @param archive Compressed tarball archive to extract
+   * @param archive Path of the compressed tarball archive to extract
    * @param target Path to the target folder
    * @return Path to the folder, where the content is meant to be extracted to
    * @throws FileException If the pre-flight checks fail
@@ -490,6 +448,62 @@ public class FileIOUtils {
     }
 
     return targetDirectory;
+  }
+
+  /**
+   * Extracts the given archive to a sub-directory with the same name that the archive has beneath
+   * the target directory.
+   *
+   * @param archive Path of the compressed tarball archive to extract
+   * @param targetDirectory File which points to the target directory
+   * @throws FileException If unable to extract the contents of the archive
+   */
+  public static void extractDir(Path archive, File targetDirectory) throws FileException {
+    /* Get the archive file size */
+    long archiveSize = archive.toFile().length();
+
+    /* Monitor amount of entries and their size for safety reasons */
+    int entries = 0;
+    long size = 0;
+    try (InputStream fileInputStream = Files.newInputStream(archive);
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
+        GzipCompressorInputStream gzipInputStream =
+            new GzipCompressorInputStream(bufferedInputStream);
+        TarArchiveInputStream tarInputStream = new TarArchiveInputStream(gzipInputStream)) {
+
+      ArchiveEntry archiveEntry;
+      while ((archiveEntry = tarInputStream.getNextEntry()) != null) {
+        /* Control the total amount of entries */
+        entries++;
+        if (entries > MAX_AMOUNT_OF_ENTRIES)
+          throw new IOException(
+              "The archive contains too many entries and is therefore possibly malicious.");
+
+        /* Control the size of extracted archive files */
+        long uncompressedSize = archiveEntry.getSize();
+        if (uncompressedSize == ArchiveEntry.SIZE_UNKNOWN)
+          throw new IOException(
+              "Unknown uncompressed file size of '" + archiveEntry.getName() + "'");
+        size += uncompressedSize;
+        if (size > MAX_SIZE_UNCOMPRESSED)
+          throw new IOException(
+              "Uncompressed size of archive exceeds permissible "
+                  + (MAX_SIZE_UNCOMPRESSED / 1024 / 1024)
+                  + " MB. Possibly malicious archive");
+
+        /* Control the compression ratio */
+        if (1 - (double) archiveSize / size > MAX_COMPRESSION_RATIO)
+          throw new IOException(
+              "Compression ratio exceeds its maximum permissible value "
+                  + (MAX_COMPRESSION_RATIO * 100)
+                  + " %. Possibly malicious archive");
+
+        handleZipEntrySafely(archiveEntry, targetDirectory.toPath(), tarInputStream);
+      }
+    } catch (IOException ex) {
+
+      throw new FileException("Unable to extract from '" + archive + "'.", ex);
+    }
   }
 
   /**
@@ -560,51 +574,11 @@ public class FileIOUtils {
           try {
             /* Pre-flight checks and assembly of the target path */
             validateZippedFile(zippedFile);
-            Path targetPath = validateTargetFile(zippedFile, target);
+            File targetFile = determineTargetFile(zippedFile, target);
 
-            /* Get the zipped file size */
-            long zippedSize = zippedFile.toFile().length();
+            extractFile(zippedFile, targetFile);
 
-            try (InputStream fileInputStream = new FileInputStream(zippedFile.toFile());
-                GZIPInputStream gzipInputStream = new GZIPInputStream(fileInputStream); ) {
-
-              long uncompressedSize = 0;
-
-              File outputFile = targetPath.toFile();
-
-              try (FileOutputStream fileOutputStream = new FileOutputStream(outputFile); ) {
-
-                /* Copy the contents of the gzip input stream to the file output stream while performing size checks */
-                byte[] buffer = new byte[1024];
-                int len;
-                while ((len = gzipInputStream.read(buffer)) > 0) {
-                  fileOutputStream.write(buffer, 0, len);
-                  /* Monitor uncompressed size for safety reasons */
-                  uncompressedSize += len;
-                  if (uncompressedSize > MAX_SIZE_UNCOMPRESSED) {
-                    Files.delete(outputFile.toPath());
-                    throw new IOException(
-                        "Uncompressed size of zipped file exceeds permissible "
-                            + (MAX_SIZE_UNCOMPRESSED / 1024 / 1024)
-                            + " MB. Possibly malicious file");
-                  }
-
-                  /* Control the compression ratio */
-                  if (1 - (double) zippedSize / uncompressedSize > MAX_COMPRESSION_RATIO) {
-                    Files.delete(outputFile.toPath());
-                    throw new IOException(
-                        "Compression ratio exceeds its maximum permissible value "
-                            + (MAX_COMPRESSION_RATIO * 100)
-                            + " %. Possibly malicious file");
-                  }
-                }
-              }
-            } catch (IOException ex) {
-              throw new FileException(
-                  "Unable to extract from '" + zippedFile + TO + targetPath + "'.", ex);
-            }
-
-            return targetPath;
+            return targetFile.toPath();
           } catch (FileException e) {
             throw new CompletionException(
                 "Unable to extract from zipped file '"
@@ -636,12 +610,12 @@ public class FileIOUtils {
   /**
    * Runs some pre-flight checks and assembles the target path
    *
-   * @param zippedFile Compressed gzip file to extract
+   * @param zippedFile Path of the compressed gzip file to extract
    * @param targetDir Path to the target directory
    * @return Path to the folder, where the content is meant to be extracted to
    * @throws FileException If the target file cannot be created
    */
-  private static Path validateTargetFile(Path zippedFile, Path targetDir) throws FileException {
+  private static File determineTargetFile(Path zippedFile, Path targetDir) throws FileException {
     /* Determine the file name */
     String fileName = zippedFile.getFileName().toString().replaceAll("\\.gz$", "");
     Path targetPath = Paths.get(FilenameUtils.concat(targetDir.toString(), fileName));
@@ -658,7 +632,7 @@ public class FileIOUtils {
       else throw new FileException("The target file '" + targetPath + ALREADY_EXISTS);
     }
 
-    /* Create the destination folder for unzipping the zip file */
+    /* Create the destination folder for unzipping the zipped file */
     try {
       Path parentDirectoryPath = targetPath.getParent();
       if (parentDirectoryPath != null) {
@@ -681,7 +655,58 @@ public class FileIOUtils {
       throw new FileException("Cannot create target output file '" + outputFile + "'.", e);
     }
 
-    return targetPath;
+    return targetPath.toFile();
+  }
+
+  /**
+   * Extracts the given zipped file to a file with the same name that the zipped file has beneath
+   * the target directory.
+   *
+   * @param zippedFile Path of the compressed gzip file to extract
+   * @param targetFile Target file where the contents will be extracted
+   * @throws FileException If unable to extract contents from the zipped file
+   * @see <a href="https://mkyong.com/java/how-to-decompress-file-from-gzip-file/">MyKong
+   *     Tutorial</a>
+   */
+  private static void extractFile(Path zippedFile, File targetFile) throws FileException {
+    /* Get the zipped file size */
+    long zippedSize = zippedFile.toFile().length();
+
+    try (InputStream fileInputStream = new FileInputStream(zippedFile.toFile());
+        GZIPInputStream gzipInputStream = new GZIPInputStream(fileInputStream); ) {
+
+      long uncompressedSize = 0;
+
+      try (FileOutputStream fileOutputStream = new FileOutputStream(targetFile); ) {
+
+        /* Copy the contents of the gzip input stream to the file output stream while performing size checks */
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = gzipInputStream.read(buffer)) > 0) {
+          fileOutputStream.write(buffer, 0, len);
+          /* Monitor uncompressed size for safety reasons */
+          uncompressedSize += len;
+          if (uncompressedSize > MAX_SIZE_UNCOMPRESSED) {
+            Files.delete(targetFile.toPath());
+            throw new IOException(
+                "Uncompressed size of zipped file exceeds permissible "
+                    + (MAX_SIZE_UNCOMPRESSED / 1024 / 1024)
+                    + " MB. Possibly malicious file");
+          }
+
+          /* Control the compression ratio */
+          if (1 - (double) zippedSize / uncompressedSize > MAX_COMPRESSION_RATIO) {
+            Files.delete(targetFile.toPath());
+            throw new IOException(
+                "Compression ratio exceeds its maximum permissible value "
+                    + (MAX_COMPRESSION_RATIO * 100)
+                    + " %. Possibly malicious file");
+          }
+        }
+      }
+    } catch (IOException ex) {
+      throw new FileException("Unable to extract from '" + zippedFile + TO + targetFile + "'.", ex);
+    }
   }
 
   /**
