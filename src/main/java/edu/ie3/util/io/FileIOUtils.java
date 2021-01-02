@@ -165,11 +165,9 @@ public class FileIOUtils {
    * @param outputFileName path of the output file where the compressed content will be stored (path
    *     should be for a file and filename should have a ".tar.gz" extension)
    * @return a Future containing a boolean which is either true on success or false otherwise
-   * @throws CompletionException If the input path is null or the input path is not of a valid
-   *     directory or if the archive already exists or unable to create the output file
    */
   public static CompletableFuture<Boolean> compressDir(
-      final Path dirName, final Path outputFileName) throws CompletionException {
+      final Path dirName, final Path outputFileName) {
     return CompletableFuture.supplyAsync(
         () -> {
           try {
@@ -179,54 +177,72 @@ public class FileIOUtils {
                     validatedInputDir.toString(), outputFileName.toString(), true);
             return compressDir(validatedInputDir.toPath(), validatedOutputFile);
           } catch (FileException e) {
-            throw new CompletionException(e.getMessage(), e.getCause());
+            throw new CompletionException(
+                "Cannot compress directory '" + dirName + "' to '" + outputFileName + "'.", e);
           }
         });
   }
 
   /**
-   * Compresses a single file and returns a {@link Future} with the result.
+   * Checks, if the input file path points to a valid directory and returns the corresponding File
+   * object.
    *
-   * @param fileName path of the file that should be compressed
-   * @param outputFileName path of the output file where the compressed content will be stored (path
-   *     should be for a file and filename should have a ".gz" extension)
-   * @return a Future containing a boolean which is either true on success or false otherwise
-   * @throws CompletionException If the input file name is null or the input path is not of a valid
-   *     file or if the archive already exists or unable to create the output file
+   * @param dirName path of the directory that should be compressed
+   * @return File object corresponding to the directory to be compressed
+   * @throws FileException If the input path is null or the input path is not of a valid directory
    */
-  public static CompletableFuture<Boolean> compressFile(
-      final Path fileName, final Path outputFileName) throws CompletionException {
-    return CompletableFuture.supplyAsync(
-        () -> {
-          try {
-            File validatedInputFile = validateInputFileName(fileName);
-            File validatedOutputFile =
-                validateOutputFileName(
-                    validatedInputFile.toString(), outputFileName.toString(), false);
+  private static File validateInputDirName(final Path dirName) throws FileException {
+    if (dirName == null) {
+      throw new FileException("Input directory name is null.");
+    }
 
-            try (GZIPOutputStream out =
-                new GZIPOutputStream(new FileOutputStream(validatedOutputFile))) {
-              try (FileInputStream in = new FileInputStream(validatedInputFile)) {
-                byte[] buffer = new byte[1024];
-                int len;
-                while ((len = in.read(buffer)) != -1) {
-                  out.write(buffer, 0, len);
-                }
-              }
-            } catch (IOException e) {
-              logger.error(
-                  "Unable to write from file '{}' to file '{}'",
-                  validatedInputFile,
-                  validatedOutputFile,
-                  e);
-              return false;
-            }
-            return true;
+    File inputDir = new File(dirName.toString());
 
-          } catch (FileException e) {
-            throw new CompletionException(e.getMessage(), e.getCause());
-          }
-        });
+    if (!inputDir.isDirectory()) {
+      throw new FileException(
+          "Input path '" + dirName.toString() + "' is not of a valid directory.");
+    }
+
+    return inputDir;
+  }
+
+  /**
+   * Checks, if the output file path actually ends with '.tar.gz' or '.gz'. If not, creates a
+   * filename from the directory or file name. Also, checks if the target file already exists. If it
+   * does not exist, finally creates the file.
+   *
+   * @param dirOrFileName path of the directory or file that should be compressed (full path
+   *     required in case of a directory / full path + filename + file extension required in case of
+   *     a file!)
+   * @param outputFileName the optional output filename (full path + filename + file extension
+   *     required!) if different from the provided filename
+   * @param isDir set to true if trying to compress a directory. Set to false if compressing a
+   *     single file. if set to true, will archive the files before compression
+   * @return Output file
+   * @throws FileException If the archive already exists or unable to create the output file
+   */
+  private static File validateOutputFileName(
+      final String dirOrFileName, final String outputFileName, boolean isDir) throws FileException {
+    String finalOutputFileName = null;
+
+    if (isDir) {
+      finalOutputFileName = outputFileName.endsWith(TARGZ) ? outputFileName : dirOrFileName + TARGZ;
+    } else {
+      finalOutputFileName = outputFileName.endsWith(GZ) ? outputFileName : dirOrFileName + GZ;
+    }
+
+    File outputFile = new File(finalOutputFileName);
+    if (outputFile.exists())
+      throw new FileException("The target '" + finalOutputFileName + "' already exists.");
+
+    try {
+      if (!outputFile.createNewFile())
+        throw new FileException("Cannot create file '" + finalOutputFileName + "'.");
+    } catch (IOException e) {
+      throw new FileException("Cannot create file '" + finalOutputFileName + "'.", e);
+    }
+
+    return outputFile;
   }
 
   /**
@@ -236,18 +252,13 @@ public class FileIOUtils {
    * @param dirName path of the directory that should be compressed
    * @param validatedOutputFile validated output file (target archive file)
    * @return a boolean which is either true on success or false otherwise
-   * @throws FileException If unable to write to the output stream or there is some error in the
-   *     output filepath
+   * @throws FileException If unable to write to the output stream
    */
   private static boolean compressDir(final Path dirName, File validatedOutputFile)
       throws FileException {
     Path validatedOutputFileName;
 
-    try {
-      validatedOutputFileName = validatedOutputFile.toPath();
-    } catch (InvalidPathException e) {
-      throw new FileException("Invalid output file path '" + validatedOutputFile + "'.", e);
-    }
+    validatedOutputFileName = validatedOutputFile.toPath();
 
     /* Open a stream and add content to the archive */
     try (BufferedOutputStream bufferedOutputStream =
@@ -294,26 +305,41 @@ public class FileIOUtils {
   }
 
   /**
-   * Checks, if the input file path points to a valid directory and returns the corresponding File
-   * object.
+   * Compresses a single file and returns a {@link Future} with the result.
    *
-   * @param dirName path of the directory that should be compressed
-   * @return File object corresponding to the directory to be compressed
-   * @throws FileException If the input path is null or the input path is not of a valid directory
+   * @param fileName path of the file that should be compressed
+   * @param outputFileName path of the output file where the compressed content will be stored (path
+   *     should be for a file and filename should have a ".gz" extension)
+   * @return a Future containing a boolean which is either true on success or false otherwise
    */
-  private static File validateInputDirName(final Path dirName) throws FileException {
-    if (dirName == null) {
-      throw new FileException("Input directory name is null.");
-    }
+  public static CompletableFuture<Boolean> compressFile(
+      final Path fileName, final Path outputFileName) {
+    return CompletableFuture.supplyAsync(
+        () -> {
+          try {
+            File validatedInputFile = validateInputFileName(fileName);
+            File validatedOutputFile =
+                validateOutputFileName(
+                    validatedInputFile.toString(), outputFileName.toString(), false);
 
-    File inputDir = new File(dirName.toString());
+            try (GZIPOutputStream out =
+                new GZIPOutputStream(new FileOutputStream(validatedOutputFile))) {
+              compressFile(validatedInputFile, out);
+            } catch (IOException e) {
+              logger.error(
+                  "Unable to write from file '{}' to file '{}'",
+                  validatedInputFile,
+                  validatedOutputFile,
+                  e);
+              return false;
+            }
+            return true;
 
-    if (!inputDir.isDirectory()) {
-      throw new FileException(
-          "Input path '" + dirName.toString() + "' is not of a valid directory.");
-    }
-
-    return inputDir;
+          } catch (FileException e) {
+            throw new CompletionException(
+                "Cannot compress file '" + fileName + "' to '" + outputFileName + "'.", e);
+          }
+        });
   }
 
   /**
@@ -338,42 +364,19 @@ public class FileIOUtils {
   }
 
   /**
-   * Checks, if the output file path actually ends with '.tar.gz' or '.gz'. If not, creates a
-   * filename from the directory or file name. Also, checks if the target file already exists. If it
-   * does not exist, finally creates the file.
+   * Writes content from a file to an output stream
    *
-   * @param dirOrFileName path of the directory or file that should be compressed (full path
-   *     required in case of a directory / full path + filename + file extension required in case of
-   *     a file!)
-   * @param outputFileName the optional output filename (full path + filename + file extension
-   *     required!) if different from the provided filename
-   * @param isDir set to true if trying to compress a directory. Set to false if compressing a
-   *     single file. if set to true, will archive the files before compression
-   * @return Output file
-   * @throws FileException If the archive already exists or unable to create the output file
+   * @param inputFile file that should be compressed
+   * @param outputStream output stream where the compressed content will be written
    */
-  private static File validateOutputFileName(
-      final String dirOrFileName, final String outputFileName, boolean isDir) throws FileException {
-    String finalOutputFileName = null;
-
-    if (isDir) {
-      finalOutputFileName = outputFileName.endsWith(TARGZ) ? outputFileName : dirOrFileName + TARGZ;
-    } else {
-      finalOutputFileName = outputFileName.endsWith(GZ) ? outputFileName : dirOrFileName + GZ;
+  private static void compressFile(final File inputFile, GZIPOutputStream outputStream)
+      throws IOException {
+    FileInputStream in = new FileInputStream(inputFile);
+    byte[] buffer = new byte[1024];
+    int len;
+    while ((len = in.read(buffer)) != -1) {
+      outputStream.write(buffer, 0, len);
     }
-
-    File outputFile = new File(finalOutputFileName);
-    if (outputFile.exists())
-      throw new FileException("The target '" + finalOutputFileName + "' already exists.");
-
-    try {
-      if (!outputFile.createNewFile())
-        throw new FileException("Cannot create file '" + finalOutputFileName + "'.");
-    } catch (IOException e) {
-      throw new FileException("Cannot create file '" + finalOutputFileName + "'.", e);
-    }
-
-    return outputFile;
   }
 
   /**
@@ -382,143 +385,73 @@ public class FileIOUtils {
    *
    * @param archive Compressed tarball archive to extract
    * @param target Path to the target folder
-   * @return Path to the actual folder, where the content is extracted to
-   * @throws FileException If the archive is not in a well shape, the target folder doesn't meet the
-   *     requirements or the archive tries to impose harm by exploiting zip slip vulnerability
+   * @return a Future containing a path to the actual folder, where the content is extracted to
    */
-  public static Path extractDir(Path archive, Path target) throws FileException {
-    /* Pre-flight checks and assembly of the target path */
-    Path targetDirectory = determineTargetDirectory(archive, target);
+  public static CompletableFuture<Path> extractDir(Path archive, Path target) {
+    return CompletableFuture.supplyAsync(
+        () -> {
+          try {
+            /* Pre-flight checks and assembly of the target path */
+            Path targetDirectory = determineTargetDirectory(archive, target);
 
-    /* Get the archive file size */
-    long archiveSize = archive.toFile().length();
+            /* Get the archive file size */
+            long archiveSize = archive.toFile().length();
 
-    /* Create the target folder */
-    try {
-      Files.createDirectories(targetDirectory);
-    } catch (IOException e) {
-      throw new FileException("Cannot create target directory '" + targetDirectory + "'.", e);
-    }
+            /* Create the target folder */
+            try {
+              Files.createDirectories(targetDirectory);
+            } catch (IOException e) {
+              throw new FileException(
+                  "Cannot create target directory '" + targetDirectory + "'.", e);
+            }
 
-    /* Monitor amount of entries and their size for safety reasons */
-    int entries = 0;
-    long size = 0;
-    try (InputStream fileInputStream = Files.newInputStream(archive);
-        BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
-        GzipCompressorInputStream gzipInputStream =
-            new GzipCompressorInputStream(bufferedInputStream);
-        TarArchiveInputStream tarInputStream = new TarArchiveInputStream(gzipInputStream)) {
-      ArchiveEntry archiveEntry;
-      while ((archiveEntry = tarInputStream.getNextEntry()) != null) {
-        /* Control the total amount of entries */
-        entries++;
-        if (entries > MAX_AMOUNT_OF_ENTRIES)
-          throw new IOException(
-              "The archive contains too many entries and is therefore possibly malicious.");
+            /* Monitor amount of entries and their size for safety reasons */
+            int entries = 0;
+            long size = 0;
+            try (InputStream fileInputStream = Files.newInputStream(archive);
+                BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
+                GzipCompressorInputStream gzipInputStream =
+                    new GzipCompressorInputStream(bufferedInputStream);
+                TarArchiveInputStream tarInputStream = new TarArchiveInputStream(gzipInputStream)) {
+              ArchiveEntry archiveEntry;
+              while ((archiveEntry = tarInputStream.getNextEntry()) != null) {
+                /* Control the total amount of entries */
+                entries++;
+                if (entries > MAX_AMOUNT_OF_ENTRIES)
+                  throw new IOException(
+                      "The archive contains too many entries and is therefore possibly malicious.");
 
-        /* Control the size of extracted archive files */
-        long uncompressedSize = archiveEntry.getSize();
-        if (uncompressedSize == ArchiveEntry.SIZE_UNKNOWN)
-          throw new IOException(
-              "Unknown uncompressed file size of '" + archiveEntry.getName() + "'");
-        size += uncompressedSize;
-        if (size > MAX_SIZE_UNCOMPRESSED)
-          throw new IOException(
-              "Uncompressed size of archive exceeds permissible "
-                  + (MAX_SIZE_UNCOMPRESSED / 1024 / 1024)
-                  + " MB. Possibly malicious archive");
+                /* Control the size of extracted archive files */
+                long uncompressedSize = archiveEntry.getSize();
+                if (uncompressedSize == ArchiveEntry.SIZE_UNKNOWN)
+                  throw new IOException(
+                      "Unknown uncompressed file size of '" + archiveEntry.getName() + "'");
+                size += uncompressedSize;
+                if (size > MAX_SIZE_UNCOMPRESSED)
+                  throw new IOException(
+                      "Uncompressed size of archive exceeds permissible "
+                          + (MAX_SIZE_UNCOMPRESSED / 1024 / 1024)
+                          + " MB. Possibly malicious archive");
 
-        /* Control the compression ratio */
-        if (1 - (double) archiveSize / size > MAX_COMPRESSION_RATIO)
-          throw new IOException(
-              "Compression ratio exceeds its maximum permissible value "
-                  + (MAX_COMPRESSION_RATIO * 100)
-                  + " %. Possibly malicious archive");
+                /* Control the compression ratio */
+                if (1 - (double) archiveSize / size > MAX_COMPRESSION_RATIO)
+                  throw new IOException(
+                      "Compression ratio exceeds its maximum permissible value "
+                          + (MAX_COMPRESSION_RATIO * 100)
+                          + " %. Possibly malicious archive");
 
-        handleZipEntrySafely(archiveEntry, targetDirectory, tarInputStream);
-      }
-    } catch (IOException ex) {
-      throw new FileException("Unable to extract from '" + archive + "'.", ex);
-    }
+                handleZipEntrySafely(archiveEntry, targetDirectory, tarInputStream);
+              }
+            } catch (IOException ex) {
+              throw new FileException("Unable to extract from '" + archive + "'.", ex);
+            }
 
-    return targetDirectory;
-  }
-
-  /**
-   * Extracts the given zipped file to a file with the same name that the zipped file has beneath
-   * the target directory.
-   *
-   * @param zippedFile Compressed gzip file to extract
-   * @param target Path to the target folder
-   * @return Path of the file, where the content is extracted to
-   * @throws FileException If the zipped file is not in a well shape or the target path doesn't meet
-   *     the requirements
-   * @see <a href="https://mkyong.com/java/how-to-decompress-file-from-gzip-file/">MyKong
-   *     Tutorial</a>
-   */
-  public static Path extractFile(Path zippedFile, Path target) throws FileException {
-    /* Pre-flight checks and assembly of the target path */
-    Path targetPath = validateTargetAndZippedFile(zippedFile, target);
-
-    /* Get the zipped file size */
-    long zippedSize = zippedFile.toFile().length();
-
-    /* Create the destination folder for unzipping the zip file */
-    try {
-      Path parentDirectoryPath = targetPath.getParent();
-      if (parentDirectoryPath != null) {
-        if (Files.notExists(parentDirectoryPath)) {
-          Files.createDirectories(parentDirectoryPath);
-        }
-      } else {
-        throw new FileException("Parent directory path is null for the file '" + targetPath + "'.");
-      }
-    } catch (IOException e) {
-      throw new FileException("Cannot create target folder for the file '" + targetPath + "'.", e);
-    }
-
-    try (InputStream fileInputStream = new FileInputStream(zippedFile.toFile());
-        GZIPInputStream gzipInputStream = new GZIPInputStream(fileInputStream); ) {
-
-      long uncompressedSize = 0;
-
-      /*Create a temporary file for extracting contents of the zipped file*/
-      File tempFile = File.createTempFile("temp", null);
-      try (FileOutputStream tempFileOutputStream = new FileOutputStream(tempFile); ) {
-
-        /* Copy the contents of the gzip input stream to the temporary file output stream while performing size checks */
-        byte[] buffer = new byte[1024];
-        int len;
-        while ((len = gzipInputStream.read(buffer)) > 0) {
-          tempFileOutputStream.write(buffer, 0, len);
-          /* Monitor uncompressed size for safety reasons */
-          uncompressedSize += len;
-          if (uncompressedSize > MAX_SIZE_UNCOMPRESSED)
-            throw new IOException(
-                "Uncompressed size of zipped file exceeds permissible "
-                    + (MAX_SIZE_UNCOMPRESSED / 1024 / 1024)
-                    + " MB. Possibly malicious file");
-
-          /* Control the compression ratio */
-          if (1 - (double) zippedSize / uncompressedSize > MAX_COMPRESSION_RATIO)
-            throw new IOException(
-                "Compression ratio exceeds its maximum permissible value "
-                    + (MAX_COMPRESSION_RATIO * 100)
-                    + " %. Possibly malicious file");
-        }
-      }
-
-      /* If everything goes well, copy the contents of the temporary file to the target file */
-      Files.copy(tempFile.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
-
-      /* Delete the temporary file */
-      tempFile.deleteOnExit();
-    } catch (IOException ex) {
-      throw new FileException(
-          "Unable to extract from '" + zippedFile + "' to '" + targetPath + "'.", ex);
-    }
-
-    return targetPath;
+            return targetDirectory;
+          } catch (FileException e) {
+            throw new CompletionException(
+                "Unable to extract from archive '" + archive + "' to target '" + target + "'.", e);
+          }
+        });
   }
 
   /**
@@ -555,43 +488,6 @@ public class FileIOUtils {
     }
 
     return targetDirectory;
-  }
-
-  /**
-   * Runs some pre-flight checks and assembles the target path
-   *
-   * @param zippedFile Compressed gzip file to extract
-   * @param targetDir Path to the target directory
-   * @return Path to the folder, where the content is meant to be extracted to
-   * @throws FileException If the pre-flight checks fail
-   */
-  private static Path validateTargetAndZippedFile(Path zippedFile, Path targetDir)
-      throws FileException {
-    /* Pre-flight checks */
-    if (Files.notExists(zippedFile))
-      throw new FileException("There is no zipped file '" + zippedFile + "' apparent.");
-    if (!Files.isRegularFile(zippedFile))
-      throw new FileException("'" + zippedFile + "' is not a regular file.");
-    if (!zippedFile.toString().endsWith(GZ))
-      throw new FileException("Zipped file '" + zippedFile + "' does not end with '" + GZ + "'.");
-
-    /* Determine the file name */
-    String fileName = zippedFile.getFileName().toString().replaceAll("\\.gz$", "");
-    Path targetPath = Paths.get(FilenameUtils.concat(targetDir.toString(), fileName));
-
-    /* Some more pre-flight checks */
-    if (Files.exists(targetPath)) {
-      if (!Files.isRegularFile(targetPath))
-        throw new FileException(
-            "You intend to extract content of '"
-                + zippedFile
-                + "' to '"
-                + targetPath
-                + "', which is a directory.");
-      else throw new FileException("The target file '" + targetPath + "' already exists.");
-    }
-
-    return targetPath;
   }
 
   /**
@@ -644,6 +540,133 @@ public class FileIOUtils {
     }
 
     return normalizePath;
+  }
+
+  /**
+   * Extracts the given zipped file to a file with the same name that the zipped file has beneath
+   * the target directory.
+   *
+   * @param zippedFile Compressed gzip file to extract
+   * @param target Path to the target folder
+   * @return a Future containing a path of the file, where the content is extracted to
+   * @see <a href="https://mkyong.com/java/how-to-decompress-file-from-gzip-file/">MyKong
+   *     Tutorial</a>
+   */
+  public static CompletableFuture<Path> extractFile(Path zippedFile, Path target) {
+    return CompletableFuture.supplyAsync(
+        () -> {
+          try {
+            /* Pre-flight checks and assembly of the target path */
+            Path targetPath = validateTargetAndZippedFile(zippedFile, target);
+
+            /* Get the zipped file size */
+            long zippedSize = zippedFile.toFile().length();
+
+            /* Create the destination folder for unzipping the zip file */
+            try {
+              Path parentDirectoryPath = targetPath.getParent();
+              if (parentDirectoryPath != null) {
+                if (Files.notExists(parentDirectoryPath)) {
+                  Files.createDirectories(parentDirectoryPath);
+                }
+              } else {
+                throw new FileException(
+                    "Parent directory path is null for the file '" + targetPath + "'.");
+              }
+            } catch (IOException e) {
+              throw new FileException(
+                  "Cannot create target folder for the file '" + targetPath + "'.", e);
+            }
+
+            try (InputStream fileInputStream = new FileInputStream(zippedFile.toFile());
+                GZIPInputStream gzipInputStream = new GZIPInputStream(fileInputStream); ) {
+
+              long uncompressedSize = 0;
+
+              /*Create the output file for extracting contents of the zipped file*/
+              File outputFile = new File(targetPath.toString());
+              outputFile.createNewFile();
+
+              try (FileOutputStream fileOutputStream = new FileOutputStream(outputFile); ) {
+
+                /* Copy the contents of the gzip input stream to the file output stream while performing size checks */
+                byte[] buffer = new byte[1024];
+                int len;
+                while ((len = gzipInputStream.read(buffer)) > 0) {
+                  fileOutputStream.write(buffer, 0, len);
+                  /* Monitor uncompressed size for safety reasons */
+                  uncompressedSize += len;
+                  if (uncompressedSize > MAX_SIZE_UNCOMPRESSED) {
+                    outputFile.delete();
+                    throw new IOException(
+                        "Uncompressed size of zipped file exceeds permissible "
+                            + (MAX_SIZE_UNCOMPRESSED / 1024 / 1024)
+                            + " MB. Possibly malicious file");
+                  }
+
+                  /* Control the compression ratio */
+                  if (1 - (double) zippedSize / uncompressedSize > MAX_COMPRESSION_RATIO) {
+                    outputFile.delete();
+                    throw new IOException(
+                        "Compression ratio exceeds its maximum permissible value "
+                            + (MAX_COMPRESSION_RATIO * 100)
+                            + " %. Possibly malicious file");
+                  }
+                }
+              }
+            } catch (IOException ex) {
+              throw new FileException(
+                  "Unable to extract from '" + zippedFile + "' to '" + targetPath + "'.", ex);
+            }
+
+            return targetPath;
+          } catch (FileException e) {
+            throw new CompletionException(
+                "Unable to extract from zipped file '"
+                    + zippedFile
+                    + "' to target '"
+                    + target
+                    + "'.",
+                e);
+          }
+        });
+  }
+
+  /**
+   * Runs some pre-flight checks and assembles the target path
+   *
+   * @param zippedFile Compressed gzip file to extract
+   * @param targetDir Path to the target directory
+   * @return Path to the folder, where the content is meant to be extracted to
+   * @throws FileException If the pre-flight checks fail
+   */
+  private static Path validateTargetAndZippedFile(Path zippedFile, Path targetDir)
+      throws FileException {
+    /* Pre-flight checks */
+    if (Files.notExists(zippedFile))
+      throw new FileException("There is no zipped file '" + zippedFile + "' apparent.");
+    if (!Files.isRegularFile(zippedFile))
+      throw new FileException("'" + zippedFile + "' is not a regular file.");
+    if (!zippedFile.toString().endsWith(GZ))
+      throw new FileException("Zipped file '" + zippedFile + "' does not end with '" + GZ + "'.");
+
+    /* Determine the file name */
+    String fileName = zippedFile.getFileName().toString().replaceAll("\\.gz$", "");
+    Path targetPath = Paths.get(FilenameUtils.concat(targetDir.toString(), fileName));
+
+    /* Some more pre-flight checks */
+    if (Files.exists(targetPath)) {
+      if (!Files.isRegularFile(targetPath))
+        throw new FileException(
+            "You intend to extract content of '"
+                + zippedFile
+                + "' to '"
+                + targetPath
+                + "', which is a directory.");
+      else throw new FileException("The target file '" + targetPath + "' already exists.");
+    }
+
+    return targetPath;
   }
 
   /**
