@@ -560,7 +560,8 @@ public class FileIOUtils {
         () -> {
           try {
             /* Pre-flight checks and assembly of the target path */
-            Path targetPath = validateTargetAndZippedFile(zippedFile, target);
+            validateZippedFile(zippedFile, target);
+            Path targetPath = validateTargetFile(zippedFile, target);
 
             /* Get the zipped file size */
             long zippedSize = zippedFile.toFile().length();
@@ -618,15 +619,13 @@ public class FileIOUtils {
   }
 
   /**
-   * Runs some pre-flight checks and assembles the target path
+   * Runs some pre-flight checks for the zipped file to be extracted
    *
    * @param zippedFile Compressed gzip file to extract
    * @param targetDir Path to the target directory
-   * @return Path to the folder, where the content is meant to be extracted to
-   * @throws FileException If the pre-flight checks fail or if the target folder cannot be created
+   * @throws FileException If the pre-flight checks fail
    */
-  private static Path validateTargetAndZippedFile(Path zippedFile, Path targetDir)
-      throws FileException {
+  private static void validateZippedFile(Path zippedFile, Path targetDir) throws FileException {
     /* Pre-flight checks */
     if (Files.notExists(zippedFile))
       throw new FileException("There is no zipped file '" + zippedFile + "' apparent.");
@@ -634,12 +633,22 @@ public class FileIOUtils {
       throw new FileException("'" + zippedFile + "' is not a regular file.");
     if (!zippedFile.toString().endsWith(GZ))
       throw new FileException("Zipped file '" + zippedFile + "' does not end with '" + GZ + "'.");
+  }
 
+  /**
+   * Runs some pre-flight checks and assembles the target path
+   *
+   * @param zippedFile Compressed gzip file to extract
+   * @param targetDir Path to the target directory
+   * @return Path to the folder, where the content is meant to be extracted to
+   * @throws FileException If the target file cannot be created
+   */
+  private static Path validateTargetFile(Path zippedFile, Path targetDir) throws FileException {
     /* Determine the file name */
     String fileName = zippedFile.getFileName().toString().replaceAll("\\.gz$", "");
     Path targetPath = Paths.get(FilenameUtils.concat(targetDir.toString(), fileName));
 
-    /* Some more pre-flight checks */
+    /* Some pre-flight checks */
     if (Files.exists(targetPath)) {
       if (!Files.isRegularFile(targetPath))
         throw new FileException(
@@ -669,9 +678,9 @@ public class FileIOUtils {
     File outputFile = new File(targetPath.toString());
     try {
       if (!outputFile.createNewFile())
-        throw new FileException("Cannot create file '" + outputFile + "'.");
+        throw new FileException("Cannot create target output file '" + outputFile + "'.");
     } catch (IOException e) {
-      throw new FileException("Cannot create file '" + outputFile + "'.", e);
+      throw new FileException("Cannot create target output file '" + outputFile + "'.", e);
     }
 
     return targetPath;
