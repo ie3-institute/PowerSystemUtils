@@ -400,14 +400,6 @@ public class FileIOUtils {
             /* Get the archive file size */
             long archiveSize = archive.toFile().length();
 
-            /* Create the target folder */
-            try {
-              Files.createDirectories(targetDirectory);
-            } catch (IOException e) {
-              throw new FileException(
-                  "Cannot create target directory '" + targetDirectory + "'.", e);
-            }
-
             /* Monitor amount of entries and their size for safety reasons */
             int entries = 0;
             long size = 0;
@@ -488,6 +480,13 @@ public class FileIOUtils {
                 + targetDirectory
                 + "', which is a regular file.");
       else throw new FileException("The target path '" + targetDirectory + ALREADY_EXISTS);
+    }
+
+    /* Create the target folder */
+    try {
+      Files.createDirectories(targetDirectory);
+    } catch (IOException e) {
+      throw new FileException("Cannot create target directory '" + targetDirectory + "'.", e);
     }
 
     return targetDirectory;
