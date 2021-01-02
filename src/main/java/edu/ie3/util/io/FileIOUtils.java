@@ -364,11 +364,12 @@ public class FileIOUtils {
   private static boolean compressFile(
       final File validatedInputFile, final File validatedOutputFile) {
     try (GZIPOutputStream out = new GZIPOutputStream(new FileOutputStream(validatedOutputFile))) {
-      FileInputStream in = new FileInputStream(validatedInputFile);
-      byte[] buffer = new byte[1024];
-      int len;
-      while ((len = in.read(buffer)) != -1) {
-        out.write(buffer, 0, len);
+      try (FileInputStream in = new FileInputStream(validatedInputFile)) {
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = in.read(buffer)) != -1) {
+          out.write(buffer, 0, len);
+        }
       }
     } catch (IOException e) {
       logger.error(
