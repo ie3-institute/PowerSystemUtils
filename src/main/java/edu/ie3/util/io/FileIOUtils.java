@@ -570,9 +570,7 @@ public class FileIOUtils {
 
               long uncompressedSize = 0;
 
-              /*Create the output file for extracting contents of the zipped file*/
-              File outputFile = new File(targetPath.toString());
-              outputFile.createNewFile();
+              File outputFile = targetPath.toFile();
 
               try (FileOutputStream fileOutputStream = new FileOutputStream(outputFile); ) {
 
@@ -665,6 +663,15 @@ public class FileIOUtils {
       }
     } catch (IOException e) {
       throw new FileException("Cannot create target folder for the file '" + targetPath + "'.", e);
+    }
+
+    /*Create the output file for extracting contents of the zipped file*/
+    File outputFile = new File(targetPath.toString());
+    try {
+      if (!outputFile.createNewFile())
+        throw new FileException("Cannot create file '" + outputFile + "'.");
+    } catch (IOException e) {
+      throw new FileException("Cannot create file '" + outputFile + "'.", e);
     }
 
     return targetPath;
