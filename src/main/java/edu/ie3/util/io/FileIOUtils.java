@@ -39,6 +39,8 @@ public class FileIOUtils {
 
   private static final String GZ = ".gz";
   private static final String TARGZ = ".tar.gz";
+  private static final String TO = "' to '";
+  private static final String ALREADY_EXISTS = "' already exists.";
   public static final Charset CHARSET_UTF8 = StandardCharsets.UTF_8;
   public static final Charset CHARSET_WINDOWS_ISO88591 = StandardCharsets.ISO_8859_1;
   public static final String NATIVE_NEWLINE = System.getProperty("line.separator");
@@ -178,7 +180,7 @@ public class FileIOUtils {
             return compressDir(validatedInputDir.toPath(), validatedOutputFile);
           } catch (FileException e) {
             throw new CompletionException(
-                "Cannot compress directory '" + dirName + "' to '" + outputFileName + "'.", e);
+                "Cannot compress directory '" + dirName + TO + outputFileName + "'.", e);
           }
         });
   }
@@ -233,7 +235,7 @@ public class FileIOUtils {
 
     File outputFile = new File(finalOutputFileName);
     if (outputFile.exists())
-      throw new FileException("The target '" + finalOutputFileName + "' already exists.");
+      throw new FileException("The target '" + finalOutputFileName + ALREADY_EXISTS);
 
     try {
       if (!outputFile.createNewFile())
@@ -322,22 +324,11 @@ public class FileIOUtils {
                 validateOutputFileName(
                     validatedInputFile.toString(), outputFileName.toString(), false);
 
-            try (GZIPOutputStream out =
-                new GZIPOutputStream(new FileOutputStream(validatedOutputFile))) {
-              compressFile(validatedInputFile, out);
-            } catch (IOException e) {
-              logger.error(
-                  "Unable to write from file '{}' to file '{}'",
-                  validatedInputFile,
-                  validatedOutputFile,
-                  e);
-              return false;
-            }
-            return true;
+            return compressFile(validatedInputFile, validatedOutputFile);
 
           } catch (FileException e) {
             throw new CompletionException(
-                "Cannot compress file '" + fileName + "' to '" + outputFileName + "'.", e);
+                "Cannot compress file '" + fileName + TO + outputFileName + "'.", e);
           }
         });
   }
@@ -364,19 +355,30 @@ public class FileIOUtils {
   }
 
   /**
-   * Writes content from a file to an output stream
+   * Compresses a single file and returns a boolean with the result.
    *
-   * @param inputFile file that should be compressed
-   * @param outputStream output stream where the compressed content will be written
+   * @param validatedInputFile validated input file that should be compressed
+   * @param validatedOutputFile validated output file where the compressed content will be stored
+   * @return a boolean which is either true on success or false otherwise
    */
-  private static void compressFile(final File inputFile, GZIPOutputStream outputStream)
-      throws IOException {
-    FileInputStream in = new FileInputStream(inputFile);
-    byte[] buffer = new byte[1024];
-    int len;
-    while ((len = in.read(buffer)) != -1) {
-      outputStream.write(buffer, 0, len);
+  private static boolean compressFile(
+      final File validatedInputFile, final File validatedOutputFile) {
+    try (GZIPOutputStream out = new GZIPOutputStream(new FileOutputStream(validatedOutputFile))) {
+      FileInputStream in = new FileInputStream(validatedInputFile);
+      byte[] buffer = new byte[1024];
+      int len;
+      while ((len = in.read(buffer)) != -1) {
+        out.write(buffer, 0, len);
+      }
+    } catch (IOException e) {
+      logger.error(
+          "Unable to write from file '{}' to file '{}'",
+          validatedInputFile,
+          validatedOutputFile,
+          e);
+      return false;
     }
+    return true;
   }
 
   /**
@@ -481,10 +483,10 @@ public class FileIOUtils {
         throw new FileException(
             "You intend to extract content of '"
                 + archive
-                + "' to '"
+                + TO
                 + targetDirectory
                 + "', which is a regular file.");
-      else throw new FileException("The target path '" + targetDirectory + "' already exists.");
+      else throw new FileException("The target path '" + targetDirectory + ALREADY_EXISTS);
     }
 
     return targetDirectory;
@@ -616,7 +618,7 @@ public class FileIOUtils {
               }
             } catch (IOException ex) {
               throw new FileException(
-                  "Unable to extract from '" + zippedFile + "' to '" + targetPath + "'.", ex);
+                  "Unable to extract from '" + zippedFile + TO + targetPath + "'.", ex);
             }
 
             return targetPath;
@@ -660,10 +662,10 @@ public class FileIOUtils {
         throw new FileException(
             "You intend to extract content of '"
                 + zippedFile
-                + "' to '"
+                + TO
                 + targetPath
                 + "', which is a directory.");
-      else throw new FileException("The target file '" + targetPath + "' already exists.");
+      else throw new FileException("The target file '" + targetPath + ALREADY_EXISTS);
     }
 
     return targetPath;
