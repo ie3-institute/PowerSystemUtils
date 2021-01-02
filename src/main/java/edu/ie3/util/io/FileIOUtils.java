@@ -565,22 +565,6 @@ public class FileIOUtils {
             /* Get the zipped file size */
             long zippedSize = zippedFile.toFile().length();
 
-            /* Create the destination folder for unzipping the zip file */
-            try {
-              Path parentDirectoryPath = targetPath.getParent();
-              if (parentDirectoryPath != null) {
-                if (Files.notExists(parentDirectoryPath)) {
-                  Files.createDirectories(parentDirectoryPath);
-                }
-              } else {
-                throw new FileException(
-                    "Parent directory path is null for the file '" + targetPath + "'.");
-              }
-            } catch (IOException e) {
-              throw new FileException(
-                  "Cannot create target folder for the file '" + targetPath + "'.", e);
-            }
-
             try (InputStream fileInputStream = new FileInputStream(zippedFile.toFile());
                 GZIPInputStream gzipInputStream = new GZIPInputStream(fileInputStream); ) {
 
@@ -600,7 +584,7 @@ public class FileIOUtils {
                   /* Monitor uncompressed size for safety reasons */
                   uncompressedSize += len;
                   if (uncompressedSize > MAX_SIZE_UNCOMPRESSED) {
-                    outputFile.delete();
+                    Files.delete(outputFile.toPath());
                     throw new IOException(
                         "Uncompressed size of zipped file exceeds permissible "
                             + (MAX_SIZE_UNCOMPRESSED / 1024 / 1024)
@@ -609,7 +593,7 @@ public class FileIOUtils {
 
                   /* Control the compression ratio */
                   if (1 - (double) zippedSize / uncompressedSize > MAX_COMPRESSION_RATIO) {
-                    outputFile.delete();
+                    Files.delete(outputFile.toPath());
                     throw new IOException(
                         "Compression ratio exceeds its maximum permissible value "
                             + (MAX_COMPRESSION_RATIO * 100)
@@ -641,7 +625,7 @@ public class FileIOUtils {
    * @param zippedFile Compressed gzip file to extract
    * @param targetDir Path to the target directory
    * @return Path to the folder, where the content is meant to be extracted to
-   * @throws FileException If the pre-flight checks fail
+   * @throws FileException If the pre-flight checks fail or if the target folder cannot be created
    */
   private static Path validateTargetAndZippedFile(Path zippedFile, Path targetDir)
       throws FileException {
@@ -667,6 +651,20 @@ public class FileIOUtils {
                 + targetPath
                 + "', which is a directory.");
       else throw new FileException("The target file '" + targetPath + ALREADY_EXISTS);
+    }
+
+    /* Create the destination folder for unzipping the zip file */
+    try {
+      Path parentDirectoryPath = targetPath.getParent();
+      if (parentDirectoryPath != null) {
+        if (Files.notExists(parentDirectoryPath)) {
+          Files.createDirectories(parentDirectoryPath);
+        }
+      } else {
+        throw new FileException("Parent directory path is null for the file '" + targetPath + "'.");
+      }
+    } catch (IOException e) {
+      throw new FileException("Cannot create target folder for the file '" + targetPath + "'.", e);
     }
 
     return targetPath;
