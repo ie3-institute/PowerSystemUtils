@@ -560,7 +560,7 @@ public class FileIOUtils {
         () -> {
           try {
             /* Pre-flight checks and assembly of the target path */
-            validateZippedFile(zippedFile, target);
+            validateZippedFile(zippedFile);
             Path targetPath = validateTargetFile(zippedFile, target);
 
             /* Get the zipped file size */
@@ -622,10 +622,9 @@ public class FileIOUtils {
    * Runs some pre-flight checks for the zipped file to be extracted
    *
    * @param zippedFile Compressed gzip file to extract
-   * @param targetDir Path to the target directory
    * @throws FileException If the pre-flight checks fail
    */
-  private static void validateZippedFile(Path zippedFile, Path targetDir) throws FileException {
+  private static void validateZippedFile(Path zippedFile) throws FileException {
     /* Pre-flight checks */
     if (Files.notExists(zippedFile))
       throw new FileException("There is no zipped file '" + zippedFile + "' apparent.");
