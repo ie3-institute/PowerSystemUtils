@@ -53,7 +53,7 @@ dependencies {
 	compile 'org.apache.logging.log4j:log4j-slf4j-impl:+' // log4j -> slf4j
 
 	compile 'javax.measure:unit-api:+' // quantities
-	compile 'tech.units:indriya:2.0.4'  // quantities
+	compile 'tech.units:indriya:2.1.1'  // quantities
 	compile 'com.google.code.gson:gson:+' // java serialization, POJOs -> JSON
 	compile 'org.apache.commons:commons-lang3:+' // for HashCodeBuilder
 	compile 'com.github.johanneshiry:OSMonaut:+' // pbf parser
