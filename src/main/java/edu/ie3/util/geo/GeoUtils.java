@@ -225,8 +225,7 @@ public class GeoUtils {
    * https://en.wikipedia.org/wiki/Convex_hull_algorithms <br>
    * https://en.wikipedia.org/wiki/Chan%27s_algorithm
    *
-   * @param points The {@link Set} of {@link com.vividsolutions.jts.geom.Point}s that shall be
-   *     enclosed by the convex hull
+   * @param points The {@link Set} of {@link Point}s that shall be enclosed by the convex hull
    * @param precision Prescision to use for "dirty casting"
    * @param algorithm {@link ConvexHullAlgorithm} to use. CAUTION {@link ConvexHullAlgorithm#CHAN}
    *     currently not working!
@@ -239,7 +238,7 @@ public class GeoUtils {
    */
   @Deprecated
   public static Polygon buildConvexHull(
-      Set<com.vividsolutions.jts.geom.Point> points, int precision, ConvexHullAlgorithm algorithm)
+      Set<Point> points, int precision, ConvexHullAlgorithm algorithm)
       throws GeoPreparationException {
     /* "Cast" the points to java.awt.Point */
     Set<Point> candidatePoints =
