@@ -14,7 +14,7 @@ plugins {
 
 ext {
 	// version (changing these should be considered thoroughly!)
-	hibernateVersion = '5.3.3.Final'
+	hibernateVersion = '5.4.29.Final'
 	slf4jVersion = '1.7.30'
 	javaVersion = JavaVersion.VERSION_1_8
 
