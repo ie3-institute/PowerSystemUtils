@@ -21,10 +21,12 @@ import javax.measure.quantity.Length;
 import net.morbz.osmonaut.geometry.Bounds;
 import net.morbz.osmonaut.geometry.Polygon;
 import net.morbz.osmonaut.osm.*;
+import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.PrecisionModel;
+import org.locationtech.jts.geom.impl.CoordinateArraySequence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.units.indriya.ComparableQuantity;
@@ -91,6 +93,118 @@ public class GeoUtils {
                   lineString.getCoordinateN(i + 1).getY()));
     }
     return y;
+  }
+
+  /**
+   * Calculates and sorts the distances between a base coordinate and other given coordinates using
+   * {@link #calcHaversine(double, double, double, double)}
+   *
+   * @param baseCoordinate the base point
+   * @param coordinates the points to calculate the distance from the base point for
+   * @return a sorted set of distances between the base and other coordinates
+   */
+  public static SortedSet<CoordinateDistance> getCoordinateDistances(
+      org.locationtech.jts.geom.Point baseCoordinate,
+      Collection<org.locationtech.jts.geom.Point> coordinates) {
+    return coordinates.stream()
+        .map(coordinate -> new CoordinateDistance(baseCoordinate, coordinate))
+        .collect(Collectors.toCollection(TreeSet::new));
+  }
+
+  /**
+   * Build an instance of {@link LineString} between two points that is safe to be compared even if
+   * the provided two points consist of exactly the same coordinates. This is done by increasing the
+   * coordinate of the provided Point {@code p1} by a small amount to make it different from Point
+   * {@code p2}. For details on the bug inside {@link LineString} that is addressed here, see
+   * https://github.com/locationtech/jts/issues/531
+   *
+   * @param p1 start point of the linestring
+   * @param p2 end point of the linestring
+   * @return a {@link LineString} between the provided points
+   */
+  public static LineString buildSafeLineStringBetweenPoints(
+      final org.locationtech.jts.geom.Point p1, final org.locationtech.jts.geom.Point p2) {
+    final org.locationtech.jts.geom.Point safePoint1 = p1.equals(p2) ? buildSafePoint(p1) : p1;
+    return DEFAULT_GEOMETRY_FACTORY.createLineString(
+        ArrayUtils.addAll(safePoint1.getCoordinates(), p2.getCoordinates()));
+  }
+
+  /**
+   * Adapt the provided point as described in {@link #buildSafeCoord(Coordinate)} and return a new,
+   * adapted instance of {@link Point}
+   *
+   * @param p1 the point that should be adapted
+   * @return the adapted point with a slightly changed coordinate
+   */
+  private static org.locationtech.jts.geom.Point buildSafePoint(
+      org.locationtech.jts.geom.Point p1) {
+
+    Coordinate[] safeCoord = new Coordinate[] {buildSafeCoord(p1.getCoordinate())};
+    CoordinateArraySequence safeCoordSeq = new CoordinateArraySequence(safeCoord);
+
+    return new org.locationtech.jts.geom.Point(safeCoordSeq, p1.getFactory());
+  }
+
+  /**
+   * Adapted {@link Coordinate#x}, {@link Coordinate#y} and {@link Coordinate#z} of the provided
+   * {@link Coordinate} by 1e-13 and return a new, adapted instance of {@link Coordinate}
+   *
+   * @param coord the coordinate that should be adapted
+   * @return the adapted coordinate with slightly changed x,y,z values
+   */
+  private static Coordinate buildSafeCoord(Coordinate coord) {
+
+    double modVal = 1e-13;
+    double p1X = coord.getX() + modVal;
+    double p1Y = coord.getY() + modVal;
+    double p1Z = coord.getZ() + modVal;
+
+    return new Coordinate(p1X, p1Y, p1Z);
+  }
+
+  /**
+   * Build an instance of {@link LineString} between two coordinates that is safe to be compared
+   * even if the provided two coordinates are exactly the same coordinates. This is done by
+   * increasing the coordinate of the provided Point {@code c1} by a small amount to make it
+   * different from Point {@code c2}. For details on the bug inside {@link LineString} that is
+   * addressed here, see https://github.com/locationtech/jts/issues/531
+   *
+   * @param c1 start coordinate of the linestring
+   * @param c2 end coordinate of the linestring
+   * @return A safely build line string
+   */
+  public static LineString buildSafeLineStringBetweenCoords(
+      final Coordinate c1, final Coordinate c2) {
+    final Coordinate safeCoord1 = c1.equals(c2) ? buildSafeCoord(c1) : c1;
+    return DEFAULT_GEOMETRY_FACTORY.createLineString(
+        ArrayUtils.addAll(new Coordinate[] {safeCoord1}, c2));
+  }
+
+  /**
+   * Convert a given {@link LineString} with at least two points into a 'safe to be compared' {@link
+   * LineString} This is done by removing duplicates in the points in the provided linestring as
+   * well as a small change of the start coordinate if the linestring only consists of two
+   * coordinates. For details on the bug inside {@link LineString} that is addressed here, see
+   * https://github.com/locationtech/jts/issues/531
+   *
+   * @param lineString the linestring that should be checked and maybe converted to a 'safe to be
+   *     compared' linestring
+   * @return a 'safe to be compared' linestring
+   */
+  public static LineString buildSafeLineString(LineString lineString) {
+    if (lineString.getCoordinates().length == 2) {
+      return buildSafeLineStringBetweenPoints(lineString.getStartPoint(), lineString.getEndPoint());
+    } else {
+      // rebuild line with unique points
+      /* Please note, that using a simple HashSet here to obtain uniqueness is harmful, as it not necessarily maintains
+       * the order of coordinates (but most likely will). Additionally, the behaviour of a HashSet might change with the
+       * JVM (version) you use to execute the code. */
+      Coordinate[] uniqueCoords =
+          Arrays.stream(lineString.getCoordinates()).distinct().toArray(Coordinate[]::new);
+      return uniqueCoords.length == 1
+          ? buildSafeLineStringBetweenPoints(lineString.getStartPoint(), lineString.getEndPoint())
+          : DEFAULT_GEOMETRY_FACTORY.createLineString(uniqueCoords);
+    }
   }
 
   /**
@@ -915,5 +1029,100 @@ public class GeoUtils {
   public enum ConvexHullAlgorithm {
     CHAN,
     GRAHAM
+  }
+
+  /**
+   * Wraps two coordinates with the distance between the first one and the second one, can be
+   * compared by distance to another CoordinateDistance
+   */
+  public static class CoordinateDistance implements Comparable<CoordinateDistance> {
+    private final org.locationtech.jts.geom.Point coordinateA;
+    private final org.locationtech.jts.geom.Point coordinateB;
+    private final ComparableQuantity<Length> distance;
+
+    /**
+     * @param coordinateA The first coordinate
+     * @param coordinateB The second coordinate
+     * @param distance The distance from A to B
+     */
+    public CoordinateDistance(
+        org.locationtech.jts.geom.Point coordinateA,
+        org.locationtech.jts.geom.Point coordinateB,
+        ComparableQuantity<Length> distance) {
+      this.coordinateA = coordinateA;
+      this.coordinateB = coordinateB;
+      this.distance = distance;
+    }
+
+    /**
+     * Calculates the distance from the first to the second coordinate using {@link
+     * GeoUtils#calcHaversine(double, double, double, double)}
+     *
+     * @param coordinateA The first coordinate
+     * @param coordinateB The second coordinate
+     */
+    public CoordinateDistance(
+        org.locationtech.jts.geom.Point coordinateA, org.locationtech.jts.geom.Point coordinateB) {
+      this(
+          coordinateA,
+          coordinateB,
+          GeoUtils.calcHaversine(
+              coordinateA.getY(), coordinateA.getX(), coordinateB.getY(), coordinateB.getX()));
+    }
+
+    /** @return The first coordinate */
+    public org.locationtech.jts.geom.Point getCoordinateA() {
+      return coordinateA;
+    }
+
+    /** @return The second coordinate */
+    public org.locationtech.jts.geom.Point getCoordinateB() {
+      return coordinateB;
+    }
+
+    /** @return The distance from the first coordinate to the second coordinate in km */
+    public ComparableQuantity<Length> getDistance() {
+      return distance;
+    }
+
+    /**
+     * Compares two coordinate distances on the length of the distance alone, thus having a natural
+     * ordering that is inconsistent with equals
+     *
+     * @param that the distance to compare
+     * @return a number lower than 0 if this has a lower distance than that, 0 if they are the same,
+     *     a number higher than 0 if that has a lower distance
+     */
+    @Override
+    public int compareTo(CoordinateDistance that) {
+      return this.distance.compareTo(that.distance);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      CoordinateDistance that = (CoordinateDistance) o;
+      return coordinateA.equals(coordinateB)
+          && coordinateB.equals(that.coordinateB)
+          && distance.equals(that.distance);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(coordinateA, coordinateB, distance);
+    }
+
+    @Override
+    public String toString() {
+      return "CoordinateDistance{"
+          + "coordinateA="
+          + coordinateA
+          + ", coordinateB="
+          + coordinateB
+          + ", distance="
+          + distance
+          + '}';
+    }
   }
 }
