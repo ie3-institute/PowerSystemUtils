@@ -23,6 +23,7 @@ import net.morbz.osmonaut.geometry.Polygon;
 import net.morbz.osmonaut.osm.*;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.PrecisionModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +70,27 @@ public class GeoUtils {
                 * Math.sin(dLon.getValue().doubleValue() / 2);
     double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return r.multiply(c);
+  }
+
+  /**
+   * Calculates the total length of a LineString through building the sum of the distances between
+   * all points of LineString using {@link #calcHaversine(double, double, double, double)}
+   *
+   * @param lineString the line string which length shall be calculated
+   * @return The total length of the line string
+   */
+  public static ComparableQuantity<Length> totalLengthOfLineString(LineString lineString) {
+    ComparableQuantity<Length> y = Quantities.getQuantity(0, KILOMETRE);
+    for (int i = 0; i < lineString.getNumPoints() - 1; i++) {
+      y =
+          y.add(
+              calcHaversine(
+                  lineString.getCoordinateN(i).getX(),
+                  lineString.getCoordinateN(i).getY(),
+                  lineString.getCoordinateN(i + 1).getX(),
+                  lineString.getCoordinateN(i + 1).getY()));
+    }
+    return y;
   }
 
   /**

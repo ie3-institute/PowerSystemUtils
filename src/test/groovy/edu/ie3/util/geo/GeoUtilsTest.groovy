@@ -5,6 +5,10 @@
  */
 package edu.ie3.util.geo
 
+import edu.ie3.util.quantities.PowerSystemUnits
+import edu.ie3.util.quantities.QuantityUtil
+import org.locationtech.jts.geom.Coordinate
+
 import static edu.ie3.util.quantities.PowerSystemUnits.METRE
 
 import net.morbz.osmonaut.geometry.Polygon
@@ -32,6 +36,21 @@ class GeoUtilsTest extends Specification {
 
 		then:
 		Math.abs(actual.subtract(expected).to(METRE).value.doubleValue()) < tolerance.value.doubleValue()
+	}
+
+	def "Total length of LineString is correctly calculated"() {
+		given:
+		def lineString = GeoUtils.DEFAULT_GEOMETRY_FACTORY.createLineString([
+			new Coordinate(22.69962d, 11.13038d, 0),
+			new Coordinate(20.84247d, 28.14743d, 0),
+			new Coordinate(24.21942d, 12.04265d, 0)] as Coordinate[])
+
+		when:
+		ComparableQuantity<Length> y = GeoUtils.totalLengthOfLineString(lineString)
+
+		then:
+		QuantityUtil.isEquivalentAbs(y, Quantities.getQuantity(3463.37, PowerSystemUnits.KILOMETRE), 10)
+		// Value from Google Maps, error range of +-10 km
 	}
 
 	def "Test radius with circle as polygon"() {
