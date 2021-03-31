@@ -88,11 +88,11 @@ class GeoUtilsTest extends Specification {
 
 		when:
 		def safeLineString = GeoUtils.buildSafeLineString(line)
-		def actualCoordinates = safeLineString.getCoordinates()
+		def actualCoordinates = safeLineString.coordinates
 
 		then:
 		coordinates.length == actualCoordinates.length
-		for(int cnt = 0; cnt < coordinates.length; cnt++){
+		for (int cnt = 0; cnt < coordinates.length; cnt++) {
 			coordinates[cnt] == actualCoordinates[cnt]
 		}
 
