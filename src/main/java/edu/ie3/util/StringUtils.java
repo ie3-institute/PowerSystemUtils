@@ -118,7 +118,7 @@ public class StringUtils {
       /* Get rid of first and last quotation if there is some. */
       String inputUnquoted = unquoteStartEnd(inputString);
       /* Escape every double quotation mark within the String by doubling it */
-      String withEscapedQuotes = inputUnquoted.replaceAll("\"", "\"\"");
+      String withEscapedQuotes = inputUnquoted.replace("\"", "\"\"");
       /* finally add quotes to the strings start and end again */
       return quote(withEscapedQuotes);
     } else return inputString;
