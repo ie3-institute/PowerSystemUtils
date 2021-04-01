@@ -25,12 +25,17 @@ import org.slf4j.LoggerFactory;
 public class DeepCopy {
   private static final Logger logger = LoggerFactory.getLogger(DeepCopy.class);
 
+  private DeepCopy() {
+    throw new IllegalStateException("Utility class");
+  }
+
   /**
    * Returns a copy of the object, or null if the object cannot be serialized.
    *
    * @param orig Original {@link Object} to be copied
    * @return The duplicate
    */
+  @SuppressWarnings("unchecked")
   public static <C> C copy(C orig) {
     C obj = null;
     try (FastByteArrayOutputStream fbos = new FastByteArrayOutputStream();
@@ -38,7 +43,6 @@ public class DeepCopy {
       // Write the object out to a byte array
       out.writeObject(orig);
       out.flush();
-      out.close();
 
       // Retrieve an input stream from the byte array and read
       // a copy of the object back in.
