@@ -6,9 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased/Snapshot]
 
+### Added
+-   Added `buildSafe{Coord,Point,LineString,LineStringBetweenCoords,LineStringBetweenPoints}` and `totalLengthOfLineString` to `GeoUtils`
+
 ### Changed
 -   Deprecated `PowerDensity` (will be replaced by `Irradiation`) & SI conform usage of `Irradiation` and `EnergyDensity` ([#54](https://github.com/ie3-institute/PowerSystemUtils/issues/54))
 -   Minor addition to `TimeUtil`
+
+### Fixed
+-   Use constant version numbers for dependencies
 
 ## [1.4]
 
@@ -49,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 -   fixes + extensions in StandardUnits
 
+[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v1.4...HEAD
 [1.4]: https://github.com/ie3-institute/powersystemutils/compare/v1.3.2...v1.4
 [1.3.2]: https://github.com/ie3-institute/powersystemutils/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/ie3-institute/powersystemutils/compare/64283b769d1faeac0a6468b0f225f5e995741cdd...v1.3.1
