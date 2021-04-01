@@ -454,7 +454,7 @@ public class GeoUtils {
       /* Limit the amount of iterations to at most log(log(nodeCount)) */
       outloop:
       for (int iterCount = 0; iterCount < maxIterations; iterCount++) {
-        double m = Math.pow(2, Math.pow(2, iterCount + 1));
+        double m = Math.pow(2, Math.pow(2, iterCount + 1d));
 
         /* Split the candidate nodes into floor(pointCount/m) with about m points each subsets and calculate those convex hulls */
         int subsetCount = (int) Math.ceil((double) pointCount / m);
@@ -990,9 +990,7 @@ public class GeoUtils {
       double distance = Double.POSITIVE_INFINITY;
       Way nextWay = null;
       Node nextLastNode = null;
-      Iterator<Node> it = nodeToWayMap.keySet().iterator();
-      while (it.hasNext()) {
-        Node node = it.next();
+      for (Node node : nodeToWayMap.keySet()) {
         if (rayCasting(circle, node.getLatlon())) {
           double tempDistance;
           tempDistance =
@@ -1012,12 +1010,14 @@ public class GeoUtils {
         }
       }
 
-      if (nextWay.getNodes().indexOf(nextLastNode) == nextWay.getNodes().size() - 1) {
-        Collections.reverse(nextWay.getNodes());
+      if (nextWay != null) {
+        if (nextWay.getNodes().indexOf(nextLastNode) == nextWay.getNodes().size() - 1) {
+          Collections.reverse(nextWay.getNodes());
+        }
         nodesList.addAll(nextWay.getNodes());
-      } else nodesList.addAll(nextWay.getNodes());
 
-      logger.debug("Removing way with id {}", nextWay.getId());
+        logger.debug("Removing way with id {}", nextWay.getId());
+      }
 
       nodeToWayMap.values().removeAll(Collections.singleton(nextWay));
       waysCopy.remove(nextWay);
