@@ -486,7 +486,8 @@ public class GeoUtils {
           /* Perform Jarvis binary search:
            * Find the point in each convex hull maximising the angle between the last point of the overall hull
            * and that point */
-          Point pA, pB;
+          Point pA;
+          Point pB;
           if (hullPoints.size() == 1) {
             pB = hullPoints.getLast();
             pA = point0;
