@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased/Snapshot]
 
+## [1.5]
+
 ### Added
 -   Added `buildSafe{Coord,Point,LineString,LineStringBetweenCoords,LineStringBetweenPoints}` and `totalLengthOfLineString` to `GeoUtils`
 
