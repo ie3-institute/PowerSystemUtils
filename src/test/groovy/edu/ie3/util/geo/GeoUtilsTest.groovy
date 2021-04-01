@@ -73,10 +73,10 @@ class GeoUtilsTest extends Specification {
 			GeoUtils.xyToPoint(52d, 9d)
 		]
 		def coordinateDistances = [
-			new GeoUtils.CoordinateDistance(basePoint, points[0]),
-			new GeoUtils.CoordinateDistance(basePoint, points[1]),
-			new GeoUtils.CoordinateDistance(basePoint, points[2]),
-			new GeoUtils.CoordinateDistance(basePoint, points[3])
+			new CoordinateDistance(basePoint, points[0]),
+			new CoordinateDistance(basePoint, points[1]),
+			new CoordinateDistance(basePoint, points[2]),
+			new CoordinateDistance(basePoint, points[3])
 		]
 		expect:
 		GeoUtils.getCoordinateDistances(basePoint, points) == new TreeSet(coordinateDistances)
@@ -131,7 +131,7 @@ class GeoUtilsTest extends Specification {
 
 		then:
 		coordinates.length == actual.length
-		for(int cnt = 0; cnt < coordinates.length; cnt++){
+		for (int cnt = 0; cnt < coordinates.length; cnt++) {
 			coordinates[cnt] == actual[cnt]
 		}
 	}
