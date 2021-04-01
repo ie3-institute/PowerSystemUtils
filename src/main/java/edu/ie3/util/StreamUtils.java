@@ -18,6 +18,11 @@ import java.util.function.Predicate;
  * @since 13.04.19
  */
 public class StreamUtils {
+
+  private StreamUtils() {
+    throw new IllegalStateException("Utility class");
+  }
+
   /**
    * Usage: Stream.filter(StreamUtils.distinctByKey(node to node.getSubnet[0]))
    *
