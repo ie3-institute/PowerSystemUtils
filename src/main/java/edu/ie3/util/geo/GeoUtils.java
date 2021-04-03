@@ -991,22 +991,22 @@ public class GeoUtils {
       double distance = Double.POSITIVE_INFINITY;
       Way nextWay = null;
       Node nextLastNode = null;
-      for (Node node : nodeToWayMap.keySet()) {
-        if (rayCasting(circle, node.getLatlon())) {
+      for (Map.Entry<Node, Way> entry : nodeToWayMap.entrySet()) {
+        if (rayCasting(circle, entry.getKey().getLatlon())) {
           double tempDistance;
           tempDistance =
               calcHaversine(
                       lastNode.getLatlon().getLat(),
                       lastNode.getLatlon().getLon(),
-                      node.getLatlon().getLat(),
-                      node.getLatlon().getLon())
+                      entry.getKey().getLatlon().getLat(),
+                      entry.getKey().getLatlon().getLon())
                   .to(KILOMETRE)
                   .getValue()
                   .doubleValue();
           if (tempDistance < distance) {
             distance = tempDistance;
-            nextWay = nodeToWayMap.get(node);
-            nextLastNode = node;
+            nextWay = entry.getValue();
+            nextLastNode = entry.getKey();
           }
         }
       }
