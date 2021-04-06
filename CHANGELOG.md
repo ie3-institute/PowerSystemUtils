@@ -57,7 +57,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 -   fixes + extensions in StandardUnits
 
-[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v1.4...HEAD
+[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v1.5...HEAD
+[1.5]: https://github.com/ie3-institute/powersystemutils/compare/v1.4...v1.5
 [1.4]: https://github.com/ie3-institute/powersystemutils/compare/v1.3.2...v1.4
 [1.3.2]: https://github.com/ie3-institute/powersystemutils/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/ie3-institute/powersystemutils/compare/64283b769d1faeac0a6468b0f225f5e995741cdd...v1.3.1
