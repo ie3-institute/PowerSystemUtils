@@ -19,20 +19,6 @@ public class CoordinateDistance implements Comparable<CoordinateDistance> {
   private final ComparableQuantity<Length> distance;
 
   /**
-   * @param coordinateA The first coordinate
-   * @param coordinateB The second coordinate
-   * @param distance The distance from A to B
-   */
-  public CoordinateDistance(
-      org.locationtech.jts.geom.Point coordinateA,
-      org.locationtech.jts.geom.Point coordinateB,
-      ComparableQuantity<Length> distance) {
-    this.coordinateA = coordinateA;
-    this.coordinateB = coordinateB;
-    this.distance = distance;
-  }
-
-  /**
    * Calculates the distance from the first to the second coordinate using {@link
    * GeoUtils#calcHaversine(double, double, double, double)}
    *
@@ -46,6 +32,20 @@ public class CoordinateDistance implements Comparable<CoordinateDistance> {
         coordinateB,
         GeoUtils.calcHaversine(
             coordinateA.getY(), coordinateA.getX(), coordinateB.getY(), coordinateB.getX()));
+  }
+
+  /**
+   * @param coordinateA The first coordinate
+   * @param coordinateB The second coordinate
+   * @param distance The distance from A to B
+   */
+  private CoordinateDistance(
+      org.locationtech.jts.geom.Point coordinateA,
+      org.locationtech.jts.geom.Point coordinateB,
+      ComparableQuantity<Length> distance) {
+    this.coordinateA = coordinateA;
+    this.coordinateB = coordinateB;
+    this.distance = distance;
   }
 
   /** @return The first coordinate */
