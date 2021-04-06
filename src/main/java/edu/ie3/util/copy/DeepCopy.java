@@ -18,12 +18,16 @@ import org.slf4j.LoggerFactory;
  * serialized) an error is printed to System.err and null is returned. Depending on your specific
  * application, it might make more sense to have copy(...) re-throw the exception.
  *
- * @version 0.1
  * @author hiry
+ * @version 0.1
  * @since 13.06.2018
  */
 public class DeepCopy {
   private static final Logger logger = LoggerFactory.getLogger(DeepCopy.class);
+
+  private DeepCopy() {
+    throw new IllegalStateException("This is a Utility Class and not meant to be instantiated.");
+  }
 
   /**
    * Returns a copy of the object, or null if the object cannot be serialized.
@@ -31,6 +35,7 @@ public class DeepCopy {
    * @param orig Original {@link Object} to be copied
    * @return The duplicate
    */
+  @SuppressWarnings("unchecked")
   public static <C> C copy(C orig) {
     C obj = null;
     try (FastByteArrayOutputStream fbos = new FastByteArrayOutputStream();
@@ -38,7 +43,6 @@ public class DeepCopy {
       // Write the object out to a byte array
       out.writeObject(orig);
       out.flush();
-      out.close();
 
       // Retrieve an input stream from the byte array and read
       // a copy of the object back in.

@@ -454,7 +454,7 @@ public class GeoUtils {
       /* Limit the amount of iterations to at most log(log(nodeCount)) */
       outloop:
       for (int iterCount = 0; iterCount < maxIterations; iterCount++) {
-        double m = Math.pow(2, Math.pow(2, iterCount + 1));
+        double m = Math.pow(2, Math.pow(2, iterCount + 1d));
 
         /* Split the candidate nodes into floor(pointCount/m) with about m points each subsets and calculate those convex hulls */
         int subsetCount = (int) Math.ceil((double) pointCount / m);
@@ -486,7 +486,8 @@ public class GeoUtils {
           /* Perform Jarvis binary search:
            * Find the point in each convex hull maximising the angle between the last point of the overall hull
            * and that point */
-          Point pA, pB;
+          Point pA;
+          Point pB;
           if (hullPoints.size() == 1) {
             pB = hullPoints.getLast();
             pA = point0;
@@ -990,34 +991,34 @@ public class GeoUtils {
       double distance = Double.POSITIVE_INFINITY;
       Way nextWay = null;
       Node nextLastNode = null;
-      Iterator<Node> it = nodeToWayMap.keySet().iterator();
-      while (it.hasNext()) {
-        Node node = it.next();
-        if (rayCasting(circle, node.getLatlon())) {
+      for (Map.Entry<Node, Way> entry : nodeToWayMap.entrySet()) {
+        if (rayCasting(circle, entry.getKey().getLatlon())) {
           double tempDistance;
           tempDistance =
               calcHaversine(
                       lastNode.getLatlon().getLat(),
                       lastNode.getLatlon().getLon(),
-                      node.getLatlon().getLat(),
-                      node.getLatlon().getLon())
+                      entry.getKey().getLatlon().getLat(),
+                      entry.getKey().getLatlon().getLon())
                   .to(KILOMETRE)
                   .getValue()
                   .doubleValue();
           if (tempDistance < distance) {
             distance = tempDistance;
-            nextWay = nodeToWayMap.get(node);
-            nextLastNode = node;
+            nextWay = entry.getValue();
+            nextLastNode = entry.getKey();
           }
         }
       }
 
-      if (nextWay.getNodes().indexOf(nextLastNode) == nextWay.getNodes().size() - 1) {
-        Collections.reverse(nextWay.getNodes());
+      if (nextWay != null) {
+        if (nextWay.getNodes().indexOf(nextLastNode) == nextWay.getNodes().size() - 1) {
+          Collections.reverse(nextWay.getNodes());
+        }
         nodesList.addAll(nextWay.getNodes());
-      } else nodesList.addAll(nextWay.getNodes());
 
-      logger.debug("Removing way with id {}", nextWay.getId());
+        logger.debug("Removing way with id {}", nextWay.getId());
+      }
 
       nodeToWayMap.values().removeAll(Collections.singleton(nextWay));
       waysCopy.remove(nextWay);
