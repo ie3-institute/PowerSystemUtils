@@ -81,7 +81,7 @@ public class CoordinateDistance implements Comparable<CoordinateDistance> {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     CoordinateDistance that = (CoordinateDistance) o;
-    return coordinateA.equals(coordinateB)
+    return coordinateA.equals(coordinateA)
         && coordinateB.equals(that.coordinateB)
         && distance.equals(that.distance);
   }
