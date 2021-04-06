@@ -18,6 +18,11 @@ import java.util.function.Predicate;
  * @since 13.04.19
  */
 public class StreamUtils {
+
+  private StreamUtils() {
+    throw new IllegalStateException("This is a Utility Class and not meant to be instantiated.");
+  }
+
   /**
    * Usage: Stream.filter(StreamUtils.distinctByKey(node to node.getSubnet[0]))
    *
