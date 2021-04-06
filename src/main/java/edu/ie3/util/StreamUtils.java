@@ -20,7 +20,7 @@ import java.util.function.Predicate;
 public class StreamUtils {
 
   private StreamUtils() {
-    throw new IllegalStateException("Utility class");
+    throw new IllegalStateException("This is a Utility Class and not meant to be instantiated.");
   }
 
   /**
