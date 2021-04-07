@@ -46,19 +46,19 @@ public class PowerSystemUnits extends Units {
 
   /** Euro / km */
   public static final Unit<PricePerLength> EURO_PER_KILOMETRE =
-      new ProductUnit<>(EURO.divide(MetricPrefix.KILO(METRE)));
+      new ProductUnit<>(EURO.divide(KILOMETRE));
 
   /** Euro / Wh */
   public static final Unit<EnergyPrice> EURO_PER_WATTHOUR =
-      new ProductUnit<>(EURO.divide(Units.WATT.multiply(Units.HOUR)));
+      new ProductUnit<>(EURO.divide(WATT.multiply(HOUR)));
 
   /** Euro / kWh */
   public static final Unit<EnergyPrice> EURO_PER_KILOWATTHOUR =
-      MetricPrefix.MILLI(EURO_PER_WATTHOUR);
+      new TransformedUnit<>("€/kWh", EURO_PER_WATTHOUR, MultiplyConverter.of(1E-3));
 
   /** Euro / MWh */
   public static final Unit<EnergyPrice> EURO_PER_MEGAWATTHOUR =
-      MetricPrefix.MICRO(EURO_PER_WATTHOUR);
+      new TransformedUnit<>("€/MWh", EURO_PER_WATTHOUR, MultiplyConverter.of(1E-6));
 
   /** Degree */
   public static final Unit<Angle> DEGREE_GEOM =
@@ -83,11 +83,12 @@ public class PowerSystemUnits extends Units {
   public static final Unit<Energy> KILOVARHOUR = MetricPrefix.KILO(VARHOUR);
 
   /** Watthour per metre */
-  public static final Unit<SpecificEnergy> WATTHOUR_PER_METRE = new BaseUnit<>("Wh/m");
+  public static final Unit<SpecificEnergy> WATTHOUR_PER_METRE =
+      new ProductUnit<>(WATTHOUR.divide(METRE));
 
   /** Kilowatthour per Kilometre */
   public static final Unit<SpecificEnergy> KILOWATTHOUR_PER_KILOMETRE =
-      new AlternateUnit<>(WATTHOUR_PER_METRE, "kWh/km");
+      new TransformedUnit<>("kWh/km", WATTHOUR_PER_METRE, MultiplyConverter.of(1d));
 
   /** Watthour per squaremetre */
   public static final Unit<Irradiation> WATTHOUR_PER_SQUAREMETRE =
@@ -159,7 +160,8 @@ public class PowerSystemUnits extends Units {
       new ProductUnit<>(MetricPrefix.MICRO(SIEMENS).divide(KILOMETRE));
 
   /** Farad per metre */
-  public static final Unit<SpecificCapacitance> FARAD_PER_METRE = new BaseUnit<>("F/m");
+  public static final Unit<SpecificCapacitance> FARAD_PER_METRE =
+      new ProductUnit<>(FARAD.divide(METRE));
 
   /** F / km */
   public static final Unit<SpecificCapacitance> FARAD_PER_KILOMETRE =
@@ -181,9 +183,10 @@ public class PowerSystemUnits extends Units {
   /* ==== Thermal Conductance ==== */
 
   /** kW/K */
-  public static final Unit<ThermalConductance> KILOWATT_PER_KELVIN = new BaseUnit<>("kW/K");
+  public static final Unit<ThermalConductance> KILOWATT_PER_KELVIN =
+      new ProductUnit<>(KILOWATT.divide(KELVIN));
 
-  private static final HashSet<String> registeredLabels = new HashSet<>();
+  private static final HashSet<String> REGISTERED_LABELS = new HashSet<>();
 
   static {
     addUnit(WATTHOUR, "Wh");
@@ -221,12 +224,13 @@ public class PowerSystemUnits extends Units {
    * return-value is null, the unit was already registered
    */
   private static Unit<?> addUnit(Unit<?> unit, String label) {
-    if (registeredLabels.contains(label)) {
+    if (REGISTERED_LABELS.contains(label)) {
       logger.log(Level.FINE, "Label {} is already registered. Ignoring", label);
       return null;
     }
 
     SimpleUnitFormat.getInstance().label(unit, label);
+    REGISTERED_LABELS.add(label);
     return unit;
   }
 }
