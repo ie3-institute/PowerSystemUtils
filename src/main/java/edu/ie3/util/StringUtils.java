@@ -147,4 +147,15 @@ public class StringUtils {
         || inputString.contains("\"")
         || inputString.contains("\n");
   }
+
+  /**
+   * Capitalizes a given String.
+   *
+   * @param inputString The String that is given.
+   * @return The String, that is taken
+   */
+  public static String capitalize(String inputString) {
+    if (inputString.isEmpty()) return inputString;
+    else return inputString.substring(0, 1).toUpperCase() + inputString.substring(1);
+  }
 }
