@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased/Snapshot]
 
 ## [1.5.2]
+### Changed
+-   Use Maven Central as repository for dependencies
+
 ### Added
 -   `Naming` that aids in providing an entity naming respecting different well known naming strategies
 
