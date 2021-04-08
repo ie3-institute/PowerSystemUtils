@@ -90,7 +90,7 @@ class NamingTest extends Specification {
 
 		then:
 		actualNaming.flatCase == expected
-		actualNaming.as(Flat) == expected
+		actualNaming.as(FLAT) == expected
 
 		where:
 		input                          || expected
@@ -114,7 +114,7 @@ class NamingTest extends Specification {
 
 		then:
 		actualNaming.upperFlatCase == expected
-		actualNaming.as(UpperFlat) == expected
+		actualNaming.as(UPPER_FLAT) == expected
 
 		where:
 		input                          || expected
@@ -138,7 +138,7 @@ class NamingTest extends Specification {
 
 		then:
 		actualNaming.camelCase == expected
-		actualNaming.as(Camel) == expected
+		actualNaming.as(CAMEL) == expected
 
 		where:
 		input                          || expected
@@ -162,7 +162,7 @@ class NamingTest extends Specification {
 
 		then:
 		actualNaming.pascalCase == expected
-		actualNaming.as(Pascal) == expected
+		actualNaming.as(PASCAL) == expected
 
 		where:
 		input                          || expected
@@ -186,7 +186,7 @@ class NamingTest extends Specification {
 
 		then:
 		actualNaming.snakeCase == expected
-		actualNaming.as(Snake) == expected
+		actualNaming.as(SNAKE) == expected
 
 		where:
 		input                          || expected
@@ -210,7 +210,7 @@ class NamingTest extends Specification {
 
 		then:
 		actualNaming.screamingSnakeCase == expected
-		actualNaming.as(ScreamingSnake) == expected
+		actualNaming.as(SCREAMING_SNAKE) == expected
 
 		where:
 		input                          || expected
@@ -234,7 +234,7 @@ class NamingTest extends Specification {
 
 		then:
 		actualNaming.camelSnakeCase == expected
-		actualNaming.as(CamelSnake) == expected
+		actualNaming.as(CAMEL_SNAKE) == expected
 
 		where:
 		input                          || expected
@@ -258,7 +258,7 @@ class NamingTest extends Specification {
 
 		then:
 		actualNaming.pascalSnakeCase == expected
-		actualNaming.as(PascalSnake) == expected
+		actualNaming.as(PASCAL_SNAKE) == expected
 
 		where:
 		input                          || expected
@@ -282,7 +282,7 @@ class NamingTest extends Specification {
 
 		then:
 		actualNaming.kebabCase == expected
-		actualNaming.as(Kebab) == expected
+		actualNaming.as(KEBAB) == expected
 
 		where:
 		input                          || expected
@@ -306,7 +306,7 @@ class NamingTest extends Specification {
 
 		then:
 		actualNaming.donerCase == expected
-		actualNaming.as(Doner) == expected
+		actualNaming.as(DONER) == expected
 
 		where:
 		input                          || expected
@@ -330,7 +330,7 @@ class NamingTest extends Specification {
 
 		then:
 		actualNaming.screamingKebabCase == expected
-		actualNaming.as(ScreamingKebab) == expected
+		actualNaming.as(SCREAMING_KEBAB) == expected
 
 		where:
 		input                          || expected
@@ -354,7 +354,7 @@ class NamingTest extends Specification {
 
 		then:
 		actualNaming.trainCase == expected
-		actualNaming.as(Train) == expected
+		actualNaming.as(TRAIN) == expected
 
 		where:
 		input                          || expected

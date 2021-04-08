@@ -12,16 +12,16 @@ package edu.ie3.util.naming;
  *     article</a>
  */
 public enum NamingConvention {
-  Flat,
-  UpperFlat,
-  Camel,
-  Pascal,
-  Snake,
-  ScreamingSnake,
-  CamelSnake,
-  PascalSnake,
-  Kebab,
-  Doner,
-  ScreamingKebab,
-  Train
+  FLAT,
+  UPPER_FLAT,
+  CAMEL,
+  PASCAL,
+  SNAKE,
+  SCREAMING_SNAKE,
+  CAMEL_SNAKE,
+  PASCAL_SNAKE,
+  KEBAB,
+  DONER,
+  SCREAMING_KEBAB,
+  TRAIN
 }

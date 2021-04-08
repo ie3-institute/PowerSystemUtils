@@ -12,11 +12,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Naming {
-  private static final String delimiterRegex = "[_\\-|]";
+  private static final String DELIMITER_REGEX = "[_\\-|]";
 
   /**
    * Builds a naming from a collection of single words. We assume, that all words are yet
-   * de-composed. This means, they only comply with {@link NamingConvention#Flat}. Components, that
+   * de-composed. This means, they only comply with {@link NamingConvention#FLAT}. Components, that
    * contain one of the known delimiters (_, -, |) are neglected.
    *
    * @param singleWords The single words, which shall compose the naming later
@@ -27,7 +27,7 @@ public class Naming {
     LinkedList<String> components =
         Arrays.stream(singleWords)
             .map(String::toLowerCase)
-            .filter(entry -> !entry.matches(".*" + delimiterRegex + ".*"))
+            .filter(entry -> !entry.matches(".*" + DELIMITER_REGEX + ".*"))
             .collect(Collectors.toCollection(LinkedList::new));
 
     String flatCase = String.join("", components);
@@ -186,29 +186,29 @@ public class Naming {
    */
   public String as(NamingConvention convention) {
     switch (convention) {
-      case Flat:
+      case FLAT:
         return flatCase();
-      case Camel:
+      case CAMEL:
         return camelCase();
-      case Doner:
+      case DONER:
         return donerCase();
-      case Kebab:
+      case KEBAB:
         return kebabCase();
-      case Snake:
+      case SNAKE:
         return snakeCase();
-      case Train:
+      case TRAIN:
         return trainCase();
-      case Pascal:
+      case PASCAL:
         return pascalCase();
-      case UpperFlat:
+      case UPPER_FLAT:
         return upperFlatCase();
-      case CamelSnake:
+      case CAMEL_SNAKE:
         return camelSnakeCase();
-      case PascalSnake:
+      case PASCAL_SNAKE:
         return pascalSnakeCase();
-      case ScreamingKebab:
+      case SCREAMING_KEBAB:
         return screamingKebabCase();
-      case ScreamingSnake:
+      case SCREAMING_SNAKE:
         return screamingSnakeCase();
       default:
         throw new IllegalArgumentException(
