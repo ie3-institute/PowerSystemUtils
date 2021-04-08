@@ -302,19 +302,35 @@ class StringUtilsTest extends Specification {
 		StringUtils.csvString(inputString, csvSep) == expect
 
 		where:
-		inputString                                                                         | csvSep || expect
-		"activePowerGradient"                                                               | ","    || "activePowerGradient"
-		"\"100,0\""                                                                         | ","    || "\"100,0\""
-		"100,0"                                                                             | ","    || "\"100,0\""
-		"100,0"                                                                             | ";"    || "\"100,0\""
-		"100;0"                                                                             | ";"    || "\"100;0\""
-		"\"100;0\""                                                                         | ";"    || "\"100;0\""
-		"100;0"                                                                             | ","    || "100;0"
-		"olm:{(0.00,1.00)}"                                                                 | ","    || "\"olm:{(0.00,1.00)}\""
-		"olm:{(0.00,1.00)}"                                                                 | ";"    || "\"olm:{(0.00,1.00)}\""
-		"{\"type\":\"Point\",\"coordinates\":[7.411111,51.492528]}"                         | ","    || "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""
-		"{\"type\":\"Point\",\"coordinates\":[7.411111,51.492528]}"                         | ";"    || "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""
-		"uu,id"                                                                             | ","    || "\"uu,id\""
-		"uu,id"                                                                             | ";"    || "\"uu,id\""
+		inputString                                                 | csvSep || expect
+		"activePowerGradient"                                       | ","    || "activePowerGradient"
+		"\"100,0\""                                                 | ","    || "\"100,0\""
+		"100,0"                                                     | ","    || "\"100,0\""
+		"100,0"                                                     | ";"    || "\"100,0\""
+		"100;0"                                                     | ";"    || "\"100;0\""
+		"\"100;0\""                                                 | ";"    || "\"100;0\""
+		"100;0"                                                     | ","    || "100;0"
+		"olm:{(0.00,1.00)}"                                         | ","    || "\"olm:{(0.00,1.00)}\""
+		"olm:{(0.00,1.00)}"                                         | ";"    || "\"olm:{(0.00,1.00)}\""
+		"{\"type\":\"Point\",\"coordinates\":[7.411111,51.492528]}" | ","    || "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""
+		"{\"type\":\"Point\",\"coordinates\":[7.411111,51.492528]}" | ";"    || "\"{\"\"type\"\":\"\"Point\"\",\"\"coordinates\"\":[7.411111,51.492528]}\""
+		"uu,id"                                                     | ","    || "\"uu,id\""
+		"uu,id"                                                     | ";"    || "\"uu,id\""
+	}
+
+	def "The StringUtils are able to capitalize a String correctly"() {
+		expect:
+		StringUtils.capitalize(inputString) == expected
+
+		where:
+		inputString  || expected
+		""           || ""
+		"a"          || "A"
+		"A"          || "A"
+		"hello"      || "Hello"
+		"Hello"      || "Hello"
+		"helloWorld" || "HelloWorld"
+		"HelloWorld" || "HelloWorld"
+		"2"          || "2"
 	}
 }
