@@ -47,7 +47,7 @@ dependencies {
 	compile 'com.lmax:disruptor:3.4.2' // async logging
 	compile 'org.apache.logging.log4j:log4j-api:2.14.1' // log4j
 	compile 'org.apache.logging.log4j:log4j-core:2.14.1' // log4j
-	compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.0' // log4j -> slf4j
+	compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.1' // log4j -> slf4j
 
 	compile 'javax.measure:unit-api:2.1.1' // quantities
 	compile 'tech.units:indriya:2.1.1'  // quantities
