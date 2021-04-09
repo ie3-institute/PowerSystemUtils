@@ -49,7 +49,7 @@ dependencies {
 	compile 'org.apache.logging.log4j:log4j-core:2.14.1' // log4j
 	compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.1' // log4j -> slf4j
 
-	compile 'javax.measure:unit-api:2.1.1' // quantities
+	compile 'javax.measure:unit-api:2.1.2' // quantities
 	compile 'tech.units:indriya:2.1.1'  // quantities
 	compile 'com.google.code.gson:gson:2.8.6' // java serialization, POJOs -> JSON
 	compile 'org.apache.commons:commons-lang3:3.12.0' // for HashCodeBuilder
