@@ -44,7 +44,7 @@ repositories {
 dependencies {
 	// logging
 	compile "org.slf4j:slf4j-api:$slf4jVersion"  // slf4j wrapper
-	compile 'com.lmax:disruptor:3.4.2' // async logging
+	compile 'com.lmax:disruptor:3.4.3' // async logging
 	compile 'org.apache.logging.log4j:log4j-api:2.14.1' // log4j
 	compile 'org.apache.logging.log4j:log4j-core:2.14.1' // log4j
 	compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.1' // log4j -> slf4j
