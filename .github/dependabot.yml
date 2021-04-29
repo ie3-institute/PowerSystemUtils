@@ -1,0 +1,15 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 10
+  reviewers:
+  - ckittl
+  - johanneshiry
+  ignore:
+  - dependency-name: com.github.spotbugs
+    versions:
+    - 4.6.2
