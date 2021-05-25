@@ -20,7 +20,7 @@ ext {
 }
 
 group = 'com.github.ie3-institute'
-version = '1.6-SNAPSHOT'
+version = '1.5.3'
 description = 'PowerSystemUtils'
 sourceCompatibility = javaVersion
 targetCompatibility = javaVersion
@@ -42,6 +42,12 @@ repositories {
 }
 
 dependencies {
+	constraints {
+		compile( 'junit:junit:4.13.1+' ){
+			because "CVE-2020-15250 - Temporary folder vulnerability - https://github.com/advisories/GHSA-269g-pwp5-87pp"
+		}
+	}
+
 	// logging
 	compile "org.slf4j:slf4j-api:$slf4jVersion"  // slf4j wrapper
 	compile 'com.lmax:disruptor:3.4.4' // async logging
