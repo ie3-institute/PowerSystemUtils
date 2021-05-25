@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased/Snapshot]
 
+## [1.5.3]
+### Fixed
+-   Adding dependency constraint to avoid transitive dependencies introducing information vulnerability [CVE-2020-15250 - Temporary folder vulnerability](https://github.com/advisories/GHSA-269g-pwp5-87pp)
+
 ## [1.5.2]
 ### Changed
 -   Use Maven Central as repository for dependencies
@@ -68,7 +72,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 -   fixes + extensions in StandardUnits
 
-[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v1.5.2...HEAD
+[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v1.5.3...HEAD
+[1.5.3]: https://github.com/ie3-institute/powersystemutils/compare/v1.5.2...v1.5.3
 [1.5.2]: https://github.com/ie3-institute/powersystemutils/compare/v1.4...v1.5.2
 [1.5.1]: https://github.com/ie3-institute/powersystemutils/compare/v1.4...v1.5.1
 [1.5]: https://github.com/ie3-institute/powersystemutils/compare/v1.4...v1.5
