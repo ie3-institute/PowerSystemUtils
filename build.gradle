@@ -43,7 +43,7 @@ repositories {
 
 dependencies {
 	constraints {
-		compile( 'junit:junit:4.13.1+' ){
+		implementation( 'junit:junit:4.13.2+' ){
 			because "CVE-2020-15250 - Temporary folder vulnerability - https://github.com/advisories/GHSA-269g-pwp5-87pp"
 		}
 	}
