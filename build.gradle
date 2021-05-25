@@ -51,7 +51,7 @@ dependencies {
 
 	compile 'javax.measure:unit-api:2.1.2' // quantities
 	compile 'tech.units:indriya:2.1.2'  // quantities
-	compile 'com.google.code.gson:gson:2.8.6' // java serialization, POJOs -> JSON
+	compile 'com.google.code.gson:gson:2.8.7' // java serialization, POJOs -> JSON
 	compile 'org.apache.commons:commons-lang3:3.12.0' // for HashCodeBuilder
 	compile 'com.github.johanneshiry:OSMonaut:v1.1.1' // pbf parser
 	compile 'org.apache.commons:commons-math3:3.6.1' // mathematics and statistics components
