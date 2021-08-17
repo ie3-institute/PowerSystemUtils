@@ -249,7 +249,8 @@ public class FileIOUtils {
 
   /**
    * Compress all the files present in the provided directory and returns a boolean value denoting
-   * success or failure.
+   * success or failure. This method uses the POSIX extension to compress large files and those with
+   * big numbers.
    *
    * @param dirName path of the directory that should be compressed
    * @param validatedOutputFile validated output file (target archive file)
@@ -257,6 +258,24 @@ public class FileIOUtils {
    * @throws FileException If unable to write to the output stream
    */
   private static boolean compressDir(final Path dirName, File validatedOutputFile)
+      throws FileException {
+    return compressDir(dirName, validatedOutputFile, true);
+  }
+
+  /**
+   * Compress all the files present in the provided directory and returns a boolean value denoting
+   * success or failure.
+   *
+   * @param dirName path of the directory that should be compressed
+   * @param validatedOutputFile validated output file (target archive file)
+   * @param usePosixExtension Use the POSIX extension for large files and big numbers
+   * @return a boolean which is either true on success or false otherwise
+   * @throws FileException If unable to write to the output stream
+   * @see <a href="https://ftp.gnu.org/old-gnu/Manuals/tar-1.12/html_node/tar_117.html">GNU POSIX
+   *     tar</a>
+   */
+  private static boolean compressDir(
+      final Path dirName, File validatedOutputFile, boolean usePosixExtension)
       throws FileException {
     Path validatedOutputFileName;
 
@@ -268,6 +287,12 @@ public class FileIOUtils {
         GzipCompressorOutputStream gzipOutputStream =
             new GzipCompressorOutputStream(bufferedOutputStream);
         TarArchiveOutputStream tarOutputStream = new TarArchiveOutputStream(gzipOutputStream)) {
+      if (usePosixExtension) {
+        /* Prepare to write big and long files */
+        tarOutputStream.setLongFileMode(TarArchiveOutputStream.LONGFILE_POSIX);
+        tarOutputStream.setBigNumberMode(TarArchiveOutputStream.BIGNUMBER_POSIX);
+      }
+
       Files.walkFileTree(
           dirName,
           new SimpleFileVisitor<Path>() {
