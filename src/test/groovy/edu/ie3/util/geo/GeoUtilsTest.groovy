@@ -53,7 +53,8 @@ class GeoUtilsTest extends Specification {
 		def lineString = GeoUtils.DEFAULT_GEOMETRY_FACTORY.createLineString([
 			new Coordinate(22.69962d, 11.13038d, 0),
 			new Coordinate(20.84247d, 28.14743d, 0),
-			new Coordinate(24.21942d, 12.04265d, 0)] as Coordinate[])
+			new Coordinate(24.21942d, 12.04265d, 0)
+		] as Coordinate[])
 
 		when:
 		ComparableQuantity<Length> y = GeoUtils.totalLengthOfLineString(lineString)
@@ -155,10 +156,12 @@ class GeoUtilsTest extends Specification {
 		coordA                  | coordB                  || resLineString
 		new Coordinate(1, 1, 0) | new Coordinate(1, 1, 0) || GeoUtils.DEFAULT_GEOMETRY_FACTORY.createLineString([
 			new Coordinate(1.0000000000001, 1.0000000000001, 1.0E-13),
-			new Coordinate(1, 1, 0)] as Coordinate[])
+			new Coordinate(1, 1, 0)
+		] as Coordinate[])
 		new Coordinate(1, 1, 0) | new Coordinate(2, 2, 0) || GeoUtils.DEFAULT_GEOMETRY_FACTORY.createLineString([
 			new Coordinate(1, 1, 0),
-			new Coordinate(2, 2, 0)] as Coordinate[])
+			new Coordinate(2, 2, 0)
+		] as Coordinate[])
 
 	}
 

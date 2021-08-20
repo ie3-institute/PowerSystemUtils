@@ -43,7 +43,8 @@ class StringUtilsTest extends Specification {
 			"mySa",
 			"sRated",
 			"xScA",
-			"sRatedB"] as String[]
+			"sRatedB"
+		] as String[]
 		def expected = [
 			"\"inputModel\"",
 			"\"iAMag\"",
@@ -56,7 +57,8 @@ class StringUtilsTest extends Specification {
 			"\"mySa\"",
 			"\"sRated\"",
 			"\"xScA\"",
-			"\"sRatedB\""] as String[]
+			"\"sRatedB\""
+		] as String[]
 
 		when:
 		def actual = StringUtils.quote(input)
@@ -126,7 +128,8 @@ class StringUtilsTest extends Specification {
 			"mySa",
 			"sRated",
 			"xScA",
-			"sRatedB"] as String[]
+			"sRatedB"
+		] as String[]
 		def expected = [
 			"input_model",
 			"i_a_mag",
@@ -139,7 +142,8 @@ class StringUtilsTest extends Specification {
 			"my_sa",
 			"s_rated",
 			"x_sc_a",
-			"s_rated_b"] as String[]
+			"s_rated_b"
+		] as String[]
 
 		when:
 		def actual = StringUtils.camelCaseToSnakeCase(input)
@@ -245,7 +249,8 @@ class StringUtilsTest extends Specification {
 			"Höchstspannung",
 			"380.0",
 			"\"olm:{(0.00,1.00)}\"",
-			"\"cosPhiP:{(0.0,1.0),(0.9,1.0),(1.2,-0.3)}\""] as Set
+			"\"cosPhiP:{(0.0,1.0),(0.9,1.0),(1.2,-0.3)}\""
+		] as Set
 
 		when:
 		def actual = input.stream().map({ inputElement -> StringUtils.csvString(inputElement, ",") }).collect(Collectors.toSet()) as Set
