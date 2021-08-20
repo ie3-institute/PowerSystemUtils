@@ -100,12 +100,14 @@ class NamingTest extends Specification {
 			"welcome",
 			"2",
 			"this",
-			"world"] as String[]   || "welcome2thisworld"
+			"world"
+		] as String[]   || "welcome2thisworld"
 		[
 			"what",
 			"a",
 			"beautiful",
-			"world"] as String[]   || "whatabeautifulworld"
+			"world"
+		] as String[]   || "whatabeautifulworld"
 	}
 
 	def "Naming builds correct upper flat cases"() {
@@ -124,12 +126,14 @@ class NamingTest extends Specification {
 			"welcome",
 			"2",
 			"this",
-			"world"] as String[]   || "WELCOME2THISWORLD"
+			"world"
+		] as String[]   || "WELCOME2THISWORLD"
 		[
 			"what",
 			"a",
 			"beautiful",
-			"world"] as String[]   || "WHATABEAUTIFULWORLD"
+			"world"
+		] as String[]   || "WHATABEAUTIFULWORLD"
 	}
 
 	def "Naming builds correct camel cases"() {
@@ -148,12 +152,14 @@ class NamingTest extends Specification {
 			"welcome",
 			"2",
 			"this",
-			"world"] as String[]   || "welcome2thisWorld"
+			"world"
+		] as String[]   || "welcome2thisWorld"
 		[
 			"what",
 			"a",
 			"beautiful",
-			"world"] as String[]   || "whatAbeautifulWorld"
+			"world"
+		] as String[]   || "whatAbeautifulWorld"
 	}
 
 	def "Naming builds correct pascal cases"() {
@@ -172,12 +178,14 @@ class NamingTest extends Specification {
 			"welcome",
 			"2",
 			"this",
-			"world"] as String[]   || "Welcome2ThisWorld"
+			"world"
+		] as String[]   || "Welcome2ThisWorld"
 		[
 			"what",
 			"a",
 			"beautiful",
-			"world"] as String[]   || "WhatABeautifulWorld"
+			"world"
+		] as String[]   || "WhatABeautifulWorld"
 	}
 
 	def "Naming builds correct snake cases"() {
@@ -196,12 +204,14 @@ class NamingTest extends Specification {
 			"welcome",
 			"2",
 			"this",
-			"world"] as String[]   || "welcome_2_this_world"
+			"world"
+		] as String[]   || "welcome_2_this_world"
 		[
 			"what",
 			"a",
 			"beautiful",
-			"world"] as String[]   || "what_a_beautiful_world"
+			"world"
+		] as String[]   || "what_a_beautiful_world"
 	}
 
 	def "Naming builds correct screaming snake cases"() {
@@ -220,12 +230,14 @@ class NamingTest extends Specification {
 			"welcome",
 			"2",
 			"this",
-			"world"] as String[]   || "WELCOME_2_THIS_WORLD"
+			"world"
+		] as String[]   || "WELCOME_2_THIS_WORLD"
 		[
 			"what",
 			"a",
 			"beautiful",
-			"world"] as String[]   || "WHAT_A_BEAUTIFUL_WORLD"
+			"world"
+		] as String[]   || "WHAT_A_BEAUTIFUL_WORLD"
 	}
 
 	def "Naming builds correct camel snake cases"() {
@@ -244,12 +256,14 @@ class NamingTest extends Specification {
 			"welcome",
 			"2",
 			"this",
-			"world"] as String[]   || "welcome_2_this_World"
+			"world"
+		] as String[]   || "welcome_2_this_World"
 		[
 			"what",
 			"a",
 			"beautiful",
-			"world"] as String[]   || "what_A_beautiful_World"
+			"world"
+		] as String[]   || "what_A_beautiful_World"
 	}
 
 	def "Naming builds correct pascal snake cases"() {
@@ -268,12 +282,14 @@ class NamingTest extends Specification {
 			"welcome",
 			"2",
 			"this",
-			"world"] as String[]   || "Welcome_2_This_World"
+			"world"
+		] as String[]   || "Welcome_2_This_World"
 		[
 			"what",
 			"a",
 			"beautiful",
-			"world"] as String[]   || "What_A_Beautiful_World"
+			"world"
+		] as String[]   || "What_A_Beautiful_World"
 	}
 
 	def "Naming builds correct kebab cases"() {
@@ -292,12 +308,14 @@ class NamingTest extends Specification {
 			"welcome",
 			"2",
 			"this",
-			"world"] as String[]   || "welcome-2-this-world"
+			"world"
+		] as String[]   || "welcome-2-this-world"
 		[
 			"what",
 			"a",
 			"beautiful",
-			"world"] as String[]   || "what-a-beautiful-world"
+			"world"
+		] as String[]   || "what-a-beautiful-world"
 	}
 
 	def "Naming builds correct doner cases"() {
@@ -316,12 +334,14 @@ class NamingTest extends Specification {
 			"welcome",
 			"2",
 			"this",
-			"world"] as String[]   || "welcome|2|this|world"
+			"world"
+		] as String[]   || "welcome|2|this|world"
 		[
 			"what",
 			"a",
 			"beautiful",
-			"world"] as String[]   || "what|a|beautiful|world"
+			"world"
+		] as String[]   || "what|a|beautiful|world"
 	}
 
 	def "Naming builds correct screaming kebab cases"() {
@@ -340,12 +360,14 @@ class NamingTest extends Specification {
 			"welcome",
 			"2",
 			"this",
-			"world"] as String[]   || "WELCOME-2-THIS-WORLD"
+			"world"
+		] as String[]   || "WELCOME-2-THIS-WORLD"
 		[
 			"what",
 			"a",
 			"beautiful",
-			"world"] as String[]   || "WHAT-A-BEAUTIFUL-WORLD"
+			"world"
+		] as String[]   || "WHAT-A-BEAUTIFUL-WORLD"
 	}
 
 	def "Naming builds correct train cases"() {
@@ -364,11 +386,13 @@ class NamingTest extends Specification {
 			"welcome",
 			"2",
 			"this",
-			"world"] as String[]   || "Welcome-2-This-World"
+			"world"
+		] as String[]   || "Welcome-2-This-World"
 		[
 			"what",
 			"a",
 			"beautiful",
-			"world"] as String[]   || "What-A-Beautiful-World"
+			"world"
+		] as String[]   || "What-A-Beautiful-World"
 	}
 }
