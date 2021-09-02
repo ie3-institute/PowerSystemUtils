@@ -4,6 +4,7 @@ test {
 		excludeTestsMatching '*IT'
 	}
 }
+test.dependsOn(scalatest)
 
 task allTests(type: Test) {
 	description 'executes all tests'
