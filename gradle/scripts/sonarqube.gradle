@@ -11,6 +11,7 @@ sonarqube {
 		property "sonar.tests", [
 			'src/test/resources',
 			'src/test/java',
+			'src/test/scala',
 			'src/test/groovy'] // test src dirs
 		// reports stuff (for all languages)
 		property 'sonar.junit.reportPaths', [
