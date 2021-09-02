@@ -1,7 +1,3 @@
-/*
-* Scala code coverage gradle plugin see https://github.com/scoverage/gradle-scoverage#configuration and
-* https://github.com/scoverage/gradle-scoverage/issues/109 for details
-*/
 scoverage {
 	scoverageScalaVersion = scalaBinaryVersion
 	coverageOutputHTML = false
