@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased/Snapshot]
+### Added
+-   Added scala support
+-   Added `RichQuantityDouble` as double type enrichment to enable easy quantity conversions [#133](https://github.com/ie3-institute/PowerSystemUtils/issues/133)
 
 ## [1.5.3]
 ### Fixed
