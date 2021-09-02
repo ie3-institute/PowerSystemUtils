@@ -165,7 +165,7 @@ object QuantityUtils {
       Quantities.getQuantity(value, SIEMENS_PER_KILOMETRE)
 
     def toMicroSiemensPerKilometre: ComparableQuantity[SpecificConductance] =
-      Quantities.getQuantity(value, MetricPrefix.MICRO(SIEMENS_PER_KILOMETRE))
+      Quantities.getQuantity(value, MICRO_SIEMENS_PER_KILOMETRE)
 
     def toFarradPerMetre: ComparableQuantity[SpecificCapacitance] =
       Quantities.getQuantity(value, FARAD_PER_METRE)

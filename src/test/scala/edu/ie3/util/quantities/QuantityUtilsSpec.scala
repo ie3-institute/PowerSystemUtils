@@ -38,7 +38,7 @@ class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
     }
     
     "convert a double to ampere quantity" in {
-      value.toKiloAmpere should equalWithTolerance(
+      value.toAmpere should equalWithTolerance(
           Quantities.getQuantity(
             value,
             AMPERE
