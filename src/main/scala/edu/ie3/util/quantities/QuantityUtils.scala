@@ -21,168 +21,168 @@ object QuantityUtils {
 
     /* javax measure units */
 
-    def toPercent: ComparableQuantity[Dimensionless] =
+    def asPercent: ComparableQuantity[Dimensionless] =
       Quantities.getQuantity(value, PERCENT)
 
     /* indriya units */
 
-    def toVolt: ComparableQuantity[ElectricPotential] =
+    def asVolt: ComparableQuantity[ElectricPotential] =
       Quantities.getQuantity(value, VOLT)
 
-    def toAmpere: ComparableQuantity[ElectricCurrent] =
+    def asAmpere: ComparableQuantity[ElectricCurrent] =
       Quantities.getQuantity(value, AMPERE)
 
-    def toKiloAmpere: ComparableQuantity[ElectricCurrent] =
+    def asKiloAmpere: ComparableQuantity[ElectricCurrent] =
       Quantities.getQuantity(value, MetricPrefix.KILO(AMPERE))
 
-    def toNanoSiemens: ComparableQuantity[ElectricConductance] =
+    def asNanoSiemens: ComparableQuantity[ElectricConductance] =
       Quantities.getQuantity(value, MetricPrefix.NANO(SIEMENS))
 
-    def toSiemens: ComparableQuantity[ElectricConductance] =
+    def asSiemens: ComparableQuantity[ElectricConductance] =
       Quantities.getQuantity(value, SIEMENS)
 
-    def toMilliOhm: ComparableQuantity[ElectricResistance] =
+    def asMilliOhm: ComparableQuantity[ElectricResistance] =
       Quantities.getQuantity(value, MetricPrefix.MILLI(OHM))
 
-    def toOhm: ComparableQuantity[ElectricResistance] =
+    def asOhm: ComparableQuantity[ElectricResistance] =
       Quantities.getQuantity(value, OHM)
 
     /* PowerSystemUnits */
 
     /* ==== Basic non electric units ==== */
 
-    def toKilometre: ComparableQuantity[Length] =
+    def asKilometre: ComparableQuantity[Length] =
       Quantities.getQuantity(value, KILOMETRE)
 
-    def toMillisecond: ComparableQuantity[Time] =
+    def asMillisecond: ComparableQuantity[Time] =
       Quantities.getQuantity(value, MILLISECOND)
 
-    def toPu: ComparableQuantity[Dimensionless] =
+    def asPu: ComparableQuantity[Dimensionless] =
       Quantities.getQuantity(value, PU)
 
-    def toEuro: ComparableQuantity[Currency] =
+    def asEuro: ComparableQuantity[Currency] =
       Quantities.getQuantity(value, EURO)
 
-    def toEuroPerKilometre: ComparableQuantity[PricePerLength] =
+    def asEuroPerKilometre: ComparableQuantity[PricePerLength] =
       Quantities.getQuantity(value, EURO_PER_KILOMETRE)
 
-    def toEuroPerWattHour: ComparableQuantity[EnergyPrice] =
+    def asEuroPerWattHour: ComparableQuantity[EnergyPrice] =
       Quantities.getQuantity(value, EURO_PER_WATTHOUR)
 
-    def toEuroPerKiloWattHour: ComparableQuantity[EnergyPrice] =
+    def asEuroPerKiloWattHour: ComparableQuantity[EnergyPrice] =
       Quantities.getQuantity(value, EURO_PER_KILOWATTHOUR)
 
-    def toEuroPerMegaWattHour: ComparableQuantity[EnergyPrice] =
+    def asEuroPerMegaWattHour: ComparableQuantity[EnergyPrice] =
       Quantities.getQuantity(value, EURO_PER_MEGAWATTHOUR)
 
-    def toDegreeGeom: ComparableQuantity[Angle] =
+    def asDegreeGeom: ComparableQuantity[Angle] =
       Quantities.getQuantity(value, DEGREE_GEOM)
 
-    def toKilogramPerCubicMetre: ComparableQuantity[Density] =
+    def asKilogramPerCubicMetre: ComparableQuantity[Density] =
       Quantities.getQuantity(value, KILOGRAM_PER_CUBIC_METRE)
 
     /* ==== Energy ==== */
 
-    def toWattHour: ComparableQuantity[Energy] =
+    def asWattHour: ComparableQuantity[Energy] =
       Quantities.getQuantity(value, WATTHOUR)
 
-    def toKiloWattHour: ComparableQuantity[Energy] =
+    def asKiloWattHour: ComparableQuantity[Energy] =
       Quantities.getQuantity(value, KILOWATTHOUR)
 
-    def toVarHour: ComparableQuantity[Energy] =
+    def asVarHour: ComparableQuantity[Energy] =
       Quantities.getQuantity(value, VARHOUR)
 
-    def toKiloVarHour: ComparableQuantity[Energy] =
+    def asKiloVarHour: ComparableQuantity[Energy] =
       Quantities.getQuantity(value, KILOVARHOUR)
 
-    def toWattHourPerMetre: ComparableQuantity[SpecificEnergy] =
+    def asWattHourPerMetre: ComparableQuantity[SpecificEnergy] =
       Quantities.getQuantity(value, WATTHOUR_PER_METRE)
 
-    def toKiloWattHourPerKiloMetre: ComparableQuantity[SpecificEnergy] =
+    def asKiloWattHourPerKiloMetre: ComparableQuantity[SpecificEnergy] =
       Quantities.getQuantity(value, KILOWATTHOUR_PER_KILOMETRE)
 
-    def toWattHourPerSquareMetre: ComparableQuantity[Irradiation] =
+    def asWattHourPerSquareMetre: ComparableQuantity[Irradiation] =
       Quantities.getQuantity(value, WATTHOUR_PER_SQUAREMETRE)
 
-    def toKiloWattHourPerSquareMetre: ComparableQuantity[Irradiation] =
+    def asKiloWattHourPerSquareMetre: ComparableQuantity[Irradiation] =
       Quantities.getQuantity(value, KILOWATTHOUR_PER_SQUAREMETRE)
 
     /* ==== Power ==== */
 
-    def toVoltAmpere: ComparableQuantity[Power] =
+    def asVoltAmpere: ComparableQuantity[Power] =
       Quantities.getQuantity(value, VOLTAMPERE)
 
-    def toKiloVoltAmpere: ComparableQuantity[Power] =
+    def asKiloVoltAmpere: ComparableQuantity[Power] =
       Quantities.getQuantity(value, KILOVOLTAMPERE)
 
-    def toMegaVoltAmpere: ComparableQuantity[Power] =
+    def asMegaVoltAmpere: ComparableQuantity[Power] =
       Quantities.getQuantity(value, MEGAVOLTAMPERE)
 
-    def toVar: ComparableQuantity[Power] =
+    def asVar: ComparableQuantity[Power] =
       Quantities.getQuantity(value, VAR)
 
-    def toKiloVar: ComparableQuantity[Power] =
+    def asKiloVar: ComparableQuantity[Power] =
       Quantities.getQuantity(value, KILOVAR)
 
-    def toMegaVar: ComparableQuantity[Power] =
+    def asMegaVar: ComparableQuantity[Power] =
       Quantities.getQuantity(value, MEGAVAR)
 
-    def toWatt: ComparableQuantity[Power] =
+    def asWatt: ComparableQuantity[Power] =
       Quantities.getQuantity(value, WATT)
 
-    def toKiloWatt: ComparableQuantity[Power] =
+    def asKiloWatt: ComparableQuantity[Power] =
       Quantities.getQuantity(value, KILOWATT)
 
-    def toMegaWatt: ComparableQuantity[Power] =
+    def asMegaWatt: ComparableQuantity[Power] =
       Quantities.getQuantity(value, MEGAWATT)
 
-    def toWattPerSquareMetre: ComparableQuantity[Irradiance] =
+    def asWattPerSquareMetre: ComparableQuantity[Irradiance] =
       Quantities.getQuantity(value, WATT_PER_SQUAREMETRE)
 
-    def toKiloWattPerSquareMetre: ComparableQuantity[Irradiance] =
+    def asKiloWattPerSquareMetre: ComparableQuantity[Irradiance] =
       Quantities.getQuantity(value, KILOWATT_PER_SQUAREMETRE)
 
     /* ==== Composed units ==== */
 
-    def toPercentPerHour: ComparableQuantity[DimensionlessRate] =
+    def asPercentPerHour: ComparableQuantity[DimensionlessRate] =
       Quantities.getQuantity( value, PERCENT_PER_HOUR)
 
-    def toPuPerHour: ComparableQuantity[DimensionlessRate] =
+    def asPuPerHour: ComparableQuantity[DimensionlessRate] =
       Quantities.getQuantity(value, PU_PER_HOUR)
 
     /* ==== Basic electric units ==== */
 
-    def toKiloVolt: ComparableQuantity[ElectricPotential] =
+    def asKiloVolt: ComparableQuantity[ElectricPotential] =
       Quantities.getQuantity(value, KILOVOLT)
 
-    def toMegaVolt: ComparableQuantity[ElectricPotential] =
+    def asMegaVolt: ComparableQuantity[ElectricPotential] =
       Quantities.getQuantity(value, MEGAVOLT)
 
-    def toOhmPerKilometre: ComparableQuantity[SpecificResistance] =
+    def asOhmPerKilometre: ComparableQuantity[SpecificResistance] =
       Quantities.getQuantity(value, OHM_PER_KILOMETRE)
 
-    def toSiemensPerKilometre: ComparableQuantity[SpecificConductance] =
+    def asSiemensPerKilometre: ComparableQuantity[SpecificConductance] =
       Quantities.getQuantity(value, SIEMENS_PER_KILOMETRE)
 
-    def toMicroSiemensPerKilometre: ComparableQuantity[SpecificConductance] =
+    def asMicroSiemensPerKilometre: ComparableQuantity[SpecificConductance] =
       Quantities.getQuantity(value, MICRO_SIEMENS_PER_KILOMETRE)
 
-    def toFarradPerMetre: ComparableQuantity[SpecificCapacitance] =
+    def asFarradPerMetre: ComparableQuantity[SpecificCapacitance] =
       Quantities.getQuantity(value, FARAD_PER_METRE)
 
-    def toMicroFarradPerKilometre: ComparableQuantity[SpecificCapacitance] =
+    def asMicroFarradPerKilometre: ComparableQuantity[SpecificCapacitance] =
       Quantities.getQuantity(value, MICROFARAD_PER_KILOMETRE)
 
-    def toKiloWattHourPerKelvin: ComparableQuantity[HeatCapacity] = {
+    def asKiloWattHourPerKelvin: ComparableQuantity[HeatCapacity] = {
       Quantities.getQuantity(value, KILOWATTHOUR_PER_KELVIN)
     }
 
-    def toKiloWattHourPerKelvinTimesCubicMetre: ComparableQuantity[SpecificHeatCapacity] =
+    def asKiloWattHourPerKelvinTimesCubicMetre: ComparableQuantity[SpecificHeatCapacity] =
       Quantities.getQuantity(value, KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE)
 
     /* ==== Thermal Conductance ==== */
 
-    def toKiloWattPerKelvin: ComparableQuantity[ThermalConductance] =
+    def asKiloWattPerKelvin: ComparableQuantity[ThermalConductance] =
       Quantities.getQuantity(value, KILOWATT_PER_KELVIN)
 
   }

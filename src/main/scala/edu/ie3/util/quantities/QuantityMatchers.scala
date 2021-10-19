@@ -1,6 +1,5 @@
 package edu.ie3.util.quantities
 
-import edu.ie3.util.quantities.QuantityUtil
 import javax.measure.Quantity
 import org.scalatest.matchers.{MatchResult, Matcher}
 
