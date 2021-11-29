@@ -76,7 +76,7 @@ dependencies {
 	implementation "org.scala-lang:scala-library:${scalaBinaryVersion}"
 
 	// TEST Scala //
-	implementation "org.scalatest:scalatest_${scalaVersion}:3.2.9"
+	implementation "org.scalatest:scalatest_${scalaVersion}:3.3.0-SNAP3"
 	implementation 'com.vladsch.flexmark:flexmark-all:0.35.10'
 
 }
