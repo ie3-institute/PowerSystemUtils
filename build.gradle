@@ -95,6 +95,3 @@ task printVersion {
 		println project.version
 	}
 }
-
-project.tasks["sonarqube"].dependsOn "reportScoverage"
-project.tasks["sonarqube"].dependsOn "checkScoverage"

@@ -45,6 +45,7 @@ project.tasks["sonarqube"].dependsOn "pmdTest"
 project.tasks["sonarqube"].dependsOn "spotbugsMain"
 project.tasks["sonarqube"].dependsOn "spotbugsTest"
 project.tasks["sonarqube"].dependsOn "allTests"
-
 project.tasks["sonarqube"].dependsOn "jacocoTestReport"
 project.tasks["sonarqube"].dependsOn "jacocoTestCoverageVerification"
+project.tasks["sonarqube"].dependsOn "reportScoverage"
+project.tasks["sonarqube"].dependsOn "checkScoverage"
