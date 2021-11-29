@@ -107,7 +107,7 @@ if (env.BRANCH_NAME == "master") {
                     // execute sonarqube code analysis
                     stage('SonarQube analysis') {
                         withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube
-                            gradle('sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey -Dsonar.scala.coverage.reportPaths="build/reports/scoverage/scoverage.xml"')
+                            gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey -Dsonar.scala.coverage.reportPaths=build/reports/scoverage/scoverage.xml")
                         }
                     }
 
@@ -228,7 +228,7 @@ if (env.BRANCH_NAME == "master") {
                     // execute sonarqube code analysis
                     stage('SonarQube analysis') {
                         withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube
-                            gradle('sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey  -Dsonar.scala.coverage.reportPaths="build/reports/scoverage/scoverage.xml"')
+                            gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey  -Dsonar.scala.coverage.reportPaths=build/reports/scoverage/scoverage.xml")
                         }
                     }
 
@@ -371,9 +371,9 @@ if (env.BRANCH_NAME == "master") {
                         String gradleCommand = "sonarqube -Dsonar.projectKey=$sonarqubeProjectKey"
 
                         if (env.CHANGE_ID != null) {
-                            gradleCommand = gradleCommand + ' -Dsonar.pullrequest.branch=${featureBranchName} -Dsonar.pullrequest.key=${env.CHANGE_ID} -Dsonar.pullrequest.base=master -Dsonar.pullrequest.github.repository=${orgNames.get(0)}/${projects.get(0)} -Dsonar.pullrequest.provider=Github -Dsonar.scala.coverage.reportPaths="build/reports/scoverage/scoverage.xml"'
+                            gradleCommand = gradleCommand + " -Dsonar.pullrequest.branch=${featureBranchName} -Dsonar.pullrequest.key=${env.CHANGE_ID} -Dsonar.pullrequest.base=master -Dsonar.pullrequest.github.repository=${orgNames.get(0)}/${projects.get(0)} -Dsonar.pullrequest.provider=Github -Dsonar.scala.coverage.reportPaths=build/reports/scoverage/scoverage.xml"
                         } else {
-                            gradleCommand = gradleCommand + ' -Dsonar.branch.name=$featureBranchName -Dsonar.scala.coverage.reportPaths="build/reports/scoverage/scoverage.xml"'
+                            gradleCommand = gradleCommand + " -Dsonar.branch.name=$featureBranchName -Dsonar.scala.coverage.reportPaths=build/reports/scoverage/scoverage.xml"
                         }
 
 
