@@ -54,7 +54,7 @@ String featureBranchName = ""
 
 //// gradle tasks that are executed
 def gradleTasks = "--refresh-dependencies clean spotlessCheck pmdMain pmdTest spotbugsMain spotbugsTest allTests" // the gradle tasks that are executed on ALL projects
-def mainProjectGradleTasks = "jacocoTestReport jacocoTestCoverageVerification" // additional tasks that are only executed on project 0 (== main project)
+def mainProjectGradleTasks = "jacocoTestReport jacocoTestCoverageVerification reportScoverage checkScoverage" // additional tasks that are only executed on project 0 (== main project)
 // if you need additional tasks for deployment add them here
 // NOTE: artifactory task with credentials will be added below
 def deployGradleTasks = ""
@@ -107,7 +107,7 @@ if (env.BRANCH_NAME == "master") {
                     // execute sonarqube code analysis
                     stage('SonarQube analysis') {
                         withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube, TODO: Remove exclusion, when removing deprecated quantity package
-                            gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey -Dsonar.cpd.exclusions=src/main/java/edu/ie3/util/quantities/dep/PowerSystemUnits.java")
+                            gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey ")
                         }
                     }
 
@@ -228,7 +228,7 @@ if (env.BRANCH_NAME == "master") {
                     // execute sonarqube code analysis
                     stage('SonarQube analysis') {
                         withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube, TODO: Remove exclusion, when removing deprecated quantity package
-                            gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey -Dsonar.cpd.exclusions=src/main/java/edu/ie3/util/quantities/dep/PowerSystemUnits.java")
+                            gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey")
                         }
                     }
 
@@ -369,7 +369,7 @@ if (env.BRANCH_NAME == "master") {
                     withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube
 
                         // do we have a PR?, TODO: Remove with removal of deprecated quantity package
-                        String gradleCommand = "sonarqube -Dsonar.projectKey=$sonarqubeProjectKey -Dsonar.cpd.exclusions=src/main/java/edu/ie3/util/quantities/dep/PowerSystemUnits.java"
+                        String gradleCommand = "sonarqube -Dsonar.projectKey=$sonarqubeProjectKey"
 
                         if (env.CHANGE_ID != null) {
                             gradleCommand = gradleCommand + " -Dsonar.pullrequest.branch=${featureBranchName} -Dsonar.pullrequest.key=${env.CHANGE_ID} -Dsonar.pullrequest.base=master -Dsonar.pullrequest.github.repository=${orgNames.get(0)}/${projects.get(0)} -Dsonar.pullrequest.provider=Github"
@@ -485,6 +485,9 @@ def publishReports() {
 
     // publish spotbugs report for main project only
     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, escapeUnderscores: false, keepAll: true, reportDir: projects.get(0) + '/build/reports/spotbugs', reportFiles: 'main.html', reportName: "${projects.get(0)}_spotbugs_report", reportTitles: ''])
+
+        // scoverage report dir
+    publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, escapeUnderscores: false, keepAll: true, reportDir: projectName + '/build/reports/scoverageAllTests', reportFiles: 'scoverage.xml', reportName: "${projectName}_scoverage_report", reportTitles: ''])
 
 }
 
