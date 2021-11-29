@@ -487,7 +487,7 @@ def publishReports() {
     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, escapeUnderscores: false, keepAll: true, reportDir: projects.get(0) + '/build/reports/spotbugs', reportFiles: 'main.html', reportName: "${projects.get(0)}_spotbugs_report", reportTitles: ''])
 
         // scoverage report dir
-    publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, escapeUnderscores: false, keepAll: true, reportDir: projectName + '/build/reports/scoverageAllTests', reportFiles: 'scoverage.xml', reportName: "${projectName}_scoverage_report", reportTitles: ''])
+    publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, escapeUnderscores: false, keepAll: true, reportDir: projects.get(0) + '/build/reports/scoverageAllTests', reportFiles: 'scoverage.xml', reportName: "${projectName}_scoverage_report", reportTitles: ''])
 
 }
 
