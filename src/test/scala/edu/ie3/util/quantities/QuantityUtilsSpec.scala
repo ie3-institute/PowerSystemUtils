@@ -36,7 +36,7 @@ class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
         Quantities.getQuantity(value, VOLT)
       )
     }
-    
+
     "convert a double to ampere quantity" in {
       value.asAmpere should equalWithTolerance(
           Quantities.getQuantity(
@@ -93,11 +93,11 @@ class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
     "convert a double to a millisecond quantity" in {
       value.asMillisecond should equalWithTolerance(Quantities.getQuantity(value, MILLISECOND))
     }
-    
+
     "convert a double to a pu quantity" in {
       value.asPu should equalWithTolerance(Quantities.getQuantity(value, PU))
     }
-    
+
     "convert a double to a euro quantity" in {
       value.asEuro should equalWithTolerance(Quantities.getQuantity(value, EURO))
     }
