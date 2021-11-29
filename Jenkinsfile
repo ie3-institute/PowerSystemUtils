@@ -107,7 +107,7 @@ if (env.BRANCH_NAME == "master") {
                     // execute sonarqube code analysis
                     stage('SonarQube analysis') {
                         withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube, TODO: Remove exclusion, when removing deprecated quantity package
-                            gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey -Dsonar.cpd.exclusions=src/main/java/edu/ie3/util/quantities/dep/PowerSystemUnits.java")
+                            gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey ")
                         }
                     }
 
@@ -228,7 +228,7 @@ if (env.BRANCH_NAME == "master") {
                     // execute sonarqube code analysis
                     stage('SonarQube analysis') {
                         withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube, TODO: Remove exclusion, when removing deprecated quantity package
-                            gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey -Dsonar.cpd.exclusions=src/main/java/edu/ie3/util/quantities/dep/PowerSystemUnits.java")
+                            gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey")
                         }
                     }
 
@@ -369,7 +369,7 @@ if (env.BRANCH_NAME == "master") {
                     withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube
 
                         // do we have a PR?, TODO: Remove with removal of deprecated quantity package
-                        String gradleCommand = "sonarqube -Dsonar.projectKey=$sonarqubeProjectKey -Dsonar.cpd.exclusions=src/main/java/edu/ie3/util/quantities/dep/PowerSystemUnits.java"
+                        String gradleCommand = "sonarqube -Dsonar.projectKey=$sonarqubeProjectKey"
 
                         if (env.CHANGE_ID != null) {
                             gradleCommand = gradleCommand + " -Dsonar.pullrequest.branch=${featureBranchName} -Dsonar.pullrequest.key=${env.CHANGE_ID} -Dsonar.pullrequest.base=master -Dsonar.pullrequest.github.repository=${orgNames.get(0)}/${projects.get(0)} -Dsonar.pullrequest.provider=Github"
@@ -487,7 +487,7 @@ def publishReports() {
     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, escapeUnderscores: false, keepAll: true, reportDir: projects.get(0) + '/build/reports/spotbugs', reportFiles: 'main.html', reportName: "${projects.get(0)}_spotbugs_report", reportTitles: ''])
 
         // scoverage report dir
-        publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, escapeUnderscores: false, keepAll: true, reportDir: projectName + '/build/reports/scoverageAllTests', reportFiles: 'scoverage.xml', reportName: "${projectName}_scoverage_report", reportTitles: ''])
+    publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, escapeUnderscores: false, keepAll: true, reportDir: projectName + '/build/reports/scoverageAllTests', reportFiles: 'scoverage.xml', reportName: "${projectName}_scoverage_report", reportTitles: ''])
 
 }
 
