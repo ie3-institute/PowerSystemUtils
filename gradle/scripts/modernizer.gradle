@@ -1,5 +1,0 @@
-// modernizer detects deprecated APIs
-
-modernizer{
-	failOnViolations false
-}

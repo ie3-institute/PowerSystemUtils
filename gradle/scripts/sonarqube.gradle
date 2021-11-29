@@ -30,9 +30,6 @@ sonarqube {
 			"build/reports/pmd/main.xml"] // Comma-delimited list of paths to PMD Apex XML reports
 		// groovy specific stuff
 		property 'sonar.groovy.jacoco.reportPath', 'build/jacoco/test.exec' // unit tests reports dir
-		// scala specific stuff
-		property 'sonar.scala.coverage.reportPaths', 'build/reports/scoverage/scoverage.xml'
-		property "sonar.scala.file.suffixes", [".scala"]
 		/// integration tests reports dir (if any)
 		property 'sonar.groovy.jacoco.itReportPath', 'build/jacoco/allTests.exec'
 		property 'sonar.groovy.binaries', 'build/classes/groovy' // groovy binaries

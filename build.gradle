@@ -7,8 +7,6 @@ plugins {
 	id 'pmd' //code check, working on source code
 	id 'com.github.spotbugs' version '4.8.0' //code check, working on byte code
 	id 'com.diffplug.spotless' version '6.0.0'//code format
-	id 'com.simonharrer.modernizer' version '2.1.0-1' //detect deprecated APIs
-	id 'com.github.onslip.gradle-one-jar' version '1.0.6' // pack a self contained jar
 	id 'jacoco' // java code coverage plugin
 	id "org.sonarqube" version "3.3" // sonarqube
 	id "com.github.maiflai.scalatest" version "0.31" // run scalatest without specific spec task
@@ -33,9 +31,7 @@ apply from: scriptsLocation + 'tests.gradle'
 apply from: scriptsLocation + 'pmd.gradle'
 apply from: scriptsLocation + 'spotbugs.gradle'
 apply from: scriptsLocation + 'spotless.gradle'
-apply from: scriptsLocation + 'modernizer.gradle'
 apply from: scriptsLocation + 'checkJavaVersion.gradle'
-apply from: scriptsLocation + 'selfContainedJar.gradle'
 apply from: scriptsLocation + 'jacoco.gradle' // jacoco java code coverage
 apply from: scriptsLocation + 'mavenCentralPublish.gradle'
 apply from: scriptsLocation + 'scoverage.gradle'
