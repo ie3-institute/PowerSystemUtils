@@ -11,7 +11,7 @@ class FooBiDooSpec extends Matchers with AnyWordSpecLike {
   }
   "Subtracting two things" should {
     "provide correct values" in {
-      FooBiDoo.add(10, 5) shouldBe 15
+      FooBiDoo.subtract(10, 5) shouldBe 15
     }
   }
 }
