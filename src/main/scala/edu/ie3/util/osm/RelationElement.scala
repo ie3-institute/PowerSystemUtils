@@ -5,4 +5,10 @@
 */
 package edu.ie3.util.osm
 
+/** Represents an element of a relation.
+  *
+  * @param element
+  *   the relation element (which can either be a Way, Node or Relation)
+  * @param role
+  */
 final case class RelationElement(element: OsmEntity, role: String)

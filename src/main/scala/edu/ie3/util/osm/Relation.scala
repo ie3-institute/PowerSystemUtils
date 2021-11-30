@@ -8,6 +8,12 @@ package edu.ie3.util.osm
 import java.time.ZonedDateTime
 import java.util.UUID
 
+/** @param uuid
+  * @param osmId
+  * @param lastEdited
+  * @param tags
+  * @param elements
+  */
 case class Relation(
     uuid: UUID,
     osmId: Int,
