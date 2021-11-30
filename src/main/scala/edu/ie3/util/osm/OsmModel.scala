@@ -5,9 +5,9 @@
 */
 package edu.ie3.util.osm
 
+import edu.ie3.util.osm.OsmEntities.{ClosedWay, Node, Relation, Way}
 import edu.ie3.util.osm.TagUtils.Keys.{building, highway, landuse}
 import edu.ie3.util.osm.TagUtils.Values.{highWayValues, landUseValues}
-import edu.ie3.util.osm.Way.ClosedWay
 import org.locationtech.jts.geom.Polygon
 
 /** Container class that contains OpenStreetMap data for a specified area.
