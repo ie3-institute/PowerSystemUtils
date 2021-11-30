@@ -13,3 +13,6 @@ updates:
   - dependency-name: com.github.spotbugs
     versions:
     - 4.6.2
+  - dependency-name: org.scalatest:scalatest_2.13
+    versions:
+      - "3.3.0-SNAP+"
