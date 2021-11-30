@@ -53,7 +53,7 @@ void setJavaVersion(javaVersionId) {
 String featureBranchName = ""
 
 //// gradle tasks that are executed
-def gradleTasks = "--refresh-dependencies clean spotlessCheck pmdMain pmdTest spotbugsMain spotbugsTest allTests" // the gradle tasks that are executed on ALL projects
+def gradleTasks = "--refresh-dependencies clean spotlessCheck pmdMain pmdTest spotbugsMain spotbugsTest test" // the gradle tasks that are executed on ALL projects
 def mainProjectGradleTasks = "jacocoTestReport jacocoTestCoverageVerification reportScoverage checkScoverage" // additional tasks that are only executed on project 0 (== main project)
 // if you need additional tasks for deployment add them here
 // NOTE: artifactory task with credentials will be added below
@@ -99,15 +99,15 @@ if (env.BRANCH_NAME == "master") {
                     }
 
                     // test the project
-                    stage("gradle allTests ${projects.get(0)}") {
+                    stage("gradle test ${projects.get(0)}") {
                         // build and test the project
                         gradle("${gradleTasks} ${mainProjectGradleTasks}")
                     }
 
                     // execute sonarqube code analysis
                     stage('SonarQube analysis') {
-                        withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube, TODO: Remove exclusion, when removing deprecated quantity package
-                            gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey ")
+                        withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube
+                            gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey")
                         }
                     }
 
@@ -141,7 +141,7 @@ if (env.BRANCH_NAME == "master") {
                         withCredentials([usernamePassword(credentialsId: mavenCentralCredentialsId, usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password'),
                                          file(credentialsId: mavenCentralSignKeyFileId, variable: 'mavenCentralKeyFile'),
                                          usernamePassword(credentialsId: mavenCentralSignKeyId, passwordVariable: 'signingPassword', usernameVariable: 'signingKeyId')]) {
-                            deployGradleTasks = "--refresh-dependencies clean allTests " + deployGradleTasks + "publish -Puser=${env.mavencentral_username} -Ppassword=${env.mavencentral_password} -Psigning.keyId=${env.signingKeyId} -Psigning.password=${env.signingPassword} -Psigning.secretKeyRingFile=${env.mavenCentralKeyFile}"
+                            deployGradleTasks = "--refresh-dependencies clean test " + deployGradleTasks + "publish -Puser=${env.mavencentral_username} -Ppassword=${env.mavencentral_password} -Psigning.keyId=${env.signingKeyId} -Psigning.password=${env.signingPassword} -Psigning.secretKeyRingFile=${env.mavenCentralKeyFile}"
 
                             // see https://docs.gradle.org/6.0.1/release-notes.html "Publication of SHA256 and SHA512 checksums"
                             def preventSHACheckSums = "-Dorg.gradle.internal.publish.checksums.insecure=true"
@@ -220,15 +220,15 @@ if (env.BRANCH_NAME == "master") {
 
 
                     // test the project
-                    stage("gradle allTests ${projects.get(0)}") {
+                    stage("gradle test ${projects.get(0)}") {
                         // build and test the project
                         gradle("${gradleTasks} ${mainProjectGradleTasks}")
                     }
 
                     // execute sonarqube code analysis
                     stage('SonarQube analysis') {
-                        withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube, TODO: Remove exclusion, when removing deprecated quantity package
-                            gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey")
+                        withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube
+                            gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey ")
                         }
                     }
 
@@ -264,7 +264,7 @@ if (env.BRANCH_NAME == "master") {
                         withCredentials([usernamePassword(credentialsId: mavenCentralCredentialsId, usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password'),
                                          file(credentialsId: mavenCentralSignKeyFileId, variable: 'mavenCentralKeyFile'),
                                          usernamePassword(credentialsId: mavenCentralSignKeyId, passwordVariable: 'signingPassword', usernameVariable: 'signingKeyId')]) {
-                            deployGradleTasks = "--refresh-dependencies clean allTests " + deployGradleTasks + "publish -Puser=${env.mavencentral_username} -Ppassword=${env.mavencentral_password} -Psigning.keyId=${env.signingKeyId} -Psigning.password=${env.signingPassword} -Psigning.secretKeyRingFile=${env.mavenCentralKeyFile}"
+                            deployGradleTasks = "--refresh-dependencies clean test " + deployGradleTasks + "publish -Puser=${env.mavencentral_username} -Ppassword=${env.mavencentral_password} -Psigning.keyId=${env.signingKeyId} -Psigning.password=${env.signingPassword} -Psigning.secretKeyRingFile=${env.mavenCentralKeyFile}"
 
                             gradle("${deployGradleTasks}")
 
@@ -358,7 +358,7 @@ if (env.BRANCH_NAME == "master") {
                 }
 
                 // test the project
-                stage("gradle allTests ${projects.get(0)}") {
+                stage("gradle test ${projects.get(0)}") {
 
                     // build and test the project
                     gradle("${gradleTasks} ${mainProjectGradleTasks}")
@@ -368,7 +368,6 @@ if (env.BRANCH_NAME == "master") {
                 stage('SonarQube analysis') {
                     withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube
 
-                        // do we have a PR?, TODO: Remove with removal of deprecated quantity package
                         String gradleCommand = "sonarqube -Dsonar.projectKey=$sonarqubeProjectKey"
 
                         if (env.CHANGE_ID != null) {
@@ -475,7 +474,7 @@ def gitCheckout(String relativeTargetDir, String baseUrl, String branch, String 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 def publishReports() {
     // publish test reports
-    publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, escapeUnderscores: false, keepAll: true, reportDir: projects.get(0) + '/build/reports/tests/allTests', reportFiles: 'index.html', reportName: "${projects.get(0)}_java_tests_report", reportTitles: ''])
+    publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, escapeUnderscores: false, keepAll: true, reportDir: projects.get(0) + '/build/reports/tests/test', reportFiles: 'index.html', reportName: "${projects.get(0)}_java_tests_report", reportTitles: ''])
 
     // publish jacoco report for main project only
     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, escapeUnderscores: false, keepAll: true, reportDir: projects.get(0) + '/build/reports/jacoco', reportFiles: 'index.html', reportName: "${projects.get(0)}_jacoco_report", reportTitles: ''])
@@ -487,7 +486,7 @@ def publishReports() {
     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, escapeUnderscores: false, keepAll: true, reportDir: projects.get(0) + '/build/reports/spotbugs', reportFiles: 'main.html', reportName: "${projects.get(0)}_spotbugs_report", reportTitles: ''])
 
         // scoverage report dir
-    publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, escapeUnderscores: false, keepAll: true, reportDir: projects.get(0) + '/build/reports/scoverageAllTests', reportFiles: 'scoverage.xml', reportName: "${projects.get(0)}_scoverage_report", reportTitles: ''])
+    publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, escapeUnderscores: false, keepAll: true, reportDir: projects.get(0) + '/build/reports/scoverageTest', reportFiles: 'scoverage.xml', reportName: "${projects.get(0)}_scoverage_report", reportTitles: ''])
 
 }
 
