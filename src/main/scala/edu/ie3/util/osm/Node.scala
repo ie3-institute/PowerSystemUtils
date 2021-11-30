@@ -11,7 +11,7 @@ import java.time.ZonedDateTime
 import java.util.UUID
 
 /** Represents an OSM Node
- */
+  */
 final case class Node(
     uuid: UUID,
     osmId: Int,

@@ -23,14 +23,14 @@ abstract class OsmEntity {
   def containsKeyValuePair(key: String, value: String): Boolean = {
     tags.get(key) match {
       case Some(tagValue) => tagValue == value
-      case None => false
+      case None           => false
     }
   }
 
   def containsKeyValuePair(key: String, values: Set[String]): Boolean = {
     tags.get(key) match {
       case Some(tagValue) => values.contains(tagValue)
-      case None => false
+      case None           => false
     }
   }
 
