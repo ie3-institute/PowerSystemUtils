@@ -40,13 +40,12 @@ sonarqube {
 
 // forces sonarqube to execute integration tests
 project.tasks["sonarqube"].dependsOn "check"
-/* Check itself depends on
- * - pmdMain
- * - spotBugsMain
- * - pmdTest
- * - spotBugsTest
- * - test
- */
+// Check itself depends on
+// - pmdMain
+// - spotBugsMain
+// - pmdTest
+// - spotBugsTest
+// - test
 
 project.tasks["sonarqube"].dependsOn "jacocoTestReport"
 project.tasks["sonarqube"].dependsOn "jacocoTestCoverageVerification"
