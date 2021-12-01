@@ -20,7 +20,7 @@ public class CoordinateDistance implements Comparable<CoordinateDistance> {
 
   /**
    * Calculates the distance from the first to the second coordinate using {@link
-   * GeoUtils#calcHaversine(double, double, double, double)}
+   * DeprecatedGeoUtils#calcHaversine(double, double, double, double)}
    *
    * @param coordinateA The first coordinate
    * @param coordinateB The second coordinate
@@ -30,7 +30,7 @@ public class CoordinateDistance implements Comparable<CoordinateDistance> {
     this(
         coordinateA,
         coordinateB,
-        GeoUtils.calcHaversine(
+        DeprecatedGeoUtils.calcHaversine(
             coordinateA.getY(), coordinateA.getX(), coordinateB.getY(), coordinateB.getX()));
   }
 

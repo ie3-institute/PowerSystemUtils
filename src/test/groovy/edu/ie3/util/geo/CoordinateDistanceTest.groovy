@@ -10,9 +10,9 @@ import spock.lang.Specification
 class CoordinateDistanceTest extends Specification {
 	def "The constructor without a distance parameter calculates the distance as expected"() {
 		given:
-		def pointA = GeoUtils.xyToPoint(49d, 7d)
-		def pointB = GeoUtils.xyToPoint(50d, 7d)
-		def expectedDistance = GeoUtils.calcHaversine(pointA.y, pointA.x, pointB.y, pointB.x)
+		def pointA = DeprecatedGeoUtils.xyToPoint(49d, 7d)
+		def pointB = DeprecatedGeoUtils.xyToPoint(50d, 7d)
+		def expectedDistance = DeprecatedGeoUtils.calcHaversine(pointA.y, pointA.x, pointB.y, pointB.x)
 
 		when:
 		def coordinateDistance = new CoordinateDistance(pointA, pointB)
@@ -26,11 +26,11 @@ class CoordinateDistanceTest extends Specification {
 
 	def "CoordinateDistances are sortable using their distance field"() {
 		given:
-		def basePoint = GeoUtils.xyToPoint(49d, 7d)
-		def distA = new CoordinateDistance(basePoint, GeoUtils.xyToPoint(50d, 7d))
-		def distB = new CoordinateDistance(basePoint, GeoUtils.xyToPoint(50d, 7.1d))
-		def distC = new CoordinateDistance(basePoint, GeoUtils.xyToPoint(49d, 7.1d))
-		def distD = new CoordinateDistance(basePoint, GeoUtils.xyToPoint(52d, 9d))
+		def basePoint = DeprecatedGeoUtils.xyToPoint(49d, 7d)
+		def distA = new CoordinateDistance(basePoint, DeprecatedGeoUtils.xyToPoint(50d, 7d))
+		def distB = new CoordinateDistance(basePoint, DeprecatedGeoUtils.xyToPoint(50d, 7.1d))
+		def distC = new CoordinateDistance(basePoint, DeprecatedGeoUtils.xyToPoint(49d, 7.1d))
+		def distD = new CoordinateDistance(basePoint, DeprecatedGeoUtils.xyToPoint(52d, 9d))
 		def coordinateDistances = [distA, distB, distC, distD]
 
 		when:

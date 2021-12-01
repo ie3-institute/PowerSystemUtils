@@ -33,8 +33,8 @@ import tech.units.indriya.ComparableQuantity;
 import tech.units.indriya.quantity.Quantities;
 
 /** Functionality to deal with geographical and geometric information */
-public class GeoUtils {
-  private static final Logger logger = LoggerFactory.getLogger(GeoUtils.class);
+public class DeprecatedGeoUtils {
+  private static final Logger logger = LoggerFactory.getLogger(DeprecatedGeoUtils.class);
 
   public static final ComparableQuantity<Length> EARTH_RADIUS =
       Quantities.getQuantity(6378137.0, METRE);
@@ -43,7 +43,7 @@ public class GeoUtils {
   public static final GeometryFactory DEFAULT_GEOMETRY_FACTORY =
       new GeometryFactory(new PrecisionModel(), 4326);
 
-  protected GeoUtils() {
+  protected DeprecatedGeoUtils() {
     throw new IllegalStateException("Utility classes cannot be instantiated");
   }
 
@@ -607,7 +607,7 @@ public class GeoUtils {
 
   /**
    * Calculates the area, which is surrounded by a closed way by the help of {@link
-   * GeoUtils#calcArea(Polygon)}
+   * DeprecatedGeoUtils#calcArea(Polygon)}
    *
    * @param w Closed way, that surrounds the area
    * @return The covered area in {@link edu.ie3.util.quantities.PowerSystemUnits#SQUARE_METRE}

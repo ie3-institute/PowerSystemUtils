@@ -7,14 +7,19 @@ package edu.ie3.util.osm
 
 import edu.ie3.util.geo.GeoUtils.DEFAULT_GEOMETRY_FACTORY
 import org.locationtech.jts.geom.impl.CoordinateArraySequence
-import org.locationtech.jts.geom.{Coordinate, GeometryFactory, LinearRing, Polygon, PrecisionModel}
+import org.locationtech.jts.geom.{
+  Coordinate,
+  GeometryFactory,
+  LinearRing,
+  Polygon,
+  PrecisionModel
+}
 
 import java.time.ZonedDateTime
 import java.util.UUID
 import scala.jdk.CollectionConverters._
 
 object OsmEntities {
-
 
   /** Common trait to all OpenStreetMap entities
     */
@@ -133,7 +138,8 @@ object OsmEntities {
 
     def toPolygon: Polygon = {
       val arrayCoordinates = new CoordinateArraySequence(getCoordinates.toArray)
-      val linearRing = new LinearRing(arrayCoordinates, DEFAULT_GEOMETRY_FACTORY)
+      val linearRing =
+        new LinearRing(arrayCoordinates, DEFAULT_GEOMETRY_FACTORY)
       new Polygon(linearRing, Array[LinearRing](), DEFAULT_GEOMETRY_FACTORY)
     }
 

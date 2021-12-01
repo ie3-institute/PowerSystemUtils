@@ -42,7 +42,7 @@ class GeoUtilsTest extends Specification {
 		ComparableQuantity<Length> expected = Quantities.getQuantity(450.18011568984845, METRE)
 
 		when:
-		ComparableQuantity<Length> actual = GeoUtils.calcHaversine(start.lat, start.lon, end.lat, end.lon)
+		ComparableQuantity<Length> actual = DeprecatedGeoUtils.calcHaversine(start.lat, start.lon, end.lat, end.lon)
 
 		then:
 		Math.abs(actual.subtract(expected).to(METRE).value.doubleValue()) < tolerance.value.doubleValue()
@@ -50,14 +50,14 @@ class GeoUtilsTest extends Specification {
 
 	def "Total length of LineString is correctly calculated"() {
 		given:
-		def lineString = GeoUtils.DEFAULT_GEOMETRY_FACTORY.createLineString([
+		def lineString = DeprecatedGeoUtils.DEFAULT_GEOMETRY_FACTORY.createLineString([
 			new Coordinate(22.69962d, 11.13038d, 0),
 			new Coordinate(20.84247d, 28.14743d, 0),
 			new Coordinate(24.21942d, 12.04265d, 0)
 		] as Coordinate[])
 
 		when:
-		ComparableQuantity<Length> y = GeoUtils.totalLengthOfLineString(lineString)
+		ComparableQuantity<Length> y = DeprecatedGeoUtils.totalLengthOfLineString(lineString)
 
 		then:
 		QuantityUtil.isEquivalentAbs(y, Quantities.getQuantity(3463.37, PowerSystemUnits.KILOMETRE), 10)
@@ -66,12 +66,12 @@ class GeoUtilsTest extends Specification {
 
 	def "The GridAndGeoUtils should get the CoordinateDistances between a base point and a collection of other points correctly"() {
 		given:
-		def basePoint = GeoUtils.xyToPoint(49d, 7d)
+		def basePoint = DeprecatedGeoUtils.xyToPoint(49d, 7d)
 		def points = [
-			GeoUtils.xyToPoint(50d, 7d),
-			GeoUtils.xyToPoint(50d, 7.1d),
-			GeoUtils.xyToPoint(49d, 7.1d),
-			GeoUtils.xyToPoint(52d, 9d)
+			DeprecatedGeoUtils.xyToPoint(50d, 7d),
+			DeprecatedGeoUtils.xyToPoint(50d, 7.1d),
+			DeprecatedGeoUtils.xyToPoint(49d, 7.1d),
+			DeprecatedGeoUtils.xyToPoint(52d, 9d)
 		]
 		def coordinateDistances = [
 			new CoordinateDistance(basePoint, points[0]),
@@ -80,7 +80,7 @@ class GeoUtilsTest extends Specification {
 			new CoordinateDistance(basePoint, points[3])
 		]
 		expect:
-		GeoUtils.getCoordinateDistances(basePoint, points) == new TreeSet(coordinateDistances)
+		DeprecatedGeoUtils.getCoordinateDistances(basePoint, points) == new TreeSet(coordinateDistances)
 	}
 
 	def "The GridAndGeoUtils should build a line string with two exact equal geo coordinates correctly avoiding the known bug in jts geometry"() {
@@ -88,7 +88,7 @@ class GeoUtilsTest extends Specification {
 		def line = geoJsonReader.read(lineString) as LineString
 
 		when:
-		def safeLineString = GeoUtils.buildSafeLineString(line)
+		def safeLineString = DeprecatedGeoUtils.buildSafeLineString(line)
 		def actualCoordinates = safeLineString.coordinates
 
 		then:
@@ -125,10 +125,10 @@ class GeoUtilsTest extends Specification {
 			new Coordinate(51.49391, 7.41172),
 			new Coordinate(51.49404, 7.41279)
 		] as Coordinate[]
-		def lineString = GeoUtils.DEFAULT_GEOMETRY_FACTORY.createLineString(coordinates)
+		def lineString = DeprecatedGeoUtils.DEFAULT_GEOMETRY_FACTORY.createLineString(coordinates)
 
 		when:
-		def actual = GeoUtils.buildSafeLineString(lineString).coordinates
+		def actual = DeprecatedGeoUtils.buildSafeLineString(lineString).coordinates
 
 		then:
 		coordinates.length == actual.length
@@ -142,23 +142,23 @@ class GeoUtilsTest extends Specification {
 		def coord = new Coordinate(1, 1, 0)
 
 		expect:
-		GeoUtils.buildSafeCoord(coord) == new Coordinate(1.0000000000001, 1.0000000000001, 1.0E-13)
+		DeprecatedGeoUtils.buildSafeCoord(coord) == new Coordinate(1.0000000000001, 1.0000000000001, 1.0E-13)
 	}
 
 	def "The GridAndGeoUtils should build a safe instance of a LineString between two provided coordinates correctly"() {
 
 		expect:
-		GeoUtils.buildSafeLineStringBetweenCoords(coordA, coordB) == resLineString
+		DeprecatedGeoUtils.buildSafeLineStringBetweenCoords(coordA, coordB) == resLineString
 		// do not change or remove the following line, it is NOT equal to the line above in this case!
-		GeoUtils.buildSafeLineStringBetweenCoords(coordA, coordB).equals(resLineString)
+		DeprecatedGeoUtils.buildSafeLineStringBetweenCoords(coordA, coordB).equals(resLineString)
 
 		where:
 		coordA                  | coordB                  || resLineString
-		new Coordinate(1, 1, 0) | new Coordinate(1, 1, 0) || GeoUtils.DEFAULT_GEOMETRY_FACTORY.createLineString([
+		new Coordinate(1, 1, 0) | new Coordinate(1, 1, 0) || DeprecatedGeoUtils.DEFAULT_GEOMETRY_FACTORY.createLineString([
 			new Coordinate(1.0000000000001, 1.0000000000001, 1.0E-13),
 			new Coordinate(1, 1, 0)
 		] as Coordinate[])
-		new Coordinate(1, 1, 0) | new Coordinate(2, 2, 0) || GeoUtils.DEFAULT_GEOMETRY_FACTORY.createLineString([
+		new Coordinate(1, 1, 0) | new Coordinate(2, 2, 0) || DeprecatedGeoUtils.DEFAULT_GEOMETRY_FACTORY.createLineString([
 			new Coordinate(1, 1, 0),
 			new Coordinate(2, 2, 0)
 		] as Coordinate[])
@@ -171,7 +171,7 @@ class GeoUtilsTest extends Specification {
 		Quantity radius = Quantities.getQuantity(50, METRE)
 
 		when:
-		Polygon poly = GeoUtils.radiusWithCircleAsPolygon(center, radius)
+		Polygon poly = DeprecatedGeoUtils.radiusWithCircleAsPolygon(center, radius)
 		List<LatLon> circlePoints = poly.getCoords()
 
 		then:
@@ -183,7 +183,7 @@ class GeoUtilsTest extends Specification {
 		circlePoints.size() == 361
 		// rounded distance should be 50 meters
 		circlePoints.forEach({ point ->
-			Double distance = GeoUtils.calcHaversine(center.lat, center.lon, point.lat, point.lon).to(METRE).value.doubleValue()
+			Double distance = DeprecatedGeoUtils.calcHaversine(center.lat, center.lon, point.lat, point.lon).to(METRE).value.doubleValue()
 			Math.round(distance) == 50
 		})
 
