@@ -48,7 +48,10 @@ object OsmModel {
     * @return
     *   all ways that represent highways
     */
-  def extractHighways(ways: List[Way]): List[Way] = {
+  def extractHighways(
+      ways: List[Way],
+      highWayValues: Set[String]
+  ): List[Way] = {
     ways.filter(way => way.containsKeyValuePair(highway, highWayValues))
   }
 

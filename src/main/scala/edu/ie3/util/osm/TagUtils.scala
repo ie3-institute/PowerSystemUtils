@@ -13,6 +13,7 @@ object TagUtils {
     val landuse = "landuse"
   }
 
+  // Fixme: Rausschmeißen
   object Values {
     val highWayValues = Set(
       "residential",

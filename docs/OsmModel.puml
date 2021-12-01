@@ -28,7 +28,7 @@ Class Node {
 }
 
 abstract Class Way {
-    nodes: List[UUID]
+    nodes: List[Node]
 }
 
 Class OpenWay {
