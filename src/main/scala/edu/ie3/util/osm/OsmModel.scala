@@ -34,52 +34,52 @@ object OsmModel {
     val LANDUSE = "landuse"
   }
 
-  /** Convenience method to extract buildings from a list of ways
+  /** Convenience method to extract buildings from a list of ways via their tags
     *
     * @param ways
     *   the ways to extract from
-    * @param specificValues
+    * @param specificTagValues
     *   only match values within the Set when given otherwise match all
     */
   def extractBuildings(
       ways: List[Way],
-      specificValues: Option[Set[String]] = None
+      specificTagValues: Option[Set[String]] = None
   ): List[ClosedWay] = {
-    extractClosedWays(ways, KeyUtils.BUILDING, specificValues)
+    extractClosedWays(ways, KeyUtils.BUILDING, specificTagValues)
   }
 
   /** Convenience method to extract land uses from a list of ways
     *
     * @param ways
     *   the ways to extract from
-    * @param specificValues
+    * @param specificTagValues
     *   only match values within the Set when given otherwise match all
     */
   def extractLandUses(
       ways: List[Way],
-      specificValues: Option[Set[String]] = None
+      specificTagValues: Option[Set[String]] = None
   ): List[ClosedWay] = {
-    extractClosedWays(ways, KeyUtils.LANDUSE, specificValues)
+    extractClosedWays(ways, KeyUtils.LANDUSE, specificTagValues)
   }
 
   /** Extract closed ways via their tags.
     *
     * @param ways
     *   the ways to extract from
-    * @param key
+    * @param tagKey
     *   the key of the tag to match
-    * @param specificValues
+    * @param specificTagValues
     *   only match values within the Set when given otherwise match all
     */
   def extractClosedWays(
       ways: List[Way],
-      key: String,
-      specificValues: Option[Set[String]] = None
+      tagKey: String,
+      specificTagValues: Option[Set[String]] = None
   ): List[ClosedWay] = {
-    specificValues match {
+    specificTagValues match {
       case Some(values) =>
         ways.collect {
-          case way: ClosedWay if way.containsKeyValuePair(key, values) =>
+          case way: ClosedWay if way.containsKeyValuePair(tagKey, values) =>
             way
         }
       case None =>
@@ -93,34 +93,34 @@ object OsmModel {
     *
     * @param ways
     *   the ways to extract from
-    * @param specificValues
+    * @param specificTagValues
     *   only match values within the Set when given otherwise match all
     */
   def extractHighways(
       ways: List[Way],
-      specificValues: Option[Set[String]]
+      specificTagValues: Option[Set[String]] = None
   ): List[Way] = {
-    extractOpenWays(ways, KeyUtils.HIGHWAY, specificValues)
+    extractOpenWays(ways, KeyUtils.HIGHWAY, specificTagValues)
   }
 
   /** Extract open ways via their tags.
     *
     * @param ways
     *   the ways to extract from
-    * @param key
+    * @param tagKey
     *   the key of the tag to match
-    * @param specificValues
+    * @param specificTagValues
     *   only match values within the Set when given otherwise match all
     */
   def extractOpenWays(
       ways: List[Way],
-      key: String,
-      specificValues: Option[Set[String]] = None
+      tagKey: String,
+      specificTagValues: Option[Set[String]] = None
   ): List[Way] = {
-    specificValues match {
+    specificTagValues match {
       case Some(values) =>
-        ways.filter(way => way.containsKeyValuePair(key, values))
-      case None => ways.filter(way => way.tags.contains(key))
+        ways.filter(way => way.containsKeyValuePair(tagKey, values))
+      case None => ways.filter(way => way.tags.contains(tagKey))
     }
   }
 
