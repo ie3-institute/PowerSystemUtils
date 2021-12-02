@@ -4,7 +4,7 @@ class OsmModel {
     nodes: List[Node]
     ways: List[Ways]
     relations: List[Relation]
-    capturedArea: ???
+    capturedArea: Polygon
     {static} extractBuildings(): List[ClosedWay]
     {static} extractLandUses(): List[ClosedWay]
     {static} extractHighWays(): List[OpenWay]
