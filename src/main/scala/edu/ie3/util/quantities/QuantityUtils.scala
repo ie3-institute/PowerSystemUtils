@@ -1,22 +1,53 @@
+/*
+ * © 2021. TU Dortmund University,
+ * Institute of Energy Systems, Energy Efficiency and Energy Economics,
+ * Research group Distribution grid planning and operation
+*/
 package edu.ie3.util.quantities
 
 import edu.ie3.util.quantities.PowerSystemUnits._
-import edu.ie3.util.quantities.interfaces.{Currency, Density, DimensionlessRate, EnergyPrice, HeatCapacity, Irradiance, Irradiation, PricePerLength, SpecificCapacitance, SpecificConductance, SpecificEnergy, SpecificHeatCapacity, SpecificResistance, ThermalConductance}
+import edu.ie3.util.quantities.interfaces.{
+  Currency,
+  Density,
+  DimensionlessRate,
+  EnergyPrice,
+  HeatCapacity,
+  Irradiance,
+  Irradiation,
+  PricePerLength,
+  SpecificCapacitance,
+  SpecificConductance,
+  SpecificEnergy,
+  SpecificHeatCapacity,
+  SpecificResistance,
+  ThermalConductance
+}
 import tech.units.indriya.ComparableQuantity
 import tech.units.indriya.quantity.Quantities
 import tech.units.indriya.unit.Units.{AMPERE, OHM, PERCENT, SIEMENS, VOLT, WATT}
 
 import javax.measure.MetricPrefix
-import javax.measure.quantity.{Angle, Dimensionless, ElectricConductance, ElectricCurrent, ElectricPotential, ElectricResistance, Energy, Length, Power, Time}
+import javax.measure.quantity.{
+  Angle,
+  Dimensionless,
+  ElectricConductance,
+  ElectricCurrent,
+  ElectricPotential,
+  ElectricResistance,
+  Energy,
+  Length,
+  Power,
+  Time
+}
 
 object QuantityUtils {
 
   /** Implicit class to enrich the [[Double]] with [[ComparableQuantity]]
-   * conversion capabilities
-   *
-   * @param value
-   *   the actual double value
-   */
+    * conversion capabilities
+    *
+    * @param value
+    *   the actual double value
+    */
   implicit class RichQuantityDouble(value: Double) {
 
     /* javax measure units */
@@ -145,7 +176,7 @@ object QuantityUtils {
     /* ==== Composed units ==== */
 
     def asPercentPerHour: ComparableQuantity[DimensionlessRate] =
-      Quantities.getQuantity( value, PERCENT_PER_HOUR)
+      Quantities.getQuantity(value, PERCENT_PER_HOUR)
 
     def asPuPerHour: ComparableQuantity[DimensionlessRate] =
       Quantities.getQuantity(value, PU_PER_HOUR)
@@ -177,7 +208,8 @@ object QuantityUtils {
       Quantities.getQuantity(value, KILOWATTHOUR_PER_KELVIN)
     }
 
-    def asKiloWattHourPerKelvinTimesCubicMetre: ComparableQuantity[SpecificHeatCapacity] =
+    def asKiloWattHourPerKelvinTimesCubicMetre
+        : ComparableQuantity[SpecificHeatCapacity] =
       Quantities.getQuantity(value, KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE)
 
     /* ==== Thermal Conductance ==== */

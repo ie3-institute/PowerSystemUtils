@@ -2,8 +2,7 @@
  * © 2021. TU Dortmund University,
  * Institute of Energy Systems, Energy Efficiency and Energy Economics,
  * Research group Distribution grid planning and operation
- */
-
+*/
 package edu.ie3.util.quantities
 
 import edu.ie3.util.quantities.PowerSystemUnits._
@@ -39,19 +38,19 @@ class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
 
     "convert a double to ampere quantity" in {
       value.asAmpere should equalWithTolerance(
-          Quantities.getQuantity(
-            value,
-            AMPERE
-      )
+        Quantities.getQuantity(
+          value,
+          AMPERE
+        )
       )
     }
 
     "convert a double to a kilo ampere quantity" in {
       value.asKiloAmpere should equalWithTolerance(
-          Quantities.getQuantity(
-            value,
-            MetricPrefix.KILO(AMPERE)
-      )
+        Quantities.getQuantity(
+          value,
+          MetricPrefix.KILO(AMPERE)
+        )
       )
     }
 
@@ -63,7 +62,7 @@ class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
 
     "convert a double to a siemens quantity" in {
       value.asSiemens should equalWithTolerance(
-          Quantities.getQuantity(value, SIEMENS)
+        Quantities.getQuantity(value, SIEMENS)
       )
     }
 
@@ -75,10 +74,10 @@ class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
 
     "convert a double to an ohm quantity" in {
       value.asOhm should equalWithTolerance(
-          Quantities.getQuantity(
-            value,
-            OHM
-      )
+        Quantities.getQuantity(
+          value,
+          OHM
+        )
       )
     }
 
@@ -87,11 +86,15 @@ class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
     /* ==== Basic non electric units ==== */
 
     "convert a double to a kilometre quantity" in {
-      value.asKilometre should equalWithTolerance(Quantities.getQuantity(value, KILOMETRE))
+      value.asKilometre should equalWithTolerance(
+        Quantities.getQuantity(value, KILOMETRE)
+      )
     }
 
     "convert a double to a millisecond quantity" in {
-      value.asMillisecond should equalWithTolerance(Quantities.getQuantity(value, MILLISECOND))
+      value.asMillisecond should equalWithTolerance(
+        Quantities.getQuantity(value, MILLISECOND)
+      )
     }
 
     "convert a double to a pu quantity" in {
@@ -99,23 +102,33 @@ class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
     }
 
     "convert a double to a euro quantity" in {
-      value.asEuro should equalWithTolerance(Quantities.getQuantity(value, EURO))
+      value.asEuro should equalWithTolerance(
+        Quantities.getQuantity(value, EURO)
+      )
     }
 
     "convert a double to a euro per kilometre quantity" in {
-      value.asEuroPerKilometre should equalWithTolerance(Quantities.getQuantity(value, EURO_PER_KILOMETRE))
+      value.asEuroPerKilometre should equalWithTolerance(
+        Quantities.getQuantity(value, EURO_PER_KILOMETRE)
+      )
     }
 
     "convert a double to a euro per watt hour quantity" in {
-      value.asEuroPerWattHour should equalWithTolerance(Quantities.getQuantity(value, EURO_PER_WATTHOUR))
+      value.asEuroPerWattHour should equalWithTolerance(
+        Quantities.getQuantity(value, EURO_PER_WATTHOUR)
+      )
     }
 
     "convert a double to a euro per kilo watt hour quantity" in {
-      value.asEuroPerKiloWattHour should equalWithTolerance(Quantities.getQuantity(value, EURO_PER_KILOWATTHOUR))
+      value.asEuroPerKiloWattHour should equalWithTolerance(
+        Quantities.getQuantity(value, EURO_PER_KILOWATTHOUR)
+      )
     }
 
     "convert a double to a euro per megawatt quantity" in {
-      value.asEuroPerMegaWattHour should equalWithTolerance(Quantities.getQuantity(value, EURO_PER_MEGAWATTHOUR))
+      value.asEuroPerMegaWattHour should equalWithTolerance(
+        Quantities.getQuantity(value, EURO_PER_MEGAWATTHOUR)
+      )
     }
 
     "convert a double to a degree geom quantity" in {
@@ -125,47 +138,67 @@ class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
     }
 
     "convert a double to a kilogram per cubic meter quantity" in {
-      value.asKilogramPerCubicMetre should equalWithTolerance(Quantities.getQuantity(value, KILOGRAM_PER_CUBIC_METRE))
+      value.asKilogramPerCubicMetre should equalWithTolerance(
+        Quantities.getQuantity(value, KILOGRAM_PER_CUBIC_METRE)
+      )
     }
 
     /* ==== Energy ==== */
 
     "convert a double to a watt hour quantity" in {
-      value.asWattHour should equalWithTolerance(Quantities.getQuantity(value, WATTHOUR))
+      value.asWattHour should equalWithTolerance(
+        Quantities.getQuantity(value, WATTHOUR)
+      )
     }
 
     "convert a double to a kilowatt-hour quantity" in {
-      value.asKiloWattHour should equalWithTolerance(Quantities.getQuantity(value, KILOWATTHOUR))
+      value.asKiloWattHour should equalWithTolerance(
+        Quantities.getQuantity(value, KILOWATTHOUR)
+      )
     }
 
     "convert a double to a var-hour quantity" in {
-      value.asVarHour should equalWithTolerance(Quantities.getQuantity(value, VARHOUR))
+      value.asVarHour should equalWithTolerance(
+        Quantities.getQuantity(value, VARHOUR)
+      )
     }
 
     "convert a double to a kilovar-hour quantity" in {
-      value.asKiloVarHour should equalWithTolerance(Quantities.getQuantity(value, KILOVARHOUR))
+      value.asKiloVarHour should equalWithTolerance(
+        Quantities.getQuantity(value, KILOVARHOUR)
+      )
     }
 
     "convert a double to a watt-hour per square metre quantity" in {
-      value.asWattHourPerSquareMetre should equalWithTolerance(Quantities.getQuantity(value, WATTHOUR_PER_SQUAREMETRE))
+      value.asWattHourPerSquareMetre should equalWithTolerance(
+        Quantities.getQuantity(value, WATTHOUR_PER_SQUAREMETRE)
+      )
     }
 
     "convert a double to a kilowatt-hour per square metre quantity" in {
-      value.asKiloWattHourPerSquareMetre should equalWithTolerance(Quantities.getQuantity(value, KILOWATTHOUR_PER_SQUAREMETRE))
+      value.asKiloWattHourPerSquareMetre should equalWithTolerance(
+        Quantities.getQuantity(value, KILOWATTHOUR_PER_SQUAREMETRE)
+      )
     }
 
     /* ==== Power ==== */
 
     "convert a double to a volt-ampere quantity" in {
-      value.asVoltAmpere should equalWithTolerance(Quantities.getQuantity(value, VOLTAMPERE))
+      value.asVoltAmpere should equalWithTolerance(
+        Quantities.getQuantity(value, VOLTAMPERE)
+      )
     }
 
     "convert a double to a kilovolt-ampere quantity" in {
-      value.asKiloVoltAmpere should equalWithTolerance(Quantities.getQuantity(value, KILOVOLTAMPERE))
+      value.asKiloVoltAmpere should equalWithTolerance(
+        Quantities.getQuantity(value, KILOVOLTAMPERE)
+      )
     }
 
     "convert a double to a megavolt-ampere quantity" in {
-      value.asMegaVoltAmpere should equalWithTolerance(Quantities.getQuantity(value, MEGAVOLTAMPERE))
+      value.asMegaVoltAmpere should equalWithTolerance(
+        Quantities.getQuantity(value, MEGAVOLTAMPERE)
+      )
     }
 
     "convert a double to a var quantity" in {
@@ -173,81 +206,117 @@ class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
     }
 
     "convert a double to a kilovar quantity" in {
-      value.asKiloVar should equalWithTolerance(Quantities.getQuantity(value, KILOVAR))
+      value.asKiloVar should equalWithTolerance(
+        Quantities.getQuantity(value, KILOVAR)
+      )
     }
 
     "convert a double to a megavar quantity" in {
-      value.asMegaVar should equalWithTolerance(Quantities.getQuantity(value, MEGAVAR))
+      value.asMegaVar should equalWithTolerance(
+        Quantities.getQuantity(value, MEGAVAR)
+      )
     }
 
     "convert a double to a watt quantity" in {
-      value.asWatt should equalWithTolerance(Quantities.getQuantity(value, WATT))
+      value.asWatt should equalWithTolerance(
+        Quantities.getQuantity(value, WATT)
+      )
     }
 
     "convert a double to a kilowatt quantity" in {
-      value.asKiloWatt should equalWithTolerance(Quantities.getQuantity(value, KILOWATT))
+      value.asKiloWatt should equalWithTolerance(
+        Quantities.getQuantity(value, KILOWATT)
+      )
     }
 
     "convert a double to a megawatt quantity" in {
-      value.asMegaWatt should equalWithTolerance(Quantities.getQuantity(value, MEGAWATT))
+      value.asMegaWatt should equalWithTolerance(
+        Quantities.getQuantity(value, MEGAWATT)
+      )
     }
 
     "convert a double to a watt per square metre quantity" in {
-      value.asWattPerSquareMetre should equalWithTolerance(Quantities.getQuantity(value, WATT_PER_SQUAREMETRE))
+      value.asWattPerSquareMetre should equalWithTolerance(
+        Quantities.getQuantity(value, WATT_PER_SQUAREMETRE)
+      )
     }
 
     "convert a double to a kilowatt per square metre quantity" in {
-      value.asKiloWattPerSquareMetre should equalWithTolerance(Quantities.getQuantity(value, KILOWATT_PER_SQUAREMETRE))
+      value.asKiloWattPerSquareMetre should equalWithTolerance(
+        Quantities.getQuantity(value, KILOWATT_PER_SQUAREMETRE)
+      )
     }
 
     /* ==== Composed units ==== */
 
     "convert a double to a percent per hour quantity" in {
-      value.asPercentPerHour should equalWithTolerance(Quantities.getQuantity(value, PERCENT_PER_HOUR))
+      value.asPercentPerHour should equalWithTolerance(
+        Quantities.getQuantity(value, PERCENT_PER_HOUR)
+      )
     }
 
     "convert a double to a pu per hour quantity" in {
-      value.asPuPerHour should equalWithTolerance(Quantities.getQuantity(value, PU_PER_HOUR))
+      value.asPuPerHour should equalWithTolerance(
+        Quantities.getQuantity(value, PU_PER_HOUR)
+      )
     }
 
     /* ==== Basic electric units ==== */
 
     "convert a double to a kilovolt quantity" in {
-      value.asKiloVolt should equalWithTolerance(Quantities.getQuantity(value, KILOVOLT))
+      value.asKiloVolt should equalWithTolerance(
+        Quantities.getQuantity(value, KILOVOLT)
+      )
     }
 
     "convert a double to a megavolt quantity" in {
-      value.asMegaVolt should equalWithTolerance(Quantities.getQuantity(value, MEGAVOLT))
+      value.asMegaVolt should equalWithTolerance(
+        Quantities.getQuantity(value, MEGAVOLT)
+      )
     }
 
     "convert a double to a ohm per kilometre quantity" in {
-      value.asOhmPerKilometre should equalWithTolerance(Quantities.getQuantity(value, OHM_PER_KILOMETRE))
+      value.asOhmPerKilometre should equalWithTolerance(
+        Quantities.getQuantity(value, OHM_PER_KILOMETRE)
+      )
     }
 
     "convert a double to a siemens per kilometre quantity" in {
-      value.asSiemensPerKilometre should equalWithTolerance(Quantities.getQuantity(value, SIEMENS_PER_KILOMETRE))
+      value.asSiemensPerKilometre should equalWithTolerance(
+        Quantities.getQuantity(value, SIEMENS_PER_KILOMETRE)
+      )
     }
 
     "convert a double to a microsiemens per kilometre quantity" in {
-      value.asMicroSiemensPerKilometre should equalWithTolerance(Quantities.getQuantity(value, MICRO_SIEMENS_PER_KILOMETRE))
+      value.asMicroSiemensPerKilometre should equalWithTolerance(
+        Quantities.getQuantity(value, MICRO_SIEMENS_PER_KILOMETRE)
+      )
     }
 
     "convert a double to a farrad per metre quantity" in {
-      value.asFarradPerMetre should equalWithTolerance(Quantities.getQuantity(value, FARAD_PER_METRE))
+      value.asFarradPerMetre should equalWithTolerance(
+        Quantities.getQuantity(value, FARAD_PER_METRE)
+      )
     }
 
     "convert a double to a microfarrad per kilometre quantity" in {
-      value.asMicroFarradPerKilometre should equalWithTolerance(Quantities.getQuantity(value, MICROFARAD_PER_KILOMETRE))
+      value.asMicroFarradPerKilometre should equalWithTolerance(
+        Quantities.getQuantity(value, MICROFARAD_PER_KILOMETRE)
+      )
     }
 
     "convert a double to a kilowatthour per kelvin quantity" in {
-      value.asKiloWattHourPerKelvin should equalWithTolerance(Quantities.getQuantity(value, KILOWATTHOUR_PER_KELVIN))
+      value.asKiloWattHourPerKelvin should equalWithTolerance(
+        Quantities.getQuantity(value, KILOWATTHOUR_PER_KELVIN)
+      )
     }
 
     /* ==== Thermal Conductance ==== */
 
     "convert a double to a kilowatt per kelvin quantity" in {
-      value.asKiloWattPerKelvin should equalWithTolerance(Quantities.getQuantity(value, KILOWATT_PER_KELVIN))
+      value.asKiloWattPerKelvin should equalWithTolerance(
+        Quantities.getQuantity(value, KILOWATT_PER_KELVIN)
+      )
     }
 
   }

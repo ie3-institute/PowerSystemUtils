@@ -1,0 +1,63 @@
+@startuml
+
+class OsmModel {
+    nodes: List[Node]
+    ways: List[Ways]
+    relations: List[Relation]
+    capturedArea: Polygon
+    {static} extractBuildings(): List[ClosedWay]
+    {static} extractLandUses(): List[ClosedWay]
+    {static} extractHighWays(): List[OpenWay]
+}
+note left of OsmModel::"extractHighWays(): List[OpenWay]"
+    If roundabouts are closed ways returning OpenWay won't work
+end note
+
+abstract Class OsmEntity {
+    uuid : UUID
+    osmId : Int
+    lastEdited: TimeStamp
+    tags: Map[String, String]
+}
+note left: every element type(Way, Relation, Node) has \n it's own id namespace e.g. node with id=100 \n and way with id=100 can exist and are not related
+
+
+Class Node {
+    lat: Double
+    lon: Double
+}
+
+abstract Class Way {
+    nodes: List[Node]
+}
+
+Class OpenWay {
+}
+
+Class ClosedWay {
+    getCenter(): Coordinate
+}
+note left: a Way is closed if the first and last nodes \nare identical
+
+Class Relation {
+    elements: List[RelationElement]
+}
+
+Class RelationElement {
+    role: String
+    element: OsmEntity
+}
+
+
+OsmModel *-- Node
+OsmModel *-- Way
+OsmModel *-- Relation
+OsmEntity <|-- Node
+OsmEntity <|-- Way
+OsmEntity <|-- Relation
+Relation *-- RelationElement
+Way <|-- OpenWay
+Way <|-- ClosedWay
+
+
+@enduml
