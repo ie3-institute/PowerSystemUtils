@@ -48,7 +48,7 @@ object OsmModel {
     extractClosedWays(ways, KeyUtils.BUILDING, specificTagValues)
   }
 
-  /** Convenience method to extract land uses from a list of ways
+  /** Convenience method to extract land uses from a list of ways via their tags
     *
     * @param ways
     *   the ways to extract from
@@ -89,7 +89,7 @@ object OsmModel {
     }
   }
 
-  /** Convenience method to extract highways from a list of ways
+  /** Convenience method to extract highways from a list of ways via their tags
     *
     * @param ways
     *   the ways to extract from
