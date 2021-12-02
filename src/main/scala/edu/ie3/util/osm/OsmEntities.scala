@@ -5,18 +5,21 @@
 */
 package edu.ie3.util.osm
 
-import edu.ie3.util.geo.GeoUtils.DEFAULT_GEOMETRY_FACTORY
-import org.locationtech.jts.geom.impl.CoordinateArraySequence
-import org.locationtech.jts.geom.{
-  Coordinate,
-  GeometryFactory,
-  LinearRing,
-  Polygon,
-  PrecisionModel
+import edu.ie3.util.geo.GeoUtils.{
+  DEFAULT_GEOMETRY_FACTORY,
+  buildPolygon,
+  calcAreaOnEarth
 }
+import edu.ie3.util.quantities.PowerSystemUnits
+import edu.ie3.util.quantities.QuantityUtils.RichQuantityDouble
+import org.locationtech.jts.geom.impl.CoordinateArraySequence
+import org.locationtech.jts.geom.{Coordinate, LinearRing, Polygon}
+import tech.units.indriya.ComparableQuantity
+import tech.units.indriya.quantity.Quantities
 
 import java.time.ZonedDateTime
 import java.util.UUID
+import javax.measure.quantity.Area
 import scala.jdk.CollectionConverters._
 
 object OsmEntities {
@@ -137,12 +140,11 @@ object OsmEntities {
     }
 
     def toPolygon: Polygon = {
-      val arrayCoordinates = new CoordinateArraySequence(getCoordinates.toArray)
-      val linearRing =
-        new LinearRing(arrayCoordinates, DEFAULT_GEOMETRY_FACTORY)
-      new Polygon(linearRing, Array[LinearRing](), DEFAULT_GEOMETRY_FACTORY)
+      buildPolygon(getCoordinates)
     }
 
+    def calculateArea: ComparableQuantity[Area] =
+      calcAreaOnEarth(toPolygon)
   }
 
   /** An OSM relation.
