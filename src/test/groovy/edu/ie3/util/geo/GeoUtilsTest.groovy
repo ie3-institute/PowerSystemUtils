@@ -96,7 +96,7 @@ class GeoUtilsTest extends Specification {
 		for (int cnt = 0; cnt < coordinates.length; cnt++) {
 			coordinates[cnt] == actualCoordinates[cnt]
 		}
-
+from
 		where:
 		lineString                                                                                                                            | coordinates
 		"{ \"type\": \"LineString\", \"coordinates\": [[7.411111, 51.49228],[7.411111, 51.49228]]}"                                           | [

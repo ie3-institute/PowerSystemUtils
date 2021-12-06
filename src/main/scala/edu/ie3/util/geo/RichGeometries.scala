@@ -6,12 +6,9 @@
 package edu.ie3.util.geo
 
 import edu.ie3.util.exceptions.GeoException
-import edu.ie3.util.geo.GeoUtils.{
-  DEFAULT_GEOMETRY_FACTORY,
-  buildPolygon,
-  calcHaversine
-}
+import edu.ie3.util.geo.GeoUtils.{DEFAULT_GEOMETRY_FACTORY, buildPolygon, calcHaversine}
 import edu.ie3.util.quantities.PowerSystemUnits.KILOMETRE
+import edu.ie3.util.quantities.QuantityUtils.RichQuantityDouble
 import org.locationtech.jts.geom.{Coordinate, LineString, Point, Polygon}
 import tech.units.indriya.ComparableQuantity
 import tech.units.indriya.quantity.Quantities
@@ -24,7 +21,7 @@ object RichGeometries {
 
   implicit class RichCoordinate(coordinate: Coordinate) {
 
-    /** Calculates the great circle disteance between two coordinates
+    /** Calculates the great circle distance between two coordinates
       *
       * @param coordinateB
       *   coordinate b
@@ -64,7 +61,7 @@ object RichGeometries {
         .add(coordinate.haversineDistance(b))
         .getValue
         .doubleValue
-      if (abs(1 - (distancePassingMe / distance)) < epsilon) true
+      if (abs(1 - (distancePassingMe / distance.getValue.doubleValue())) < epsilon) true
       else false
     }
 

@@ -25,11 +25,9 @@ import tech.units.indriya.quantity.Quantities
 import tech.units.indriya.unit.Units.{METRE, RADIAN}
 
 import java.lang.Math.{atan2, cos, sin, sqrt, toRadians}
-import java.util
 import javax.measure.Quantity
 import javax.measure.quantity.Length
 import scala.collection.immutable.{SortedSet, TreeSet}
-import scala.jdk.CollectionConverters.IterableHasAsJava
 import scala.math.pow
 import scala.util.{Failure, Success, Try}
 
@@ -39,6 +37,37 @@ object GeoUtils {
 
   val EARTH_RADIUS: ComparableQuantity[Length] =
     Quantities.getQuantity(6378137.0, METRE);
+
+
+  /** Convert a given [[LineString]] with at least two points into a 'safe to be
+   * compared' [[LineString]] This is done by removing duplicates in the points
+   * in the provided linestring as well as a small change of the start
+   * coordinate if the linestring only consists of two coordinates. For details
+   * on the bug inside [[LineString]] that is addressed here, see
+   * https://github.com/locationtech/jts/issues/531
+   *
+   * @param lineString
+   *   the linestring that should be checked and maybe converted to a 'safe to
+   *   be compared' linestring
+   * @return
+   *   a 'safe to be compared' linestring
+   */
+  def buildSafeLineString(lineString: LineString): LineString =
+    if (lineString.getCoordinates.length == 2)
+      buildSafeLineStringBetweenPoints(
+        lineString.getStartPoint,
+        lineString.getEndPoint
+      )
+    // rebuild line with unique points
+    else {
+      val uniqueCoords: Array[Coordinate] = lineString.getCoordinates.distinct
+      if (uniqueCoords.length == 1)
+        buildSafeLineStringBetweenPoints(
+          lineString.getStartPoint,
+          lineString.getEndPoint
+        )
+      else DEFAULT_GEOMETRY_FACTORY.createLineString(uniqueCoords)
+    }
 
   /** Build an instance of [[LineString]] between two points that is safe to be
     * compared even if the provided two points consist of exactly the same
@@ -116,35 +145,6 @@ object GeoUtils {
     new Coordinate(p1X, p1Y, p1Z)
   }
 
-  /** Convert a given [[LineString]] with at least two points into a 'safe to be
-    * compared' [[LineString]] This is done by removing duplicates in the points
-    * in the provided linestring as well as a small change of the start
-    * coordinate if the linestring only consists of two coordinates. For details
-    * on the bug inside [[LineString]] that is addressed here, see
-    * https://github.com/locationtech/jts/issues/531
-    *
-    * @param lineString
-    *   the linestring that should be checked and maybe converted to a 'safe to
-    *   be compared' linestring
-    * @return
-    *   a 'safe to be compared' linestring
-    */
-  def buildSafeLineString(lineString: LineString): LineString =
-    if (lineString.getCoordinates.length == 2)
-      buildSafeLineStringBetweenPoints(
-        lineString.getStartPoint,
-        lineString.getEndPoint
-      )
-    // rebuild line with unique points
-    else {
-      val uniqueCoords: Array[Coordinate] = lineString.getCoordinates.distinct
-      if (uniqueCoords.length == 1)
-        buildSafeLineStringBetweenPoints(
-          lineString.getStartPoint,
-          lineString.getEndPoint
-        )
-      else DEFAULT_GEOMETRY_FACTORY.createLineString(uniqueCoords)
-    }
 
   /** Calculates and orders the coordinate distances from a base coordinate to a
     * list of coordinates
@@ -295,7 +295,7 @@ object GeoUtils {
   ): Polygon = {
     val coordinates = (0 to 359)
       .map(deg => {
-        val angle = deg.toRadians
+        val angle = deg.toFloat.toRadians
         val x = center.x + radius.getValue.doubleValue() * cos(angle)
         val y = center.y + radius.getValue.doubleValue() * sin(angle)
         new Coordinate(x, y)
