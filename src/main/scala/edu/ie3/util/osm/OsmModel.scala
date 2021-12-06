@@ -6,8 +6,6 @@
 package edu.ie3.util.osm
 
 import edu.ie3.util.osm.OsmEntities.{ClosedWay, Node, Relation, Way}
-import edu.ie3.util.osm.TagUtils.Keys.{building, highway, landuse}
-import edu.ie3.util.osm.TagUtils.Values.{highWayValues, landUseValues}
 import org.locationtech.jts.geom.Polygon
 
 /** Container class that contains OpenStreetMap data for a specified area.
@@ -30,42 +28,99 @@ case class OsmModel(
 
 object OsmModel {
 
-  /** Extract buildings from a list of ways.
-    *
-    * @param ways
-    *   the ways to extract from
-    * @return
-    *   all was that represent buildings
-    */
-  def extractBuildings(ways: List[Way]): List[ClosedWay] = {
-    ways.collect { case way: ClosedWay if way.tags.contains(building) => way }
+  object KeyUtils {
+    val BUILDING = "building"
+    val HIGHWAY = "highway"
+    val LANDUSE = "landuse"
   }
 
-  /** Extract high ways from a list of ways.
+  /** Convenience method to extract buildings from a list of ways via their tags
     *
     * @param ways
     *   the ways to extract from
-    * @return
-    *   all ways that represent highways
+    * @param specificTagValues
+    *   only match values within the Set when given otherwise match all
+    */
+  def extractBuildings(
+      ways: List[Way],
+      specificTagValues: Option[Set[String]] = None
+  ): List[ClosedWay] = {
+    extractClosedWays(ways, KeyUtils.BUILDING, specificTagValues)
+  }
+
+  /** Convenience method to extract land uses from a list of ways via their tags
+    *
+    * @param ways
+    *   the ways to extract from
+    * @param specificTagValues
+    *   only match values within the Set when given otherwise match all
+    */
+  def extractLandUses(
+      ways: List[Way],
+      specificTagValues: Option[Set[String]] = None
+  ): List[ClosedWay] = {
+    extractClosedWays(ways, KeyUtils.LANDUSE, specificTagValues)
+  }
+
+  /** Extract closed ways via their tags.
+    *
+    * @param ways
+    *   the ways to extract from
+    * @param tagKey
+    *   the key of the tag to match
+    * @param specificTagValues
+    *   only match values within the Set when given otherwise match all
+    */
+  def extractClosedWays(
+      ways: List[Way],
+      tagKey: String,
+      specificTagValues: Option[Set[String]] = None
+  ): List[ClosedWay] = {
+    specificTagValues match {
+      case Some(values) =>
+        ways.collect {
+          case way: ClosedWay if way.containsKeyValuePair(tagKey, values) =>
+            way
+        }
+      case None =>
+        ways.collect {
+          case way: ClosedWay if way.tags.contains(KeyUtils.BUILDING) => way
+        }
+    }
+  }
+
+  /** Convenience method to extract highways from a list of ways via their tags
+    *
+    * @param ways
+    *   the ways to extract from
+    * @param specificTagValues
+    *   only match values within the Set when given otherwise match all
     */
   def extractHighways(
       ways: List[Way],
-      highWayValues: Set[String]
+      specificTagValues: Option[Set[String]] = None
   ): List[Way] = {
-    ways.filter(way => way.containsKeyValuePair(highway, highWayValues))
+    extractOpenWays(ways, KeyUtils.HIGHWAY, specificTagValues)
   }
 
-  /** Extract land uses from a list of ways
+  /** Extract open ways via their tags.
     *
     * @param ways
     *   the ways to extract from
-    * @return
-    *   all ways that represent land uses
+    * @param tagKey
+    *   the key of the tag to match
+    * @param specificTagValues
+    *   only match values within the Set when given otherwise match all
     */
-  def extractLandUses(ways: List[Way]): List[ClosedWay] = {
-    ways.collect {
-      case way: ClosedWay if way.containsKeyValuePair(landuse, landUseValues) =>
-        way
+  def extractOpenWays(
+      ways: List[Way],
+      tagKey: String,
+      specificTagValues: Option[Set[String]] = None
+  ): List[Way] = {
+    specificTagValues match {
+      case Some(values) =>
+        ways.filter(way => way.containsKeyValuePair(tagKey, values))
+      case None => ways.filter(way => way.tags.contains(tagKey))
     }
   }
 

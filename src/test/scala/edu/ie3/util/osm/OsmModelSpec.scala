@@ -56,7 +56,8 @@ class OsmModelSpec extends Matchers with AnyWordSpecLike {
           highwayA,
           highwayB,
           highwayC
-        )
+        ),
+        Some(Set("residential", "path"))
       ) shouldBe List(highwayA, highwayC)
     }
 
@@ -69,7 +70,8 @@ class OsmModelSpec extends Matchers with AnyWordSpecLike {
           landuseA,
           landuseB,
           landuseC
-        )
+        ),
+        Some(Set("residential", "retail"))
       ) shouldBe List(landuseA, landuseB)
     }
   }
