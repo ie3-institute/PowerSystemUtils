@@ -74,10 +74,10 @@ class GeoUtilsTest extends Specification {
 			DeprecatedGeoUtils.xyToPoint(52d, 9d)
 		]
 		def coordinateDistances = [
-			new CoordinateDistance(basePoint, points[0]),
-			new CoordinateDistance(basePoint, points[1]),
-			new CoordinateDistance(basePoint, points[2]),
-			new CoordinateDistance(basePoint, points[3])
+			new DeprecatedCoordinateDistance(basePoint, points[0]),
+			new DeprecatedCoordinateDistance(basePoint, points[1]),
+			new DeprecatedCoordinateDistance(basePoint, points[2]),
+			new DeprecatedCoordinateDistance(basePoint, points[3])
 		]
 		expect:
 		DeprecatedGeoUtils.getCoordinateDistances(basePoint, points) == new TreeSet(coordinateDistances)

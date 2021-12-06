@@ -7,7 +7,7 @@ package edu.ie3.util.geo
 
 import spock.lang.Specification
 
-class CoordinateDistanceTest extends Specification {
+class DeprecatedCoordinateDistanceTest extends Specification {
 	def "The constructor without a distance parameter calculates the distance as expected"() {
 		given:
 		def pointA = DeprecatedGeoUtils.xyToPoint(49d, 7d)
@@ -15,8 +15,8 @@ class CoordinateDistanceTest extends Specification {
 		def expectedDistance = DeprecatedGeoUtils.calcHaversine(pointA.y, pointA.x, pointB.y, pointB.x)
 
 		when:
-		def coordinateDistance = new CoordinateDistance(pointA, pointB)
-		def expectedCoordinateDistance = new CoordinateDistance(coordinateDistance.coordinateA, coordinateDistance.coordinateB, expectedDistance)
+		def coordinateDistance = new DeprecatedCoordinateDistance(pointA, pointB)
+		def expectedCoordinateDistance = new DeprecatedCoordinateDistance(coordinateDistance.coordinateA, coordinateDistance.coordinateB, expectedDistance)
 
 		then:
 		coordinateDistance.distance == expectedDistance
@@ -27,10 +27,10 @@ class CoordinateDistanceTest extends Specification {
 	def "CoordinateDistances are sortable using their distance field"() {
 		given:
 		def basePoint = DeprecatedGeoUtils.xyToPoint(49d, 7d)
-		def distA = new CoordinateDistance(basePoint, DeprecatedGeoUtils.xyToPoint(50d, 7d))
-		def distB = new CoordinateDistance(basePoint, DeprecatedGeoUtils.xyToPoint(50d, 7.1d))
-		def distC = new CoordinateDistance(basePoint, DeprecatedGeoUtils.xyToPoint(49d, 7.1d))
-		def distD = new CoordinateDistance(basePoint, DeprecatedGeoUtils.xyToPoint(52d, 9d))
+		def distA = new DeprecatedCoordinateDistance(basePoint, DeprecatedGeoUtils.xyToPoint(50d, 7d))
+		def distB = new DeprecatedCoordinateDistance(basePoint, DeprecatedGeoUtils.xyToPoint(50d, 7.1d))
+		def distC = new DeprecatedCoordinateDistance(basePoint, DeprecatedGeoUtils.xyToPoint(49d, 7.1d))
+		def distD = new DeprecatedCoordinateDistance(basePoint, DeprecatedGeoUtils.xyToPoint(52d, 9d))
 		def coordinateDistances = [distA, distB, distC, distD]
 
 		when:

@@ -5,17 +5,10 @@
 */
 package edu.ie3.util.osm
 
-import edu.ie3.util.geo.GeoUtils.{
-  DEFAULT_GEOMETRY_FACTORY,
-  buildPolygon,
-  calcAreaOnEarth
-}
-import edu.ie3.util.quantities.PowerSystemUnits
-import edu.ie3.util.quantities.QuantityUtils.RichQuantityDouble
-import org.locationtech.jts.geom.impl.CoordinateArraySequence
-import org.locationtech.jts.geom.{Coordinate, LinearRing, Polygon}
+import edu.ie3.util.geo.GeoUtils.buildPolygon
+import edu.ie3.util.geo.RichGeometries.RichPolygon
+import org.locationtech.jts.geom.{Coordinate, Polygon}
 import tech.units.indriya.ComparableQuantity
-import tech.units.indriya.quantity.Quantities
 
 import java.time.ZonedDateTime
 import java.util.UUID
@@ -144,7 +137,7 @@ object OsmEntities {
     }
 
     def calculateArea: ComparableQuantity[Area] =
-      calcAreaOnEarth(toPolygon)
+      toPolygon.calcAreaOnEarth
   }
 
   /** An OSM relation.

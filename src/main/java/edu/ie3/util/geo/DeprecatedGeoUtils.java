@@ -103,11 +103,11 @@ public class DeprecatedGeoUtils {
    * @param coordinates the points to calculate the distance from the base point for
    * @return a sorted set of distances between the base and other coordinates
    */
-  public static SortedSet<CoordinateDistance> getCoordinateDistances(
+  public static SortedSet<DeprecatedCoordinateDistance> getCoordinateDistances(
       org.locationtech.jts.geom.Point baseCoordinate,
       Collection<org.locationtech.jts.geom.Point> coordinates) {
     return coordinates.stream()
-        .map(coordinate -> new CoordinateDistance(baseCoordinate, coordinate))
+        .map(coordinate -> new DeprecatedCoordinateDistance(baseCoordinate, coordinate))
         .collect(Collectors.toCollection(TreeSet::new));
   }
 

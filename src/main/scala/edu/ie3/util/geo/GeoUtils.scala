@@ -7,6 +7,7 @@ package edu.ie3.util.geo
 
 import edu.ie3.util.exceptions.GeoException
 import edu.ie3.util.quantities.PowerSystemUnits.KILOMETRE
+import org.apache.commons.lang3.ArrayUtils
 import org.locationtech.jts.algorithm.ConvexHull
 import org.locationtech.jts.geom.impl.CoordinateArraySequence
 import org.locationtech.jts.geom.{
@@ -24,8 +25,11 @@ import tech.units.indriya.quantity.Quantities
 import tech.units.indriya.unit.Units.{METRE, RADIAN}
 
 import java.lang.Math.{atan2, cos, sin, sqrt, toRadians}
+import java.util
 import javax.measure.Quantity
 import javax.measure.quantity.Length
+import scala.collection.immutable.{SortedSet, TreeSet}
+import scala.jdk.CollectionConverters.IterableHasAsJava
 import scala.math.pow
 import scala.util.{Failure, Success, Try}
 
@@ -36,7 +40,133 @@ object GeoUtils {
   val EARTH_RADIUS: ComparableQuantity[Length] =
     Quantities.getQuantity(6378137.0, METRE);
 
-  /** Calculates the great circle disteance between two coordinates
+  /** Build an instance of [[LineString]] between two points that is safe to be
+    * compared even if the provided two points consist of exactly the same
+    * coordinates. This is done by increasing the coordinate of the provided
+    * Point `p1` by a small amount to make it different from Point `p2`. For
+    * details on the bug inside [[LineString]] that is addressed here, see
+    * https://github.com/locationtech/jts/issues/531
+    *
+    * @param p1
+    *   start point of the linestring
+    * @param p2
+    *   end point of the linestring
+    * @return
+    *   a [[LineString]] between the provided points
+    */
+  def buildSafeLineStringBetweenPoints(p1: Point, p2: Point): LineString = {
+    val safePoint1 = if (p1 == p2) buildSafePoint(p1) else p1
+    DEFAULT_GEOMETRY_FACTORY.createLineString(
+      safePoint1.getCoordinates ++ p2.getCoordinates
+    )
+  }
+
+  /** Build an instance of [[LineString]] between two coordinates that is safe
+    * to be compared even if the provided two coordinates are exactly the same
+    * coordinates. This is done by increasing the coordinate of the provided
+    * Point `code c1` by a small amount to make it different from Point `code
+    * c2`. For details on the bug inside [[LineString]] that is addressed here,
+    * see https://github.com/locationtech/jts/issues/531
+    *
+    * @param c1
+    *   start coordinate of the linestring
+    * @param c2
+    *   end coordinate of the linestring
+    * @return
+    *   A safely build line string
+    */
+  def buildSafeLineStringBetweenCoords(
+      c1: Coordinate,
+      c2: Coordinate
+  ): LineString = {
+    val safeCoord1: Coordinate = if (c1 == c2) buildSafeCoord(c1) else c1
+    DEFAULT_GEOMETRY_FACTORY.createLineString(
+      ArrayUtils.addAll(Array[Coordinate](safeCoord1), c2)
+    )
+  }
+
+  /** Adapt the provided point as described in buildSafeCoord ( Coordinate )}
+    * and return a new, adapted instance of [[Point]]
+    *
+    * @param p1
+    *   the point that should be adapted
+    * @return
+    *   the adapted point with a slightly changed coordinate
+    */
+  private def buildSafePoint(p1: Point): Point = {
+    val safeCoord = buildSafeCoord(p1.getCoordinate)
+    val safeCoordSeq = new CoordinateArraySequence(Array[Coordinate](safeCoord))
+    new Point(safeCoordSeq, p1.getFactory)
+  }
+
+  /** Adapted [[Coordinate]] x, [[Coordinate]] y and [[Coordinate]] z of the
+    * provided [[Coordinate]] by 1e-13 and return a new, adapted instance of
+    * [[Coordinate]]
+    *
+    * @param coord
+    *   the coordinate that should be adapted
+    * @return
+    *   the adapted coordinate with slightly changed x,y,z values
+    */
+  private def buildSafeCoord(coord: Coordinate): Coordinate = {
+    val modVal: Double = 1e-13
+    val p1X: Double = coord.getX + modVal
+    val p1Y: Double = coord.getY + modVal
+    val p1Z: Double = coord.getZ + modVal
+    new Coordinate(p1X, p1Y, p1Z)
+  }
+
+  /** Convert a given [[LineString]] with at least two points into a 'safe to be
+    * compared' [[LineString]] This is done by removing duplicates in the points
+    * in the provided linestring as well as a small change of the start
+    * coordinate if the linestring only consists of two coordinates. For details
+    * on the bug inside [[LineString]] that is addressed here, see
+    * https://github.com/locationtech/jts/issues/531
+    *
+    * @param lineString
+    *   the linestring that should be checked and maybe converted to a 'safe to
+    *   be compared' linestring
+    * @return
+    *   a 'safe to be compared' linestring
+    */
+  def buildSafeLineString(lineString: LineString): LineString =
+    if (lineString.getCoordinates.length == 2)
+      buildSafeLineStringBetweenPoints(
+        lineString.getStartPoint,
+        lineString.getEndPoint
+      )
+    // rebuild line with unique points
+    else {
+      val uniqueCoords: Array[Coordinate] = lineString.getCoordinates.distinct
+      if (uniqueCoords.length == 1)
+        buildSafeLineStringBetweenPoints(
+          lineString.getStartPoint,
+          lineString.getEndPoint
+        )
+      else DEFAULT_GEOMETRY_FACTORY.createLineString(uniqueCoords)
+    }
+
+  /** Calculates and orders the coordinate distances from a base coordinate to a
+    * list of coordinates
+    *
+    * @param baseCoordinate
+    *   the base coordinate
+    * @param coordinates
+    *   the coordinates to calculate the distance for
+    * @return
+    *   a sorted set of [[CoordinateDistance]]
+    */
+  def calcOrderedCoordinateDistances(
+      baseCoordinate: Point,
+      coordinates: List[Point]
+  ): SortedSet[CoordinateDistance] = {
+    val coordinateDistances = coordinates.map(coordinate =>
+      new CoordinateDistance(baseCoordinate, coordinate)
+    )
+    TreeSet(coordinateDistances: _*)
+  }
+
+  /** Calculates the great circle distance between two coordinates
     *
     * @param latA
     *   latitude of coordinate a
@@ -65,6 +195,7 @@ object GeoUtils {
     r.multiply(c)
   }
 
+  // Fixme: Might be slightly off as it does not account for earth's curvature
   /** Builds a convex hull from a set of coordinates.
     *
     * @param coordinates
@@ -158,8 +289,19 @@ object GeoUtils {
     * @return
     *   a polygon without the center, but with all points of the circle
     */
-  def buildCircle(center: Coordinate, radius: Quantity[Length]): Polygon = {
-    ???
+  def buildCirclePolygon(
+      center: Coordinate,
+      radius: Quantity[Length]
+  ): Polygon = {
+    val coordinates = (0 to 359)
+      .map(deg => {
+        val angle = deg.toRadians
+        val x = center.x + radius.getValue.doubleValue() * cos(angle)
+        val y = center.y + radius.getValue.doubleValue() * sin(angle)
+        new Coordinate(x, y)
+      })
+      .toList
+    buildPolygon(coordinates)
   }
 
 }

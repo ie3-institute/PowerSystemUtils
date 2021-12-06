@@ -3,18 +3,16 @@
  * Institute of Energy Systems, Energy Efficiency and Energy Economics,
  * Research group Distribution grid planning and operation
 */
-package edu.ie3.util.osm
+package edu.ie3.util.geo
 
 import edu.ie3.util.exceptions.GeoException
-import edu.ie3.util.geo.GeoUtils
 import edu.ie3.util.geo.GeoUtils.{
+  DEFAULT_GEOMETRY_FACTORY,
   buildPolygon,
-  calcHaversine,
-  equalAreaProjection
+  calcHaversine
 }
 import edu.ie3.util.quantities.PowerSystemUnits.KILOMETRE
-import edu.ie3.util.quantities.QuantityUtils.RichQuantityDouble
-import org.locationtech.jts.geom.{Coordinate, LineString, Polygon}
+import org.locationtech.jts.geom.{Coordinate, LineString, Point, Polygon}
 import tech.units.indriya.ComparableQuantity
 import tech.units.indriya.quantity.Quantities
 
@@ -24,7 +22,7 @@ import scala.util.{Failure, Success, Try}
 
 object RichGeometries {
 
-  implicit class EarthCoordinate(coordinate: Coordinate) {
+  implicit class RichCoordinate(coordinate: Coordinate) {
 
     /** Calculates the great circle disteance between two coordinates
       *
@@ -69,9 +67,13 @@ object RichGeometries {
       if (abs(1 - (distancePassingMe / distance)) < epsilon) true
       else false
     }
+
+    def toPoint: Point = {
+      DEFAULT_GEOMETRY_FACTORY.createPoint(coordinate)
+    }
   }
 
-  implicit class EarthLineString(lineString: LineString) {
+  implicit class RichLineString(lineString: LineString) {
 
     /** Compute length of a [[LineString]] on earth's surface.
       *
@@ -92,10 +94,11 @@ object RichGeometries {
     }
   }
 
-  implicit class EarthPolygon(polygon: Polygon) {
+  implicit class RichPolygon(polygon: Polygon) {
 
     // Fixme: Is not precisely right because earths curvature - use equal area projection ?
     def intersect(polygonB: Polygon): Try[Set[Coordinate]] = {
+
       Try(polygon.intersection(polygonB)) match {
         case Failure(exception) =>
           Failure(
@@ -129,6 +132,20 @@ object RichGeometries {
         GeoUtils.equalAreaProjection(coordinate.y, coordinate.getX)
       )
       buildPolygon(projectedCoordinates.toList)
+    }
+
+    // Fixme: Is not precisely right because earths curvatur
+
+    /** Checks whether the polygon contains the coordinate. Uses "covers()"
+      * insted of "contains()" so borders are included.
+      *
+      * @param coordinate
+      *   the coordinate to check
+      * @return
+      *   whether the polygon contains the coordinate
+      */
+    def containsCoordinate(coordinate: Coordinate): Boolean = {
+      polygon.covers(coordinate.toPoint)
     }
 
   }

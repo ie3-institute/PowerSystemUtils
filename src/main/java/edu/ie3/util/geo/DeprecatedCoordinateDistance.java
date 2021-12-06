@@ -13,7 +13,7 @@ import tech.units.indriya.ComparableQuantity;
  * Wraps two coordinates with the distance between the first one and the second one, can be compared
  * by distance to another CoordinateDistance
  */
-public class CoordinateDistance implements Comparable<CoordinateDistance> {
+public class DeprecatedCoordinateDistance implements Comparable<DeprecatedCoordinateDistance> {
   private final org.locationtech.jts.geom.Point coordinateA;
   private final org.locationtech.jts.geom.Point coordinateB;
   private final ComparableQuantity<Length> distance;
@@ -25,7 +25,7 @@ public class CoordinateDistance implements Comparable<CoordinateDistance> {
    * @param coordinateA The first coordinate
    * @param coordinateB The second coordinate
    */
-  public CoordinateDistance(
+  public DeprecatedCoordinateDistance(
       org.locationtech.jts.geom.Point coordinateA, org.locationtech.jts.geom.Point coordinateB) {
     this(
         coordinateA,
@@ -39,7 +39,7 @@ public class CoordinateDistance implements Comparable<CoordinateDistance> {
    * @param coordinateB The second coordinate
    * @param distance The distance from A to B
    */
-  private CoordinateDistance(
+  private DeprecatedCoordinateDistance(
       org.locationtech.jts.geom.Point coordinateA,
       org.locationtech.jts.geom.Point coordinateB,
       ComparableQuantity<Length> distance) {
@@ -72,7 +72,7 @@ public class CoordinateDistance implements Comparable<CoordinateDistance> {
    *     number higher than 0 if that has a lower distance
    */
   @Override
-  public int compareTo(CoordinateDistance that) {
+  public int compareTo(DeprecatedCoordinateDistance that) {
     return this.distance.compareTo(that.distance);
   }
 
@@ -80,7 +80,7 @@ public class CoordinateDistance implements Comparable<CoordinateDistance> {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    CoordinateDistance that = (CoordinateDistance) o;
+    DeprecatedCoordinateDistance that = (DeprecatedCoordinateDistance) o;
     return coordinateA.equals(that.coordinateA)
         && coordinateB.equals(that.coordinateB)
         && distance.equals(that.distance);
