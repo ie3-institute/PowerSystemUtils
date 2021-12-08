@@ -9,7 +9,8 @@ import edu.ie3.util.exceptions.GeoException
 import edu.ie3.util.geo.GeoUtils.{
   DEFAULT_GEOMETRY_FACTORY,
   buildPolygon,
-  calcHaversine
+  calcHaversine,
+  reverseEqualAreaProjection
 }
 import edu.ie3.util.quantities.PowerSystemUnits.KILOMETRE
 import edu.ie3.util.quantities.QuantityUtils.RichQuantityDouble
@@ -23,7 +24,7 @@ import scala.util.{Failure, Success, Try}
 
 object RichGeometries {
 
-  implicit class RichCoordinate(coordinate: Coordinate) {
+  implicit class GeoCoordinate(coordinate: Coordinate) {
 
     /** Calculates the great circle distance between two coordinates
       *
@@ -76,7 +77,7 @@ object RichGeometries {
     }
   }
 
-  implicit class RichLineString(lineString: LineString) {
+  implicit class GeoLineString(lineString: LineString) {
 
     /** Compute length of a [[LineString]] on earth's surface.
       *
@@ -97,12 +98,19 @@ object RichGeometries {
     }
   }
 
-  implicit class RichPolygon(polygon: Polygon) {
+  implicit class GeoPolygon(polygon: Polygon) {
 
-    // Fixme: Is not precisely right because earths curvature - use equal area projection ?
+    // Fixme: Is this correct or should the function calculate the specific coordinates shared by the polygons
+    /** Calculates intersection between polygons
+      *
+      * @param polygonB
+      *   polygon with which to calculate the intersection
+      * @return
+      */
     def intersect(polygonB: Polygon): Try[Set[Coordinate]] = {
-
-      Try(polygon.intersection(polygonB)) match {
+      Try(
+        polygon.equalAreaProjection.intersection(polygonB.equalAreaProjection)
+      ) match {
         case Failure(exception) =>
           Failure(
             new GeoException(
@@ -110,7 +118,8 @@ object RichGeometries {
               exception
             )
           )
-        case Success(geometry) => Success(geometry.getCoordinates.toSet)
+        case Success(geometry) =>
+          Success(geometry.getCoordinates.map(reverseEqualAreaProjection).toSet)
       }
     }
 
@@ -137,8 +146,7 @@ object RichGeometries {
       buildPolygon(projectedCoordinates.toList)
     }
 
-    // Fixme: Is not precisely right because earths curvatur
-
+    // Fixme: Should we do an equal area projection here as well?
     /** Checks whether the polygon contains the coordinate. Uses "covers()"
       * insted of "contains()" so borders are included.
       *

@@ -6,7 +6,7 @@
 package edu.ie3.util.geo
 
 import edu.ie3.util.geo.GeoUtils.DEFAULT_GEOMETRY_FACTORY
-import edu.ie3.util.geo.RichGeometries.RichPolygon
+import edu.ie3.util.geo.RichGeometries.GeoPolygon
 import edu.ie3.util.quantities.QuantityUtils.RichQuantityDouble
 import org.locationtech.jts.geom.Coordinate
 import org.scalatest.matchers.should.Matchers

@@ -6,7 +6,7 @@
 package edu.ie3.util.osm
 
 import edu.ie3.util.geo.GeoUtils.buildPolygon
-import edu.ie3.util.geo.RichGeometries.RichPolygon
+import edu.ie3.util.geo.RichGeometries.GeoPolygon
 import org.locationtech.jts.geom.{Coordinate, Polygon}
 import tech.units.indriya.ComparableQuantity
 
