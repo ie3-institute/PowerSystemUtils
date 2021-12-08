@@ -13,48 +13,48 @@ import tech.units.indriya.ComparableQuantity
 
 /** Wraps two coordinates with the distance between the first one and the second
   * one, can be compared by distance to another CoordinateDistance
-  * @param coordinateA
+  * @param from
   *   The first coordinate
-  * @param coordinateB
+  * @param to
   *   The second coordinate
   * @param distance
   *   The distance from A to B
   */
 class CoordinateDistance private (
-    val coordinateA: Point,
-    val coordinateB: Point,
+    val from: Point,
+    val to: Point,
     val distance: ComparableQuantity[Length]
 ) extends Comparable[CoordinateDistance] {
 
   /** Calculates the distance from the first to the second coordinate using
     * [[GeoUtils.calcHaversine(double, double, double, double)]]
     *
-    * @param coordinateA
+    * @param from
     *   The first coordinate
-    * @param coordinateB
+    * @param to
     *   The second coordinate
     */
-  def this(coordinateA: Point, coordinateB: Point) = {
+  def this(from: Point, to: Point) = {
     this(
-      coordinateA,
-      coordinateB,
+      from,
+      to,
       GeoUtils.calcHaversine(
-        coordinateA.getY,
-        coordinateA.getX,
-        coordinateB.getY,
-        coordinateB.getX
+        from.getY,
+        from.getX,
+        to.getY,
+        to.getX
       )
     )
   }
 
-  /** @return The first coordinate */
-  def getCoordinateA: Point = {
-    coordinateA
+  /** The first coordinate */
+  def getFrom: Point = {
+    from
   }
 
-  /** @return The second coordinate */
-  def getCoordinateB: Point = {
-    coordinateB
+  /** The second coordinate */
+  def getTo: Point = {
+    to
   }
 
   /** @return
@@ -80,17 +80,17 @@ class CoordinateDistance private (
   override def equals(other: Any): Boolean = other match {
     case other: CoordinateDistance if this == other => true
     case other: CoordinateDistance =>
-      coordinateA.equals(other.coordinateA) && coordinateB.equals(
-        other.coordinateB
+      from.equals(other.from) && to.equals(
+        other.to
       ) && distance == other.distance
     case _ => false
   }
 
   override def hashCode: Int = {
-    Objects.hash(coordinateA, coordinateB, distance)
+    Objects.hash(from, to, distance)
   }
 
   override def toString: String = {
-    "CoordinateDistance{" + "coordinateA=" + coordinateA + ", coordinateB=" + coordinateB + ", distance=" + distance + '}'
+    "CoordinateDistance{" + "coordinateA=" + from + ", coordinateB=" + to + ", distance=" + distance + '}'
   }
 }

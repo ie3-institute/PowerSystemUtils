@@ -6,7 +6,11 @@
 package edu.ie3.util.geo
 
 import edu.ie3.util.exceptions.GeoException
-import edu.ie3.util.geo.GeoUtils.{DEFAULT_GEOMETRY_FACTORY, buildPolygon, calcHaversine}
+import edu.ie3.util.geo.GeoUtils.{
+  DEFAULT_GEOMETRY_FACTORY,
+  buildPolygon,
+  calcHaversine
+}
 import edu.ie3.util.quantities.PowerSystemUnits.KILOMETRE
 import edu.ie3.util.quantities.QuantityUtils.RichQuantityDouble
 import org.locationtech.jts.geom.{Coordinate, LineString, Point, Polygon}
@@ -61,7 +65,9 @@ object RichGeometries {
         .add(coordinate.haversineDistance(b))
         .getValue
         .doubleValue
-      if (abs(1 - (distancePassingMe / distance.getValue.doubleValue())) < epsilon) true
+      if (
+        abs(1 - (distancePassingMe / distance.getValue.doubleValue())) < epsilon
+      ) true
       else false
     }
 
@@ -126,7 +132,7 @@ object RichGeometries {
       */
     def equalAreaProjection: Polygon = {
       val projectedCoordinates = polygon.getCoordinates.map(coordinate =>
-        GeoUtils.equalAreaProjection(coordinate.y, coordinate.getX)
+        GeoUtils.equalAreaProjection(coordinate)
       )
       buildPolygon(projectedCoordinates.toList)
     }

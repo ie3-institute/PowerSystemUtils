@@ -6,7 +6,6 @@
 package edu.ie3.util.geo
 
 import edu.ie3.util.exceptions.GeoException
-import edu.ie3.util.quantities.PowerSystemUnits.KILOMETRE
 import org.apache.commons.lang3.ArrayUtils
 import org.locationtech.jts.algorithm.ConvexHull
 import org.locationtech.jts.geom.impl.CoordinateArraySequence
@@ -24,7 +23,7 @@ import tech.units.indriya.ComparableQuantity
 import tech.units.indriya.quantity.Quantities
 import tech.units.indriya.unit.Units.{METRE, RADIAN}
 
-import java.lang.Math.{atan2, cos, sin, sqrt, toRadians}
+import java.lang.Math._
 import javax.measure.Quantity
 import javax.measure.quantity.Length
 import scala.collection.immutable.{SortedSet, TreeSet}
@@ -38,20 +37,19 @@ object GeoUtils {
   val EARTH_RADIUS: ComparableQuantity[Length] =
     Quantities.getQuantity(6378137.0, METRE);
 
-
   /** Convert a given [[LineString]] with at least two points into a 'safe to be
-   * compared' [[LineString]] This is done by removing duplicates in the points
-   * in the provided linestring as well as a small change of the start
-   * coordinate if the linestring only consists of two coordinates. For details
-   * on the bug inside [[LineString]] that is addressed here, see
-   * https://github.com/locationtech/jts/issues/531
-   *
-   * @param lineString
-   *   the linestring that should be checked and maybe converted to a 'safe to
-   *   be compared' linestring
-   * @return
-   *   a 'safe to be compared' linestring
-   */
+    * compared' [[LineString]] This is done by removing duplicates in the points
+    * in the provided linestring as well as a small change of the start
+    * coordinate if the linestring only consists of two coordinates. For details
+    * on the bug inside [[LineString]] that is addressed here, see
+    * https://github.com/locationtech/jts/issues/531
+    *
+    * @param lineString
+    *   the linestring that should be checked and maybe converted to a 'safe to
+    *   be compared' linestring
+    * @return
+    *   a 'safe to be compared' linestring
+    */
   def buildSafeLineString(lineString: LineString): LineString =
     if (lineString.getCoordinates.length == 2)
       buildSafeLineStringBetweenPoints(
@@ -145,7 +143,6 @@ object GeoUtils {
     new Coordinate(p1X, p1Y, p1Z)
   }
 
-
   /** Calculates and orders the coordinate distances from a base coordinate to a
     * list of coordinates
     *
@@ -185,7 +182,7 @@ object GeoUtils {
       latB: Double,
       longB: Double
   ): ComparableQuantity[Length] = {
-    val r = EARTH_RADIUS.to(KILOMETRE)
+    val r = EARTH_RADIUS
     val dLat = Quantities.getQuantity(toRadians(latB - latA), RADIAN)
     val dLon = Quantities.getQuantity(toRadians(longB - longA), RADIAN)
     val a = pow(sin(dLat.getValue.doubleValue / 2), 2) + cos(
@@ -195,20 +192,25 @@ object GeoUtils {
     r.multiply(c)
   }
 
-  // Fixme: Might be slightly off as it does not account for earth's curvature
-  /** Builds a convex hull from a set of coordinates.
+  /** Builds a convex hull from a set of latitude/longitude coordinates.
+    * Projects them on a 2D-surface, calculates the convex hull and reverses the
+    * projection of resulting coordinates to latitude and longitude values.
     *
     * @param coordinates
     *   the coordinates to consider
     * @return
     *   a Try of the resulting polygon
     */
-  def buildConvexHull(coordinates: Set[Coordinate]): Try[Polygon] = {
+  def buildConvexHull(coordinates: List[Coordinate]): Try[Polygon] = {
+    val projectedCoordinates = coordinates.map(equalAreaProjection)
     new ConvexHull(
-      coordinates.toArray,
+      projectedCoordinates.toArray,
       DEFAULT_GEOMETRY_FACTORY
     ).getConvexHull match {
-      case polygon: Polygon => Success(polygon)
+      case projectedPolygon: Polygon =>
+        val coordinates =
+          projectedPolygon.getCoordinates.map(reverseEqualAreaProjection)
+        Success(buildPolygon(coordinates.toList))
       case _: LineString =>
         Failure(
           new GeoException(
@@ -231,6 +233,14 @@ object GeoUtils {
     }
   }
 
+  def buildPoint(lat: Double, long: Double): Point = {
+    buildPoint(buildCoordinate(lat, long))
+  }
+
+  def buildPoint(coordinate: Coordinate): Point = {
+    DEFAULT_GEOMETRY_FACTORY.createPoint(coordinate)
+  }
+
   /** Build a coordinate from latitude and longitude values.
     *
     * @param lat
@@ -244,7 +254,9 @@ object GeoUtils {
     new Coordinate(long, lat)
   }
 
-  /** Builds a polygon from a List of coordinates
+  /** Builds a polygon from a List of coordinates. To build a Polygon the
+    * coordinates have to form a closed ring which means that the first and last
+    * coordinate have to be the same coordinate.
     *
     * @param coordinates
     *   the coordinates for building the polygon
@@ -258,10 +270,11 @@ object GeoUtils {
     new Polygon(linearRing, Array[LinearRing](), DEFAULT_GEOMETRY_FACTORY)
   }
 
-  /** Credits to Joe Kington
+  /** Sinusoidal equal-area projection of latitude and longitude values to a 2d
+    * surface. This is an approximation gets worse when lines become very long.
+    *
+    * Credits to Joe Kington
     * (https://stackoverflow.com/questions/4681737/how-to-calculate-the-area-of-a-polygon-on-the-earths-surface-using-python#:~:text=Basically%2C%20you%20just%20multiply%20the,the%20cosine%20of%20the%20latitude.)
-    * Sinusoidal equal-area projection of latitude and longitude values to a 2d
-    * surface. This is an approximation gets worse when lines become very long
     *
     * @param lat
     *   latitude to project
@@ -270,17 +283,37 @@ object GeoUtils {
     * @return
     *   a projected Coordinate with values in metre
     */
-  def equalAreaProjection(lat: Double, long: Double): Coordinate = {
+  def equalAreaProjection(coordinate: Coordinate): Coordinate = {
+    val lat = coordinate.getY
+    val long = coordinate.getX
     val latDist =
-      Math.PI * (EARTH_RADIUS.to(METRE).getValue.doubleValue() / 180.0)
+      PI * (EARTH_RADIUS.to(METRE).getValue.doubleValue() / 180d)
     val y = lat * latDist
     val x = long * latDist * cos(toRadians(lat))
     new Coordinate(x, y)
   }
 
+  /** Reverses the [[equalAreaProjection()]] and returns a coordinate on earths
+    * surface
+    *
+    * @param coordinate
+    *   the projected coordinate
+    * @return
+    *   the latitude longitude based coordinate
+    */
+  def reverseEqualAreaProjection(coordinate: Coordinate): Coordinate = {
+    val latDist = PI * (EARTH_RADIUS.to(METRE).getValue.doubleValue() / 180d)
+    val lat = coordinate.y / latDist
+    val long = coordinate.x / (latDist * cos(toRadians(lat)))
+    buildCoordinate(lat, long)
+  }
+
   /** Draws a circle with a radius of the provided distance around the provided
     * center coordinates and returns the result as a drawable polygon (one point
     * per degree)
+    *
+    * Source: https://www.movable-type.co.uk/scripts/latlong.html "Destination
+    * point given distance and bearing from start point"
     *
     * @param center
     *   coordinate of the circle's center
@@ -293,12 +326,19 @@ object GeoUtils {
       center: Coordinate,
       radius: Quantity[Length]
   ): Polygon = {
-    val coordinates = (0 to 359)
-      .map(deg => {
-        val angle = deg.toFloat.toRadians
-        val x = center.x + radius.getValue.doubleValue() * cos(angle)
-        val y = center.y + radius.getValue.doubleValue() * sin(angle)
-        new Coordinate(x, y)
+    val centerLat = toRadians(center.y)
+    val centerLon = toRadians(center.x)
+    val d = radius.divide(EARTH_RADIUS).getValue.doubleValue
+    val coordinates = (0 to 360)
+      .map(angle => {
+        val bearing = toRadians(angle)
+        val latRad =
+          asin(sin(centerLat) * cos(d) + cos(centerLat) * sin(d) * cos(bearing))
+        val lonRad: Double = centerLon + atan2(
+          sin(bearing) * sin(d) * cos(centerLat),
+          cos(d) - sin(centerLat) * sin(latRad)
+        )
+        new Coordinate(lonRad.toDegrees, latRad.toDegrees)
       })
       .toList
     buildPolygon(coordinates)

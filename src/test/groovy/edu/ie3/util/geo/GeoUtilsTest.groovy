@@ -45,7 +45,7 @@ class GeoUtilsTest extends Specification {
 		ComparableQuantity<Length> actual = DeprecatedGeoUtils.calcHaversine(start.lat, start.lon, end.lat, end.lon)
 
 		then:
-		Math.abs(actual.subtract(expected).to(METRE).value.doubleValue()) < tolerance.value.doubleValue()
+		Math.abs(actual.subtract(expected).to(METRE).value.doubleValue()) < tolerance	.value.doubleValue()
 	}
 
 	def "Total length of LineString is correctly calculated"() {
@@ -96,7 +96,7 @@ class GeoUtilsTest extends Specification {
 		for (int cnt = 0; cnt < coordinates.length; cnt++) {
 			coordinates[cnt] == actualCoordinates[cnt]
 		}
-from
+		from
 		where:
 		lineString                                                                                                                            | coordinates
 		"{ \"type\": \"LineString\", \"coordinates\": [[7.411111, 51.49228],[7.411111, 51.49228]]}"                                           | [
