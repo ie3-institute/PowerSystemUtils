@@ -76,7 +76,7 @@ dependencies {
 
 	// TEST Scala //
 	implementation "org.scalatest:scalatest_${scalaVersion}:3.2.9"
-	implementation 'com.vladsch.flexmark:flexmark-all:0.35.10'
+	implementation 'com.vladsch.flexmark:flexmark-all:0.62.2'
 
 }
 
