@@ -1,5 +1,6 @@
 scoverage {
 	scoverageScalaVersion = scalaBinaryVersion
+	scoverageVersion = "1.4.10" // TODO: Remove, when default version is matching
 	coverageOutputHTML = false
 	coverageOutputXML = true
 	coverageOutputCobertura = false
