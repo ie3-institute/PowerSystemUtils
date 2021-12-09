@@ -9,8 +9,7 @@ import edu.ie3.util.exceptions.GeoException
 import edu.ie3.util.geo.GeoUtils.{
   DEFAULT_GEOMETRY_FACTORY,
   buildPolygon,
-  calcHaversine,
-  reverseEqualAreaProjection
+  calcHaversine
 }
 import edu.ie3.util.quantities.QuantityUtils.RichQuantityDouble
 import org.locationtech.jts.geom.{Coordinate, LineString, Point, Polygon}

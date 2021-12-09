@@ -123,7 +123,7 @@ class GeoUtilsSpec extends Matchers with AnyWordSpecLike {
           hullCoordinates.size shouldBe 5
           hullCoordinates.foreach(hullCoordinate =>
             cornerCoordinates.exists(cornerCoordinate =>
-              hullCoordinate.equals2D(cornerCoordinate, 1e-10)
+              hullCoordinate.equals2D(cornerCoordinate)
             ) shouldBe true
           )
       }
@@ -201,7 +201,6 @@ class GeoUtilsSpec extends Matchers with AnyWordSpecLike {
       polygon.containsCoordinate(new Coordinate(7.5, 49)) shouldBe true
       polygon.containsCoordinate(new Coordinate(7.5, 50.1)) shouldBe false
       polygon.containsCoordinate(new Coordinate(8.1, 50)) shouldBe false
-
     }
   }
 }

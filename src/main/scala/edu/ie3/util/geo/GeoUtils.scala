@@ -193,8 +193,6 @@ object GeoUtils {
   }
 
   /** Builds a convex hull from a set of latitude/longitude coordinates.
-    * Projects them on a 2D-surface, calculates the convex hull and reverses the
-    * projection of resulting coordinates to latitude and longitude values.
     *
     * @param coordinates
     *   the coordinates to consider
@@ -202,15 +200,13 @@ object GeoUtils {
     *   a Try of the resulting polygon
     */
   def buildConvexHull(coordinates: Set[Coordinate]): Try[Polygon] = {
-    val projectedCoordinates = coordinates.map(equalAreaProjection)
+    val projectedCoordinates = coordinates
     new ConvexHull(
       projectedCoordinates.toArray,
       DEFAULT_GEOMETRY_FACTORY
     ).getConvexHull match {
       case projectedPolygon: Polygon =>
-        val coordinates =
-          projectedPolygon.getCoordinates.map(reverseEqualAreaProjection)
-        Success(buildPolygon(coordinates))
+        Success(buildPolygon(projectedPolygon.getCoordinates))
       case _: LineString =>
         Failure(
           new GeoException(
