@@ -133,7 +133,7 @@ object OsmEntities {
     }
 
     def toPolygon: Polygon = {
-      buildPolygon(getCoordinates)
+      buildPolygon(getCoordinates.toArray)
     }
 
     def calculateArea: ComparableQuantity[Area] =

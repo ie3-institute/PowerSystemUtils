@@ -12,11 +12,11 @@ import edu.ie3.util.geo.GeoUtils.{
   calcHaversine,
   reverseEqualAreaProjection
 }
-import edu.ie3.util.quantities.PowerSystemUnits.KILOMETRE
 import edu.ie3.util.quantities.QuantityUtils.RichQuantityDouble
 import org.locationtech.jts.geom.{Coordinate, LineString, Point, Polygon}
 import tech.units.indriya.ComparableQuantity
 import tech.units.indriya.quantity.Quantities
+import tech.units.indriya.unit.Units.METRE
 
 import javax.measure.quantity.{Area, Length}
 import scala.math.abs
@@ -44,21 +44,23 @@ object RichGeometries {
       )
     }
 
-    /** Checks if the coordinate lies between two coordinates a and b.
+    /** Checks if the coordinate lies between two coordinates a and b by
+      * comparing the distances between a and b with the sum of distances
+      * between the coordinate and a and the coordinate and b
       *
       * @param a
       *   coordinate a
       * @param b
       *   coordinate b
       * @param epsilon
-      *   permitted deviation
+      *   permitted relative deviation
       * @return
       *   whether or not the coordinate lies between
       */
     def isBetween(
         a: Coordinate,
         b: Coordinate,
-        epsilon: Double = 1e-11
+        epsilon: Double = 1e-12
     ): Boolean = {
       val distance = a.haversineDistance(b)
       val distancePassingMe = a
@@ -88,7 +90,7 @@ object RichGeometries {
       val coordinates = lineString.getCoordinates.toVector
       val coordinateSize = coordinates.size
       coordinates.zipWithIndex
-        .foldLeft(Quantities.getQuantity(0, KILOMETRE))((acc, current) => {
+        .foldLeft(Quantities.getQuantity(0, METRE))((acc, current) => {
           if (current._2 < coordinateSize - 1) {
             val currentCoordinate = current._1
             val nextCoordinate = coordinates(current._2 + 1)
@@ -107,9 +109,9 @@ object RichGeometries {
       *   polygon with which to calculate the intersection
       * @return
       */
-    def intersect(polygonB: Polygon): Try[Set[Coordinate]] = {
+    def intersect(polygonB: Polygon): Try[Polygon] = {
       Try(
-        polygon.equalAreaProjection.intersection(polygonB.equalAreaProjection)
+        polygon.intersection(polygonB.equalAreaProjection)
       ) match {
         case Failure(exception) =>
           Failure(
@@ -118,8 +120,7 @@ object RichGeometries {
               exception
             )
           )
-        case Success(geometry) =>
-          Success(geometry.getCoordinates.map(reverseEqualAreaProjection).toSet)
+        case Success(polygon: Polygon) => Success(polygon)
       }
     }
 
@@ -143,10 +144,9 @@ object RichGeometries {
       val projectedCoordinates = polygon.getCoordinates.map(coordinate =>
         GeoUtils.equalAreaProjection(coordinate)
       )
-      buildPolygon(projectedCoordinates.toList)
+      buildPolygon(projectedCoordinates)
     }
 
-    // Fixme: Should we do an equal area projection here as well?
     /** Checks whether the polygon contains the coordinate. Uses "covers()"
       * insted of "contains()" so borders are included.
       *

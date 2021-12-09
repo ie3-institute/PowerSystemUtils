@@ -9,6 +9,7 @@ import edu.ie3.util.geo.GeoUtils.{
   DEFAULT_GEOMETRY_FACTORY,
   buildCirclePolygon,
   buildConvexHull,
+  buildCoordinate,
   buildPoint,
   buildPolygon,
   calcHaversine,
@@ -16,7 +17,7 @@ import edu.ie3.util.geo.GeoUtils.{
   equalAreaProjection,
   reverseEqualAreaProjection
 }
-import edu.ie3.util.geo.RichGeometries.GeoCoordinate
+import edu.ie3.util.geo.RichGeometries.{GeoCoordinate, GeoPolygon}
 import edu.ie3.util.quantities.QuantityMatchers.equalWithTolerance
 import org.locationtech.jts.geom.Coordinate
 import org.scalatest.matchers.should.Matchers
@@ -78,7 +79,7 @@ class GeoUtilsSpec extends Matchers with AnyWordSpecLike {
       val middle = buildPoint(51.44074066208236, 10.039100585737868)
       val furthest = buildPoint(51.6273949370414, 10.341911247878777)
       val actual =
-        calcOrderedCoordinateDistances(base, List(middle, furthest, nearest))
+        calcOrderedCoordinateDistances(base, Array(middle, furthest, nearest))
       val list = actual.toList
       list.size shouldBe 3
       list.head.to shouldBe nearest
@@ -119,12 +120,11 @@ class GeoUtilsSpec extends Matchers with AnyWordSpecLike {
           val cornerCoordinates =
             List(topLeft, topRight, bottomRight, bottomLeft)
           // contains all corner coordinates and filters out all colinear ones
-          hullCoordinates.foreach(coord => println(coord.toString))
           hullCoordinates.size shouldBe 5
           hullCoordinates.foreach(hullCoordinate =>
             cornerCoordinates.exists(cornerCoordinate =>
               hullCoordinate.equals2D(cornerCoordinate, 1e-10)
-            )
+            ) shouldBe true
           )
       }
     }
@@ -142,7 +142,7 @@ class GeoUtilsSpec extends Matchers with AnyWordSpecLike {
       val coordinateB = new Coordinate(7.521007845835815, 51.50450661471354)
       val coordinateC = new Coordinate(7.5598606548385545, 51.456498140367934)
       val actual =
-        buildPolygon(List(coordinateA, coordinateB, coordinateC, coordinateA))
+        buildPolygon(Array(coordinateA, coordinateB, coordinateC, coordinateA))
       actual.getCoordinates shouldBe Array(
         coordinateA,
         coordinateB,
@@ -190,6 +190,18 @@ class GeoUtilsSpec extends Matchers with AnyWordSpecLike {
       ) should equalWithTolerance(radius)
     }
 
-  }
+    "checks if the polygon contains a coordinate" in {
+      val topLeft = new Coordinate(7, 50)
+      val topRight = new Coordinate(8, 50)
+      val bottomRight = new Coordinate(8, 48)
+      val bottomLeft = new Coordinate(7, 48)
+      val polygon =
+        buildPolygon(Array(topLeft, topRight, bottomRight, bottomLeft, topLeft))
+      polygon.containsCoordinate(new Coordinate(7.5, 50)) shouldBe true
+      polygon.containsCoordinate(new Coordinate(7.5, 49)) shouldBe true
+      polygon.containsCoordinate(new Coordinate(7.5, 50.1)) shouldBe false
+      polygon.containsCoordinate(new Coordinate(8.1, 50)) shouldBe false
 
+    }
+  }
 }

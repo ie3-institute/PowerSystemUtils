@@ -155,7 +155,7 @@ object GeoUtils {
     */
   def calcOrderedCoordinateDistances(
       baseCoordinate: Point,
-      coordinates: List[Point]
+      coordinates: Array[Point]
   ): SortedSet[CoordinateDistance] = {
     val coordinateDistances = coordinates.map(coordinate =>
       new CoordinateDistance(baseCoordinate, coordinate)
@@ -210,7 +210,7 @@ object GeoUtils {
       case projectedPolygon: Polygon =>
         val coordinates =
           projectedPolygon.getCoordinates.map(reverseEqualAreaProjection)
-        Success(buildPolygon(coordinates.toList))
+        Success(buildPolygon(coordinates))
       case _: LineString =>
         Failure(
           new GeoException(
@@ -263,7 +263,7 @@ object GeoUtils {
     * @return
     *   a [[Polygon]]
     */
-  def buildPolygon(coordinates: List[Coordinate]): Polygon = {
+  def buildPolygon(coordinates: Array[Coordinate]): Polygon = {
     val arrayCoordinates = new CoordinateArraySequence(coordinates.toArray)
     val linearRing =
       new LinearRing(arrayCoordinates, DEFAULT_GEOMETRY_FACTORY)
@@ -338,7 +338,7 @@ object GeoUtils {
         )
         new Coordinate(lonRad.toDegrees, latRad.toDegrees)
       })
-      .toList
+      .toArray
     buildPolygon(coordinates)
   }
 
