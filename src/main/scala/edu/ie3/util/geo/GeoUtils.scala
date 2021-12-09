@@ -201,7 +201,7 @@ object GeoUtils {
     * @return
     *   a Try of the resulting polygon
     */
-  def buildConvexHull(coordinates: List[Coordinate]): Try[Polygon] = {
+  def buildConvexHull(coordinates: Set[Coordinate]): Try[Polygon] = {
     val projectedCoordinates = coordinates.map(equalAreaProjection)
     new ConvexHull(
       projectedCoordinates.toArray,
@@ -276,10 +276,8 @@ object GeoUtils {
     * Credits to Joe Kington
     * (https://stackoverflow.com/questions/4681737/how-to-calculate-the-area-of-a-polygon-on-the-earths-surface-using-python#:~:text=Basically%2C%20you%20just%20multiply%20the,the%20cosine%20of%20the%20latitude.)
     *
-    * @param lat
-    *   latitude to project
-    * @param long
-    *   longitude to project
+    * @param coordinate
+    *   the coordinate to project
     * @return
     *   a projected Coordinate with values in metre
     */

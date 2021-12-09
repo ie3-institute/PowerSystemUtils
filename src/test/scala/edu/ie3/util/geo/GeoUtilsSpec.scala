@@ -103,7 +103,7 @@ class GeoUtilsSpec extends Matchers with AnyWordSpecLike {
       val bottomRight = new Coordinate(8, 48)
       val betweenBlBr = new Coordinate(7.5, 48)
       val bottomLeft = new Coordinate(7, 48)
-      val coordinates = List(
+      val coordinates = Set(
         topLeft,
         betweenTlTr,
         topRight,
@@ -116,13 +116,16 @@ class GeoUtilsSpec extends Matchers with AnyWordSpecLike {
         case Failure(exception) => throw exception
         case Success(polygon) =>
           val hullCoordinates = polygon.getCoordinates
+          val cornerCoordinates =
+            List(topLeft, topRight, bottomRight, bottomLeft)
           // contains all corner coordinates and filters out all colinear ones
+          hullCoordinates.foreach(coord => println(coord.toString))
           hullCoordinates.size shouldBe 5
-          hullCoordinates(0).equals2D(topLeft, 1e-10)
-          hullCoordinates(1).equals(topRight, 1e-10) shouldBe true
-          hullCoordinates(2).equals(bottomRight, 1e-10) shouldBe true
-          hullCoordinates(3).equals(bottomLeft, 1e-10) shouldBe true
-          hullCoordinates(4).equals(topLeft, 1e-10) shouldBe true
+          hullCoordinates.foreach(hullCoordinate =>
+            cornerCoordinates.exists(cornerCoordinate =>
+              hullCoordinate.equals2D(cornerCoordinate, 1e-10)
+            )
+          )
       }
     }
 
