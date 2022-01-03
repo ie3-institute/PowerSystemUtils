@@ -3,9 +3,10 @@
  * Institute of Energy Systems, Energy Efficiency and Energy Economics,
  * Research group Distribution grid planning and operation
 */
-package edu.ie3.util.osm
+package edu.ie3.util.osm.model
 
-import edu.ie3.util.osm.OsmEntities.{ClosedWay, OpenWay}
+import edu.ie3.util.osm.model.OsmContainer
+import edu.ie3.util.osm.model.OsmEntity.Way.{ClosedWay, OpenWay}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
@@ -16,42 +17,39 @@ class OsmModelSpec extends Matchers with AnyWordSpecLike {
 
   "The OsmModel" should {
     val wayA = ClosedWay(
-      UUID.randomUUID(),
       1,
-      ZonedDateTime.now(),
+      Vector.empty,
       Map(
         "shop" -> "supermarket"
       ),
-      List()
+      None
     )
     val wayB = ClosedWay(
-      UUID.randomUUID(),
       1,
-      ZonedDateTime.now(),
+      Vector.empty,
       Map(
         "building" -> "supermarket"
       ),
-      List()
+      None
     )
     val wayC = OpenWay(
-      UUID.randomUUID(),
       1,
-      ZonedDateTime.now(),
+      Vector.empty,
       Map(
         "building" -> "supermarket"
       ),
-      List()
+      None
     )
 
     "extract buildings correctly" in {
-      OsmModel.extractBuildings(List(wayA, wayB, wayC)) shouldBe List(wayB)
+      OsmContainer.extractBuildings(List(wayA, wayB, wayC)) shouldBe List(wayB)
     }
 
     "extract highways correctly" in {
       val highwayA = wayA.copy(tags = Map("highway" -> "residential"))
       val highwayB = wayB.copy(tags = Map("highway" -> "unlisted"))
       val highwayC = wayC.copy(tags = Map("highway" -> "path"))
-      OsmModel.extractHighways(
+      OsmContainer.extractHighways(
         List(
           highwayA,
           highwayB,
@@ -65,7 +63,7 @@ class OsmModelSpec extends Matchers with AnyWordSpecLike {
       val landuseA = wayA.copy(tags = Map("landuse" -> "residential"))
       val landuseB = wayA.copy(tags = Map("landuse" -> "retail"))
       val landuseC = wayA.copy(tags = Map("landuse" -> "unlisted"))
-      OsmModel.extractLandUses(
+      OsmContainer.extractLanduses(
         List(
           landuseA,
           landuseB,

@@ -3,9 +3,9 @@
  * Institute of Energy Systems, Energy Efficiency and Energy Economics,
  * Research group Distribution grid planning and operation
 */
-package edu.ie3.util.osm
+package edu.ie3.util.osm.model
 
-import edu.ie3.util.osm.OsmEntities.ClosedWay
+import edu.ie3.util.osm.model.OsmEntity.Way.ClosedWay
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
@@ -14,29 +14,28 @@ import java.util.UUID
 
 class OsmEntitiesSpec extends Matchers with AnyWordSpecLike {
 
-  "A OsmEntitiy" should {
+  "A OsmEntity" should {
     val entity = ClosedWay(
-      UUID.randomUUID(),
       1,
-      ZonedDateTime.now(),
+      Vector.empty,
       Map(
         "shop" -> "supermarket",
         "building" -> "residential",
         "landuse" -> "meadow"
       ),
-      List()
+      None
     )
     "check if the tags contains a specific key value pair" in {
-      entity.containsKeyValuePair("shop", "supermarket") shouldBe true
-      entity.containsKeyValuePair("supermarket", "shop") shouldBe false
-      entity.containsKeyValuePair("building", "commercial") shouldBe false
-      entity.containsKeyValuePair("building", "residential") shouldBe true
+      entity.hasKeyValuePair("shop", "supermarket") shouldBe true
+      entity.hasKeyValuePair("supermarket", "shop") shouldBe false
+      entity.hasKeyValuePair("building", "commercial") shouldBe false
+      entity.hasKeyValuePair("building", "residential") shouldBe true
     }
     "check if the tags contains a specific key with a value within a given a set" in {
       val valueSet = Set("supermarket", "residential")
-      entity.containsKeyValuePair("shop", valueSet) shouldBe true
-      entity.containsKeyValuePair("building", valueSet) shouldBe true
-      entity.containsKeyValuePair("landuse", valueSet) shouldBe false
+      entity.hasKeyValuesPairOr("shop", valueSet) shouldBe true
+      entity.hasKeyValuesPairOr("building", valueSet) shouldBe true
+      entity.hasKeyValuesPairOr("landuse", valueSet) shouldBe false
     }
   }
 
