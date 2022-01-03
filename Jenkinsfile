@@ -40,7 +40,7 @@ def mavenCentralSignKeyId = "a1357827-1516-4fa2-ab8e-72cdea07a692"
 //// define and setjava version ////
 //// requires the java version to be set in the internal jenkins java version management
 //// use identifier accordingly
-def javaVersionId = 'jdk-8'
+def javaVersionId = 'jdk-11'
 
 //// set java version method (needs node{} for execution)
 void setJavaVersion(javaVersionId) {
@@ -106,7 +106,6 @@ if (env.BRANCH_NAME == "master") {
 
                     // execute sonarqube code analysis
                     stage('SonarQube analysis') {
-                        setJavaVersion('jdk-11')
                         withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube
                             gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey")
                         }
@@ -138,7 +137,6 @@ if (env.BRANCH_NAME == "master") {
 
                     // deploy snapshot version to oss sonatype
                     stage('deploy') {
-                    setJavaVersion(javaVersionId)
                         // get the sonatype credentials stored in the jenkins secure keychain
                         withCredentials([usernamePassword(credentialsId: mavenCentralCredentialsId, usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password'),
                                          file(credentialsId: mavenCentralSignKeyFileId, variable: 'mavenCentralKeyFile'),
@@ -229,7 +227,6 @@ if (env.BRANCH_NAME == "master") {
 
                     // execute sonarqube code analysis
                     stage('SonarQube analysis') {
-                     setJavaVersion('jdk-11')
                         withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube
                             gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey ")
                         }
@@ -263,7 +260,6 @@ if (env.BRANCH_NAME == "master") {
 
                     // deploy snapshot version to oss sonatype
                     stage('deploy') {
-                    setJavaVersion(javaVersionId)
                         // get the sonatype credentials stored in the jenkins secure keychain
                         withCredentials([usernamePassword(credentialsId: mavenCentralCredentialsId, usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password'),
                                          file(credentialsId: mavenCentralSignKeyFileId, variable: 'mavenCentralKeyFile'),
