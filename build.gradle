@@ -15,8 +15,8 @@ plugins {
 ext {
 	slf4jVersion = '1.7.32'
 	javaVersion = JavaVersion.VERSION_1_8
-	scalaVersion = '2.13'
-	scalaBinaryVersion = '2.13.7'
+	scalaVersion = '3'
+	scalaBinaryVersion = '3.1.0'
 	scriptsLocation = 'gradle' + File.separator + 'scripts' + File.separator //location of script plugins
 }
 
@@ -70,11 +70,11 @@ dependencies {
 
 	/* --- Scala libs --- */
 	// CORE Scala //
-	implementation "org.scala-lang:scala-library:${scalaBinaryVersion}"
+	implementation "org.scala-lang:scala3-library_3:${scalaBinaryVersion}"
 
 	// TEST Scala //
-	implementation "org.scalatest:scalatest_${scalaVersion}:3.2.10"
-	implementation 'com.vladsch.flexmark:flexmark-all:0.62.2'
+	testImplementation "org.scalatest:scalatest_$scalaVersion:3.2.10"
+	testRuntimeClasspath 'com.vladsch.flexmark:flexmark-all:0.62.2'
 }
 
 tasks.withType(JavaCompile) {
