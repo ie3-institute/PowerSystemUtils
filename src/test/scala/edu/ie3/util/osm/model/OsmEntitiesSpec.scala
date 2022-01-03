@@ -14,7 +14,7 @@ import java.util.UUID
 
 class OsmEntitiesSpec extends Matchers with AnyWordSpecLike {
 
-  "A OsmEntity" should {
+  "An OsmEntity" should {
     val entity = ClosedWay(
       1,
       Vector.empty,
