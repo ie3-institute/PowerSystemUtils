@@ -32,8 +32,6 @@ sonarqube {
 		/// integration tests reports dir (if any)
 		property 'sonar.groovy.jacoco.itReportPath', 'build/jacoco/allTests.exec'
 		property 'sonar.groovy.binaries', 'build/classes/groovy' // groovy binaries
-		// scala specific stuff
-		property 'sonar.scala.coverage.reportPaths'
 	}
 }
 
