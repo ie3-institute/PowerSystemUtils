@@ -5,9 +5,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased/Snapshot]
+
+## [1.6.0]
+
+**Last version with java 8 support!**
+
 ### Added
--   Added scala support
--   Added `RichQuantityDouble` as double type enrichment to enable easy quantity conversions [#133](https://github.com/ie3-institute/PowerSystemUtils/issues/133)
+- Added scala support
+- Added `RichQuantityDouble` as double type enrichment to enable easy quantity conversions [#133](https://github.com/ie3-institute/PowerSystemUtils/issues/133)
+
+### Fixed
+- log4j security update
+- dangerous constructor call in `OneToOneMap`
 
 ## [1.5.3]
 ### Fixed
@@ -75,7 +84,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 -   fixes + extensions in StandardUnits
 
-[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v1.5.3...HEAD
+[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/ie3-institute/powersystemutils/compare/v1.5.3...v1.6.0
 [1.5.3]: https://github.com/ie3-institute/powersystemutils/compare/v1.5.2...v1.5.3
 [1.5.2]: https://github.com/ie3-institute/powersystemutils/compare/v1.4...v1.5.2
 [1.5.1]: https://github.com/ie3-institute/powersystemutils/compare/v1.4...v1.5.1

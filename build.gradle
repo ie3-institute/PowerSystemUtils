@@ -14,7 +14,6 @@ plugins {
 }
 
 ext {
-	slf4jVersion = '1.7.32'
 	javaVersion = JavaVersion.VERSION_1_8
 	scalaVersion = '2.13'
 	scalaBinaryVersion = '2.13.7'
@@ -22,7 +21,7 @@ ext {
 }
 
 group = 'com.github.ie3-institute'
-version = '1.6-SNAPSHOT'
+version = '1.6'
 description = 'PowerSystemUtils'
 sourceCompatibility = javaVersion
 targetCompatibility = javaVersion
@@ -49,7 +48,7 @@ dependencies {
 	}
 
 	// logging
-	implementation "org.slf4j:slf4j-api:$slf4jVersion"  // slf4j wrapper
+	implementation "org.slf4j:slf4j-api:1.7.32"  // slf4j wrapper
 	implementation 'com.lmax:disruptor:3.4.4' // async logging
 	implementation 'org.apache.logging.log4j:log4j-api:2.17.1' // log4j
 	implementation 'org.apache.logging.log4j:log4j-core:2.17.1' // log4j
@@ -67,6 +66,7 @@ dependencies {
 
 	implementation 'commons-io:commons-io:2.11.0' // I/O functionalities
 	implementation 'org.apache.commons:commons-compress:1.21' // I/O functionalities
+
 	// testing
 	testImplementation 'org.spockframework:spock-core:1.3-groovy-2.5'
 

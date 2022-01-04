@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 /**
  * @author Kittl
  * @since 26.09.2018
+ * @deprecated Will be removed in v2.0
  */
 public class YearAdapter extends XmlAdapter<Integer, Year> {
   @Override

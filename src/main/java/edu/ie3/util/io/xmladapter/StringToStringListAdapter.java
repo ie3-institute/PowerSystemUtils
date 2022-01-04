@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  *
  * @author Kittl
  * @since 05.10.2018
+ * @deprecated Will be removed in v2.0
  */
 public class StringToStringListAdapter extends XmlAdapter<String, List<String>> {
   @Override
