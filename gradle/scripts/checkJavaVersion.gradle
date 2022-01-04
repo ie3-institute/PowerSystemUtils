@@ -5,10 +5,12 @@ tasks.register("checkJavaVersion") {
 	description = 'Enforces correct Java version'
 
 	doLast {
-		def foundVersion = JavaVersion.current()
-		if (foundVersion != javaVersion)
-			throw new IllegalStateException("Wrong Java version: required is "
-			+ javaVersion + ", but found " + foundVersion)
+		if(!project.hasProperty("sonarqube_task")) { // skip this check if we run sonarqube (requires java 11, but we use 8 atm)
+			def foundVersion = JavaVersion.current()
+			if (foundVersion != javaVersion)
+				throw new IllegalStateException("Wrong Java version: required is "
+				+ javaVersion + ", but found " + foundVersion)
+		}
 	}
 }
 compileJava.dependsOn(checkJavaVersion)

@@ -115,7 +115,7 @@ if (env.BRANCH_NAME == "master") {
             setJavaVersion('jdk-11')
             withSonarQubeEnv() {
               // Will pick the global server connection from jenkins for sonarqube
-              gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey")
+              gradle("sonarqube -Dsonarqube_task -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey")
             }
           }
 
@@ -148,6 +148,7 @@ if (env.BRANCH_NAME == "master") {
 
           // deploy snapshot version to oss sonatype
           stage('deploy') {
+            setJavaVersion(javaVersionId)
             // get the sonatype credentials stored in the jenkins secure keychain
             withCredentials([
               usernamePassword(credentialsId: mavenCentralCredentialsId, usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password'),
@@ -243,7 +244,7 @@ if (env.BRANCH_NAME == "master") {
             setJavaVersion('jdk-11')
             withSonarQubeEnv() {
               // Will pick the global server connection from jenkins for sonarqube
-              gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey ")
+              gradle("sonarqube -Dsonarqube_task -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey ")
             }
           }
 
@@ -278,6 +279,7 @@ if (env.BRANCH_NAME == "master") {
 
           // deploy snapshot version to oss sonatype
           stage('deploy') {
+            setJavaVersion(javaVersionId)
             // get the sonatype credentials stored in the jenkins secure keychain
             withCredentials([
               usernamePassword(credentialsId: mavenCentralCredentialsId, usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password'),
@@ -390,7 +392,7 @@ if (env.BRANCH_NAME == "master") {
           withSonarQubeEnv() {
             // Will pick the global server connection from jenkins for sonarqube
 
-            String gradleCommand = "sonarqube -Dsonar.projectKey=$sonarqubeProjectKey"
+            String gradleCommand = "sonarqube -Dsonarqube_task -Dsonar.projectKey=$sonarqubeProjectKey"
 
             if (env.CHANGE_ID != null) {
               gradleCommand = gradleCommand + " -Dsonar.pullrequest.branch=${featureBranchName} -Dsonar.pullrequest.key=${env.CHANGE_ID} -Dsonar.pullrequest.base=master -Dsonar.pullrequest.github.repository=${orgNames.get(0)}/${projects.get(0)} -Dsonar.pullrequest.provider=Github"
