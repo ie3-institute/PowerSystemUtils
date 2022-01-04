@@ -113,7 +113,6 @@ if (env.BRANCH_NAME == "master") {
           // execute sonarqube code analysis
           stage('SonarQube analysis') {
             setJavaVersion('jdk-11')
-            sh 'java --version'
             withSonarQubeEnv() {
               // Will pick the global server connection from jenkins for sonarqube
               gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey")
@@ -123,7 +122,6 @@ if (env.BRANCH_NAME == "master") {
           // wait for the sonarqube quality gate
           stage("Quality Gate") {
             setJavaVersion('jdk-11')
-            sh 'java --version'
             timeout(time: 1, unit: 'HOURS') {
               // Just in case something goes wrong, pipeline will be killed after a timeout
               def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
@@ -243,7 +241,6 @@ if (env.BRANCH_NAME == "master") {
           // execute sonarqube code analysis
           stage('SonarQube analysis') {
             setJavaVersion('jdk-11')
-            sh 'java --version'
             withSonarQubeEnv() {
               // Will pick the global server connection from jenkins for sonarqube
               gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey ")
@@ -254,7 +251,6 @@ if (env.BRANCH_NAME == "master") {
           // wait for the sonarqube quality gate
           stage("Quality Gate") {
             setJavaVersion('jdk-11')
-            sh 'java --version'
             timeout(time: 1, unit: 'HOURS') {
               // Just in case something goes wrong, pipeline will be killed after a timeout
               def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
@@ -390,6 +386,7 @@ if (env.BRANCH_NAME == "master") {
 
         // execute sonarqube code analysis
         stage('SonarQube analysis') {
+          setJavaVersion('jdk-11')
           withSonarQubeEnv() {
             // Will pick the global server connection from jenkins for sonarqube
 
@@ -408,6 +405,7 @@ if (env.BRANCH_NAME == "master") {
 
         // wait for the sonarqube quality gate
         stage("Quality Gate") {
+          setJavaVersion('jdk-11')
           timeout(time: 1, unit: 'HOURS') {
             // Just in case something goes wrong, pipeline will be killed after a timeout
             def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
