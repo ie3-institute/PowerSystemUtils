@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - log4j security update
+- dangerous constructor call in `OneToOneMap`
 
 ## [1.5.3]
 ### Fixed
