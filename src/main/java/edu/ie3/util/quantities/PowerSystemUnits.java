@@ -10,6 +10,7 @@ import static tech.units.indriya.AbstractUnit.ONE;
 import edu.ie3.util.quantities.interfaces.*;
 import java.util.HashSet;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.measure.MetricPrefix;
 import javax.measure.Unit;
 import javax.measure.quantity.*;
@@ -30,6 +31,8 @@ import tech.units.indriya.unit.Units;
  * @since 17.07.2017
  */
 public class PowerSystemUnits extends Units {
+
+  private static final Logger logger = Logger.getLogger(PowerSystemUnits.class.getName());
 
   /* ==== Basic non electric units ==== */
   /** Kilometre */
