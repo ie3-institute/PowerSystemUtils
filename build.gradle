@@ -75,8 +75,8 @@ dependencies {
 	implementation "org.scala-lang:scala-library:${scalaBinaryVersion}"
 
 	// TEST Scala //
-	implementation "org.scalatest:scalatest_${scalaVersion}:3.2.10"
-	implementation 'com.vladsch.flexmark:flexmark-all:0.62.2'
+	testImplementation "org.scalatest:scalatest_${scalaVersion}:3.2.10"
+	testRuntimeClasspath 'com.vladsch.flexmark:flexmark-all:0.62.2'
 }
 
 tasks.withType(JavaCompile) {
