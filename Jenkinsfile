@@ -112,9 +112,8 @@ if (env.BRANCH_NAME == "master") {
 
           // execute sonarqube code analysis
           stage('SonarQube analysis') {
-            tools {
-              jdk "jdk-11" // the name you have given the JDK installation in Global Tool Configuration
-            }
+            setJavaVersion('jdk-11')
+            sh 'java --version'
             withSonarQubeEnv() {
               // Will pick the global server connection from jenkins for sonarqube
               gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey")
@@ -123,9 +122,8 @@ if (env.BRANCH_NAME == "master") {
 
           // wait for the sonarqube quality gate
           stage("Quality Gate") {
-            tools {
-              jdk "jdk-11" // the name you have given the JDK installation in Global Tool Configuration
-            }
+            setJavaVersion('jdk-11')
+            sh 'java --version'
             timeout(time: 1, unit: 'HOURS') {
               // Just in case something goes wrong, pipeline will be killed after a timeout
               def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
@@ -244,9 +242,8 @@ if (env.BRANCH_NAME == "master") {
 
           // execute sonarqube code analysis
           stage('SonarQube analysis') {
-            tools {
-              jdk "jdk-11" // the name you have given the JDK installation in Global Tool Configuration
-            }
+            setJavaVersion('jdk-11')
+            sh 'java --version'
             withSonarQubeEnv() {
               // Will pick the global server connection from jenkins for sonarqube
               gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey ")
@@ -256,9 +253,8 @@ if (env.BRANCH_NAME == "master") {
 
           // wait for the sonarqube quality gate
           stage("Quality Gate") {
-            tools {
-              jdk "jdk-11" // the name you have given the JDK installation in Global Tool Configuration
-            }
+            setJavaVersion('jdk-11')
+            sh 'java --version'
             timeout(time: 1, unit: 'HOURS') {
               // Just in case something goes wrong, pipeline will be killed after a timeout
               def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
@@ -533,7 +529,7 @@ def publishReports() {
 def gradle(String command) {
   env.JENKINS_NODE_COOKIE = 'dontKillMe' // this is necessary for the Gradle daemon to be kept alive
 
-  // switch directory to bew able to use gradle wrapper
+  // switch directory to be able to use gradle wrapper
   sh """cd ${projects.get(0)}""" + ''' set +x; ./gradlew ''' + """$command"""
 }
 
