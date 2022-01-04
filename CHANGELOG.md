@@ -6,8 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased/Snapshot]
 ### Added
--   Added scala support
--   Added `RichQuantityDouble` as double type enrichment to enable easy quantity conversions [#133](https://github.com/ie3-institute/PowerSystemUtils/issues/133)
+- Added scala support
+- Added `RichQuantityDouble` as double type enrichment to enable easy quantity conversions [#133](https://github.com/ie3-institute/PowerSystemUtils/issues/133)
+- `OsmEntity` and `OsmContainer` to provide a simple, lightweight representation of openstreetmap data
 
 ## [1.5.3]
 ### Fixed

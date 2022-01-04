@@ -6,7 +6,7 @@
 package edu.ie3.util.osm.model
 
 import edu.ie3.util.geo.GeoUtils
-import edu.ie3.util.osm.model.OsmEntity.{MetaInformation, OsmEntityType}
+import edu.ie3.util.osm.model.OsmEntity.MetaInformation
 import edu.ie3.util.osm.model.OsmEntity.Relation.RelationMember
 import org.locationtech.jts.geom.Point
 
@@ -14,7 +14,6 @@ import java.time.Instant
 import scala.annotation.tailrec
 
 sealed trait OsmEntity {
-  val entityType: OsmEntityType
   val id: Long
   val tags: Map[String, String]
   val metaInformation: Option[MetaInformation]
@@ -71,9 +70,6 @@ sealed trait OsmEntity {
 
 object OsmEntity {
 
-  enum OsmEntityType:
-    case Node, Way, Relation
-
   final case class MetaInformation(
       version: Option[Int] = None,
       timestamp: Option[Instant] = None,
@@ -84,14 +80,13 @@ object OsmEntity {
   )
 
   final case class Node(
-      id: Long,
+      override val id: Long,
       latitude: Double,
       longitude: Double,
-      tags: Map[String, String],
-      metaInformation: Option[MetaInformation] = None
+      override val tags: Map[String, String],
+      override val metaInformation: Option[MetaInformation] = None
   ) extends OsmEntity {
-    override val osmModel: OsmEntityType = OsmEntityType.Node
-    val coord: Point = GeoUtils.xyToPoint(longitude, latitude)
+    val coordinate: Point = GeoUtils.xyToPoint(longitude, latitude)
   }
 
   sealed trait Way extends OsmEntity {
@@ -99,24 +94,22 @@ object OsmEntity {
     val nodes: Seq[Long]
     val tags: Map[String, String]
     val metaInformation: Option[MetaInformation]
-
-    override val osmModel: OsmEntityType = OsmEntityType.Way
   }
 
   object Way {
 
     final case class OpenWay private[model] (
-        id: Long,
-        nodes: Seq[Long],
-        tags: Map[String, String],
-        metaInformation: Option[MetaInformation]
+        override val id: Long,
+        override val nodes: Seq[Long],
+        override val tags: Map[String, String],
+        override val metaInformation: Option[MetaInformation]
     ) extends Way
 
     final case class ClosedWay private[model] (
-        id: Long,
-        nodes: Seq[Long],
-        tags: Map[String, String],
-        metaInformation: Option[MetaInformation]
+        override val id: Long,
+        override val nodes: Seq[Long],
+        override val tags: Map[String, String],
+        override val metaInformation: Option[MetaInformation]
     ) extends Way
 
     def apply(
@@ -139,13 +132,11 @@ object OsmEntity {
   }
 
   final case class Relation(
-      id: Long,
-      relations: Seq[RelationMember],
-      tags: Map[String, String],
-      metaInformation: Option[MetaInformation] = None
-  ) extends OsmEntity {
-    override val osmModel: OsmEntityType = OsmEntityType.Relation
-  }
+      override val id: Long,
+      members: Seq[RelationMember],
+      override val tags: Map[String, String],
+      override val metaInformation: Option[MetaInformation] = None
+  ) extends OsmEntity
 
   object Relation {
 
@@ -154,7 +145,7 @@ object OsmEntity {
 
     final case class RelationMember(
         id: Long,
-        relationTypes: RelationMemberType,
+        relationType: RelationMemberType,
         role: String
     )
 

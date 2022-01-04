@@ -13,9 +13,9 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import java.time.ZonedDateTime
 import java.util.UUID
 
-class OsmModelSpec extends Matchers with AnyWordSpecLike {
+class OsmContainerSpec extends Matchers with AnyWordSpecLike {
 
-  "The OsmModel" should {
+  "The OsmContainer" should {
     val wayA = ClosedWay(
       1,
       Vector.empty,
