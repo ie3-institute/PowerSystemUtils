@@ -5,11 +5,12 @@
 */
 package edu.ie3.util.io.xmladapter;
 
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * This adapter converts a {@link String} of integer values to a {@link List} of {@link Integer}.
@@ -20,6 +21,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  * @since 05.10.2018
  * @deprecated Will be removed in v2.0
  */
+@Deprecated
 public class StringToIntegerListAdapter extends XmlAdapter<String, List<Integer>> {
   @Override
   public List<Integer> unmarshal(String v) {

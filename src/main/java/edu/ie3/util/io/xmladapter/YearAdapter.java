@@ -5,14 +5,16 @@
 */
 package edu.ie3.util.io.xmladapter;
 
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
+
 import java.time.Year;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * @author Kittl
  * @since 26.09.2018
  * @deprecated Will be removed in v2.0
  */
+@Deprecated
 public class YearAdapter extends XmlAdapter<Integer, Year> {
   @Override
   public Year unmarshal(Integer v) throws Exception {
