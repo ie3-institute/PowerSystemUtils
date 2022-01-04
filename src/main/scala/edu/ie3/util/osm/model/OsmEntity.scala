@@ -14,7 +14,7 @@ import java.time.Instant
 import scala.annotation.tailrec
 
 sealed trait OsmEntity {
-  val osmModel: OsmEntityType
+  val entityType: OsmEntityType
   val id: Long
   val tags: Map[String, String]
   val metaInformation: Option[MetaInformation]
