@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased/Snapshot]
 ### Fixed
-- Fix tests in CI
+- Fix tests in CI [#206](https://github.com/ie3-institute/PowerSystemUtils/issues/206)
   - Enable using JUnit platform
   - Fix broken tests
   - Let scalatest and JUnit tests run together
