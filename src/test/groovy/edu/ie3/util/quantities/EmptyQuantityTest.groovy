@@ -26,14 +26,36 @@ class EmptyQuantityTest extends Specification {
 		EmptyQuantity.of(PowerSystemUnits.WATT)  || PowerSystemUnits.WATT
 	}
 
+	def "EmptyQuantity is not equal to a regular Quantity "() {
+		when:
+		def nullMetreQuantity = EmptyQuantity.of(PowerSystemUnits.METRE)
+		def filledMetreQuantity = Quantities.getQuantity(17.1, PowerSystemUnits.METRE)
+
+		nullMetreQuantity.compareTo(filledMetreQuantity)
+
+		then:
+		def thrown = thrown(EmptyQuantityException)
+		thrown.message == "An empty quantity cannot be compared against an actual quantity (17.1 m)."
+	}
+
+	def "regular Quantity is not equal to a regular Quantity EmptyQuantity"() {
+		when:
+		def nullMetreQuantity = EmptyQuantity.of(PowerSystemUnits.METRE)
+		def filledMetreQuantity = Quantities.getQuantity(17.1, PowerSystemUnits.METRE)
+
+		filledMetreQuantity.compareTo(nullMetreQuantity)
+
+		then:
+		def thrown = thrown(NullPointerException)
+		thrown.message == "Cannot invoke \"Object.getClass()\" because \"number\" is null"
+	}
+
 	def "EmptyQuantity is never equivalent or equal to a regular Quantity "() {
 		when:
 		def nullMetreQuantity = EmptyQuantity.of(PowerSystemUnits.METRE)
 		def filledMetreQuantity = Quantities.getQuantity(17.1, PowerSystemUnits.METRE)
 
 		then:
-		nullMetreQuantity != filledMetreQuantity
-		filledMetreQuantity != nullMetreQuantity
 		!nullMetreQuantity.isEquivalentTo(filledMetreQuantity)
 	}
 

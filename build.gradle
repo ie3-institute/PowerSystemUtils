@@ -29,6 +29,7 @@ apply from: scriptsLocation + 'pmd.gradle'
 apply from: scriptsLocation + 'spotbugs.gradle'
 apply from: scriptsLocation + 'spotless.gradle'
 apply from: scriptsLocation + 'checkJavaVersion.gradle'
+apply from: scriptsLocation + 'test.gradle'
 apply from: scriptsLocation + 'jacoco.gradle' // jacoco java code coverage
 apply from: scriptsLocation + 'mavenCentralPublish.gradle'
 apply from: scriptsLocation + 'sonarqube.gradle'

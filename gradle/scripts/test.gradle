@@ -1,0 +1,9 @@
+//Configure test reporting
+test {
+	useJUnitPlatform()
+	testLogging {
+		events "skipped", "failed"
+	}
+
+	dependsOn scalatest
+}
