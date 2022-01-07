@@ -10,11 +10,7 @@ import org.locationtech.jts.geom.Point
 
 object OsmUtils {
 
-  def isInsideLandUse(coordinate: Point, landuses: List[ClosedWay]): Boolean = {
-    landuses.foreach(landuse =>
-      if (landuse.toPolygon.convexHull().contains(coordinate)) return true
-    )
-    false
-  }
+def isInsideLandUse(coordinate: Point, landuses: List[ClosedWay]): Boolean =
+    landuses.exists(_.toPolygon.convexHull().contains(coordinate))
 
 }
