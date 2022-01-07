@@ -238,7 +238,7 @@ public class GeoUtils {
    * @return Deep copy of the {@code relation} with closed ways
    * @deprecated This method is currently not under test and has to be revised thoroughly
    */
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public static Relation buildClosedWays(Relation relation) throws GeoPreparationException {
     /* Copy relation and empty the Members */
     Relation closedRelation = DeepCopy.copy(relation);
@@ -372,7 +372,7 @@ public class GeoUtils {
    * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
    *     revised thoroughly
    */
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public static Polygon buildConvexHull(
       Set<Point> points, int precision, ConvexHullAlgorithm algorithm)
       throws GeoPreparationException {
@@ -566,7 +566,7 @@ public class GeoUtils {
    * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
    *     revised thoroughly
    */
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public static Polygon getIntersection(Polygon a, Polygon b) {
     List<LatLon> sharedCoords = a.getCoords().stream().filter(b::contains).toList();
     List<LatLon> additionalCoords = b.getCoords().stream().filter(a::contains).toList();
@@ -613,7 +613,7 @@ public class GeoUtils {
    * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
    *     revised thoroughly
    */
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public static Quantity<Area> calcArea(Way w) throws GeoPreparationException {
     if (!w.isClosed())
       throw new GeoPreparationException(
@@ -631,7 +631,7 @@ public class GeoUtils {
    * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
    *     revised thoroughly
    */
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public static Quantity<Area> calcArea(Polygon p) throws GeoPreparationException {
     /* Get the boundary of the Polygon */
     Bounds bounds = p.getBounds();
@@ -732,7 +732,7 @@ public class GeoUtils {
    * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
    *     revised thoroughly
    */
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public static boolean isBetween(Node a, Node b, Node c) {
     double crossProduct;
     double dotProduct;
@@ -777,7 +777,7 @@ public class GeoUtils {
    * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
    *     revised thoroughly
    */
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public static Quantity<Area> calcGeo2qmNew(double geoArea, Quantity<Area> cor) {
     double width = 51.5;
     double length = 7.401;
@@ -812,7 +812,7 @@ public class GeoUtils {
    * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
    *     revised thoroughly
    */
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public static boolean isInsideLanduse(LatLon node, List<Way> landUses) {
     for (Way landUse : landUses) {
       if (rayCasting(new Polygon(landUse), node)) return true;
@@ -824,7 +824,7 @@ public class GeoUtils {
    * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
    *     revised thoroughly
    */
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public static boolean rayCasting(Polygon shape, LatLon node) {
     boolean inside = false;
 
@@ -841,7 +841,7 @@ public class GeoUtils {
    * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
    *     revised thoroughly
    */
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   private static boolean intersects(LatLon aIn, LatLon bIn, LatLon nIn) {
 
     // convert LatLons to arrays
@@ -873,7 +873,7 @@ public class GeoUtils {
    * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
    *     revised thoroughly
    */
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public static double calculateBuildingArea(Way building) {
     double area = 0.0;
 
@@ -926,7 +926,7 @@ public class GeoUtils {
    * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
    *     revised thoroughly
    */
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public static List<LatLon> radiusWithCircle(LatLon center, Quantity<Length> radius) {
 
     double lat1 = Math.toRadians(center.getLat());
@@ -966,7 +966,7 @@ public class GeoUtils {
    * @deprecated ATTENTION! DON'T REMOVE: This method is currently not under test and has to be
    *     revised thoroughly
    */
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public static Way wayFromWays(List<Way> waysToChain, Quantity<Length> radius, int wayId) {
 
     LinkedList<Way> waysCopy = new LinkedList<>(waysToChain);

@@ -68,7 +68,7 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
    *     on this Quantity
    */
   @Override
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public ComparableQuantity<Q> add(Quantity<Q> that) {
     throw new EmptyQuantityException(EXCEPTION_MESSAGE);
   }
@@ -83,7 +83,7 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
    *     on this Quantity
    */
   @Override
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public ComparableQuantity<Q> subtract(Quantity<Q> that) {
     throw new EmptyQuantityException(EXCEPTION_MESSAGE);
   }
@@ -98,7 +98,7 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
    *     on this Quantity
    */
   @Override
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public ComparableQuantity<?> divide(Quantity<?> that) {
     throw new EmptyQuantityException(EXCEPTION_MESSAGE);
   }
@@ -113,7 +113,7 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
    *     on this Quantity
    */
   @Override
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public ComparableQuantity<Q> divide(Number that) {
     throw new EmptyQuantityException(EXCEPTION_MESSAGE);
   }
@@ -128,7 +128,7 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
    *     on this Quantity
    */
   @Override
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public ComparableQuantity<?> multiply(Quantity<?> multiplier) {
     throw new EmptyQuantityException(EXCEPTION_MESSAGE);
   }
@@ -143,7 +143,7 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
    *     on this Quantity
    */
   @Override
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public ComparableQuantity<Q> multiply(Number multiplier) {
     throw new EmptyQuantityException(EXCEPTION_MESSAGE);
   }
@@ -157,7 +157,7 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
    *     on this Quantity
    */
   @Override
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public ComparableQuantity<?> inverse() {
     throw new EmptyQuantityException(EXCEPTION_MESSAGE);
   }
@@ -171,7 +171,7 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
    *     on this Quantity
    */
   @Override
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public Quantity<Q> negate() {
     throw new EmptyQuantityException(EXCEPTION_MESSAGE);
   }
@@ -198,7 +198,7 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
    *     on this Quantity
    */
   @Override
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = false)
   public int hashCode() {
     throw new EmptyQuantityException(EXCEPTION_MESSAGE);
   }

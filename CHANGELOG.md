@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Improve code quality to meet minimum standards [#203](https://github.com/ie3-institute/PowerSystemUtils/issues/203)
   - Use `Stream#toList`
+  - Enhance deprecation annotations
 - Fix formatting for MarkDown files
 
 ## [1.6.0]
