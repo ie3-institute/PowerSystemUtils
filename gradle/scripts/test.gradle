@@ -1,0 +1,6 @@
+//Configure test reporting
+test {
+	testLogging {
+		events "skipped", "failed"
+	}
+}
