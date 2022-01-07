@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added implicit classes for `loactiontec.jts` Geometries that represent geographical geometries with functionality before located in `GeoUtils` [#163] (https://github.com/ie3-institute/PowerSystemUtils/issues/163)
 
 ### Changed
-- Refactored `GeoUtils`, moved them to the scala package and tailored them toward the `loactiontec.jts` Geometries used in the `OsmModel` [#163] (https://github.com/ie3-institute/PowerSystemUtils/issues/163)
+- Refactored `GeoUtils`, moved them to the scala package and tailored them toward the `loactiontec.jts` Geometries used in the `OsmContainer` [#163] (https://github.com/ie3-institute/PowerSystemUtils/issues/163)
+
 
 ## [1.5.3]
 ### Fixed
