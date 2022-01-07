@@ -26,27 +26,6 @@ class CoordinateDistance private (
     val distance: ComparableQuantity[Length]
 ) extends Comparable[CoordinateDistance] {
 
-  /** Calculates the distance from the first to the second coordinate using
-    * [[GeoUtils.calcHaversine(double, double, double, double)]]
-    *
-    * @param from
-    *   The first coordinate
-    * @param to
-    *   The second coordinate
-    */
-  def this(from: Point, to: Point) = {
-    this(
-      from,
-      to,
-      GeoUtils.calcHaversine(
-        from.getY,
-        from.getX,
-        to.getY,
-        to.getX
-      )
-    )
-  }
-
   /** The first coordinate */
   def getFrom: Point = {
     from
@@ -93,4 +72,21 @@ class CoordinateDistance private (
   override def toString: String = {
     "CoordinateDistance{" + "coordinateA=" + from + ", coordinateB=" + to + ", distance=" + distance + '}'
   }
+}
+
+object CoordinateDistance {
+
+  def apply(from: Point, to: Point): CoordinateDistance = {
+    new CoordinateDistance(
+      from,
+      to,
+      GeoUtils.calcHaversine(
+        from.getY,
+        from.getX,
+        to.getY,
+        to.getX
+      )
+    )
+  }
+
 }

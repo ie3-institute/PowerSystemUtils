@@ -14,8 +14,6 @@ import edu.ie3.util.geo.GeoUtils.{
 import edu.ie3.util.quantities.QuantityUtils.RichQuantityDouble
 import org.locationtech.jts.geom.{Coordinate, LineString, Point, Polygon}
 import tech.units.indriya.ComparableQuantity
-import tech.units.indriya.quantity.Quantities
-import tech.units.indriya.unit.Units.METRE
 
 import javax.measure.quantity.{Area, Length}
 import scala.math.abs
@@ -23,7 +21,7 @@ import scala.util.{Failure, Success, Try}
 
 object RichGeometries {
 
-  implicit class GeoCoordinate(coordinate: Coordinate) {
+  implicit class RichCoordinate(coordinate: Coordinate) {
 
     /** Calculates the great circle distance between two coordinates
       *
@@ -67,10 +65,7 @@ object RichGeometries {
         .add(coordinate.haversineDistance(b))
         .getValue
         .doubleValue
-      if (
-        abs(1 - (distancePassingMe / distance.getValue.doubleValue())) < epsilon
-      ) true
-      else false
+      abs(1 - (distancePassingMe / distance.getValue.doubleValue())) < epsilon
     }
 
     def toPoint: Point = {
@@ -78,7 +73,7 @@ object RichGeometries {
     }
   }
 
-  implicit class GeoLineString(lineString: LineString) {
+  implicit class RichLineString(lineString: LineString) {
 
     /** Compute length of a [[LineString]] on earth's surface.
       *
@@ -87,21 +82,17 @@ object RichGeometries {
       */
     def haversineLength: ComparableQuantity[Length] = {
       val coordinates = lineString.getCoordinates.toVector
-      val coordinateSize = coordinates.size
-      coordinates.zipWithIndex
-        .foldLeft(Quantities.getQuantity(0, METRE))((acc, current) => {
-          if (current._2 < coordinateSize - 1) {
-            val currentCoordinate = current._1
-            val nextCoordinate = coordinates(current._2 + 1)
-            acc.add(currentCoordinate.haversineDistance(nextCoordinate))
-          } else acc
-        })
+      val coordinatePairs = coordinates.init.zip(coordinates.tail)
+      coordinatePairs
+        .map { case (lhs, rhs) =>
+          lhs.haversineDistance(rhs)
+        }
+        .reduce(_.add(_))
     }
   }
 
-  implicit class GeoPolygon(polygon: Polygon) {
+  implicit class RichPolygon(polygon: Polygon) {
 
-    // Fixme: Is this correct or should the function calculate the specific coordinates shared by the polygons
     /** Calculates intersection between polygons
       *
       * @param polygonB
@@ -110,7 +101,7 @@ object RichGeometries {
       */
     def intersect(polygonB: Polygon): Try[Polygon] = {
       Try(
-        polygon.intersection(polygonB.equalAreaProjection)
+        polygon.intersection(polygonB)
       ) match {
         case Failure(exception) =>
           Failure(

@@ -17,7 +17,7 @@ import edu.ie3.util.geo.GeoUtils.{
   equalAreaProjection,
   reverseEqualAreaProjection
 }
-import edu.ie3.util.geo.RichGeometries.{GeoCoordinate, GeoPolygon}
+import edu.ie3.util.geo.RichGeometries.{RichCoordinate, RichPolygon}
 import edu.ie3.util.quantities.QuantityMatchers.equalWithTolerance
 import org.locationtech.jts.geom.Coordinate
 import org.scalatest.matchers.should.Matchers

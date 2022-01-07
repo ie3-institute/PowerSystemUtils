@@ -6,7 +6,7 @@
 package edu.ie3.util.geo
 
 import edu.ie3.util.exceptions.GeoException
-import org.apache.commons.lang3.ArrayUtils
+import edu.ie3.util.geo.RichGeometries.RichCoordinate
 import org.locationtech.jts.algorithm.ConvexHull
 import org.locationtech.jts.geom.impl.CoordinateArraySequence
 import org.locationtech.jts.geom.{
@@ -82,10 +82,7 @@ object GeoUtils {
     *   a [[LineString]] between the provided points
     */
   def buildSafeLineStringBetweenPoints(p1: Point, p2: Point): LineString = {
-    val safePoint1 = if (p1 == p2) buildSafePoint(p1) else p1
-    DEFAULT_GEOMETRY_FACTORY.createLineString(
-      safePoint1.getCoordinates ++ p2.getCoordinates
-    )
+    buildSafeLineStringBetweenCoords(p1.getCoordinate, p2.getCoordinate)
   }
 
   /** Build an instance of [[LineString]] between two coordinates that is safe
@@ -108,22 +105,8 @@ object GeoUtils {
   ): LineString = {
     val safeCoord1: Coordinate = if (c1 == c2) buildSafeCoord(c1) else c1
     DEFAULT_GEOMETRY_FACTORY.createLineString(
-      ArrayUtils.addAll(Array[Coordinate](safeCoord1), c2)
+      Array(safeCoord1, c2)
     )
-  }
-
-  /** Adapt the provided point as described in buildSafeCoord ( Coordinate )}
-    * and return a new, adapted instance of [[Point]]
-    *
-    * @param p1
-    *   the point that should be adapted
-    * @return
-    *   the adapted point with a slightly changed coordinate
-    */
-  private def buildSafePoint(p1: Point): Point = {
-    val safeCoord = buildSafeCoord(p1.getCoordinate)
-    val safeCoordSeq = new CoordinateArraySequence(Array[Coordinate](safeCoord))
-    new Point(safeCoordSeq, p1.getFactory)
   }
 
   /** Adapted [[Coordinate]] x, [[Coordinate]] y and [[Coordinate]] z of the
@@ -143,6 +126,16 @@ object GeoUtils {
     new Coordinate(p1X, p1Y, p1Z)
   }
 
+  @deprecated(
+    "This method will be dropped and replaced by #calcOrderedCoordinateDistances"
+  )
+  def getCoordinateDistances(
+      baseCoordinate: Point,
+      coordinates: Array[Point]
+  ): SortedSet[CoordinateDistance] = {
+    calcOrderedCoordinateDistances(baseCoordinate, coordinates)
+  }
+
   /** Calculates and orders the coordinate distances from a base coordinate to a
     * list of coordinates
     *
@@ -158,7 +151,7 @@ object GeoUtils {
       coordinates: Array[Point]
   ): SortedSet[CoordinateDistance] = {
     val coordinateDistances = coordinates.map(coordinate =>
-      new CoordinateDistance(baseCoordinate, coordinate)
+      CoordinateDistance(baseCoordinate, coordinate)
     )
     TreeSet(coordinateDistances: _*)
   }
@@ -200,9 +193,8 @@ object GeoUtils {
     *   a Try of the resulting polygon
     */
   def buildConvexHull(coordinates: Set[Coordinate]): Try[Polygon] = {
-    val projectedCoordinates = coordinates
     new ConvexHull(
-      projectedCoordinates.toArray,
+      coordinates.toArray,
       DEFAULT_GEOMETRY_FACTORY
     ).getConvexHull match {
       case projectedPolygon: Polygon =>
@@ -230,11 +222,14 @@ object GeoUtils {
   }
 
   def buildPoint(lat: Double, long: Double): Point = {
-    buildPoint(buildCoordinate(lat, long))
+    buildCoordinate(lat, long).toPoint
   }
 
+  @deprecated(
+    "Will be dropped. Please use implementation in rich class GeoCoordinate."
+  )
   def buildPoint(coordinate: Coordinate): Point = {
-    DEFAULT_GEOMETRY_FACTORY.createPoint(coordinate)
+    coordinate.toPoint
   }
 
   /** Build a coordinate from latitude and longitude values.
@@ -260,7 +255,7 @@ object GeoUtils {
     *   a [[Polygon]]
     */
   def buildPolygon(coordinates: Array[Coordinate]): Polygon = {
-    val arrayCoordinates = new CoordinateArraySequence(coordinates.toArray)
+    val arrayCoordinates = new CoordinateArraySequence(coordinates)
     val linearRing =
       new LinearRing(arrayCoordinates, DEFAULT_GEOMETRY_FACTORY)
     new Polygon(linearRing, Array[LinearRing](), DEFAULT_GEOMETRY_FACTORY)
