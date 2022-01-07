@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.stream.Collectors;
 import org.eclipse.collections.impl.UnmodifiableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +68,7 @@ public class EmpiricalRandom<C> {
         this.empiricalCdf.entrySet().stream()
             .filter(entry -> entry.getValue() >= rand)
             .map(Map.Entry::getKey)
-            .collect(Collectors.toList());
+            .toList();
     if (candidates.isEmpty()) {
       logger.error("There is no candidate, which is not supposed to happen. Take first one");
       return empiricalCdf.keySet().iterator().next();

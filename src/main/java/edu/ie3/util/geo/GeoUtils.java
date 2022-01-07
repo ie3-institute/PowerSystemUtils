@@ -253,7 +253,7 @@ public class GeoUtils {
         relation.getMembers().stream()
             .filter(e -> e.getEntity() instanceof Way)
             .map(e -> (Way) e.getEntity())
-            .collect(Collectors.toList());
+            .toList();
 
     /* Get an idea, of which ways do have intersections and where */
     HashMap<Node, Set<Way>> intersections = new HashMap<>();
@@ -303,7 +303,7 @@ public class GeoUtils {
             intersections.entrySet().stream()
                 .filter(e -> e.getValue().contains(currentWay))
                 .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
+                .toList();
         Node secondIntersection;
         if (candidateNodes.size() > 1)
           throw new GeoPreparationException(
@@ -568,10 +568,8 @@ public class GeoUtils {
    */
   @Deprecated
   public static Polygon getIntersection(Polygon a, Polygon b) {
-    List<LatLon> sharedCoords =
-        a.getCoords().stream().filter(b::contains).collect(Collectors.toList());
-    List<LatLon> additionalCoords =
-        b.getCoords().stream().filter(a::contains).collect(Collectors.toList());
+    List<LatLon> sharedCoords = a.getCoords().stream().filter(b::contains).toList();
+    List<LatLon> additionalCoords = b.getCoords().stream().filter(a::contains).toList();
 
     if (sharedCoords.isEmpty() && additionalCoords.isEmpty()) return null;
     else {
@@ -913,9 +911,7 @@ public class GeoUtils {
     List<LatLon> circlePoints = radiusWithCircle(center, radius);
 
     List<LatLon> circlePointsLatLon =
-        circlePoints.stream()
-            .map(point -> new LatLon(point.getLat(), point.getLon()))
-            .collect(Collectors.toList());
+        circlePoints.stream().map(point -> new LatLon(point.getLat(), point.getLon())).toList();
 
     return new Polygon(circlePointsLatLon);
   }
