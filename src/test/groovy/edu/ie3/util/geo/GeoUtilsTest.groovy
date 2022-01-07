@@ -9,6 +9,8 @@ import edu.ie3.util.quantities.PowerSystemUnits
 import edu.ie3.util.quantities.QuantityUtil
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.LineString
+import org.locationtech.jts.geom.Point
+import org.locationtech.jts.geom.PrecisionModel
 import org.locationtech.jts.io.geojson.GeoJsonReader
 import spock.lang.Shared
 
@@ -32,6 +34,15 @@ class GeoUtilsTest extends Specification {
 
 	def setupSpec() {
 		geoJsonReader = new GeoJsonReader()
+	}
+
+	def "Trying to instantiate the GeoUtils leads to an exception"() {
+		when:
+		new GeoUtils()
+
+		then:
+		def ex = thrown(IllegalStateException)
+		ex.message == "Utility classes cannot be instantiated"
 	}
 
 	def "Test haversine (distance between two points given lat/lon)"() {
@@ -64,7 +75,19 @@ class GeoUtilsTest extends Specification {
 		// Value from Google Maps, error range of +-10 km
 	}
 
-	def "The GridAndGeoUtils should get the CoordinateDistances between a base point and a collection of other points correctly"() {
+	def "LatLon can properly be converted to Point"() {
+		given:
+		def latLon = new LatLon(49d, 7d)
+		def expected = new Point(new Coordinate(7d, 49d), new PrecisionModel(), 4326)
+
+		when:
+		def actual = GeoUtils.latlonToPoint(latLon)
+
+		then:
+		actual == expected
+	}
+
+	def "The GeoUtils should get the CoordinateDistances between a base point and a collection of other points correctly"() {
 		given:
 		def basePoint = GeoUtils.xyToPoint(49d, 7d)
 		def points = [
