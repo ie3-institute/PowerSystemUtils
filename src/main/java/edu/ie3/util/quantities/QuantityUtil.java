@@ -102,7 +102,7 @@ public class QuantityUtil {
    * @deprecated renamed to {@link QuantityUtil#isEquivalentAbs(Quantity, Quantity, double)} for
    *     clarity und uniformity
    */
-  @Deprecated
+  @Deprecated(since = "1.4", forRemoval = true)
   public static <Q extends Quantity<Q>> boolean considerablyAbsEqual(
       Quantity<Q> a, Quantity<Q> b, double absQuantityTolerance) {
     return isEquivalentAbs(a, b, absQuantityTolerance);
