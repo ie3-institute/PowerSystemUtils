@@ -176,6 +176,14 @@ public final class EmptyQuantity<Q extends Quantity<Q>> extends AbstractQuantity
     throw new EmptyQuantityException(EXCEPTION_MESSAGE);
   }
 
+  @Override
+  public int compareTo(Quantity<Q> that) {
+    if (that.getClass().isAssignableFrom(EmptyQuantity.class)) return 0;
+    else
+      throw new EmptyQuantityException(
+          "An empty quantity cannot be compared against an actual quantity (" + that + ").");
+  }
+
   /**
    * Decides equality based <b>only</b> on the type of the object: If it is an EmptyQuantity, it is
    * equal. This is based on the thought that nothing is always equals to nothing.
