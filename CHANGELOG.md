@@ -6,8 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased/Snapshot]
 ### Fixed
-- Fix tests
+- Fix tests in CI
   - Enable using JUnit platform
+  - Fix broken tests
+  - Let scalatest and JUnit tests run together
 
 ## [1.6.0]
 
