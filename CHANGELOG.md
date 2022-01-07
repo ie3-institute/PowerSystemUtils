@@ -6,13 +6,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased/Snapshot]
 ### Added
-- Added scala support
-- Added `RichQuantityDouble` as double type enrichment to enable easy quantity conversions [#133](https://github.com/ie3-institute/PowerSystemUtils/issues/133)
 - Added implicit classes for `loactiontec.jts` Geometries that represent geographical geometries with functionality before located in `GeoUtils` [#163] (https://github.com/ie3-institute/PowerSystemUtils/issues/163)
 
 ### Changed
 - Refactored `GeoUtils`, moved them to the scala package and tailored them toward the `loactiontec.jts` Geometries used in the `OsmContainer` [#163] (https://github.com/ie3-institute/PowerSystemUtils/issues/163)
 
+## [1.6.0]
+
+**Last version with java 8 support!**
+
+### Added
+- Added scala support
+- Added `RichQuantityDouble` as double type enrichment to enable easy quantity conversions [#133](https://github.com/ie3-institute/PowerSystemUtils/issues/133)
+
+### Fixed
+- log4j security update
+- dangerous constructor call in `OneToOneMap`
 
 ## [1.5.3]
 ### Fixed
