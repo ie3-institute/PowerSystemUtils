@@ -4,4 +4,6 @@ test {
 	testLogging {
 		events "skipped", "failed"
 	}
+
+	dependsOn scalatest
 }
