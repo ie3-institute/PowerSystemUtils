@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Use `Stream#toList`
   - Enhance deprecation annotations
 - Fix formatting for MarkDown files
+- Configure gradle jacoco plugin according to newest documentation
 
 ## [1.6.0]
 
