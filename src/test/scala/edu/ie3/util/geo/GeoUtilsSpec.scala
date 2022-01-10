@@ -5,17 +5,7 @@
 */
 package edu.ie3.util.geo
 
-import edu.ie3.util.geo.GeoUtils.{
-  DEFAULT_GEOMETRY_FACTORY,
-  buildCirclePolygon,
-  buildConvexHull,
-  buildPoint,
-  buildPolygon,
-  calcHaversine,
-  calcOrderedCoordinateDistances,
-  equalAreaProjection,
-  reverseEqualAreaProjection
-}
+import edu.ie3.util.geo.GeoUtils._
 import edu.ie3.util.geo.RichGeometries.{RichCoordinate, RichPolygon}
 import edu.ie3.util.quantities.QuantityMatchers.equalWithTolerance
 import org.locationtech.jts.geom.Coordinate

@@ -8,8 +8,7 @@ package edu.ie3.util.geo
 import edu.ie3.util.geo.GeoUtils.{
   DEFAULT_GEOMETRY_FACTORY,
   buildCoordinate,
-  buildPolygon,
-  calcHaversine
+  buildPolygon
 }
 import edu.ie3.util.geo.RichGeometries.{
   RichCoordinate,

@@ -24,15 +24,7 @@ import edu.ie3.util.quantities.interfaces.{
 }
 import tech.units.indriya.ComparableQuantity
 import tech.units.indriya.quantity.Quantities
-import tech.units.indriya.unit.Units.{
-  AMPERE,
-  OHM,
-  PERCENT,
-  SIEMENS,
-  SQUARE_METRE,
-  VOLT,
-  WATT
-}
+import tech.units.indriya.unit.Units._
 
 import javax.measure.MetricPrefix
 import javax.measure.quantity.{

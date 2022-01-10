@@ -9,16 +9,7 @@ import edu.ie3.util.exceptions.GeoException
 import edu.ie3.util.geo.RichGeometries.RichCoordinate
 import org.locationtech.jts.algorithm.ConvexHull
 import org.locationtech.jts.geom.impl.CoordinateArraySequence
-import org.locationtech.jts.geom.{
-  Coordinate,
-  GeometryCollection,
-  GeometryFactory,
-  LineString,
-  LinearRing,
-  Point,
-  Polygon,
-  PrecisionModel
-}
+import org.locationtech.jts.geom._
 import tech.units.indriya.ComparableQuantity
 import tech.units.indriya.quantity.Quantities
 import tech.units.indriya.unit.Units.{METRE, RADIAN}
