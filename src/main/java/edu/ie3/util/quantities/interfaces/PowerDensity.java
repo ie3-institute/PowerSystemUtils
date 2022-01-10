@@ -12,5 +12,5 @@ import tech.units.indriya.ComparableQuantity;
  *
  * @deprecated replaced by {@link Irradiance}
  */
-@Deprecated
+@Deprecated(since = "1.5", forRemoval = true)
 public interface PowerDensity extends ComparableQuantity<PowerDensity> {}

@@ -4,15 +4,15 @@
 // general configuration
 jacoco {
 	toolVersion = "0.8.7"
-	reportsDir = file("$buildDir/reports/jacoco")
+	reportsDirectory = layout.buildDirectory.dir("$buildDir/reports/jacoco")
 }
 
 jacocoTestReport {
 	reports {
-		xml.enabled true
-		csv.enabled false
-		html.enabled true
-		html.destination file("${buildDir}/reports/jacoco")
+		csv.required = false
+		html.required = true
+		xml.required = true
+		html.outputLocation = layout.buildDirectory.dir("${buildDir}/reports/jacoco")
 	}
 
 	// what to exclude from coverage report (files that should not be analyzed!)

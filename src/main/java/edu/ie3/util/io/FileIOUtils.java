@@ -122,7 +122,7 @@ public class FileIOUtils {
    * @deprecated replaced by #compressFile(Path, Path). Add ".gz" to the input path and pass it as
    *     output filepath in compressFile() for a similar functionality.
    */
-  @Deprecated
+  @Deprecated(since = "1.5", forRemoval = true)
   public static CompletableFuture<Boolean> gzip(final String filename) {
     return gzip(filename, "");
   }
@@ -138,7 +138,7 @@ public class FileIOUtils {
    * @return a Future containing a boolean which is either true on success or false otherwise
    * @deprecated replaced by #compressFile(Path, Path)
    */
-  @Deprecated
+  @Deprecated(since = "1.5", forRemoval = true)
   public static CompletableFuture<Boolean> gzip(
       final String filename, final String outputFileName) {
     return CompletableFuture.supplyAsync(
