@@ -9,7 +9,6 @@ import edu.ie3.util.geo.GeoUtils.{
   DEFAULT_GEOMETRY_FACTORY,
   buildCirclePolygon,
   buildConvexHull,
-  buildCoordinate,
   buildPoint,
   buildPolygon,
   calcHaversine,
