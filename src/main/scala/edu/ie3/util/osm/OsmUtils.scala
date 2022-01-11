@@ -8,6 +8,7 @@ package edu.ie3.util.osm
 import edu.ie3.util.geo.RichGeometries.RichCoordinate
 import edu.ie3.util.osm.model.OsmEntity.Node
 import edu.ie3.util.osm.model.OsmEntity.Way.ClosedWay
+import edu.ie3.util.osm.model.OsmEntity.Way.ClosedWay.GeometricClosedWay
 import org.locationtech.jts.geom.{Coordinate, Point, Polygon}
 
 object OsmUtils {
@@ -17,15 +18,20 @@ object OsmUtils {
     *
     * @param point
     *   The point to check for
-    * @param landuses
-    *   Land use polygons
+    * @param closedWays
+    *   Land uses as closed way with already built polygon
     * @return
     *   true, if the point is within at least one land use
     */
-  def isInsideLandUse(point: Point, landuses: Seq[Polygon]): Boolean =
-    landuses.exists(_.convexHull().contains(point))
+  def isInsideLandUse(
+      point: Point,
+      closedWays: Seq[GeometricClosedWay]
+  ): Boolean =
+    closedWays.exists(_.polygon.convexHull().contains(point))
 
-  @deprecated("Use #isInsideLandUse(Coordinate, Seq[Polygon]) instead")
+  @deprecated(
+    "Use #isInsideLandUse(Coordinate, Seq[GeometricClosedWay]) instead"
+  )
   def isInsideLandUse(
       coordinate: Point,
       landuses: Seq[ClosedWay],
@@ -34,7 +40,7 @@ object OsmUtils {
     isInsideLandUse(coordinate, polygonsFromClosedWays(landuses, nodes))
 
   private def polygonsFromClosedWays(ways: Seq[ClosedWay], nodes: Seq[Node]) =
-    ways.map(_.toPolygon(nodes))
+    ways.map(way => GeometricClosedWay(way, nodes))
 
   /** Determine, if a certain coordinate lays within the convex hull of one of
     * the land use polygons

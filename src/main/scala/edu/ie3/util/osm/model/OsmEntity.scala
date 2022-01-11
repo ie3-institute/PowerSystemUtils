@@ -109,23 +109,47 @@ object OsmEntity {
         override val metaInformation: Option[MetaInformation]
     ) extends Way
 
-    final case class ClosedWay private[model] (
+    case class ClosedWay private[model] (
         override val id: Long,
         override val nodes: Seq[Long],
         override val tags: Map[String, String],
         override val metaInformation: Option[MetaInformation]
-    ) extends Way {
-      def toPolygon(nodes: Seq[Node]): Polygon = {
-        val coordinates = nodes
-          .filter(node => this.nodes.contains(node.id))
-          .map(node => new Coordinate(node.longitude, node.latitude))
-          .toArray
+    ) extends Way
 
-        buildPolygon(coordinates)
+    object ClosedWay {
+      final case class GeometricClosedWay private (
+          override val id: Long,
+          override val nodes: Seq[Long],
+          override val tags: Map[String, String],
+          override val metaInformation: Option[MetaInformation],
+          polygon: Polygon
+      ) extends Way {
+        def areaOnEarth: ComparableQuantity[Area] =
+          polygon.calcAreaOnEarth
+
+        def centroid: Coordinate = polygon.getCentroid.getCoordinate
       }
 
-      def calculateArea(nodes: Seq[Node]): ComparableQuantity[Area] =
-        toPolygon(nodes).calcAreaOnEarth
+      object GeometricClosedWay {
+        def apply(closedWay: ClosedWay, nodes: Seq[Node]): GeometricClosedWay =
+          closedWay match {
+            case ClosedWay(id, wayNodes, tags, metaInformation) =>
+              val coordinates = nodes
+                .filter(node => nodes.contains(node.id))
+                .map(node => new Coordinate(node.longitude, node.latitude))
+                .toArray
+
+              val polygon = buildPolygon(coordinates)
+
+              new GeometricClosedWay(
+                id,
+                wayNodes,
+                tags,
+                metaInformation,
+                polygon
+              )
+          }
+      }
     }
 
     def apply(
