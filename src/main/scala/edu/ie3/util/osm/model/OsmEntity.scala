@@ -7,6 +7,7 @@ package edu.ie3.util.osm.model
 
 import edu.ie3.util.geo.GeoUtils
 import edu.ie3.util.geo.GeoUtils.buildPolygon
+import edu.ie3.util.geo.RichGeometries.*
 import edu.ie3.util.osm.model.OsmEntity.MetaInformation
 import edu.ie3.util.osm.model.OsmEntity.Relation.RelationMember
 import org.locationtech.jts.geom.{Coordinate, Point, Polygon}
@@ -114,16 +115,17 @@ object OsmEntity {
         override val tags: Map[String, String],
         override val metaInformation: Option[MetaInformation]
     ) extends Way {
-      def getCoordinates: List[Coordinate] = {
-        nodes.map(_.coordinate)
+      def toPolygon(nodes: Seq[Node]): Polygon = {
+        val coordinates = nodes
+          .filter(node => this.nodes.contains(node.id))
+          .map(node => new Coordinate(node.longitude, node.latitude))
+          .toArray
+
+        buildPolygon(coordinates)
       }
 
-      def toPolygon: Polygon = {
-        buildPolygon(getCoordinates.toArray)
-      }
-
-      def calculateArea: ComparableQuantity[Area] =
-        toPolygon.calcAreaOnEarth
+      def calculateArea(nodes: Seq[Node]): ComparableQuantity[Area] =
+        toPolygon(nodes).calcAreaOnEarth
     }
 
     def apply(
