@@ -15,7 +15,7 @@ sonarqube {
 			'src/test/groovy'] // test src dirs
 		// reports stuff (for all languages)
 		property 'sonar.junit.reportPaths', [
-			'build/test-results/allTests'] // Comma-delimited list of paths to Surefire XML-format reports.
+			'build/test-results/test'] // Comma-delimited list of paths to Surefire XML-format reports.
 		// unit tests reports dirs
 		property "sonar.coverage.jacoco.xmlReportsPath", [
 			"build/reports/jacoco/test/jacocoTestReport.xml"] // Comma-separated list of paths to JaCoCo (jacoco.xml) report files.
@@ -32,11 +32,13 @@ sonarqube {
 		/// integration tests reports dir (if any)
 		property 'sonar.groovy.jacoco.itReportPath', 'build/jacoco/allTests.exec'
 		property 'sonar.groovy.binaries', 'build/classes/groovy' // groovy binaries
+		// scala specific stuff
+		//property 'sonar.scala.coverage.reportPaths', 'build/reports/scoverage/scoverage.xml'
 	}
 }
 
 // forces sonarqube to execute integration tests
-//project.tasks["sonarqube"].dependsOn "check"
+project.tasks["sonarqube"].dependsOn "check"
 // Check itself depends on
 // - pmdMain
 // - spotBugsMain
@@ -44,5 +46,5 @@ sonarqube {
 // - spotBugsTest
 // - test
 
-//project.tasks["sonarqube"].dependsOn "jacocoTestReport"
-//project.tasks["sonarqube"].dependsOn "jacocoTestCoverageVerification"
+project.tasks["sonarqube"].dependsOn "jacocoTestReport"
+project.tasks["sonarqube"].dependsOn "jacocoTestCoverageVerification"

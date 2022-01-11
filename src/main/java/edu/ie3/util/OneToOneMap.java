@@ -28,13 +28,11 @@ public class OneToOneMap<X, Y> extends HashMap<X, Y> {
 
   public OneToOneMap(Map<X, Y> existingMap) {
     this(existingMap.size());
-    for (Map.Entry<X, Y> entry : existingMap.entrySet()) {
-      put(entry.getKey(), entry.getValue());
-    }
+    this.putAll(existingMap);
   }
 
   @Override
-  public Y put(X key, Y value) {
+  public final Y put(X key, Y value) {
     inverse.put(value, key);
     return super.put(key, value);
   }

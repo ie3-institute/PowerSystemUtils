@@ -6,11 +6,14 @@
 package edu.ie3.util.osm.model
 
 import edu.ie3.util.geo.GeoUtils
+import edu.ie3.util.geo.GeoUtils.buildPolygon
 import edu.ie3.util.osm.model.OsmEntity.MetaInformation
 import edu.ie3.util.osm.model.OsmEntity.Relation.RelationMember
-import org.locationtech.jts.geom.Point
+import org.locationtech.jts.geom.{Coordinate, Point, Polygon}
+import tech.units.indriya.ComparableQuantity
 
 import java.time.Instant
+import javax.measure.quantity.Area
 import scala.annotation.tailrec
 
 sealed trait OsmEntity {
@@ -86,7 +89,7 @@ object OsmEntity {
       override val tags: Map[String, String],
       override val metaInformation: Option[MetaInformation] = None
   ) extends OsmEntity {
-    val coordinate: Point = GeoUtils.xyToPoint(longitude, latitude)
+    val coordinate: Point = GeoUtils.buildPoint(longitude, latitude)
   }
 
   sealed trait Way extends OsmEntity {
@@ -110,7 +113,18 @@ object OsmEntity {
         override val nodes: Seq[Long],
         override val tags: Map[String, String],
         override val metaInformation: Option[MetaInformation]
-    ) extends Way
+    ) extends Way {
+      def getCoordinates: List[Coordinate] = {
+        nodes.map(_.coordinate)
+      }
+
+      def toPolygon: Polygon = {
+        buildPolygon(getCoordinates.toArray)
+      }
+
+      def calculateArea: ComparableQuantity[Area] =
+        toPolygon.calcAreaOnEarth
+    }
 
     def apply(
         id: Long,
