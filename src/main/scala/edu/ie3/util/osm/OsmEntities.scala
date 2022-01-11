@@ -5,10 +5,15 @@
 */
 package edu.ie3.util.osm
 
-import org.locationtech.jts.geom.Point
+import edu.ie3.util.geo.GeoUtils.buildPolygon
+import edu.ie3.util.geo.RichGeometries.RichPolygon
+import org.locationtech.jts.geom.{Coordinate, Polygon}
+import tech.units.indriya.ComparableQuantity
 
 import java.time.ZonedDateTime
 import java.util.UUID
+import javax.measure.quantity.Area
+import scala.jdk.CollectionConverters._
 
 object OsmEntities {
 
@@ -63,7 +68,7 @@ object OsmEntities {
     *   time stamp of the elements last edit
     * @param tags
     *   associated tags
-    * @param coordinates
+    * @param coordinate
     *   the coordinates of the specific node
     */
   final case class Node(
@@ -71,7 +76,7 @@ object OsmEntities {
       osmId: Int,
       lastEdited: ZonedDateTime,
       tags: Map[String, String],
-      coordinates: Point
+      coordinate: Coordinate
   ) extends OsmEntity
 
   /** Common trait to all OSM ways
@@ -121,7 +126,19 @@ object OsmEntities {
       lastEdited: ZonedDateTime,
       tags: Map[String, String],
       nodes: List[Node]
-  ) extends Way
+  ) extends Way {
+
+    def getCoordinates: List[Coordinate] = {
+      nodes.map(_.coordinate)
+    }
+
+    def toPolygon: Polygon = {
+      buildPolygon(getCoordinates.toArray)
+    }
+
+    def calculateArea: ComparableQuantity[Area] =
+      toPolygon.calcAreaOnEarth
+  }
 
   /** An OSM relation.
     *

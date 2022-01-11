@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased/Snapshot]
+
+### Added
+- Added implicit classes for `loactiontec.jts` Geometries that represent geographical geometries with functionality before located in `GeoUtils` [#163] (https://github.com/ie3-institute/PowerSystemUtils/issues/163)
+
+### Changed
+- Refactored `GeoUtils`, moved them to the scala package and tailored them toward the `loactiontec.jts` Geometries used in the `OsmContainer` [#163] (https://github.com/ie3-institute/PowerSystemUtils/issues/163)
+
 ### Fixed
 - Fix tests in CI [#206](https://github.com/ie3-institute/PowerSystemUtils/issues/206)
   - Enable using JUnit platform
@@ -14,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Use `Stream#toList`
   - Enhance deprecation annotations
 - Fix formatting for MarkDown files
-- Configure gradle jacoco plugin according to newest documentation
+- Configure gradle jacoco plugin according to newest documentation 
 
 ## [1.6.0]
 
