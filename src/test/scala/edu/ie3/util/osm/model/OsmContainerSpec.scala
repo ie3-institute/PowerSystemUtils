@@ -5,6 +5,7 @@
 */
 package edu.ie3.util.osm.model
 
+import edu.ie3.util.osm.OsmUtils
 import edu.ie3.util.osm.model.OsmContainer
 import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.ClosedWay.SimpleClosedWay
 import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.OpenWay.SimpleOpenWay
@@ -44,14 +45,14 @@ class OsmContainerSpec extends Matchers with AnyWordSpecLike {
     )
 
     "extract buildings correctly" in {
-      OsmUtil.extractBuildings(List(wayA, wayB, wayC)) shouldBe List(wayB)
+      OsmUtils.extractBuildings(List(wayA, wayB, wayC)) shouldBe List(wayB)
     }
 
     "extract highways correctly" in {
       val highwayA = wayA.copy(tags = Map("highway" -> "residential"))
       val highwayB = wayB.copy(tags = Map("highway" -> "unlisted"))
       val highwayC = wayC.copy(tags = Map("highway" -> "path"))
-      OsmUtil.extractHighways(
+      OsmUtils.extractHighways(
         List(
           highwayA,
           highwayB,
@@ -65,7 +66,7 @@ class OsmContainerSpec extends Matchers with AnyWordSpecLike {
       val landuseA = wayA.copy(tags = Map("landuse" -> "residential"))
       val landuseB = wayA.copy(tags = Map("landuse" -> "retail"))
       val landuseC = wayA.copy(tags = Map("landuse" -> "unlisted"))
-      OsmUtil.extractLanduses(
+      OsmUtils.extractLanduses(
         List(
           landuseA,
           landuseB,

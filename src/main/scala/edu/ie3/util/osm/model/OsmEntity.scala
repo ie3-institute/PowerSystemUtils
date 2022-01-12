@@ -16,7 +16,10 @@ import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Relation.RelationMember.{
   ExtendedRelationMember,
   SimpleRelationMember
 }
-import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.ClosedWay.SimpleClosedWay
+import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.ClosedWay.{
+  ExtendedClosedWay,
+  SimpleClosedWay
+}
 import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.OpenWay.SimpleOpenWay
 
 import java.time.Instant
@@ -152,23 +155,52 @@ object OsmEntity {
             override val tags: Map[String, String],
             override val metaInformation: Option[MetaInformation]
         ) extends ClosedWay
-            with ExtendedWay
+            with ExtendedWay {
+          lazy val polygon: Polygon =
+            GeoUtils.buildPolygon(
+              nodes
+                .map(node => new Coordinate(node.longitude, node.latitude))
+                .toArray
+            )
+
+          def areaOnEarth(): ComparableQuantity[Area] = polygon.calcAreaOnEarth
+
+          def centroid(): Coordinate = polygon.getCentroid.getCoordinate
+
+        }
 
       }
 
-      def apply(
-          id: Long,
-          nodes: Seq[Long],
-          tags: Map[String, String],
-          metaInformation: Option[MetaInformation]
-      ): Way =
-        if (isClosedWay(nodes)) {
-          SimpleClosedWay(id, nodes, tags, metaInformation)
-        } else {
-          SimpleOpenWay(id, nodes, tags, metaInformation)
-        }
+      object SimpleWay {
 
-      def isClosedWay(nodes: Seq[Long]): Boolean =
+        def apply(
+            id: Long,
+            nodes: Seq[Long],
+            tags: Map[String, String],
+            metaInformation: Option[MetaInformation]
+        ): SimpleWay =
+          if (isClosedWay(nodes)) {
+            SimpleClosedWay(id, nodes, tags, metaInformation)
+          } else {
+            SimpleOpenWay(id, nodes, tags, metaInformation)
+          }
+      }
+
+      object ExtendedWay {
+        def apply(
+            id: Long,
+            nodes: Seq[Node],
+            tags: Map[String, String],
+            metaInformation: Option[MetaInformation]
+        ): ExtendedWay =
+          if (isClosedWay(nodes)) {
+            ExtendedClosedWay(id, nodes, tags, metaInformation)
+          } else {
+            ExtendedClosedWay(id, nodes, tags, metaInformation)
+          }
+      }
+
+      private def isClosedWay(nodes: Seq[Long] | Seq[Node]): Boolean =
         nodes.headOption.zip(nodes.lastOption).exists { case (head, last) =>
           head == last
         }
@@ -184,6 +216,19 @@ object OsmEntity {
       enum RelationMemberType:
         case Node, Way, Relation, Unrecognized
 
+      object RelationMemberType {
+        def apply(osmEntity: OsmEntity): RelationMemberType =
+          osmEntity match {
+            case _: Node =>
+              Node
+            case _: Way =>
+              Way
+            case _: Relation =>
+              Way
+          }
+
+      }
+
       sealed trait RelationMember
 
       object RelationMember {
@@ -194,12 +239,32 @@ object OsmEntity {
             role: String
         ) extends RelationMember
 
+        object SimpleRelationMember {
+
+          def apply(osmEntity: OsmEntity): SimpleRelationMember =
+            SimpleRelationMember(
+              osmEntity.id,
+              RelationMemberType(osmEntity),
+              s"converted_${osmEntity.id}"
+            )
+
+        }
+
         final case class ExtendedRelationMember(
             entity: ExtendedOsmEntity,
             relationType: RelationMemberType,
             role: String
         ) extends RelationMember
 
+        object ExtendedRelationMember {
+          def apply(
+              osmEntity: OsmEntity with ExtendedOsmEntity
+          ): ExtendedRelationMember = ExtendedRelationMember(
+            osmEntity,
+            RelationMemberType(osmEntity),
+            s"converted_${osmEntity.id}"
+          )
+        }
       }
 
       final case class SimpleRelation(

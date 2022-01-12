@@ -5,6 +5,8 @@
 */
 package edu.ie3.util.osm.model
 
+import com.typesafe.scalalogging.LazyLogging
+import edu.ie3.util.exceptions.OsmException
 import edu.ie3.util.osm.model.OsmEntity
 import edu.ie3.util.osm.model.CommonOsmKey.{Building, Highway, Landuse}
 import edu.ie3.util.osm.model.OsmContainer.ParOsmContainer.{
@@ -16,15 +18,24 @@ import edu.ie3.util.osm.model.OsmContainer.SeqOsmContainer.{
   SimpleSeqOsmContainer
 }
 import edu.ie3.util.osm.model.OsmContainer.{ParOsmContainer, SeqOsmContainer}
+import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Relation.RelationMember.ExtendedRelationMember
 import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Relation.{
   ExtendedRelation,
+  RelationMemberType,
   SimpleRelation
 }
+import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.ExtendedWay
 import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.{ExtendedWay, SimpleWay}
-import edu.ie3.util.osm.model.OsmEntity.Node
+import edu.ie3.util.osm.model.OsmEntity.{
+  ComposedEntity,
+  ExtendedOsmEntity,
+  Node
+}
 
+import scala.collection.mutable
 import scala.collection.parallel.CollectionConverters.*
 import scala.collection.parallel.immutable.{ParMap, ParSeq}
+import scala.util.{Failure, Success, Try}
 
 sealed trait OsmContainer {
 
@@ -62,12 +73,23 @@ object OsmContainer {
 
   object SeqOsmContainer {
 
+    // todo JH: conversion method to transfer simple to extended container
+
     final case class SimpleSeqOsmContainer(
         override val nodes: Seq[Node],
         ways: Seq[SimpleWay],
         relations: Seq[SimpleRelation]
     ) extends SimpleContainer
-        with SeqOsmContainer {
+        with SeqOsmContainer
+        with LazyLogging
+        with ContainerCache {
+
+      private val _wayCache: mutable.Map[Long, ExtendedWay] =
+        scala.collection.mutable.Map.empty
+
+      private val _relCache: mutable.Map[Long, ExtendedRelation] =
+        scala.collection.mutable.Map.empty
+
       lazy val nodesMap: Map[Long, Node] =
         nodes.map(node => (node.id, node)).toMap
 
@@ -76,6 +98,15 @@ object OsmContainer {
 
       lazy val relationsMap: Map[Long, SimpleRelation] =
         relations.map(relation => (relation.id, relation)).toMap
+
+      override protected def _node: Long => Option[Node] = id =>
+        nodesMap.get(id)
+
+      override protected def _simpleWay: Long => Option[SimpleWay] = id =>
+        waysMap.get(id)
+
+      override protected def _simpleRelation: Long => Option[SimpleRelation] =
+        id => relationsMap.get(id)
 
       override def nodeFromId(osmId: Long): Option[Node] =
         nodesMap.get(osmId)
@@ -87,6 +118,7 @@ object OsmContainer {
         SimpleParOsmContainer(nodes.par, ways.par, relations.par)
 
       override def seq(): SimpleContainer with SeqOsmContainer = this
+
     }
 
     final case class ExtendedSeqOsmContainer(
@@ -127,7 +159,8 @@ object OsmContainer {
         ways: ParSeq[SimpleWay],
         relations: ParSeq[SimpleRelation]
     ) extends SimpleContainer
-        with ParOsmContainer {
+        with ParOsmContainer
+        with ContainerCache {
 
       lazy val nodesMap: ParMap[Long, Node] =
         nodes.map(node => (node.id, node)).toMap
@@ -137,6 +170,15 @@ object OsmContainer {
 
       lazy val relationsMap: ParMap[Long, SimpleRelation] =
         relations.map(relation => (relation.id, relation)).toMap
+
+      override protected def _node: Long => Option[Node] = id =>
+        nodesMap.get(id)
+
+      override protected def _simpleWay: Long => Option[SimpleWay] = id =>
+        waysMap.get(id)
+
+      override protected def _simpleRelation: Long => Option[SimpleRelation] =
+        id => relationsMap.get(id)
 
       override def nodeFromId(osmId: Long): Option[Node] =
         nodesMap.get(osmId)
