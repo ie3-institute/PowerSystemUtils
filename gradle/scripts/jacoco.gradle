@@ -40,7 +40,7 @@ jacocoTestCoverageVerification {
 	violationRules {
 		rule {
 			limit {
-				minimum = 0.00 // increase if we make progress on this
+				minimum = 0.25 // increase if we make progress on this
 			}
 		}
 
