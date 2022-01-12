@@ -7,11 +7,11 @@ package edu.ie3.util.osm.model
 
 import edu.ie3.util.geo.GeoUtils
 import edu.ie3.util.geo.GeoUtils.buildPolygon
-import edu.ie3.util.geo.RichGeometries.*
 import edu.ie3.util.osm.model.OsmEntity.MetaInformation
 import edu.ie3.util.osm.model.OsmEntity.Relation.RelationMember
 import org.locationtech.jts.geom.{Coordinate, Point, Polygon}
 import tech.units.indriya.ComparableQuantity
+import edu.ie3.util.geo.RichGeometries._
 
 import java.time.Instant
 import javax.measure.quantity.Area
@@ -46,22 +46,10 @@ sealed trait OsmEntity {
       case None => false
     }
 
-  @tailrec
   final def hasKeysValuesPairOr(
       keyTagValues: Map[String, Set[String]]
-  ): Boolean = {
-    keyTagValues.headOption match {
-      case Some((key, tagValues)) =>
-        // if we have at least one matching key/tagValues pair
-        // we can stop the process and return true
-        if (hasKeyValuesPairOr(key, tagValues)) {
-          true
-        } else {
-          hasKeysValuesPairOr(keyTagValues - key)
-        }
-      case None =>
-        false
-    }
+  ): Boolean = keyTagValues.exists { case (key, tagValues) =>
+    hasKeyValuesPairOr(key, tagValues)
   }
 
   def hasKey(key: CommonOsmKey): Boolean =
@@ -90,7 +78,7 @@ object OsmEntity {
       override val tags: Map[String, String],
       override val metaInformation: Option[MetaInformation] = None
   ) extends OsmEntity {
-    val coordinate: Point = GeoUtils.buildPoint(longitude, latitude)
+    lazy val coordinate: Point = new Coordinate(longitude, latitude).toPoint
   }
 
   sealed trait Way extends OsmEntity {
@@ -102,55 +90,19 @@ object OsmEntity {
 
   object Way {
 
-    final case class OpenWay private[model] (
+    final case class OpenWay(
         override val id: Long,
         override val nodes: Seq[Long],
         override val tags: Map[String, String],
         override val metaInformation: Option[MetaInformation]
     ) extends Way
 
-    case class ClosedWay private[model] (
+    final case class ClosedWay(
         override val id: Long,
         override val nodes: Seq[Long],
         override val tags: Map[String, String],
         override val metaInformation: Option[MetaInformation]
     ) extends Way
-
-    object ClosedWay {
-      final case class GeometricClosedWay private (
-          override val id: Long,
-          override val nodes: Seq[Long],
-          override val tags: Map[String, String],
-          override val metaInformation: Option[MetaInformation],
-          polygon: Polygon
-      ) extends Way {
-        def areaOnEarth: ComparableQuantity[Area] =
-          polygon.calcAreaOnEarth
-
-        def centroid: Coordinate = polygon.getCentroid.getCoordinate
-      }
-
-      object GeometricClosedWay {
-        def apply(closedWay: ClosedWay, nodes: Seq[Node]): GeometricClosedWay =
-          closedWay match {
-            case ClosedWay(id, wayNodes, tags, metaInformation) =>
-              val coordinates = nodes
-                .filter(node => nodes.contains(node.id))
-                .map(node => new Coordinate(node.longitude, node.latitude))
-                .toArray
-
-              val polygon = buildPolygon(coordinates)
-
-              new GeometricClosedWay(
-                id,
-                wayNodes,
-                tags,
-                metaInformation,
-                polygon
-              )
-          }
-      }
-    }
 
     def apply(
         id: Long,
