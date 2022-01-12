@@ -68,6 +68,10 @@ sealed trait OsmEntity {
 
 object OsmEntity {
 
+  sealed trait SimpleOsmEntity
+
+  sealed trait ExtendedOsmEntity
+
   final case class MetaInformation(
       version: Option[Int] = None,
       timestamp: Option[Instant] = None,
@@ -83,7 +87,8 @@ object OsmEntity {
       longitude: Double,
       override val tags: Map[String, String],
       override val metaInformation: Option[MetaInformation] = None
-  ) extends OsmEntity {
+  ) extends OsmEntity
+      with ExtendedOsmEntity {
     lazy val coordinate: Point = new Coordinate(longitude, latitude).toPoint
   }
 
@@ -95,13 +100,19 @@ object OsmEntity {
 
   object ComposedEntity {
 
-    sealed trait SimpleOsmEntity
-
-    sealed trait ExtendedOsmEntity
-
-    sealed trait Way extends ComposedEntity {
-      val nodes: Seq[Long | Node]
+    sealed trait SimpleComposedOsmEntity
+        extends SimpleOsmEntity
+        with ComposedEntity {
+      val nodes: Seq[Long]
     }
+
+    sealed trait ExtendedComposedOsmEntity
+        extends ExtendedOsmEntity
+        with ComposedEntity {
+      val nodes: Seq[Node]
+    }
+
+    sealed trait Way
 
     object Way {
 
@@ -115,6 +126,7 @@ object OsmEntity {
             override val tags: Map[String, String],
             override val metaInformation: Option[MetaInformation]
         ) extends OpenWay
+            with SimpleComposedOsmEntity
 
         final case class ExtendedOpenWay(
             override val id: Long,
@@ -122,6 +134,7 @@ object OsmEntity {
             override val tags: Map[String, String],
             override val metaInformation: Option[MetaInformation]
         ) extends OpenWay
+            with ExtendedComposedOsmEntity
 
       }
 
@@ -135,6 +148,7 @@ object OsmEntity {
             override val tags: Map[String, String],
             override val metaInformation: Option[MetaInformation]
         ) extends ClosedWay
+            with SimpleComposedOsmEntity
 
         final case class ExtendedClosedWay(
             override val id: Long,
@@ -142,6 +156,7 @@ object OsmEntity {
             override val tags: Map[String, String],
             override val metaInformation: Option[MetaInformation]
         ) extends ClosedWay
+            with ExtendedComposedOsmEntity
 
       }
 
@@ -151,13 +166,13 @@ object OsmEntity {
           tags: Map[String, String],
           metaInformation: Option[MetaInformation]
       ): Way =
-        if (closedWay(nodes)) {
+        if (isClosedWay(nodes)) {
           SimpleClosedWay(id, nodes, tags, metaInformation)
         } else {
           SimpleOpenWay(id, nodes, tags, metaInformation)
         }
 
-      def closedWay(nodes: Seq[Long]): Boolean =
+      def isClosedWay(nodes: Seq[Long]): Boolean =
         nodes.headOption.zip(nodes.lastOption).exists { case (head, last) =>
           head == last
         }
@@ -197,6 +212,7 @@ object OsmEntity {
           override val tags: Map[String, String],
           override val metaInformation: Option[MetaInformation]
       ) extends Relation
+          with SimpleOsmEntity
 
       final case class ExtendedRelation(
           override val id: Long,
@@ -204,6 +220,7 @@ object OsmEntity {
           override val tags: Map[String, String],
           override val metaInformation: Option[MetaInformation]
       ) extends Relation
+          with ExtendedOsmEntity
 
     }
 
