@@ -88,15 +88,6 @@ object OsmContainer {
         with LazyLogging
         with ContainerCache {
 
-      lazy val nodesMap: Map[Long, Node] =
-        nodes.map(node => (node.id, node)).toMap
-
-      lazy val waysMap: Map[Long, SimpleWay] =
-        ways.map(way => (way.id, way)).toMap
-
-      lazy val relationsMap: Map[Long, SimpleRelation] =
-        relations.map(relation => (relation.id, relation)).toMap
-
       override protected def _node: Long => Option[Node] = id =>
         nodesMap.get(id)
 
@@ -105,6 +96,15 @@ object OsmContainer {
 
       override protected def _simpleRelation: Long => Option[SimpleRelation] =
         id => relationsMap.get(id)
+
+      lazy val nodesMap: Map[Long, Node] =
+        nodes.map(node => (node.id, node)).toMap
+
+      lazy val waysMap: Map[Long, SimpleWay] =
+        ways.map(way => (way.id, way)).toMap
+
+      lazy val relationsMap: Map[Long, SimpleRelation] =
+        relations.map(relation => (relation.id, relation)).toMap
 
       override def nodeFromId(osmId: Long): Option[Node] =
         nodesMap.get(osmId)
@@ -164,15 +164,6 @@ object OsmContainer {
         with ParOsmContainer
         with ContainerCache {
 
-      lazy val nodesMap: ParMap[Long, Node] =
-        nodes.map(node => (node.id, node)).toMap
-
-      lazy val waysMap: ParMap[Long, SimpleWay] =
-        ways.map(way => (way.id, way)).toMap
-
-      lazy val relationsMap: ParMap[Long, SimpleRelation] =
-        relations.map(relation => (relation.id, relation)).toMap
-
       override protected def _node: Long => Option[Node] = id =>
         nodesMap.get(id)
 
@@ -181,6 +172,15 @@ object OsmContainer {
 
       override protected def _simpleRelation: Long => Option[SimpleRelation] =
         id => relationsMap.get(id)
+
+      lazy val nodesMap: ParMap[Long, Node] =
+        nodes.map(node => (node.id, node)).toMap
+
+      lazy val waysMap: ParMap[Long, SimpleWay] =
+        ways.map(way => (way.id, way)).toMap
+
+      lazy val relationsMap: ParMap[Long, SimpleRelation] =
+        relations.map(relation => (relation.id, relation)).toMap
 
       override def nodeFromId(osmId: Long): Option[Node] =
         nodesMap.get(osmId)
