@@ -7,6 +7,7 @@ package edu.ie3.util.osm.model
 
 import com.typesafe.scalalogging.LazyLogging
 import edu.ie3.util.exceptions.OsmException
+import edu.ie3.util.osm.OsmUtils
 import edu.ie3.util.osm.model.OsmContainer.ParOsmContainer.SimpleParOsmContainer
 import edu.ie3.util.osm.model.OsmContainer.SeqOsmContainer.SimpleSeqOsmContainer
 import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.{ExtendedWay, SimpleWay}
@@ -39,10 +40,10 @@ trait ContainerCache extends LazyLogging {
 
   protected def _node: Long => Option[Node]
 
-  private val _wayCache: mutable.Map[Long, ExtendedWay] =
+  protected val _wayCache: mutable.Map[Long, ExtendedWay] =
     scala.collection.mutable.Map.empty
 
-  private val _relCache: mutable.Map[Long, ExtendedRelation] =
+  protected val _relCache: mutable.Map[Long, ExtendedRelation] =
     scala.collection.mutable.Map.empty
 
   /** WARNING: METHOD IS NOT THREAD SAFE AND MAY CAUSE OVERHEAD IN GENERATING
@@ -53,21 +54,12 @@ trait ContainerCache extends LazyLogging {
     */
   def extendedWay(id: Long): Option[ExtendedWay] =
     _wayCache.get(id) match {
-      case cachedWay @ Some(_) => cachedWay
+      case cachedWay @ Some(_) =>
+        cachedWay
       case None =>
         _simpleWay(id)
-          .map(simpleWay =>
-            ExtendedWay(
-              simpleWay.id,
-              simpleWay.nodes.collect(_node(_)).flatten,
-              simpleWay.tags,
-              simpleWay.metaInformation
-            )
-          )
-          .map(extendedWay => {
-            _wayCache.addOne(id, extendedWay)
-            extendedWay
-          })
+          .map(_.asExtended(_node))
+          .flatMap(cache)
     }
 
   /** WARNING: METHOD IS NOT THREAD SAFE AND MAY CAUSE OVERHEAD IN GENERATING
@@ -76,55 +68,58 @@ trait ContainerCache extends LazyLogging {
     * @param id
     * @return
     */
-  def extendedRelation(id: Long): Option[ExtendedRelation] =
+  def extendedRelation(id: Long): Option[ExtendedRelation] = {
+    val osmException: String => OsmException = (entityName: String) =>
+      new OsmException(
+        s"Cannot build $entityName for relation with '$id'. " +
+          s"Node with id '$id not found!'"
+      )
+
+    def extendedNodeMemberType(id: Long) =
+      _node(id) match {
+        case Some(node) =>
+          Some(ExtendedRelationMember(node))
+        case None =>
+          throw osmException("ExtendedNode")
+      }
+
+    def extendedWayMemberType(id: Long) =
+      extendedWay(id) match {
+        case Some(extendedWay) =>
+          Some(ExtendedRelationMember(extendedWay))
+        case None =>
+          throw osmException("ExtendedWay")
+      }
+
+    def extendedRelationMemberType(id: Long) =
+      extendedRelation(id) match {
+        case Some(extendedRel) =>
+          Some(ExtendedRelationMember(extendedRel))
+        case None =>
+          throw osmException("ExtendedRelation")
+      }
+
     _relCache.get(id) match {
       case cachedRel @ Some(_) => cachedRel
       case None =>
         _simpleRelation(id)
           .flatMap(simpleRelation => {
             Try {
-              simpleRelation.members.flatMap(simpleRelationMember => {
+              simpleRelation.members.flatMap(simpleRelationMember =>
                 simpleRelationMember.relationType match {
                   case RelationMemberType.Node =>
-                    _node(simpleRelationMember.id) match {
-                      case Some(node) =>
-                        Some(ExtendedRelationMember(node))
-                      case None =>
-                        throw new OsmException(
-                          s"Cannot build ExtendedNode for relation with '$id'. " +
-                            s"Node with id '${simpleRelationMember.id} not found!'"
-                        )
-
-                    }
+                    extendedNodeMemberType(simpleRelationMember.id)
                   case RelationMemberType.Way =>
-                    extendedWay(simpleRelationMember.id) match {
-                      case Some(extendedWay) =>
-                        Some(ExtendedRelationMember(extendedWay))
-                      case None =>
-                        throw new OsmException(
-                          s"Cannot build ExtendedWay for relation with '$id'. " +
-                            s"Way with id '${simpleRelationMember.id} not found!'"
-                        )
-
-                    }
+                    extendedWayMemberType(simpleRelationMember.id)
                   case RelationMemberType.Relation =>
-                    extendedRelation(simpleRelationMember.id) match {
-                      case Some(extendedRel) =>
-                        Some(ExtendedRelationMember(extendedRel))
-                      case None =>
-                        throw new OsmException(
-                          s"Cannot build ExtendedRelation for relation with '$id'. " +
-                            s"Relation with id '${simpleRelationMember.id} not found!'"
-                        )
-
-                    }
+                    extendedRelationMemberType(simpleRelationMember.id)
                   case RelationMemberType.Unrecognized =>
                     logger.warn(
                       s"SimpleRelationMember $simpleRelationMember has type 'Unrecognized'."
                     )
                     None
                 }
-              })
+              )
             } match {
               case Failure(exception) =>
                 logger.error(
@@ -142,10 +137,20 @@ trait ContainerCache extends LazyLogging {
                 )
             }
           })
-          .map(extendedRelation => {
-            _relCache.addOne(id, extendedRelation)
-            extendedRelation
-          })
+          .flatMap(cache)
+    }
+  }
+
+  private def cache[T <: ExtendedOsmEntity](entity: T): Option[T] =
+    entity match {
+      case Node(id, latitude, longitude, tags, metaInformation) =>
+        None
+      case way: ExtendedWay =>
+        _wayCache.addOne(way.id, way)
+        Some(way)
+      case relation: ExtendedRelation =>
+        _relCache.addOne(relation.id, relation)
+        Some(relation)
     }
 
 }

@@ -78,17 +78,15 @@ object OsmContainer {
     final case class SimpleSeqOsmContainer(
         override val nodes: Seq[Node],
         ways: Seq[SimpleWay],
-        relations: Seq[SimpleRelation]
+        relations: Seq[SimpleRelation],
+        override protected val _relCache: mutable.Map[Long, ExtendedRelation] =
+          mutable.Map.empty,
+        override protected val _wayCache: mutable.Map[Long, ExtendedWay] =
+          mutable.Map.empty
     ) extends SimpleContainer
         with SeqOsmContainer
         with LazyLogging
         with ContainerCache {
-
-      private val _wayCache: mutable.Map[Long, ExtendedWay] =
-        scala.collection.mutable.Map.empty
-
-      private val _relCache: mutable.Map[Long, ExtendedRelation] =
-        scala.collection.mutable.Map.empty
 
       lazy val nodesMap: Map[Long, Node] =
         nodes.map(node => (node.id, node)).toMap
@@ -157,7 +155,11 @@ object OsmContainer {
     final case class SimpleParOsmContainer(
         override val nodes: ParSeq[Node],
         ways: ParSeq[SimpleWay],
-        relations: ParSeq[SimpleRelation]
+        relations: ParSeq[SimpleRelation],
+        override protected val _relCache: mutable.Map[Long, ExtendedRelation] =
+          mutable.Map.empty,
+        override protected val _wayCache: mutable.Map[Long, ExtendedWay] =
+          mutable.Map.empty
     ) extends SimpleContainer
         with ParOsmContainer
         with ContainerCache {

@@ -11,16 +11,22 @@ import edu.ie3.util.osm.model.OsmEntity.MetaInformation
 import org.locationtech.jts.geom.{Coordinate, Point, Polygon}
 import tech.units.indriya.ComparableQuantity
 import edu.ie3.util.geo.RichGeometries.*
+import edu.ie3.util.osm.OsmUtils
 import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Relation.RelationMember
 import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Relation.RelationMember.{
   ExtendedRelationMember,
   SimpleRelationMember
 }
+import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way
 import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.ClosedWay.{
   ExtendedClosedWay,
   SimpleClosedWay
 }
-import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.OpenWay.SimpleOpenWay
+import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.ExtendedWay
+import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.OpenWay.{
+  ExtendedOpenWay,
+  SimpleOpenWay
+}
 
 import java.time.Instant
 import javax.measure.quantity.Area
@@ -107,6 +113,17 @@ object OsmEntity {
 
     sealed trait SimpleWay extends Way with SimpleOsmEntity {
       val nodes: Seq[Long]
+
+      /** Nodes are going to be filtered
+        *
+        * @param nodesToBeConsidered
+        */
+      def asExtended(nodesToBeConsidered: Map[Long, Node]): ExtendedWay =
+        OsmUtils.extendedWay(this, nodesToBeConsidered)
+
+      def asExtended(nodeFunction: Long => Option[Node]): ExtendedWay =
+        OsmUtils.extendedWay(this, nodeFunction)
+
     }
 
     sealed trait ExtendedWay extends Way with ExtendedOsmEntity {
@@ -196,7 +213,7 @@ object OsmEntity {
           if (isClosedWay(nodes)) {
             ExtendedClosedWay(id, nodes, tags, metaInformation)
           } else {
-            ExtendedClosedWay(id, nodes, tags, metaInformation)
+            ExtendedOpenWay(id, nodes, tags, metaInformation)
           }
       }
 

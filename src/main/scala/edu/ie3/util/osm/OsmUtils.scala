@@ -5,16 +5,29 @@
 */
 package edu.ie3.util.osm
 
+import com.typesafe.scalalogging.LazyLogging
+import edu.ie3.util.exceptions.OsmException
 import edu.ie3.util.geo.RichGeometries.RichCoordinate
 import edu.ie3.util.osm.model.CommonOsmKey.{Building, Highway, Landuse}
 import edu.ie3.util.osm.model.OsmEntity
+import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Relation.RelationMember.{
+  ExtendedRelationMember,
+  SimpleRelationMember
+}
+import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Relation.{
+  RelationMemberType,
+  SimpleRelation
+}
+import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.SimpleWay
 import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.ClosedWay.ExtendedClosedWay
-import edu.ie3.util.osm.model.OsmEntity.Node
+import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.ExtendedWay
+import edu.ie3.util.osm.model.OsmEntity.{ComposedEntity, Node}
 import org.locationtech.jts.geom.{Coordinate, Point, Polygon}
 
 import scala.collection.parallel.immutable.ParSeq
+import scala.util.Try
 
-object OsmUtils {
+object OsmUtils extends LazyLogging {
 
   val par: ParOsmUtil.type = ParOsmUtil
 
@@ -93,4 +106,21 @@ object OsmUtils {
       case None =>
         entities.filter(_.hasKey(osmKey))
     }
+
+  def extendedWay(
+      simpleWay: SimpleWay,
+      nodesToBeConsidered: Map[Long, Node]
+  ): ComposedEntity.ExtendedWay =
+    extendedWay(simpleWay, (nodeId: Long) => nodesToBeConsidered.get(nodeId))
+
+  def extendedWay(
+      simpleWay: SimpleWay,
+      nodesToBeConsidered: Long => Option[Node]
+  ): ComposedEntity.ExtendedWay =
+    ExtendedWay(
+      simpleWay.id,
+      simpleWay.nodes.collect(nodesToBeConsidered(_)).flatten,
+      simpleWay.tags,
+      simpleWay.metaInformation
+    )
 }
