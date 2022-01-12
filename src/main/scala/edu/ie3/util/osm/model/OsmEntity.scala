@@ -100,19 +100,15 @@ object OsmEntity {
 
   object ComposedEntity {
 
-    sealed trait SimpleComposedOsmEntity
-        extends SimpleOsmEntity
-        with ComposedEntity {
+    sealed trait Way extends ComposedEntity
+
+    sealed trait SimpleWay extends Way with SimpleOsmEntity {
       val nodes: Seq[Long]
     }
 
-    sealed trait ExtendedComposedOsmEntity
-        extends ExtendedOsmEntity
-        with ComposedEntity {
+    sealed trait ExtendedWay extends Way with ExtendedOsmEntity {
       val nodes: Seq[Node]
     }
-
-    sealed trait Way
 
     object Way {
 
@@ -126,7 +122,7 @@ object OsmEntity {
             override val tags: Map[String, String],
             override val metaInformation: Option[MetaInformation]
         ) extends OpenWay
-            with SimpleComposedOsmEntity
+            with SimpleWay
 
         final case class ExtendedOpenWay(
             override val id: Long,
@@ -134,7 +130,7 @@ object OsmEntity {
             override val tags: Map[String, String],
             override val metaInformation: Option[MetaInformation]
         ) extends OpenWay
-            with ExtendedComposedOsmEntity
+            with ExtendedWay
 
       }
 
@@ -148,7 +144,7 @@ object OsmEntity {
             override val tags: Map[String, String],
             override val metaInformation: Option[MetaInformation]
         ) extends ClosedWay
-            with SimpleComposedOsmEntity
+            with SimpleWay
 
         final case class ExtendedClosedWay(
             override val id: Long,
@@ -156,7 +152,7 @@ object OsmEntity {
             override val tags: Map[String, String],
             override val metaInformation: Option[MetaInformation]
         ) extends ClosedWay
-            with ExtendedComposedOsmEntity
+            with ExtendedWay
 
       }
 
