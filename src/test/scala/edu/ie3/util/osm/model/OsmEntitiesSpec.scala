@@ -5,7 +5,8 @@
 */
 package edu.ie3.util.osm.model
 
-import edu.ie3.util.osm.model.OsmEntity.Way.ClosedWay
+import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.ClosedWay
+import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.ClosedWay.SimpleClosedWay
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
@@ -15,7 +16,7 @@ import java.util.UUID
 class OsmEntitiesSpec extends Matchers with AnyWordSpecLike {
 
   "An OsmEntity" should {
-    val entity = ClosedWay(
+    val entity = SimpleClosedWay(
       1,
       Vector.empty,
       Map(

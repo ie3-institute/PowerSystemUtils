@@ -8,10 +8,16 @@ package edu.ie3.util.osm.model
 import edu.ie3.util.geo.GeoUtils
 import edu.ie3.util.geo.GeoUtils.buildPolygon
 import edu.ie3.util.osm.model.OsmEntity.MetaInformation
-import edu.ie3.util.osm.model.OsmEntity.Relation.RelationMember
 import org.locationtech.jts.geom.{Coordinate, Point, Polygon}
 import tech.units.indriya.ComparableQuantity
-import edu.ie3.util.geo.RichGeometries._
+import edu.ie3.util.geo.RichGeometries.*
+import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Relation.RelationMember
+import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Relation.RelationMember.{
+  ExtendedRelationMember,
+  SimpleRelationMember
+}
+import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.ClosedWay.SimpleClosedWay
+import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.OpenWay.SimpleOpenWay
 
 import java.time.Instant
 import javax.measure.quantity.Area
@@ -81,65 +87,126 @@ object OsmEntity {
     lazy val coordinate: Point = new Coordinate(longitude, latitude).toPoint
   }
 
-  sealed trait Way extends OsmEntity {
-    val id: Long
-    val nodes: Seq[Long]
-    val tags: Map[String, String]
-    val metaInformation: Option[MetaInformation]
+  sealed trait ComposedEntity extends OsmEntity {
+    override val id: Long
+    override val tags: Map[String, String]
+    override val metaInformation: Option[MetaInformation]
   }
 
-  object Way {
+  object ComposedEntity {
 
-    final case class OpenWay(
-        override val id: Long,
-        override val nodes: Seq[Long],
-        override val tags: Map[String, String],
-        override val metaInformation: Option[MetaInformation]
-    ) extends Way
+    sealed trait SimpleOsmEntity
 
-    final case class ClosedWay(
-        override val id: Long,
-        override val nodes: Seq[Long],
-        override val tags: Map[String, String],
-        override val metaInformation: Option[MetaInformation]
-    ) extends Way
+    sealed trait ExtendedOsmEntity
 
-    def apply(
-        id: Long,
-        nodes: Seq[Long],
-        tags: Map[String, String],
-        metaInformation: Option[MetaInformation]
-    ): Way =
-      if (closedWay(nodes)) {
-        ClosedWay(id, nodes, tags, metaInformation)
-      } else {
-        OpenWay(id, nodes, tags, metaInformation)
+    sealed trait Way extends ComposedEntity {
+      val nodes: Seq[Long | Node]
+    }
+
+    object Way {
+
+      sealed trait OpenWay extends Way
+
+      object OpenWay {
+
+        final case class SimpleOpenWay(
+            override val id: Long,
+            override val nodes: Seq[Long],
+            override val tags: Map[String, String],
+            override val metaInformation: Option[MetaInformation]
+        ) extends OpenWay
+
+        final case class ExtendedOpenWay(
+            override val id: Long,
+            override val nodes: Seq[Node],
+            override val tags: Map[String, String],
+            override val metaInformation: Option[MetaInformation]
+        ) extends OpenWay
+
       }
 
-    def closedWay(nodes: Seq[Long]): Boolean =
-      nodes.headOption.zip(nodes.lastOption).exists { case (head, last) =>
-        head == last
+      sealed trait ClosedWay extends Way
+
+      object ClosedWay {
+
+        final case class SimpleClosedWay(
+            override val id: Long,
+            override val nodes: Seq[Long],
+            override val tags: Map[String, String],
+            override val metaInformation: Option[MetaInformation]
+        ) extends ClosedWay
+
+        final case class ExtendedClosedWay(
+            override val id: Long,
+            override val nodes: Seq[Node],
+            override val tags: Map[String, String],
+            override val metaInformation: Option[MetaInformation]
+        ) extends ClosedWay
+
       }
 
+      def apply(
+          id: Long,
+          nodes: Seq[Long],
+          tags: Map[String, String],
+          metaInformation: Option[MetaInformation]
+      ): Way =
+        if (closedWay(nodes)) {
+          SimpleClosedWay(id, nodes, tags, metaInformation)
+        } else {
+          SimpleOpenWay(id, nodes, tags, metaInformation)
+        }
+
+      def closedWay(nodes: Seq[Long]): Boolean =
+        nodes.headOption.zip(nodes.lastOption).exists { case (head, last) =>
+          head == last
+        }
+
+    }
+
+    sealed trait Relation extends ComposedEntity {
+      val members: Seq[RelationMember]
+    }
+
+    object Relation {
+
+      enum RelationMemberType:
+        case Node, Way, Relation, Unrecognized
+
+      sealed trait RelationMember
+
+      object RelationMember {
+
+        final case class SimpleRelationMember(
+            id: Long,
+            relationType: RelationMemberType,
+            role: String
+        ) extends RelationMember
+
+        final case class ExtendedRelationMember(
+            entity: ExtendedOsmEntity,
+            relationType: RelationMemberType,
+            role: String
+        ) extends RelationMember
+
+      }
+
+      final case class SimpleRelation(
+          override val id: Long,
+          override val members: Seq[SimpleRelationMember],
+          override val tags: Map[String, String],
+          override val metaInformation: Option[MetaInformation]
+      ) extends Relation
+
+      final case class ExtendedRelation(
+          override val id: Long,
+          override val members: Seq[ExtendedRelationMember],
+          override val tags: Map[String, String],
+          override val metaInformation: Option[MetaInformation]
+      ) extends Relation
+
+    }
+
   }
 
-  final case class Relation(
-      override val id: Long,
-      members: Seq[RelationMember],
-      override val tags: Map[String, String],
-      override val metaInformation: Option[MetaInformation] = None
-  ) extends OsmEntity
-
-  object Relation {
-
-    enum RelationMemberType:
-      case Node, Way, Relation, Unrecognized
-
-    final case class RelationMember(
-        id: Long,
-        relationType: RelationMemberType,
-        role: String
-    )
-
-  }
 }
