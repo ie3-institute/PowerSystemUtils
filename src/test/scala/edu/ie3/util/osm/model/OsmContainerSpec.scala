@@ -7,9 +7,7 @@ package edu.ie3.util.osm.model
 
 import edu.ie3.util.osm.OsmUtils
 import edu.ie3.util.osm.model.OsmContainer
-import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.ClosedWay.SimpleClosedWay
-import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.OpenWay.SimpleOpenWay
-import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.{ClosedWay, OpenWay}
+import edu.ie3.util.osm.model.OsmEntity.Way.{ClosedWay, OpenWay}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
@@ -19,7 +17,7 @@ import java.util.UUID
 class OsmContainerSpec extends Matchers with AnyWordSpecLike {
 
   "The OsmContainer" should {
-    val wayA = SimpleClosedWay(
+    val wayA = ClosedWay(
       1,
       Vector.empty,
       Map(
@@ -27,7 +25,7 @@ class OsmContainerSpec extends Matchers with AnyWordSpecLike {
       ),
       None
     )
-    val wayB = SimpleClosedWay(
+    val wayB = ClosedWay(
       1,
       Vector.empty,
       Map(
@@ -35,7 +33,7 @@ class OsmContainerSpec extends Matchers with AnyWordSpecLike {
       ),
       None
     )
-    val wayC = SimpleOpenWay(
+    val wayC = OpenWay(
       1,
       Vector.empty,
       Map(

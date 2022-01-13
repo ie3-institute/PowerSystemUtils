@@ -12,21 +12,7 @@ import org.locationtech.jts.geom.{Coordinate, Point, Polygon}
 import tech.units.indriya.ComparableQuantity
 import edu.ie3.util.geo.RichGeometries.*
 import edu.ie3.util.osm.OsmUtils
-import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Relation.RelationMember
-import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Relation.RelationMember.{
-  ExtendedRelationMember,
-  SimpleRelationMember
-}
-import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way
-import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.ClosedWay.{
-  ExtendedClosedWay,
-  SimpleClosedWay
-}
-import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.ExtendedWay
-import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.OpenWay.{
-  ExtendedOpenWay,
-  SimpleOpenWay
-}
+import edu.ie3.util.osm.model.OsmEntity.Relation.RelationMember
 import tech.units.indriya.unit.Units
 
 import java.time.Instant
@@ -140,13 +126,6 @@ sealed trait OsmEntity {
 
 object OsmEntity {
 
-  /** Osm entity where the entity is tracked
-    */
-  sealed trait SimpleOsmEntity
-
-  /** */
-  sealed trait ExtendedOsmEntity extends OsmEntity
-
   /** Common attributes of the osm data model. Explanation taken from:
     * https://wiki.openstreetmap.org/wiki/Elements
     *
@@ -204,358 +183,188 @@ object OsmEntity {
       longitude: Double,
       override val tags: Map[String, String],
       override val metaInformation: Option[MetaInformation] = None
-  ) extends OsmEntity
-      with ExtendedOsmEntity {
+  ) extends OsmEntity {
     lazy val coordinate: Point = new Coordinate(longitude, latitude).toPoint
   }
 
-  /** Groups entities that are made up of other OSM entities. Includes Ways
-    * which are made up off multiple Nodes and relations which can be made up
-    * off nodes ways or other relations.
+  /** Groups different implementation of OSM Ways.
     */
-  sealed trait ComposedEntity extends OsmEntity
+  sealed trait Way extends OsmEntity {
+    val nodes: Seq[Long]
+  }
 
-  object ComposedEntity {
+  object Way {
 
-    /** Groups different implementation of OSM Ways.
+    /** [[OpenWay]] implementation that resemble OSM ways which are by
+      * definition not closed so their first and last node are different.
+      *
+      * @param id
+      *   unique (with respect to all ways) OSM identifier of the way
+      * @param nodes
+      *   sequence of node ids that make up the way
+      * @param tags
+      *   tags that store additional characteristic of the way as key-value
+      *   pairs
+      * @param metaInformation
+      *   additional meta information of the data object
       */
-    sealed trait Way extends ComposedEntity
+    final case class OpenWay(
+        override val id: Long,
+        override val nodes: Seq[Long],
+        override val tags: Map[String, String],
+        override val metaInformation: Option[MetaInformation]
+    ) extends Way
 
-    /** Groups simple ways. Simple ways are ways for which only the identifier
-      * of the nodes they consist of are tracked rather then the node objects.
+    /** [[ClosedWay]] implementation that resemble OSM ways which are closed so
+      * their first and last node are identical. They mostly represent areas.
+      *
+      * @param id
+      *   unique (with respect to all ways) OSM identifier of the way
+      * @param nodes
+      *   sequence of node ids that make up the way
+      * @param tags
+      *   tags that store additional characteristic of the way as key-value
+      *   pairs
+      * @param metaInformation
+      *   additional meta information of the data object
       */
-    sealed trait SimpleWay extends Way with SimpleOsmEntity {
-      val nodes: Seq[Long]
+    final case class ClosedWay(
+        override val id: Long,
+        override val nodes: Seq[Long],
+        override val tags: Map[String, String],
+        override val metaInformation: Option[MetaInformation]
+    ) extends Way
 
-      /** Tries building an extended way from the simple way. todo JH
-        *
-        * @param idToNode
-        *   mapping of node id to the corresponding node object
-        * @return
-        *   a Try of an [[ExtendedWay]]
-        */
-      def asExtended(nodesToBeConsidered: Map[Long, Node]): Try[ExtendedWay] =
-        OsmUtils.extendedWay(this, nodesToBeConsidered)
+    //      object ClosedWay {
+    //
+    //
+    //        /** [[ClosedWay]] implementation that resemble OSM ways which are closed
+    //         * so their first and last node are identical. They mostly represent
+    //         * areas.
+    //         *
+    //         * @param id
+    //         * unique (with respect to all ways) OSM identifier of the way
+    //         * @param nodes
+    //         * sequence of nodes that make up the way
+    //         * @param tags
+    //         * tags that store additional characteristic of the way as key-value
+    //         * pairs
+    //         * @param metaInformation
+    //         * additional meta information of the data object
+    //         */
+    //        final case class ExtendedClosedWay(
+    //                                            override val id: Long,
+    //                                            override val nodes: Seq[Node],
+    //                                            override val tags: Map[String, String],
+    //                                            override val metaInformation: Option[MetaInformation]
+    //                                          ) extends ClosedWay
+    //          with ExtendedWay {
+    //          lazy val polygon: Polygon =
+    //            GeoUtils.buildPolygon(
+    //              nodes
+    //                .map(node => new Coordinate(node.longitude, node.latitude))
+    //                .toArray
+    //            )
+    //
+    //          /** Calculates the are of a way in earth's surface in square metre.
+    //           *
+    //           * @return
+    //           * the [[ComparableQuantity]] in square metre
+    //           */
+    //          def areaOnEarth(): ComparableQuantity[Area] =
+    //            polygon.calcAreaOnEarth.to(Units.SQUARE_METRE)
+    //
+    //          /** Calculates geometric centre of the way.
+    //           *
+    //           * @return
+    //           * the centroid's [[Coordinate]]
+    //           */
+    //          def centroid(): Coordinate = polygon.getCentroid.getCoordinate
+    //
+    //        }
+    //      }
 
-      /** Tries building an extended way from the simple way. todo JH
-        *
-        * @param nodeFunction
-        *   function that retrieves a node by passing a corresponding id
-        * @return
-        *   a Try of an [[ExtendedWay]]
-        */
-      def asExtended(nodeFunction: Long => Option[Node]): Try[ExtendedWay] =
-        OsmUtils.extendedWay(this, nodeFunction)
-    }
+    def apply(
+        id: Long,
+        nodes: Seq[Long],
+        tags: Map[String, String],
+        metaInformation: Option[MetaInformation]
+    ): Way =
+      if (isClosedWay(nodes)) {
+        ClosedWay(id, nodes, tags, metaInformation)
+      } else {
+        OpenWay(id, nodes, tags, metaInformation)
+      }
 
-    /** Groups extended way implementations. Extended ways in contrast to a
-      * [[SimpleWay]] track the nodes not by their id but by the corresponding
-      * [[Node]] s
+    /** Checks if a way is closed by assessing if the first and last nodes are
+      * identical.
+      *
+      * @param nodes
+      *   a sequence of node ids
+      * @return
+      *   whether or not the way is closed
       */
-    sealed trait ExtendedWay extends Way with ExtendedOsmEntity {
-      val nodes: Seq[Node]
-    }
-
-    object Way {
-
-      /** Groups open ways. Open ways are by definition not closed so their
-        * first and last node are different.
-        */
-      sealed trait OpenWay extends Way
-
-      object OpenWay {
-
-        /** [[OpenWay]] implementation that resemble OSM ways which are by
-          * definition not closed so their first and last node are different.
-          *
-          * @param id
-          *   unique (with respect to all ways) OSM identifier of the way
-          * @param nodes
-          *   sequence of node ids that make up the way
-          * @param tags
-          *   tags that store additional characteristic of the way as key-value
-          *   pairs
-          * @param metaInformation
-          *   additional meta information of the data object
-          */
-        final case class SimpleOpenWay(
-            override val id: Long,
-            override val nodes: Seq[Long],
-            override val tags: Map[String, String],
-            override val metaInformation: Option[MetaInformation]
-        ) extends OpenWay
-            with SimpleWay
-
-        /** [[OpenWay]] implementation that resemble OSM ways which are by
-          * definition not closed so their first and last node are different.
-          *
-          * @param id
-          *   unique (with respect to all ways) OSM identifier of the way
-          * @param nodes
-          *   sequence of nodes that make up the way
-          * @param tags
-          *   tags that store additional characteristic of the way as key-value
-          *   pairs
-          * @param metaInformation
-          *   additional meta information of the data object
-          */
-        final case class ExtendedOpenWay(
-            override val id: Long,
-            override val nodes: Seq[Node],
-            override val tags: Map[String, String],
-            override val metaInformation: Option[MetaInformation]
-        ) extends OpenWay
-            with ExtendedWay
-
+    def isClosedWay(nodes: Seq[Long] | Seq[Node]): Boolean =
+      nodes.headOption.zip(nodes.lastOption).exists { case (head, last) =>
+        head == last
       }
-
-      /** Groups closed ways. Closed ways are ways in which the first and last
-        * node are identical. They mostly represent areas.
-        */
-      sealed trait ClosedWay extends Way
-
-      object ClosedWay {
-
-        /** [[ClosedWay]] implementation that resemble OSM ways which are closed
-          * so their first and last node are identical. They mostly represent
-          * areas.
-          *
-          * @param id
-          *   unique (with respect to all ways) OSM identifier of the way
-          * @param nodes
-          *   sequence of node ids that make up the way
-          * @param tags
-          *   tags that store additional characteristic of the way as key-value
-          *   pairs
-          * @param metaInformation
-          *   additional meta information of the data object
-          */
-        final case class SimpleClosedWay(
-            override val id: Long,
-            override val nodes: Seq[Long],
-            override val tags: Map[String, String],
-            override val metaInformation: Option[MetaInformation]
-        ) extends ClosedWay
-            with SimpleWay
-
-        /** [[ClosedWay]] implementation that resemble OSM ways which are closed
-          * so their first and last node are identical. They mostly represent
-          * areas.
-          *
-          * @param id
-          *   unique (with respect to all ways) OSM identifier of the way
-          * @param nodes
-          *   sequence of nodes that make up the way
-          * @param tags
-          *   tags that store additional characteristic of the way as key-value
-          *   pairs
-          * @param metaInformation
-          *   additional meta information of the data object
-          */
-        final case class ExtendedClosedWay(
-            override val id: Long,
-            override val nodes: Seq[Node],
-            override val tags: Map[String, String],
-            override val metaInformation: Option[MetaInformation]
-        ) extends ClosedWay
-            with ExtendedWay {
-          lazy val polygon: Polygon =
-            GeoUtils.buildPolygon(
-              nodes
-                .map(node => new Coordinate(node.longitude, node.latitude))
-                .toArray
-            )
-
-          /** Calculates the are of a way in earth's surface in square metre.
-            *
-            * @return
-            *   the [[ComparableQuantity]] in square metre
-            */
-          def areaOnEarth(): ComparableQuantity[Area] =
-            polygon.calcAreaOnEarth.to(Units.SQUARE_METRE)
-
-          /** Calculates geometric centre of the way.
-            *
-            * @return
-            *   the centroid's [[Coordinate]]
-            */
-          def centroid(): Coordinate = polygon.getCentroid.getCoordinate
-
-        }
-      }
-
-      object SimpleWay {
-
-        def apply(
-            id: Long,
-            nodes: Seq[Long],
-            tags: Map[String, String],
-            metaInformation: Option[MetaInformation]
-        ): SimpleWay =
-          if (isClosedWay(nodes)) {
-            SimpleClosedWay(id, nodes, tags, metaInformation)
-          } else {
-            SimpleOpenWay(id, nodes, tags, metaInformation)
-          }
-      }
-
-      object ExtendedWay {
-        def apply(
-            id: Long,
-            nodes: Seq[Node],
-            tags: Map[String, String],
-            metaInformation: Option[MetaInformation]
-        ): ExtendedWay =
-          if (isClosedWay(nodes)) {
-            ExtendedClosedWay(id, nodes, tags, metaInformation)
-          } else {
-            ExtendedOpenWay(id, nodes, tags, metaInformation)
-          }
-      }
-
-      /** Checks if a way is closed by assessing if the first and last nodes are
-        * identical.
-        *
-        * @param nodes
-        *   a sequence of node ids
-        * @return
-        *   whether or not the way is closed
-        */
-      private def isClosedWay(nodes: Seq[Long] | Seq[Node]): Boolean =
-        nodes.headOption.zip(nodes.lastOption).exists { case (head, last) =>
-          head == last
-        }
-
-    }
-
-    /** Groups relation data classes. A relation is one of the core OSM data
-      * elements, consists of a group of OSM elements (nodes, ways, relations)
-      * and represents a relationship between them.
-      */
-    sealed trait Relation extends ComposedEntity {
-      val members: Seq[RelationMember]
-    }
-
-    object Relation {
-
-      /** Enumeration of the different members a relation can consist off.
-        */
-      enum RelationMemberType:
-        case Node, Way, Relation, Unrecognized
-
-      object RelationMemberType {
-        def apply(osmEntity: OsmEntity): RelationMemberType =
-          osmEntity match {
-            case _: Node =>
-              Node
-            case _: Way =>
-              Way
-            case _: Relation =>
-              Relation
-          }
-
-      }
-
-      sealed trait RelationMember {
-        val id: Long
-        val relationType: RelationMemberType
-        val role: String
-      }
-
-      object RelationMember {
-
-        /** A simple member of a relation which can be either a node a way or a
-          * relation. In contrast to [[ExtendedRelationMember]] it holds the id
-          * of the specific OSM element rather than a reference to the object.
-          *
-          * @param id
-          *   osm specific identifier of the member
-          * @param relationType
-          *   the specific type of the member
-          * @param role
-          *   additional information about its role
-          */
-        final case class SimpleRelationMember(
-            override val id: Long,
-            override val relationType: RelationMemberType,
-            override val role: String
-        ) extends RelationMember
-
-        /** An extended member of a relation which can be either a node a way or
-          * a relation. In contrast to [[SimpleRelationMember]] it holds the
-          * reference to the specific OSM element rather than only its
-          * identifier.
-          *
-          * @param entity
-          *   the osm entity
-          * @param role
-          *   additional information about its role
-          */
-        final case class ExtendedRelationMember(
-            entity: ExtendedOsmEntity,
-            override val role: String
-        ) extends RelationMember {
-          override val id: Long = entity.id
-          override val relationType: RelationMemberType = RelationMemberType(
-            entity
-          )
-        }
-
-        object ExtendedRelationMember {
-          def apply(
-              osmEntity: ExtendedOsmEntity,
-              simpleRelationMember: SimpleRelationMember
-          ): ExtendedRelationMember = ExtendedRelationMember(
-            osmEntity,
-            simpleRelationMember.role
-          )
-        }
-      }
-
-      /** A [[Relation]] implementation that contains [[SimpleRelationMember]]
-        * s.
-        *
-        * @param id
-        *   osm specific identifier of the relation
-        * @param members
-        *   a sequence of all relations
-        * @param tags
-        *   tags that store additional characteristic of the way as key-value
-        *   pairs
-        * @param metaInformation
-        *   additional meta information of the data object
-        */
-      final case class SimpleRelation(
-          override val id: Long,
-          override val members: Seq[SimpleRelationMember],
-          override val tags: Map[String, String],
-          override val metaInformation: Option[MetaInformation]
-      ) extends Relation
-          with SimpleOsmEntity
-
-      /** [[Relation]] implementation that contains [[ExtendedRelationMember]]
-        * s.
-        *
-        * @param id
-        *   osm specific identifier of the relation
-        * @param members
-        *   a sequence of all relations
-        * @param tags
-        *   tags that store additional characteristic of the way as key-value
-        *   pairs
-        * @param metaInformation
-        *   additional meta information of the data object
-        */
-      final case class ExtendedRelation(
-          override val id: Long,
-          override val members: Seq[ExtendedRelationMember],
-          override val tags: Map[String, String],
-          override val metaInformation: Option[MetaInformation]
-      ) extends Relation
-          with ExtendedOsmEntity
-
-    }
 
   }
 
+  /** A [[Relation]] implementation.
+    *
+    * @param id
+    *   osm specific identifier of the relation
+    * @param members
+    *   a sequence of all relations
+    * @param tags
+    *   tags that store additional characteristic of the way as key-value pairs
+    * @param metaInformation
+    *   additional meta information of the data object
+    */
+  final case class Relation(
+      override val id: Long,
+      members: Seq[RelationMember],
+      override val tags: Map[String, String],
+      override val metaInformation: Option[MetaInformation]
+  ) extends OsmEntity
+
+  object Relation {
+
+    /** Enumeration of the different members a relation can consist off.
+      */
+    enum RelationMemberType:
+      case Node, Way, Relation, Unrecognized
+
+    object RelationMemberType {
+      def apply(osmEntity: OsmEntity): RelationMemberType =
+        osmEntity match {
+          case _: Node =>
+            Node
+          case _: Way =>
+            Way
+          case _: Relation =>
+            Relation
+        }
+
+    }
+
+    /** A simple member of a relation which can be either a node a way or a
+      * relation. In contrast to [[ExtendedRelationMember]] it holds the id of
+      * the specific OSM element rather than a reference to the object.
+      *
+      * @param id
+      *   osm specific identifier of the member
+      * @param relationType
+      *   the specific type of the member
+      * @param role
+      *   additional information about its role
+      */
+    final case class RelationMember(
+        id: Long,
+        relationType: RelationMemberType,
+        role: String
+    )
+
+  }
 }
