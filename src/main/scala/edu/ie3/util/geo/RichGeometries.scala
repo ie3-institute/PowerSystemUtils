@@ -126,7 +126,7 @@ object RichGeometries {
     /** Calculates the area of a polygon on earth's surface.
       *
       * @return
-      *   a Quantity of area in metre
+      *   a Quantity of area in square metre
       */
     def calcAreaOnEarth: ComparableQuantity[Area] = {
       equalAreaProjection.getArea.asSquareMetre
