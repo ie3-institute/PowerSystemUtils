@@ -16,7 +16,10 @@ import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Relation.{
   RelationMemberType,
   SimpleRelation
 }
-import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Relation.RelationMember.ExtendedRelationMember
+import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Relation.RelationMember.{
+  ExtendedRelationMember,
+  SimpleRelationMember
+}
 import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.{
   ExtendedWay,
   SimpleWay
@@ -85,28 +88,28 @@ trait ContainerCache extends LazyLogging {
             s"'$entityName' with id '$entityId' not found!"
         )
 
-    def extendedNodeMemberType(id: Long) =
-      _node(id) match {
+    def extendedNodeMemberType(simpleRelationMember: SimpleRelationMember) =
+      _node(simpleRelationMember.id) match {
         case Some(node) =>
-          Some(ExtendedRelationMember(node))
+          Some(ExtendedRelationMember(node, simpleRelationMember))
         case None =>
-          throw osmException("ExtendedNode", id)
+          throw osmException("ExtendedNode", simpleRelationMember.id)
       }
 
-    def extendedWayMemberType(id: Long) =
-      extendedWay(id) match {
+    def extendedWayMemberType(simpleRelationMember: SimpleRelationMember) =
+      extendedWay(simpleRelationMember.id) match {
         case Some(extendedWay) =>
-          Some(ExtendedRelationMember(extendedWay))
+          Some(ExtendedRelationMember(extendedWay, simpleRelationMember))
         case None =>
-          throw osmException("ExtendedWay", id)
+          throw osmException("ExtendedWay", simpleRelationMember.id)
       }
 
-    def extendedRelationMemberType(id: Long) =
-      extendedRelation(id) match {
+    def extendedRelationMemberType(simpleRelationMember: SimpleRelationMember) =
+      extendedRelation(simpleRelationMember.id) match {
         case Some(extendedRel) =>
-          Some(ExtendedRelationMember(extendedRel))
+          Some(ExtendedRelationMember(extendedRel, simpleRelationMember))
         case None =>
-          throw osmException("ExtendedRelation", id)
+          throw osmException("ExtendedRelation", simpleRelationMember.id)
       }
 
     _relCache.get(id) match {
@@ -118,11 +121,11 @@ trait ContainerCache extends LazyLogging {
               simpleRelation.members.flatMap(simpleRelationMember =>
                 simpleRelationMember.relationType match {
                   case RelationMemberType.Node =>
-                    extendedNodeMemberType(simpleRelationMember.id)
+                    extendedNodeMemberType(simpleRelationMember)
                   case RelationMemberType.Way =>
-                    extendedWayMemberType(simpleRelationMember.id)
+                    extendedWayMemberType(simpleRelationMember)
                   case RelationMemberType.Relation =>
-                    extendedRelationMemberType(simpleRelationMember.id)
+                    extendedRelationMemberType(simpleRelationMember)
                   case RelationMemberType.Unrecognized =>
                     logger.warn(
                       s"SimpleRelationMember $simpleRelationMember has type 'Unrecognized'."
