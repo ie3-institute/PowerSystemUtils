@@ -107,7 +107,7 @@ trait ContainerCache extends LazyLogging {
         case None =>
           throw osmException("ExtendedRelation")
       }
-3
+
     _relCache.get(id) match {
       case cachedRel @ Some(_) => cachedRel
       case None =>
