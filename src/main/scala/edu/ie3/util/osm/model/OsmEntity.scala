@@ -235,55 +235,6 @@ object OsmEntity {
         override val metaInformation: Option[MetaInformation]
     ) extends Way
 
-    //      object ClosedWay {
-    //
-    //
-    //        /** [[ClosedWay]] implementation that resemble OSM ways which are closed
-    //         * so their first and last node are identical. They mostly represent
-    //         * areas.
-    //         *
-    //         * @param id
-    //         * unique (with respect to all ways) OSM identifier of the way
-    //         * @param nodes
-    //         * sequence of nodes that make up the way
-    //         * @param tags
-    //         * tags that store additional characteristic of the way as key-value
-    //         * pairs
-    //         * @param metaInformation
-    //         * additional meta information of the data object
-    //         */
-    //        final case class ExtendedClosedWay(
-    //                                            override val id: Long,
-    //                                            override val nodes: Seq[Node],
-    //                                            override val tags: Map[String, String],
-    //                                            override val metaInformation: Option[MetaInformation]
-    //                                          ) extends ClosedWay
-    //          with ExtendedWay {
-    //          lazy val polygon: Polygon =
-    //            GeoUtils.buildPolygon(
-    //              nodes
-    //                .map(node => new Coordinate(node.longitude, node.latitude))
-    //                .toArray
-    //            )
-    //
-    //          /** Calculates the are of a way in earth's surface in square metre.
-    //           *
-    //           * @return
-    //           * the [[ComparableQuantity]] in square metre
-    //           */
-    //          def areaOnEarth(): ComparableQuantity[Area] =
-    //            polygon.calcAreaOnEarth.to(Units.SQUARE_METRE)
-    //
-    //          /** Calculates geometric centre of the way.
-    //           *
-    //           * @return
-    //           * the centroid's [[Coordinate]]
-    //           */
-    //          def centroid(): Coordinate = polygon.getCentroid.getCoordinate
-    //
-    //        }
-    //      }
-
     def apply(
         id: Long,
         nodes: Seq[Long],
