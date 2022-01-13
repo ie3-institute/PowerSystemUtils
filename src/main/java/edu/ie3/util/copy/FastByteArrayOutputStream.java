@@ -13,7 +13,7 @@ import java.io.OutputStream;
  * on toByteArray().
  *
  * @version 0.1
- * @author: hiry
+ * @author hiry
  * @since 13.06.2018
  */
 public class FastByteArrayOutputStream extends OutputStream {
