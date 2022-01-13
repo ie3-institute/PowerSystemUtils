@@ -78,18 +78,19 @@ trait ContainerCache extends LazyLogging {
     * @return
     */
   def extendedRelation(id: Long): Option[ExtendedRelation] = {
-    val osmException: String => OsmException = (entityName: String) =>
-      new OsmException(
-        s"Cannot build $entityName for relation with '$id'. " +
-          s"$entityName with id '$id not found!'"
-      )
+    val osmException: (String, Long) => OsmException =
+      (entityName: String, entityId: Long) =>
+        new OsmException(
+          s"Cannot build '$entityName' for relation with '$id'. " +
+            s"'$entityName' with id '$entityId' not found!"
+        )
 
     def extendedNodeMemberType(id: Long) =
       _node(id) match {
         case Some(node) =>
           Some(ExtendedRelationMember(node))
         case None =>
-          throw osmException("ExtendedNode")
+          throw osmException("ExtendedNode", id)
       }
 
     def extendedWayMemberType(id: Long) =
@@ -97,7 +98,7 @@ trait ContainerCache extends LazyLogging {
         case Some(extendedWay) =>
           Some(ExtendedRelationMember(extendedWay))
         case None =>
-          throw osmException("ExtendedWay")
+          throw osmException("ExtendedWay", id)
       }
 
     def extendedRelationMemberType(id: Long) =
@@ -105,7 +106,7 @@ trait ContainerCache extends LazyLogging {
         case Some(extendedRel) =>
           Some(ExtendedRelationMember(extendedRel))
         case None =>
-          throw osmException("ExtendedRelation")
+          throw osmException("ExtendedRelation", id)
       }
 
     _relCache.get(id) match {

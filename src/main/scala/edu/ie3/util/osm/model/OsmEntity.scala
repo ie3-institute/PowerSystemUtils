@@ -80,7 +80,7 @@ object OsmEntity {
 
   sealed trait SimpleOsmEntity
 
-  sealed trait ExtendedOsmEntity
+  sealed trait ExtendedOsmEntity extends OsmEntity
 
   final case class MetaInformation(
       version: Option[Int] = None,
@@ -102,11 +102,7 @@ object OsmEntity {
     lazy val coordinate: Point = new Coordinate(longitude, latitude).toPoint
   }
 
-  sealed trait ComposedEntity extends OsmEntity {
-    override val id: Long
-    override val tags: Map[String, String]
-    override val metaInformation: Option[MetaInformation]
-  }
+  sealed trait ComposedEntity extends OsmEntity
 
   object ComposedEntity {
 
@@ -242,45 +238,42 @@ object OsmEntity {
             case _: Way =>
               Way
             case _: Relation =>
-              Way
+              Relation
           }
 
       }
 
-      sealed trait RelationMember
+      sealed trait RelationMember {
+        val id: Long
+        val relationType: RelationMemberType
+        val role: String
+      }
 
       object RelationMember {
 
         final case class SimpleRelationMember(
-            id: Long,
-            relationType: RelationMemberType,
-            role: String
+            override val id: Long,
+            override val relationType: RelationMemberType,
+            override val role: String
         ) extends RelationMember
-
-        object SimpleRelationMember {
-
-          def apply(osmEntity: OsmEntity): SimpleRelationMember =
-            SimpleRelationMember(
-              osmEntity.id,
-              RelationMemberType(osmEntity),
-              s"converted_${osmEntity.id}"
-            )
-
-        }
 
         final case class ExtendedRelationMember(
             entity: ExtendedOsmEntity,
-            relationType: RelationMemberType,
-            role: String
-        ) extends RelationMember
+            override val role: String
+        ) extends RelationMember {
+          override val id: Long = entity.id
+          override val relationType: RelationMemberType = RelationMemberType(
+            entity
+          )
+        }
 
         object ExtendedRelationMember {
           def apply(
-              osmEntity: OsmEntity with ExtendedOsmEntity
+              osmEntity: ExtendedOsmEntity,
+              simpleRelationMember: SimpleRelationMember
           ): ExtendedRelationMember = ExtendedRelationMember(
             osmEntity,
-            RelationMemberType(osmEntity),
-            s"converted_${osmEntity.id}"
+            simpleRelationMember.role
           )
         }
       }
