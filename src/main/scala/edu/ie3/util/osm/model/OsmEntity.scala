@@ -31,6 +31,7 @@ import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.OpenWay.{
 import java.time.Instant
 import javax.measure.quantity.Area
 import scala.annotation.tailrec
+import scala.util.Try
 
 sealed trait OsmEntity {
   val id: Long
@@ -118,10 +119,10 @@ object OsmEntity {
         *
         * @param nodesToBeConsidered
         */
-      def asExtended(nodesToBeConsidered: Map[Long, Node]): ExtendedWay =
+      def asExtended(nodesToBeConsidered: Map[Long, Node]): Try[ExtendedWay] =
         OsmUtils.extendedWay(this, nodesToBeConsidered)
 
-      def asExtended(nodeFunction: Long => Option[Node]): ExtendedWay =
+      def asExtended(nodeFunction: Long => Option[Node]): Try[ExtendedWay] =
         OsmUtils.extendedWay(this, nodeFunction)
 
     }

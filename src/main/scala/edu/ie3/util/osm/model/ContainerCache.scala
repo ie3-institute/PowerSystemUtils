@@ -58,7 +58,16 @@ trait ContainerCache extends LazyLogging {
         cachedWay
       case None =>
         _simpleWay(id)
-          .map(_.asExtended(_node))
+          .flatMap(_.asExtended(_node) match {
+            case Failure(exception) =>
+              logger.error(
+                s"Cannot convert SimpleWay '$id' to ExtendedWay. " +
+                  s"Exception: $exception."
+              )
+              None
+            case Success(extendedWay) =>
+              Some(extendedWay)
+          })
           .flatMap(cache)
     }
 
@@ -72,7 +81,7 @@ trait ContainerCache extends LazyLogging {
     val osmException: String => OsmException = (entityName: String) =>
       new OsmException(
         s"Cannot build $entityName for relation with '$id'. " +
-          s"Node with id '$id not found!'"
+          s"$entityName with id '$id not found!'"
       )
 
     def extendedNodeMemberType(id: Long) =
@@ -98,7 +107,7 @@ trait ContainerCache extends LazyLogging {
         case None =>
           throw osmException("ExtendedRelation")
       }
-
+3
     _relCache.get(id) match {
       case cachedRel @ Some(_) => cachedRel
       case None =>
