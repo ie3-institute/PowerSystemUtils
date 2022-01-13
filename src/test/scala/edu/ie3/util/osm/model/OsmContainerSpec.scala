@@ -45,7 +45,9 @@ class OsmContainerSpec extends Matchers with AnyWordSpecLike {
     )
 
     "extract buildings correctly" in {
-      OsmUtils.extractBuildings(List(wayA, wayB, wayC)) shouldBe List(wayB)
+      val extracted = OsmUtils.extractBuildings(List(wayA, wayB, wayC))
+      extracted.length shouldBe 2
+      extracted contains allOf(wayB, wayC)
     }
 
     "extract highways correctly" in {
