@@ -18,14 +18,14 @@ import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Relation.{
   RelationMemberType,
   SimpleRelation
 }
-import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.SimpleWay
+import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.{ExtendedWay, SimpleWay}
 import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.ClosedWay.ExtendedClosedWay
 import edu.ie3.util.osm.model.OsmEntity.ComposedEntity.Way.ExtendedWay
 import edu.ie3.util.osm.model.OsmEntity.{ComposedEntity, Node}
 import org.locationtech.jts.geom.{Coordinate, Point, Polygon}
 
 import scala.collection.parallel.immutable.ParSeq
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 
 object OsmUtils extends LazyLogging {
 
@@ -110,17 +110,31 @@ object OsmUtils extends LazyLogging {
   def extendedWay(
       simpleWay: SimpleWay,
       nodesToBeConsidered: Map[Long, Node]
-  ): ComposedEntity.ExtendedWay =
+  ): Try[ComposedEntity.ExtendedWay] =
     extendedWay(simpleWay, (nodeId: Long) => nodesToBeConsidered.get(nodeId))
 
   def extendedWay(
       simpleWay: SimpleWay,
       nodesToBeConsidered: Long => Option[Node]
-  ): ComposedEntity.ExtendedWay =
-    ExtendedWay(
-      simpleWay.id,
-      simpleWay.nodes.collect(nodesToBeConsidered(_)).flatten,
-      simpleWay.tags,
-      simpleWay.metaInformation
-    )
+  ): Try[ComposedEntity.ExtendedWay] = {
+    val wayNodes = simpleWay.nodes.collect(nodesToBeConsidered(_)).flatten
+    if (wayNodes.size == simpleWay.nodes.size) {
+      Success(
+        ExtendedWay(
+          simpleWay.id,
+          simpleWay.nodes.collect(nodesToBeConsidered(_)).flatten,
+          simpleWay.tags,
+          simpleWay.metaInformation
+        )
+      )
+    } else {
+      Failure(
+        OsmException(
+          s"Cannot create extended way from simple way with id '${simpleWay.id}'. " +
+            s"Missing nodes: ${simpleWay.nodes.diff(wayNodes.map(_.id))}"
+        )
+      )
+    }
+  }
+
 }
