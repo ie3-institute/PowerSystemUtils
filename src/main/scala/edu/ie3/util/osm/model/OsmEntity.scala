@@ -82,8 +82,8 @@ sealed trait OsmEntity {
     hasKeyValuesPairOr(key.toString, values)
 
   /** Checks whether or not the entity has a tag that matches the given key and
-    * one of the set of given values.
-   * NOTE: If an empty values set is given it matches any value.
+    * one of the set of given values. NOTE: If an empty values set is given it
+    * matches any value.
     *
     * @param key
     *   the common osm key to match
@@ -227,7 +227,7 @@ object OsmEntity {
     sealed trait SimpleWay extends Way with SimpleOsmEntity {
       val nodes: Seq[Long]
 
-      /** Tries building an extended way from the simple way.
+      /** Tries building an extended way from the simple way. todo JH
         *
         * @param idToNode
         *   mapping of node id to the corresponding node object
@@ -237,7 +237,7 @@ object OsmEntity {
       def asExtended(nodesToBeConsidered: Map[Long, Node]): Try[ExtendedWay] =
         OsmUtils.extendedWay(this, nodesToBeConsidered)
 
-      /** Tries building an extended way from the simple way.
+      /** Tries building an extended way from the simple way. todo JH
         *
         * @param nodeFunction
         *   function that retrieves a node by passing a corresponding id
@@ -482,15 +482,15 @@ object OsmEntity {
         ) extends RelationMember
 
         /** An extended member of a relation which can be either a node a way or
-         * a relation. In contrast to [[SimpleRelationMember]] it holds the
-         * reference to the specific OSM element rather than only its
-         * identifier.
-         *
-         * @param entity
-         *   the osm entity
-         * @param role
-         *   additional information about its role
-         */
+          * a relation. In contrast to [[SimpleRelationMember]] it holds the
+          * reference to the specific OSM element rather than only its
+          * identifier.
+          *
+          * @param entity
+          *   the osm entity
+          * @param role
+          *   additional information about its role
+          */
         final case class ExtendedRelationMember(
             entity: ExtendedOsmEntity,
             override val role: String
