@@ -17,6 +17,10 @@ import scala.collection.parallel.immutable.{ParMap, ParSeq}
 import scala.util.{Failure, Success, Try}
 import scala.collection.parallel.CollectionConverters.*
 
+/** A container entity holding all entities (nodes, ways, relations) related to
+  * OpenStreetMap data. This container class is intended to represent an area of
+  * investigation (e.g. after reading a .pbf-file) for further processing.
+  */
 sealed trait OsmContainer {
 
   def node(nodeId: Long): Option[Node]
@@ -39,6 +43,15 @@ sealed trait OsmContainer {
 
 object OsmContainer {
 
+  /** Concrete implementation of [[OsmContainer]] with sequential collections.
+    *
+    * @param nodes
+    *   sequence of nodes in the area of investigation
+    * @param ways
+    *   sequence of ways in the area of investigation
+    * @param relations
+    *   sequence of relations in the area of investigation
+    */
   final case class SeqOsmContainer(
       nodes: Map[Long, Node],
       ways: Map[Long, Way],
@@ -93,6 +106,15 @@ object OsmContainer {
       )
   }
 
+  /** Concrete implementation of [[OsmContainer]] with parallel collections.
+    *
+    * @param nodes
+    *   sequence of nodes in the area of investigation
+    * @param ways
+    *   sequence of ways in the area of investigation
+    * @param relations
+    *   sequence of relations in the area of investigation
+    */
   final case class ParOsmContainer(
       nodes: ParMap[Long, Node],
       ways: ParMap[Long, Way],
