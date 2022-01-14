@@ -109,6 +109,9 @@ object RelationEntitiesSupport {
     * [[Node]] and [[Way]] instances of all downstream relations are also
     * included comparable to a deep instance.
     *
+    * If specific entity instances are not part of the container, they are
+    * (obviously) not included!
+    *
     * @param relationId
     *   the identifier of the [[Relation]] this class holds all entities for
     * @param nodes
