@@ -31,12 +31,6 @@ trait RelationEntitiesSupport extends WayCache with LazyLogging {
 
   def relationEntities(relationId: Long): Option[RelationEntities] = {
 
-    val osmException: (String, Long) => OsmException =
-      (entityName: String, entityId: Long) =>
-        new OsmException(
-          s"Cannot build '$entityName' with id '$entityId' for relation with id '$relationId'."
-        )
-
     def _relationEntities(relation: RelationMember) =
       relationEntities(relation.id)
 
