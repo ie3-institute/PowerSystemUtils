@@ -40,38 +40,29 @@ sealed trait OsmContainer {
 object OsmContainer {
 
   final case class SeqOsmContainer(
-      nodes: Seq[Node],
-      ways: Seq[Way],
-      relations: Seq[Relation]
+      nodes: Map[Long, Node],
+      ways: Map[Long, Way],
+      relations: Map[Long, Relation]
   ) extends OsmContainer
       with RichClosedWaySupport
       with RelationEntitiesSupport {
 
-    lazy val nodesMap: Map[Long, Node] =
-      nodes.map(node => (node.id, node)).toMap
-
-    lazy val waysMap: Map[Long, Way] =
-      ways.map(way => (way.id, way)).toMap
-
-    lazy val relationsMap: Map[Long, Relation] =
-      relations.map(relation => (relation.id, relation)).toMap
-
     override def node(nodeId: Long): Option[Node] =
-      nodesMap.get(nodeId)
+      nodes.get(nodeId)
 
     override def nodes(nodeIds: Seq[Long]): Seq[Option[Node]] =
-      nodeIds.map(nodesMap.get)
+      nodeIds.map(nodes.get)
 
-    override def way(wayId: Long): Option[Way] = waysMap.get(wayId)
+    override def way(wayId: Long): Option[Way] = ways.get(wayId)
 
     override def ways(wayIds: Seq[Long]): Seq[Option[Way]] =
-      wayIds.map(waysMap.get)
+      wayIds.map(ways.get)
 
     override def relation(relationId: Long): Option[Relation] =
-      relationsMap.get(relationId)
+      relations.get(relationId)
 
     override def relations(relationIds: Seq[Long]): Seq[Option[Relation]] =
-      relationIds.map(relationsMap.get)
+      relationIds.map(relations.get)
 
     override def par(): ParOsmContainer =
       ParOsmContainer(nodes.par, ways.par, relations.par)
@@ -79,49 +70,53 @@ object OsmContainer {
     override def seq(): SeqOsmContainer = this
 
     override protected def _getNode: Long => Option[Node] = (nodeId: Long) =>
-      nodesMap.get(nodeId)
+      nodes.get(nodeId)
 
     override protected def _getWay: Long => Option[Way] = (nodeId: Long) =>
-      waysMap.get(nodeId)
+      ways.get(nodeId)
 
     override protected def _getRelation: Long => Option[Relation] =
-      (nodeId: Long) => relationsMap.get(nodeId)
+      (nodeId: Long) => relations.get(nodeId)
 
   }
 
+  object SeqOsmContainer {
+    def apply(
+        nodes: Seq[Node],
+        ways: Seq[Way],
+        relations: Seq[Relation]
+    ): SeqOsmContainer =
+      new SeqOsmContainer(
+        nodes.map(node => (node.id, node)).toMap,
+        ways.map(way => (way.id, way)).toMap,
+        relations.map(relation => (relation.id, relation)).toMap
+      )
+  }
+
   final case class ParOsmContainer(
-      nodes: ParSeq[Node],
-      ways: ParSeq[Way],
-      relations: ParSeq[Relation]
+      nodes: ParMap[Long, Node],
+      ways: ParMap[Long, Way],
+      relations: ParMap[Long, Relation]
   ) extends OsmContainer
       with RichClosedWaySupport
       with RelationEntitiesSupport {
 
-    lazy val nodesMap: ParMap[Long, Node] =
-      nodes.map(node => (node.id, node)).toMap
-
-    lazy val waysMap: ParMap[Long, Way] =
-      ways.map(way => (way.id, way)).toMap
-
-    lazy val relationsMap: ParMap[Long, Relation] =
-      relations.map(relation => (relation.id, relation)).toMap
-
     override def node(nodeId: Long): Option[Node] =
-      nodesMap.get(nodeId)
+      nodes.get(nodeId)
 
     override def nodes(nodeIds: Seq[Long]): Seq[Option[Node]] =
-      nodeIds.map(nodesMap.get)
+      nodeIds.map(nodes.get)
 
-    override def way(wayId: Long): Option[Way] = waysMap.get(wayId)
+    override def way(wayId: Long): Option[Way] = ways.get(wayId)
 
     override def ways(wayIds: Seq[Long]): Seq[Option[Way]] =
-      wayIds.map(waysMap.get)
+      wayIds.map(ways.get)
 
     override def relation(relationId: Long): Option[Relation] =
-      relationsMap.get(relationId)
+      relations.get(relationId)
 
     override def relations(relationIds: Seq[Long]): Seq[Option[Relation]] =
-      relationIds.map(relationsMap.get)
+      relationIds.map(relations.get)
 
     override def par(): ParOsmContainer =
       this
@@ -130,13 +125,27 @@ object OsmContainer {
       SeqOsmContainer(nodes.seq, ways.seq, relations.seq)
 
     override protected def _getNode: Long => Option[Node] = (nodeId: Long) =>
-      nodesMap.get(nodeId)
+      nodes.get(nodeId)
 
     override protected def _getWay: Long => Option[Way] = (nodeId: Long) =>
-      waysMap.get(nodeId)
+      ways.get(nodeId)
 
     override protected def _getRelation: Long => Option[Relation] =
-      (nodeId: Long) => relationsMap.get(nodeId)
+      (nodeId: Long) => relations.get(nodeId)
+
+  }
+
+  object ParOsmContainer {
+
+    def apply(
+        nodes: ParSeq[Node],
+        ways: ParSeq[Way],
+        relations: ParSeq[Relation]
+    ): ParOsmContainer = new ParOsmContainer(
+      nodes.map(node => (node.id, node)).toMap,
+      ways.map(way => (way.id, way)).toMap,
+      relations.map(relation => (relation.id, relation)).toMap
+    )
 
   }
 
