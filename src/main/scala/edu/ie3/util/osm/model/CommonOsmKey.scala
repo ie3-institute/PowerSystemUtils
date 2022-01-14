@@ -19,4 +19,5 @@ enum CommonOsmKey(key: String):
   case Name extends CommonOsmKey("name")
   case Power extends CommonOsmKey("power")
   case Surface extends CommonOsmKey("surface")
+  case Boundary extends CommonOsmKey("boundary")
 end CommonOsmKey
