@@ -12,6 +12,8 @@ import org.locationtech.jts.geom.Polygon
 import java.util.concurrent.{ConcurrentHashMap, ConcurrentMap}
 import scala.util.Try
 
+/** A cache to speed up retrieval of nodes of a specific way
+  */
 private[model] trait WayCache {
 
   protected def _getNode: Long => Option[Node]
@@ -22,7 +24,6 @@ private[model] trait WayCache {
 
     def safeGet(key: K): Option[V] =
       Try(Option(concurrentMap.get(key))).toOption.flatten
-
   }
 
   type WayId = Long

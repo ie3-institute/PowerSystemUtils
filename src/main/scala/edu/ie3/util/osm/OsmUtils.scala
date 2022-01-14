@@ -53,19 +53,6 @@ object OsmUtils extends LazyLogging {
 
   }
 
-  // todo JH
-//  /** Checks if the provided point is covered by the area of the provided way
-//    *
-//    * @param point
-//    *   the point that should be checked
-//    * @param closedWay
-//    *   the closed way that may contains the provided point
-//    * @return
-//    *   true if the is located within the provided way, false otherwise
-//    */
-//  def wayAreaCovers(point: Point, closedWay: ExtendedClosedWay): Boolean =
-//    closedWay.polygon.covers(point)
-//
   def extractBuildings(
       entities: Seq[OsmEntity],
       specificTagValues: Option[Set[String]] = None
