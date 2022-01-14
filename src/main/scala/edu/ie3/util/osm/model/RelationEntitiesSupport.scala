@@ -13,6 +13,9 @@ import edu.ie3.util.osm.model.OsmEntity.Relation.{
 }
 import edu.ie3.util.osm.model.OsmEntity.{Node, Relation, Way}
 
+/** Trait to be used for [[OsmContainer]] instances to add support for
+  * [[RelationEntities]] provision
+  */
 trait RelationEntitiesSupport extends WayCache with LazyLogging {
 
   protected def _getRelation: Long => Option[Relation]
@@ -22,6 +25,18 @@ trait RelationEntitiesSupport extends WayCache with LazyLogging {
   private lazy val _relationEntityCache =
     java.util.concurrent.ConcurrentHashMap[RelationId, RelationEntities]()
 
+  /** Class holding all instances of [[Node]] s, [[Way]] s, and [[Relation]] s
+    * inside a specific [[Relation]]
+    *
+    * @param relationId
+    *   the identifier of the [[Relation]] this class holds all entities for
+    * @param nodes
+    *   nodes inside the specific relation
+    * @param ways
+    *   ways inside the specific relation
+    * @param relations
+    *   relations inside the specific relation
+    */
   final case class RelationEntities(
       relationId: Long,
       nodes: Map[Long, Node],
@@ -29,6 +44,14 @@ trait RelationEntitiesSupport extends WayCache with LazyLogging {
       relations: Map[Long, Relation]
   )
 
+  /** Tries to create a [[RelationEntities]] instance based on the provided
+    * identifier of the requested [[Relation]]
+    *
+    * @param relationId
+    *   the identifier of the relation of interest
+    * @return
+    *   an optional instance of [[RelationEntities]]
+    */
   def relationEntities(relationId: Long): Option[RelationEntities] = {
 
     def _relationEntities(relation: RelationMember) =
