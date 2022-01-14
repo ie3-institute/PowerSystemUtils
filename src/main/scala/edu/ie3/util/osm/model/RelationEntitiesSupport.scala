@@ -12,6 +12,7 @@ import edu.ie3.util.osm.model.OsmEntity.Relation.{
   RelationMemberType
 }
 import edu.ie3.util.osm.model.OsmEntity.{Node, Relation, Way}
+import edu.ie3.util.osm.model.RelationEntitiesSupport.RelationEntities
 
 /** Trait to be used for [[OsmContainer]] instances to add support for
   * [[RelationEntities]] provision
@@ -24,25 +25,6 @@ trait RelationEntitiesSupport extends WayCache with LazyLogging {
 
   private val _relationEntityCache =
     java.util.concurrent.ConcurrentHashMap[RelationId, RelationEntities]()
-
-  /** Class holding all instances of [[Node]] s, [[Way]] s, and [[Relation]] s
-    * inside a specific [[Relation]]
-    *
-    * @param relationId
-    *   the identifier of the [[Relation]] this class holds all entities for
-    * @param nodes
-    *   nodes inside the specific relation
-    * @param ways
-    *   ways inside the specific relation
-    * @param relations
-    *   relations inside the specific relation
-    */
-  final case class RelationEntities(
-      relationId: Long,
-      nodes: Map[Long, Node],
-      ways: Map[Long, Way],
-      relations: Map[Long, Relation]
-  )
 
   /** Tries to create a [[RelationEntities]] instance based on the provided
     * identifier of the requested [[Relation]]
@@ -91,12 +73,13 @@ trait RelationEntitiesSupport extends WayCache with LazyLogging {
                   }
 
                 case RelationMemberType.Relation =>
-                  _relationEntities(relationMember) match {
-                    case Some(entities) =>
+                  _relationEntities(relationMember)
+                    .zip(_getRelation(relationMember.id)) match {
+                    case Some((entities, relation)) =>
                       (
                         nodes ++ entities.nodes,
                         ways ++ entities.ways,
-                        relations ++ entities.relations
+                        relations ++ entities.relations + (relation.id -> relation)
                       )
                     case None =>
                       (nodes, ways, relations)
@@ -116,4 +99,29 @@ trait RelationEntitiesSupport extends WayCache with LazyLogging {
           })
     }
   }
+}
+
+object RelationEntitiesSupport {
+
+  /** Class holding all instances of [[Node]] s, [[Way]] s, and [[Relation]] s
+    * inside a specific [[Relation]]. This class is intended to be recursive and
+    * comprehensive. That means, if it holds [[Relation]] instances, all
+    * [[Node]] and [[Way]] instances of all downstream relations are also
+    * included comparable to a deep instance.
+    *
+    * @param relationId
+    *   the identifier of the [[Relation]] this class holds all entities for
+    * @param nodes
+    *   nodes inside the specific relation
+    * @param ways
+    *   ways inside the specific relation
+    * @param relations
+    *   relations inside the specific relation
+    */
+  final case class RelationEntities(
+      relationId: Long,
+      nodes: Map[Long, Node],
+      ways: Map[Long, Way],
+      relations: Map[Long, Relation]
+  )
 }
