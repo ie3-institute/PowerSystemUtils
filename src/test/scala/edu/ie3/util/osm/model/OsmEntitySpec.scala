@@ -12,7 +12,7 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import java.time.ZonedDateTime
 import java.util.UUID
 
-class OsmEntitiesSpec extends Matchers with AnyWordSpecLike {
+class OsmEntitySpec extends Matchers with AnyWordSpecLike {
 
   "An OsmEntity" should {
     val entity = ClosedWay(
