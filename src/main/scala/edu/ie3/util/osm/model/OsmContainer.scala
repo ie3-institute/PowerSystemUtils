@@ -44,8 +44,8 @@ object OsmContainer {
       ways: Seq[Way],
       relations: Seq[Relation]
   ) extends OsmContainer
-      with LazyLogging
-      with RichWaySupport {
+      with RichClosedWaySupport
+      with RelationEntitiesSupport {
 
     lazy val nodesMap: Map[Long, Node] =
       nodes.map(node => (node.id, node)).toMap
@@ -84,6 +84,9 @@ object OsmContainer {
     override protected def _getWay: Long => Option[Way] = (nodeId: Long) =>
       waysMap.get(nodeId)
 
+    override protected def _getRelation: Long => Option[Relation] =
+      (nodeId: Long) => relationsMap.get(nodeId)
+
   }
 
   final case class ParOsmContainer(
@@ -91,7 +94,8 @@ object OsmContainer {
       ways: ParSeq[Way],
       relations: ParSeq[Relation]
   ) extends OsmContainer
-      with RichWaySupport {
+      with RichClosedWaySupport
+      with RelationEntitiesSupport {
 
     lazy val nodesMap: ParMap[Long, Node] =
       nodes.map(node => (node.id, node)).toMap
@@ -130,6 +134,9 @@ object OsmContainer {
 
     override protected def _getWay: Long => Option[Way] = (nodeId: Long) =>
       waysMap.get(nodeId)
+
+    override protected def _getRelation: Long => Option[Relation] =
+      (nodeId: Long) => relationsMap.get(nodeId)
 
   }
 
