@@ -28,7 +28,7 @@ private[model] trait WayCache {
 
   type WayId = Long
 
-  private lazy val _wayNodeCache =
+  private val _wayNodeCache =
     java.util.concurrent.ConcurrentHashMap[WayId, Seq[Node]]()
 
   protected def wayNodes(way: Way): Option[Seq[Node]] =

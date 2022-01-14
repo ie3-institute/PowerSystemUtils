@@ -93,6 +93,17 @@ trait RichClosedWaySupport extends WayCache with LazyLogging {
   def wayAreaCovers(point: Point, way: ClosedWay): Boolean =
     wayAreaCovers(point, way.id)
 
+  /** Get the optional polygon of a [[ClosedWay]]. If the polygon cannot be
+    * constructed, [[None]] is returned
+    *
+    * @param way
+    *   the way of interested
+    * @return
+    *   the optional polygon of the provided way
+    */
+  def wayPolygon(way: ClosedWay): Option[Polygon] =
+    wayPolygon(way.id)
+
   /** Get the optional polygon of a [[ClosedWay]]. If the [[Way]] is not closed
     * or the polygon cannot be constructed, [[None]] is returned
     *
@@ -122,7 +133,7 @@ trait RichClosedWaySupport extends WayCache with LazyLogging {
         )
       )
 
-  private lazy val _wayPolygonCache =
+  private val _wayPolygonCache =
     java.util.concurrent.ConcurrentHashMap[Long, Polygon]()
 
   private def buildPolygon(nodes: Seq[Node]): Polygon =

@@ -22,7 +22,7 @@ trait RelationEntitiesSupport extends WayCache with LazyLogging {
 
   type RelationId = Long
 
-  private lazy val _relationEntityCache =
+  private val _relationEntityCache =
     java.util.concurrent.ConcurrentHashMap[RelationId, RelationEntities]()
 
   /** Class holding all instances of [[Node]] s, [[Way]] s, and [[Relation]] s
