@@ -64,7 +64,7 @@ trait RelationEntitiesSupport extends WayCache with LazyLogging {
                   }
 
                 case RelationMemberType.Relation =>
-                  relationEntities(relation.id)
+                  relationEntities(relationMember.id)
                     .zip(_getRelation(relationMember.id)) match {
                     case Some((entities, relation)) =>
                       (
