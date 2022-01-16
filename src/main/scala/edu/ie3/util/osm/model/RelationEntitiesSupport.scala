@@ -36,15 +36,6 @@ trait RelationEntitiesSupport extends WayCache with LazyLogging {
     */
   def relationEntities(relationId: Long): Option[RelationEntities] = {
 
-    def _relationEntities(relation: RelationMember) =
-      relationEntities(relation.id)
-
-    def _wayEntity(way: RelationMember) =
-      _getWay(way.id)
-
-    def _nodeEntity(node: RelationMember) =
-      _getNode(node.id)
-
     _relationEntityCache.safeGet(relationId) match {
       case relationEntities @ Some(_) =>
         relationEntities
@@ -58,14 +49,14 @@ trait RelationEntitiesSupport extends WayCache with LazyLogging {
             ) { case ((nodes, ways, relations), relationMember) =>
               relationMember.relationType match {
                 case RelationMemberType.Node =>
-                  _nodeEntity(relationMember) match {
+                  _getNode(relationMember.id) match {
                     case Some(node) =>
                       (nodes + (node.id -> node), ways, relations)
                     case None =>
                       (nodes, ways, relations)
                   }
                 case RelationMemberType.Way =>
-                  _wayEntity(relationMember) match {
+                  _getWay(relationMember.id) match {
                     case Some(way) =>
                       (nodes, ways + (way.id -> way), relations)
                     case None =>
@@ -73,7 +64,7 @@ trait RelationEntitiesSupport extends WayCache with LazyLogging {
                   }
 
                 case RelationMemberType.Relation =>
-                  _relationEntities(relationMember)
+                  relationEntities(relation.id)
                     .zip(_getRelation(relationMember.id)) match {
                     case Some((entities, relation)) =>
                       (

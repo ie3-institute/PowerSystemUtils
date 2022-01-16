@@ -282,7 +282,7 @@ object OsmEntity {
 
   object Relation {
 
-    /** Enumeration of the different members a relation can consist off.
+    /** Enumeration of the different members a relation can consist of.
       */
     enum RelationMemberType:
       case Node, Way, Relation, Unrecognized

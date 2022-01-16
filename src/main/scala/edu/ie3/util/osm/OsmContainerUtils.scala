@@ -20,6 +20,16 @@ import scala.collection.parallel.CollectionConverters._
 
 object OsmContainerUtils {
 
+  /** Given an [[OsmContainer]] instance, this method removes all entity ids
+    * from ways and relations that are not available in the container as
+    * concrete instances. The result is a new instance of an [[OsmContainer]]
+    * which only refers to instances available in the container.
+    *
+    * @param osmContainer
+    *   the [[OsmContainer]] instance that should be reduced
+    * @return
+    *   a reduced copy of the provided original container instance
+    */
   def reduce(osmContainer: OsmContainer): OsmContainer = {
     osmContainer match {
       case container @ SeqOsmContainer(nodes, ways, relations) =>
