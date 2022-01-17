@@ -25,6 +25,10 @@ object OsmContainerUtils {
     * concrete instances. The result is a new instance of an [[OsmContainer]]
     * which only refers to instances available in the container.
     *
+    * Note: this method does only remove entity ids w/o considering special
+    * cases, e.g., adapting [[ClosedWay]] s that become [[OpenWay]] s due to the
+    * id removal.
+    *
     * @param osmContainer
     *   the [[OsmContainer]] instance that should be reduced
     * @return
@@ -68,6 +72,13 @@ object OsmContainerUtils {
     }
   }
 
+  /** Asynchronous representation of [[reduce]]
+    *
+    * @param osmContainer
+    *   the [[OsmContainer]] instance that should be reduced
+    * @return
+    *   a reduced copy of the provided original container instance as future
+    */
   def reducePar(osmContainer: OsmContainer): Future[OsmContainer] = {
     import concurrent.ExecutionContext.Implicits.global
 
