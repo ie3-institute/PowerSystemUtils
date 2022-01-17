@@ -12,7 +12,13 @@ import edu.ie3.util.geo.GeoUtils.{
   calcHaversine
 }
 import edu.ie3.util.quantities.QuantityUtils.RichQuantityDouble
-import org.locationtech.jts.geom.{Coordinate, LineString, Point, Polygon}
+import org.locationtech.jts.geom.{
+  Coordinate,
+  Geometry,
+  LineString,
+  Point,
+  Polygon
+}
 import tech.units.indriya.ComparableQuantity
 
 import javax.measure.quantity.{Area, Length}
@@ -98,8 +104,10 @@ object RichGeometries {
       * @param polygonB
       *   polygon with which to calculate the intersection
       * @return
+      *   a [[Geometry]] representing the point-set common to the two
+      *   [[Geometry]] s
       */
-    def intersect(polygonB: Polygon): Try[Polygon] = {
+    def intersect(polygonB: Polygon): Try[Geometry] = {
       Try(
         polygon.intersection(polygonB)
       ) match {
@@ -110,14 +118,15 @@ object RichGeometries {
               exception
             )
           )
-        case Success(polygon: Polygon) => Success(polygon)
+        case Success(geometry) =>
+          Success(geometry)
       }
     }
 
     /** Calculates the area of a polygon on earth's surface.
       *
       * @return
-      *   a Quantity of area in metre
+      *   a Quantity of area in square metre
       */
     def calcAreaOnEarth: ComparableQuantity[Area] = {
       equalAreaProjection.getArea.asSquareMetre

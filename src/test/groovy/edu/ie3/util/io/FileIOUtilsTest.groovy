@@ -105,7 +105,7 @@ class FileIOUtilsTest extends Specification {
 		then:
 		noExceptionThrown()
 		Files.exists(archiveFile)
-		Files.size(archiveFile) >= 1384 && Files.size(archiveFile) <= 1427 // Should be around 1427 bytes +/- 3 %
+		Files.size(archiveFile) >= 1384 && Files.size(archiveFile) <= 1470 // Should be around 1427 bytes +/- 3 %
 	}
 
 	def "The fileio utils throws an exception, if the input path is null when called to compress a file"() {

@@ -4,11 +4,9 @@ tasks.register("checkJavaVersion") {
 	group = 'Verification'
 	description = 'Enforces correct Java version'
 
-	doLast {
-		def foundVersion = JavaVersion.current()
-		if (foundVersion != javaVersion)
-			throw new IllegalStateException("Wrong Java version: required is "
-			+ javaVersion + ", but found " + foundVersion)
-	}
+	def foundVersion = JavaVersion.current()
+	if (foundVersion != javaVersion)
+		throw new IllegalStateException("Wrong Java version: required is "
+		+ javaVersion + ", but found " + foundVersion)
 }
 compileJava.dependsOn(checkJavaVersion)

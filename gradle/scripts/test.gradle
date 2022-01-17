@@ -5,5 +5,9 @@ test {
 		events "skipped", "failed"
 	}
 
+	testLogging {
+		exceptionFormat "full"
+	}
+
 	dependsOn scalatest
 }

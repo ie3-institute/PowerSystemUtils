@@ -521,7 +521,7 @@ def publishReports() {
 def gradle(String command) {
   env.JENKINS_NODE_COOKIE = 'dontKillMe' // this is necessary for the Gradle daemon to be kept alive
 
-  // switch directory to bew able to use gradle wrapper
+  // switch directory to be able to use gradle wrapper
   sh """cd ${projects.get(0)}""" + ''' set +x; ./gradlew ''' + """$command"""
 }
 
