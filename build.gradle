@@ -80,7 +80,7 @@ dependencies {
 
 	// TEST Scala //
 	implementation "org.scalatest:scalatest_$scalaVersion:3.2.11"
-	testRuntimeClasspath 'com.vladsch.flexmark:flexmark-all:0.62.2'
+	testRuntimeClasspath 'com.vladsch.flexmark:flexmark-all:0.64.0'
 
 
 }
