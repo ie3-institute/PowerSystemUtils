@@ -10,6 +10,7 @@ import edu.ie3.util.geo.GeoUtils
 import edu.ie3.util.osm.model.OsmEntity.{Node, Way}
 import org.locationtech.jts.geom.{Coordinate, Point, Polygon}
 import edu.ie3.util.geo.RichGeometries.*
+import edu.ie3.util.osm.OsmUtils
 import edu.ie3.util.osm.model.OsmEntity.Way.ClosedWay
 import tech.units.indriya.ComparableQuantity
 import tech.units.indriya.unit.Units
@@ -94,11 +95,11 @@ trait RichClosedWaySupport extends WayCache with LazyLogging {
     wayAreaCovers(point, way.id)
 
   /** Get the optional polygon of a [[ClosedWay]]. If the polygon cannot be
-    * constructed, [[None]] is returned
+    * constructed, [[None]] is returned∞∞
     *
     * @param way
     *   the way of interested
-    * @return
+    * @return∞∞
     *   the optional polygon of the provided way
     */
   def wayPolygon(way: ClosedWay): Option[Polygon] =
@@ -116,31 +117,22 @@ trait RichClosedWaySupport extends WayCache with LazyLogging {
     _wayPolygonCache
       .safeGet(wayId)
       .orElse(
-        _getWay(wayId).flatMap(way =>
-          way match {
-            case Way.OpenWay(id, nodes, tags, metaInformation) =>
-              logger
-                .error(s"Cannot create polygon for OpenWay with id '$wayId'!")
-              None
-            case closedWay: Way.ClosedWay =>
-              wayNodes(way)
-                .map(buildPolygon)
-                .map(polygon => {
-                  _wayPolygonCache.putIfAbsent(wayId, polygon)
-                  polygon
-                })
-          }
-        )
+        _getWay(wayId).flatMap {
+          case Way.OpenWay(id, nodes, tags, metaInformation) =>
+            logger
+              .error(s"Cannot create polygon for OpenWay with id '$wayId'!")
+            None
+          case way @ (closedWay: Way.ClosedWay) =>
+            wayNodes(way)
+              .map(OsmUtils.GeometryUtils.buildPolygon)
+              .map(polygon => {
+                _wayPolygonCache.putIfAbsent(wayId, polygon)
+                polygon
+              })
+        }
       )
 
   private val _wayPolygonCache =
     java.util.concurrent.ConcurrentHashMap[Long, Polygon]()
-
-  private def buildPolygon(nodes: Seq[Node]): Polygon =
-    GeoUtils.buildPolygon(
-      nodes
-        .map(node => new Coordinate(node.longitude, node.latitude))
-        .toArray
-    )
 
 }
