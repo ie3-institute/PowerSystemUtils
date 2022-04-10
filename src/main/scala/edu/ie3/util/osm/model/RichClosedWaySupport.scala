@@ -95,11 +95,11 @@ trait RichClosedWaySupport extends WayCache with LazyLogging {
     wayAreaCovers(point, way.id)
 
   /** Get the optional polygon of a [[ClosedWay]]. If the polygon cannot be
-    * constructed, [[None]] is returned∞∞
+    * constructed, [[None]] is returned
     *
     * @param way
     *   the way of interested
-    * @return∞∞
+    * @return
     *   the optional polygon of the provided way
     */
   def wayPolygon(way: ClosedWay): Option[Polygon] =
