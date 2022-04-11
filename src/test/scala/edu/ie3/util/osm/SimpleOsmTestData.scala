@@ -34,6 +34,13 @@ trait SimpleOsmTestData {
     n2,
     n3
   )
+
+  protected val nodesMap: Map[Long, Node] = Map(
+    n1.id -> n1,
+    n2.id -> n2,
+    n3.id -> n3
+  )
+
   protected val ways: Seq[OsmEntity.Way] = Seq(closedWay, openWay)
 
   protected val r1: Relation = Relation(

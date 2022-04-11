@@ -6,6 +6,7 @@
 package edu.ie3.util.osm
 
 import edu.ie3.util.osm.OsmUtils
+import edu.ie3.util.osm.OsmUtils.GeometryUtils.buildPolygon
 import edu.ie3.util.osm.model.OsmContainer
 import edu.ie3.util.osm.model.OsmEntity.Way.{ClosedWay, OpenWay}
 import org.scalatest.matchers.should.Matchers
@@ -13,8 +14,12 @@ import org.scalatest.wordspec.AnyWordSpecLike
 
 import java.time.ZonedDateTime
 import java.util.UUID
+import scala.util.{Failure, Success}
 
-class OsmUtilsSpec extends Matchers with AnyWordSpecLike {
+class OsmUtilsSpec
+    extends Matchers
+    with AnyWordSpecLike
+    with SimpleOsmTestData {
 
   "The OsmUtils" should {
     val wayA = ClosedWay(
@@ -74,6 +79,15 @@ class OsmUtilsSpec extends Matchers with AnyWordSpecLike {
         ),
         Some(Set("residential", "retail"))
       ) shouldBe List(landuseA, landuseB)
+    }
+
+    "build a polygon correctly" in {
+      val maybePolygon = buildPolygon(closedWay, nodesMap)
+      maybePolygon match {
+        case Failure(exception) => fail("Polygon couldn't be built", exception)
+        case Success(polygon) =>
+          polygon.getCoordinates.length shouldBe 4
+      }
     }
   }
 }
