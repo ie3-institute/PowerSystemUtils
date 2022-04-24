@@ -94,11 +94,11 @@ public class PowerSystemUnits extends Units {
       new TransformedUnit<>("kWh/km", WATTHOUR_PER_METRE, MultiplyConverter.of(1d));
 
   /** Watthour per squaremetre */
-  public static final Unit<Irradiation> WATTHOUR_PER_SQUAREMETRE =
+  public static final Unit<EnergyDensity> WATTHOUR_PER_SQUAREMETRE =
       new ProductUnit<>(WATT.multiply(HOUR).divide(SQUARE_METRE));
 
   /** Kilowatthour per squaremetre */
-  public static final Unit<Irradiation> KILOWATTHOUR_PER_SQUAREMETRE =
+  public static final Unit<EnergyDensity> KILOWATTHOUR_PER_SQUAREMETRE =
       MetricPrefix.KILO(WATTHOUR_PER_SQUAREMETRE);
 
   /* ==== Power ==== */
@@ -128,11 +128,11 @@ public class PowerSystemUnits extends Units {
   public static final Unit<Power> MEGAWATT = MetricPrefix.MEGA(WATT);
 
   /** Watt per square metre */
-  public static final Unit<Irradiance> WATT_PER_SQUAREMETRE =
+  public static final Unit<PowerDensity> WATT_PER_SQUAREMETRE =
       new ProductUnit<>(WATT.divide(SQUARE_METRE));
 
   /** Kilowatt per square metre */
-  public static final Unit<Irradiance> KILOWATT_PER_SQUAREMETRE =
+  public static final Unit<PowerDensity> KILOWATT_PER_SQUAREMETRE =
       new ProductUnit<>(KILOWATT.divide(SQUARE_METRE));
 
   /* ==== Composed units ==== */

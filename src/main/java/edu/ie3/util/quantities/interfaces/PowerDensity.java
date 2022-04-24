@@ -8,9 +8,10 @@ package edu.ie3.util.quantities.interfaces;
 import tech.units.indriya.ComparableQuantity;
 
 /**
- * Rate of {@link javax.measure.quantity.Power} and {@link javax.measure.quantity.Area}
+ * Interface to describe power density.
  *
- * @deprecated replaced by {@link Irradiance}
+ * <p>Can for example depict irradiance which is the radiant exitance emitted or received by a
+ * surface per unit area. Relevant in the context of pv plants where it describes the power density
+ * of the sun's radiation.
  */
-@Deprecated(since = "1.5", forRemoval = true)
 public interface PowerDensity extends ComparableQuantity<PowerDensity> {}

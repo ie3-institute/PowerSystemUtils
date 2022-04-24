@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Refactored `GeoUtils`, moved them to the scala package and tailored them toward the `loactiontec.jts` Geometries used in the `OsmContainer` [#163] (https://github.com/ie3-institute/PowerSystemUtils/issues/163)
+- BREAKING: Changed interfaces back to `PowerDensity` and `EnergyDensity` instead of `Irradiation` and `Irradiance`[#244](PowerDensity and EnergyDensity instead of Irradiation and Irradiance)
 
 ### Fixed
 - Fix tests in CI [#206](https://github.com/ie3-institute/PowerSystemUtils/issues/206)

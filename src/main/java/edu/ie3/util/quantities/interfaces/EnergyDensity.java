@@ -7,6 +7,11 @@ package edu.ie3.util.quantities.interfaces;
 
 import tech.units.indriya.ComparableQuantity;
 
-/** @deprecated replaced by {@link Irradiation} */
-@Deprecated(since = "1.5", forRemoval = true)
+/**
+ * Interface to describe energy density.
+ *
+ * <p>Can for example depict irradiation which is the radiant energy received by a surface per unit
+ * area. Relevant in the context of pv plants where it describes the energy density of the sun's
+ * radiation.
+ */
 public interface EnergyDensity extends ComparableQuantity<EnergyDensity> {}

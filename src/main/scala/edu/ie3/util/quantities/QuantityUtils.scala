@@ -5,15 +5,15 @@
 */
 package edu.ie3.util.quantities
 
-import edu.ie3.util.quantities.PowerSystemUnits._
+import edu.ie3.util.quantities.PowerSystemUnits.*
 import edu.ie3.util.quantities.interfaces.{
   Currency,
   Density,
   DimensionlessRate,
+  EnergyDensity,
   EnergyPrice,
   HeatCapacity,
-  Irradiance,
-  Irradiation,
+  PowerDensity,
   PricePerLength,
   SpecificCapacitance,
   SpecificConductance,
@@ -24,7 +24,7 @@ import edu.ie3.util.quantities.interfaces.{
 }
 import tech.units.indriya.ComparableQuantity
 import tech.units.indriya.quantity.Quantities
-import tech.units.indriya.unit.Units._
+import tech.units.indriya.unit.Units.*
 
 import javax.measure.MetricPrefix
 import javax.measure.quantity.{
@@ -136,10 +136,10 @@ object QuantityUtils {
     def asKiloWattHourPerKiloMetre: ComparableQuantity[SpecificEnergy] =
       Quantities.getQuantity(value, KILOWATTHOUR_PER_KILOMETRE)
 
-    def asWattHourPerSquareMetre: ComparableQuantity[Irradiation] =
+    def asWattHourPerSquareMetre: ComparableQuantity[EnergyDensity] =
       Quantities.getQuantity(value, WATTHOUR_PER_SQUAREMETRE)
 
-    def asKiloWattHourPerSquareMetre: ComparableQuantity[Irradiation] =
+    def asKiloWattHourPerSquareMetre: ComparableQuantity[EnergyDensity] =
       Quantities.getQuantity(value, KILOWATTHOUR_PER_SQUAREMETRE)
 
     /* ==== Power ==== */
@@ -171,10 +171,10 @@ object QuantityUtils {
     def asMegaWatt: ComparableQuantity[Power] =
       Quantities.getQuantity(value, MEGAWATT)
 
-    def asWattPerSquareMetre: ComparableQuantity[Irradiance] =
+    def asWattPerSquareMetre: ComparableQuantity[PowerDensity] =
       Quantities.getQuantity(value, WATT_PER_SQUAREMETRE)
 
-    def asKiloWattPerSquareMetre: ComparableQuantity[Irradiance] =
+    def asKiloWattPerSquareMetre: ComparableQuantity[PowerDensity] =
       Quantities.getQuantity(value, KILOWATT_PER_SQUAREMETRE)
 
     /* ==== Composed units ==== */

@@ -15,5 +15,8 @@ import tech.units.indriya.ComparableQuantity;
  * (W·m<sup>-2</sup>·Hz<sup>-1</sup>) and that of spectral exitance in wavelength is the watt per
  * square metre per metre (W·m<sup>-3</sup>)—commonly the watt per square metre per nanometre
  * (W·m<sup>-2</sup>·nm<sup>-1</sup>).
+ *
+ * @deprecated replaced by {@link PowerDensity}
  */
+@Deprecated(since = "1.6", forRemoval = true)
 public interface Irradiance extends ComparableQuantity<Irradiance> {}
