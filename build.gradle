@@ -14,8 +14,8 @@ plugins {
 
 ext {
 	javaVersion = JavaVersion.VERSION_17
-	scalaVersion = '3'
-	scalaBinaryVersion = '3.1.2'
+	scalaVersion = '2.13'
+	scalaBinaryVersion = '2.13.8'
 	scriptsLocation = 'gradle' + File.separator + 'scripts' + File.separator //location of script plugins
 }
 
@@ -74,8 +74,8 @@ dependencies {
 
 	/* --- Scala libs --- */
 	// CORE Scala //
-	implementation "org.scala-lang:scala3-library_3:${scalaBinaryVersion}"
-	implementation 'org.scala-lang.modules:scala-parallel-collections_3:1.0.4'
+	implementation "org.scala-lang:scala-library:${scalaBinaryVersion}"
+	implementation group: 'org.scala-lang.modules', name: 'scala-parallel-collections_3', version: '1.0.4'
 	implementation group: 'org.typelevel', name: 'cats-core_3', version: '2.7.0' // advanced functional programming
 
 	// TEST Scala //
