@@ -22,6 +22,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import tech.units.indriya.quantity.Quantities
 import tech.units.indriya.unit.Units.METRE
+import org.scalatest.prop.TableDrivenPropertyChecks._
 
 import scala.util.{Failure, Success}
 
@@ -42,24 +43,67 @@ class RichGeometriesSpec extends Matchers with AnyWordSpecLike {
     }
 
     "check if a coordinate is between two others" in {
-      val coordinateA = buildCoordinate(10, 5)
-      val coordinateB = buildCoordinate(20, 5)
-      val coordinateBetween = buildCoordinate(15, 5)
-      val coordinateNotExactlyBetween = buildCoordinate(16, 5.005)
-      val coordinateNotBetween = buildCoordinate(15, 6)
+      val coordinates = Table(
+        (
+          "coordinateA",
+          "coordinateB",
+          "maybeCoordinateBetween",
+          "epsilon",
+          "isBetween"
+        ),
+        (
+          buildCoordinate(10, 5),
+          buildCoordinate(20, 5),
+          buildCoordinate(15, 5),
+          1e-12,
+          true
+        ),
+        (
+          buildCoordinate(20, 5),
+          buildCoordinate(10, 5),
+          buildCoordinate(15, 5),
+          1e-12,
+          true
+        ),
+        (
+          buildCoordinate(10, 5),
+          buildCoordinate(20, 5),
+          buildCoordinate(16, 5.005),
+          1e-12,
+          false
+        ),
+        (
+          buildCoordinate(7.4065, 51.538),
+          buildCoordinate(7.4265, 51.578),
+          buildCoordinate(7.423473617185907, 51.57194723437181),
+          1e-12,
+          false
+        ),
+        (
+          buildCoordinate(7.4065, 51.538),
+          buildCoordinate(7.4265, 51.578),
+          buildCoordinate(7.423473617185907, 51.57194723437181),
+          1e-8,
+          true
+        )
+      )
 
-      coordinateBetween.isBetween(coordinateA, coordinateB) shouldBe true
-      coordinateBetween.isBetween(coordinateB, coordinateA) shouldBe true
-      coordinateNotExactlyBetween.isBetween(
-        coordinateA,
-        coordinateB
-      ) shouldBe false
-      coordinateNotExactlyBetween.isBetween(
-        coordinateA,
-        coordinateB,
-        1e-5
-      ) shouldBe true
-      coordinateNotBetween.isBetween(coordinateB, coordinateA) shouldBe false
+      forAll(coordinates) {
+        (
+            coordinateA: Coordinate,
+            coordinateB: Coordinate,
+            maybeCoordinateBetwee: Coordinate,
+            epsilon: Double,
+            isBetween: Boolean
+        ) =>
+          {
+            maybeCoordinateBetwee.isBetween(
+              coordinateA,
+              coordinateB,
+              epsilon
+            ) shouldBe isBetween
+          }
+      }
     }
 
     "transform to a point correctly" in {
