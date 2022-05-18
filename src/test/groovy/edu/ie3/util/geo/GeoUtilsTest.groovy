@@ -162,9 +162,9 @@ class GeoUtilsTest extends Specification {
     def "GeoUtils should calculate haversine distance of LineString correctly"() {
         given:
             def lineString = GeoUtils.DEFAULT_GEOMETRY_FACTORY.createLineString([
-                    new Coordinate(22.69962d, 11.13038d, 0),
-                    new Coordinate(20.84247d, 28.14743d, 0),
-                    new Coordinate(24.21942d, 12.04265d, 0)
+                    new Coordinate(11.13038d, 22.69962d, 0),
+                    new Coordinate(28.14743d, 20.84247d, 0),
+                    new Coordinate(12.04265d, 24.21942d, 0)
             ] as Coordinate[])
 
         when:
