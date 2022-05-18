@@ -6,11 +6,7 @@
 package edu.ie3.util.geo
 
 import edu.ie3.util.exceptions.GeoException
-import edu.ie3.util.geo.GeoUtils.{
-  DEFAULT_GEOMETRY_FACTORY,
-  buildPolygon,
-  calcHaversine
-}
+import edu.ie3.util.geo.GeoUtils
 import edu.ie3.util.quantities.QuantityUtils.RichQuantityDouble
 import org.locationtech.jts.geom.{
   Coordinate,
@@ -38,14 +34,8 @@ object RichGeometries {
       */
     def haversineDistance(
         coordinateB: Coordinate
-    ): ComparableQuantity[Length] = {
-      calcHaversine(
-        coordinate.getY,
-        coordinate.getX,
-        coordinateB.getY,
-        coordinateB.getX
-      )
-    }
+    ): ComparableQuantity[Length] =
+      GeoUtils.calcHaversine(coordinate, coordinateB)
 
     /** Checks if the coordinate lies between two coordinates a and b by
       * comparing the distances between a and b with the sum of distances
@@ -74,9 +64,11 @@ object RichGeometries {
       abs(1 - (distancePassingMe / distance.getValue.doubleValue())) < epsilon
     }
 
-    def toPoint: Point = {
-      DEFAULT_GEOMETRY_FACTORY.createPoint(coordinate)
-    }
+    /** Creates a [[Point]] from this coordinate
+      * @return
+      *   the corresponding [[Point]] of this coordinate
+      */
+    def toPoint: Point = GeoUtils.buildPoint(coordinate)
   }
 
   implicit class RichLineString(lineString: LineString) {
@@ -86,15 +78,8 @@ object RichGeometries {
       * @return
       *   the length in kilometre as a quantity
       */
-    def haversineLength: ComparableQuantity[Length] = {
-      val coordinates = lineString.getCoordinates.toVector
-      val coordinatePairs = coordinates.init.zip(coordinates.tail)
-      coordinatePairs
-        .map { case (lhs, rhs) =>
-          lhs.haversineDistance(rhs)
-        }
-        .reduce(_.add(_))
-    }
+    def haversineLength: ComparableQuantity[Length] =
+      GeoUtils.calcHaversine(lineString)
   }
 
   implicit class RichPolygon(polygon: Polygon) {
@@ -107,30 +92,25 @@ object RichGeometries {
       *   a [[Geometry]] representing the point-set common to the two
       *   [[Geometry]] s
       */
-    def intersect(polygonB: Polygon): Try[Geometry] = {
+    def intersect(polygonB: Polygon): Try[Geometry] =
       Try(
         polygon.intersection(polygonB)
-      ) match {
-        case Failure(exception) =>
-          Failure(
-            new GeoException(
-              s"Couldn't calculate intersection of polygons: ${polygon.toString} and ${polygonB.toString}. Reason:",
-              exception
-            )
+      ).recoverWith { exception =>
+        Failure(
+          new GeoException(
+            s"Couldn't calculate intersection of polygons: ${polygon.toString} and ${polygonB.toString}. Reason:",
+            exception
           )
-        case Success(geometry) =>
-          Success(geometry)
+        )
       }
-    }
 
     /** Calculates the area of a polygon on earth's surface.
       *
       * @return
       *   a Quantity of area in square metre
       */
-    def calcAreaOnEarth: ComparableQuantity[Area] = {
+    def calcAreaOnEarth: ComparableQuantity[Area] =
       equalAreaProjection.getArea.asSquareMetre
-    }
 
     /** Does an equal area projection of the polygon onto a two-dimensional
       * surface to account for earth's curvature when calculating the polygon's
@@ -143,7 +123,7 @@ object RichGeometries {
       val projectedCoordinates = polygon.getCoordinates.map(coordinate =>
         GeoUtils.equalAreaProjection(coordinate)
       )
-      buildPolygon(projectedCoordinates)
+      GeoUtils.buildPolygon(projectedCoordinates)
     }
 
     /** Checks whether the polygon contains the coordinate. Uses "covers()"
@@ -154,9 +134,8 @@ object RichGeometries {
       * @return
       *   whether the polygon contains the coordinate
       */
-    def containsCoordinate(coordinate: Coordinate): Boolean = {
+    def containsCoordinate(coordinate: Coordinate): Boolean =
       polygon.covers(coordinate.toPoint)
-    }
 
   }
 }
