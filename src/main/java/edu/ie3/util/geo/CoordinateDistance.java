@@ -44,17 +44,17 @@ public class CoordinateDistance implements Comparable<CoordinateDistance> {
     this.distance = distance;
   }
 
-  /** @return The first coordinate */
+  /** Returns the first coordinate.
   public org.locationtech.jts.geom.Point getCoordinateA() {
     return coordinateA;
   }
 
-  /** @return The second coordinate */
+  /** Returns the second coordinate.
   public org.locationtech.jts.geom.Point getCoordinateB() {
     return coordinateB;
   }
 
-  /** @return The distance from the first coordinate to the second coordinate in km */
+  /** Returns the distance from the first coordinate to the second coordinate in km.
   public ComparableQuantity<Length> getDistance() {
     return distance;
   }

@@ -158,9 +158,9 @@ public class GeoUtils {
    * Calculates between two coordinates on earth's surface (great circle distance).
    *
    * @param latA latitude of coordinate a
-   * @param longA longitude of coordinate a
+   * @param lngA longitude of coordinate a
    * @param latB latitude of coordinate b
-   * @param longB longitude of coordinate b
+   * @param lngB longitude of coordinate b
    * @return The distance between both coordinates in {@link
    *     edu.ie3.util.quantities.PowerSystemUnits#KILOMETRE}
    */
