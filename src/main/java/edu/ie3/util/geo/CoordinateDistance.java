@@ -75,7 +75,7 @@ public class CoordinateDistance implements Comparable<CoordinateDistance> {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (o == null || !(o instanceof CoordinateDistance)) return false;
+    if (!(o instanceof CoordinateDistance)) return false;
     CoordinateDistance that = (CoordinateDistance) o;
     return coordinateA.equals(that.coordinateA)
         && coordinateB.equals(that.coordinateB)
