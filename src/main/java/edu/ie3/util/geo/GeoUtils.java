@@ -163,15 +163,15 @@ public class GeoUtils {
 
     // average radius of the earth in km
     ComparableQuantity<Length> r = EARTH_RADIUS.to(KILOMETRE);
-    ComparableQuantity<Angle> dLat = Quantities.getQuantity(Math.toRadians(latB - latA), RADIAN);
-    ComparableQuantity<Angle> dLon = Quantities.getQuantity(Math.toRadians(lngB - lngA), RADIAN);
+    ComparableQuantity<Angle> dLat = Quantities.getQuantity(toRadians(latB - latA), RADIAN);
+    ComparableQuantity<Angle> dLon = Quantities.getQuantity(toRadians(lngB - lngA), RADIAN);
     double a =
-        Math.sin(dLat.getValue().doubleValue() / 2) * Math.sin(dLat.getValue().doubleValue() / 2)
-            + Math.cos(Math.toRadians(latA))
-                * Math.cos(Math.toRadians(latB))
-                * Math.sin(dLon.getValue().doubleValue() / 2)
-                * Math.sin(dLon.getValue().doubleValue() / 2);
-    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        sin(dLat.getValue().doubleValue() / 2) * sin(dLat.getValue().doubleValue() / 2)
+            + cos(toRadians(latA))
+                * cos(toRadians(latB))
+                * sin(dLon.getValue().doubleValue() / 2)
+                * sin(dLon.getValue().doubleValue() / 2);
+    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
     return r.multiply(c);
   }
 

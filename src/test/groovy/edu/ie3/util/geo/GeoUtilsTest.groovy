@@ -5,6 +5,8 @@
  */
 package edu.ie3.util.geo
 
+import static edu.ie3.util.quantities.PowerSystemUnits.METRE
+
 import edu.ie3.util.quantities.PowerSystemUnits
 import edu.ie3.util.quantities.QuantityUtil
 import org.locationtech.jts.geom.Coordinate
@@ -18,8 +20,6 @@ import tech.units.indriya.ComparableQuantity
 import tech.units.indriya.quantity.Quantities
 
 import javax.measure.quantity.Length
-
-import static edu.ie3.util.quantities.PowerSystemUnits.METRE
 
 class GeoUtilsTest extends Specification {
 
@@ -249,8 +249,8 @@ class GeoUtilsTest extends Specification {
             )
 
         then:
-            Math.abs(actual.getX() - 603277.0126920443d) < 1e-12d
-            Math.abs(actual.getY() - 5757823.816510521d) < 1e-12d
+            Math.abs(actual.x - 603277.0126920443d) < 1e-12d
+            Math.abs(actual.y - 5757823.816510521d) < 1e-12d
     }
 
     def "GeoUtils reverses the equal area projection correctly"() {
@@ -259,8 +259,8 @@ class GeoUtilsTest extends Specification {
             def reversed = GeoUtils.reverseEqualAreaProjection(GeoUtils.equalAreaProjection(original))
 
         then:
-            Math.abs(original.getX() - reversed.getX()) < 1e-12
-            Math.abs(original.getY() - reversed.getY()) < 1e-12
+            Math.abs(original.x - reversed.x) < 1e-12
+            Math.abs(original.y - reversed.y) < 1e-12
     }
 
     def "GeoUtils creates a circle polygon correctly"() {
@@ -278,7 +278,7 @@ class GeoUtilsTest extends Specification {
 
             // rounded distance should be 50 meters
             actualCoordinates.toList().forEach({ point ->
-                def distance = GeoUtils.calcHaversine(center.getY(), center.getX(), point.getY(), point.getX()).to(METRE).value.doubleValue()
+                def distance = GeoUtils.calcHaversine(center.y, center.x, point.y, point.x).to(METRE).value.doubleValue()
                 assert Math.abs(distance - radius.to(METRE).value.doubleValue()) < precision
             })
     }
