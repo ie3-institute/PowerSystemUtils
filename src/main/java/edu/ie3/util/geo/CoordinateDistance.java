@@ -44,17 +44,17 @@ public class CoordinateDistance implements Comparable<CoordinateDistance> {
     this.distance = distance;
   }
 
-  /** Returns the first coordinate.
+  /** Returns the first coordinate. */
   public org.locationtech.jts.geom.Point getCoordinateA() {
     return coordinateA;
   }
 
-  /** Returns the second coordinate.
+  /** Returns the second coordinate. */
   public org.locationtech.jts.geom.Point getCoordinateB() {
     return coordinateB;
   }
 
-  /** Returns the distance from the first coordinate to the second coordinate in km.
+  /** Returns the distance from the first coordinate to the second coordinate in km. */
   public ComparableQuantity<Length> getDistance() {
     return distance;
   }
@@ -75,7 +75,7 @@ public class CoordinateDistance implements Comparable<CoordinateDistance> {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (o == null || !(o instanceof CoordinateDistance)) return false;
     CoordinateDistance that = (CoordinateDistance) o;
     return coordinateA.equals(that.coordinateA)
         && coordinateB.equals(that.coordinateB)

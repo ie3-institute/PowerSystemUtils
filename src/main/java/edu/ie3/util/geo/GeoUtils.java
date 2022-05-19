@@ -9,14 +9,12 @@ import static edu.ie3.util.quantities.PowerSystemUnits.*;
 import static java.lang.Math.*;
 
 import edu.ie3.util.exceptions.GeoException;
-import java.awt.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.measure.Quantity;
 import javax.measure.quantity.Angle;
 import javax.measure.quantity.Length;
-import net.morbz.osmonaut.osm.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.jts.algorithm.ConvexHull;
 import org.locationtech.jts.geom.Coordinate;
@@ -81,8 +79,7 @@ public class GeoUtils {
    * @param p2 end point of the linestring
    * @return a {@link LineString} between the provided points
    */
-  public static LineString buildSafeLineStringBetweenPoints(
-      final org.locationtech.jts.geom.Point p1, final org.locationtech.jts.geom.Point p2) {
+  public static LineString buildSafeLineStringBetweenPoints(final Point p1, final Point p2) {
     return buildSafeLineStringBetweenCoords(p1.getCoordinate(), p2.getCoordinate());
   }
 
@@ -128,14 +125,12 @@ public class GeoUtils {
    * @param baseCoordinate the base point
    * @param coordinates the points to calculate the distance from the base point for
    * @return a sorted set of distances between the base and other coordinates
+   * @deprecated Use {@link #calcOrderedCoordinateDistances(Point, Collection)} instead.
    */
   @Deprecated(since = "2.0", forRemoval = true)
   public static SortedSet<CoordinateDistance> getCoordinateDistances(
-      org.locationtech.jts.geom.Point baseCoordinate,
-      Collection<org.locationtech.jts.geom.Point> coordinates) {
-    return coordinates.stream()
-        .map(coordinate -> new CoordinateDistance(baseCoordinate, coordinate))
-        .collect(Collectors.toCollection(TreeSet::new));
+      Point baseCoordinate, Collection<Point> coordinates) {
+    return calcOrderedCoordinateDistances(baseCoordinate, coordinates);
   }
 
   /**
@@ -147,8 +142,7 @@ public class GeoUtils {
    * @return a sorted set of distances between the base and other coordinates
    */
   public static SortedSet<CoordinateDistance> calcOrderedCoordinateDistances(
-      org.locationtech.jts.geom.Point baseCoordinate,
-      Collection<org.locationtech.jts.geom.Point> coordinates) {
+      Point baseCoordinate, Collection<Point> coordinates) {
     return coordinates.stream()
         .map(coordinate -> new CoordinateDistance(baseCoordinate, coordinate))
         .collect(Collectors.toCollection(TreeSet::new));
@@ -200,6 +194,7 @@ public class GeoUtils {
    *
    * @param lineString the line string which length shall be calculated
    * @return The total length of the line string
+   * @deprecated Use {@link #calcHaversine(LineString)} instead.
    */
   @Deprecated(since = "2.0", forRemoval = true)
   public static ComparableQuantity<Length> totalLengthOfLineString(LineString lineString) {
@@ -235,12 +230,12 @@ public class GeoUtils {
     if (geom instanceof LineString)
       throw new GeoException(
           "Got a line string as a convex hull. Probable cause: $coordinates only contains two different coordinates.");
-    else if (geom instanceof org.locationtech.jts.geom.Point)
+    else if (geom instanceof Point)
       throw new GeoException(
           "Got a point as a convex hull. Probably coordinates: $coordinates only contains one coordinate.");
     else if (geom instanceof GeometryCollection)
       throw new GeoException("Got a GeometryCollection. Probably $coordinates was empty.");
-    else if (geom instanceof Polygon) return (Polygon) geom;
+    else if (geom instanceof Polygon polygon) return polygon;
     else
       throw new GeoException("Got an unexpected return type: " + geom.getClass().getSimpleName());
   }
@@ -297,7 +292,7 @@ public class GeoUtils {
   }
 
   /**
-   * Reverses the {@link #equalAreaProjection(Coordinate[])} and returns a coordinate on earths
+   * Reverses the {@link #equalAreaProjection(Coordinate)} and returns a coordinate on earths
    * surface
    *
    * @param coordinate the projected coordinate
