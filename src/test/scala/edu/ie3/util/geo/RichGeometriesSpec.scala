@@ -31,15 +31,15 @@ class RichGeometriesSpec extends Matchers with AnyWordSpecLike {
   "A rich GeoCordinate" should {
 
     "calculate the haversine distance correctly" in {
-      val latA = 37.87532764735112
-      val longA = -122.25311279296875
-      val latB = 37.87934174490509
-      val longB = -122.2537350654602
+      val latA = 37.87532764735112d
+      val longA = -122.25311279296875d
+      val latB = 37.87934174490509d
+      val longB = -122.2537350654602d
       val coordinateA = buildCoordinate(latA, longA)
       val coordinateB = buildCoordinate(latB, longB)
-      val expected = Quantities.getQuantity(450.18011568984845, METRE)
+      val expected = Quantities.getQuantity(450.18011568984845d, METRE)
       val actual = coordinateA.haversineDistance(coordinateB)
-      actual should equalWithTolerance(expected)
+      actual.to(METRE) should equalWithTolerance(expected)
     }
 
     "check if a coordinate is between two others" in {
