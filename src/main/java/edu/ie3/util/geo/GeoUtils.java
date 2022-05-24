@@ -15,7 +15,6 @@ import java.util.stream.IntStream;
 import javax.measure.Quantity;
 import javax.measure.quantity.Angle;
 import javax.measure.quantity.Length;
-import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.jts.algorithm.ConvexHull;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
@@ -97,8 +96,7 @@ public class GeoUtils {
   public static LineString buildSafeLineStringBetweenCoords(
       final Coordinate c1, final Coordinate c2) {
     final Coordinate safeCoord1 = c1.equals(c2) ? buildSafeCoord(c1) : c1;
-    return DEFAULT_GEOMETRY_FACTORY.createLineString(
-        ArrayUtils.addAll(new Coordinate[] {safeCoord1}, c2));
+    return DEFAULT_GEOMETRY_FACTORY.createLineString(new Coordinate[] {safeCoord1, c2});
   }
 
   /**
