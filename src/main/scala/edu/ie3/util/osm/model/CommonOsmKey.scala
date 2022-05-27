@@ -5,8 +5,7 @@
 */
 package edu.ie3.util.osm.model
 
-sealed abstract class CommonOsmKey {
-  val key: String
+sealed abstract class CommonOsmKey(key: String) {
   override def toString: String = key
 }
 
@@ -15,22 +14,20 @@ sealed abstract class CommonOsmKey {
   */
 object CommonOsmKey {
 
-  case class Amenity(override val key: String = "amenity") extends CommonOsmKey
+  case object Amenity extends CommonOsmKey("amenity")
 
-  case class Building(override val key: String = "building")
-      extends CommonOsmKey
+  case object Building extends CommonOsmKey("building")
 
-  case class Highway(override val key: String = "highway") extends CommonOsmKey
+  case object Highway extends CommonOsmKey("highway")
 
-  case class Landuse(override val key: String = "landuse") extends CommonOsmKey
+  case object Landuse extends CommonOsmKey("landuse")
 
-  case class Name(override val key: String = "name") extends CommonOsmKey
+  case object Name extends CommonOsmKey("name")
 
-  case class Power(override val key: String = "power") extends CommonOsmKey
+  case object Power extends CommonOsmKey("power")
 
-  case class Surface(override val key: String = "surface") extends CommonOsmKey
+  case object Surface extends CommonOsmKey("surface")
 
-  case class Boundary(override val key: String = "boundary")
-      extends CommonOsmKey
+  case object Boundary extends CommonOsmKey("boundary")
 
 }
