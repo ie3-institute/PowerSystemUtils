@@ -6,26 +6,19 @@
 package edu.ie3.util.osm.model
 
 import edu.ie3.util.geo.GeoUtils
+import edu.ie3.util.geo.RichGeometries._
+import edu.ie3.util.osm.SimpleOsmTestData
 import edu.ie3.util.osm.model.OsmContainer.{ParOsmContainer, SeqOsmContainer}
-import edu.ie3.util.osm.model.OsmEntity.Relation.{
-  RelationMember,
-  RelationMemberType
-}
-import edu.ie3.util.osm.model.OsmEntity.Way.{ClosedWay, OpenWay}
-import edu.ie3.util.osm.model.OsmEntity.{Node, Relation, Way}
-import edu.ie3.util.quantities.{PowerSystemUnits, QuantityMatchers}
+import edu.ie3.util.osm.model.OsmEntity.Node
+import edu.ie3.util.osm.model.RelationEntitiesSupport.RelationEntities
+import edu.ie3.util.quantities.QuantityMatchers
 import org.scalatest.Inside.inside
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import tech.units.indriya.quantity.Quantities
 import tech.units.indriya.unit.Units
-import org.locationtech.jts.geom.Point
-import edu.ie3.util.geo.RichGeometries.*
-import edu.ie3.util.osm.model.RelationEntitiesSupport.RelationEntities
-import org.scalatest.matchers.dsl.MatcherWords.contain
 
-import scala.collection.parallel.CollectionConverters.*
-import edu.ie3.util.osm.SimpleOsmTestData
+import scala.collection.parallel.CollectionConverters._
 
 class OsmContainerSpec
     extends Matchers

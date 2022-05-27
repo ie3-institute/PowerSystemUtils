@@ -5,20 +5,13 @@
 */
 package edu.ie3.util.osm.model
 
-import edu.ie3.util.geo.GeoUtils
-import edu.ie3.util.geo.GeoUtils.buildPolygon
+import edu.ie3.util.geo.RichGeometries.RichCoordinate
 import edu.ie3.util.osm.model.OsmEntity.MetaInformation
-import org.locationtech.jts.geom.{Coordinate, Point, Polygon}
-import tech.units.indriya.ComparableQuantity
-import edu.ie3.util.geo.RichGeometries.*
-import edu.ie3.util.osm.OsmUtils
 import edu.ie3.util.osm.model.OsmEntity.Relation.RelationMember
-import tech.units.indriya.unit.Units
+import edu.ie3.util.osm.model.OsmEntity.Relation.RelationMemberType.RelationMemberType
+import org.locationtech.jts.geom.{Coordinate, Point}
 
 import java.time.Instant
-import javax.measure.quantity.Area
-import scala.annotation.tailrec
-import scala.util.Try
 
 /** Base trait for all different OSM entities
   */
@@ -82,14 +75,14 @@ sealed trait OsmEntity {
     tags.get(key) match {
       case Some(tagValue) if values.nonEmpty =>
         values.contains(tagValue)
-      case Some(tagValue) =>
+      case Some(_) =>
         true
       case None => false
     }
 
   /** Checks whether or not the entity has a tag that matches one of the given
-    * key to value sets in the [[keyTagValues]] Map. NOTE: If an empty values
-    * set is given it matches any value for the specific key.
+    * key to value sets in the keyTagValues Map. NOTE: If an empty values set is
+    * given it matches any value for the specific key.
     *
     * @param keyTagValues
     *   mapping from key to possible values to match against
@@ -255,11 +248,10 @@ object OsmEntity {
       * @return
       *   whether or not the way is closed
       */
-    def isClosedWay(nodes: Seq[Long] | Seq[Node]): Boolean =
+    def isClosedWay(nodes: Seq[Long]): Boolean =
       nodes.headOption.zip(nodes.lastOption).exists { case (head, last) =>
         head == last
       }
-
   }
 
   /** A [[Relation]] implementation.
@@ -284,25 +276,24 @@ object OsmEntity {
 
     /** Enumeration of the different members a relation can consist of.
       */
-    enum RelationMemberType:
-      case Node, Way, Relation, Unrecognized
+    object RelationMemberType extends Enumeration {
+      type RelationMemberType = Value
 
-    object RelationMemberType {
+      val Node, Way, Relation, Unrecognized = Value
+
       def apply(osmEntity: OsmEntity): RelationMemberType =
         osmEntity match {
           case _: Node =>
-            Node
+            RelationMemberType.Node
           case _: Way =>
-            Way
+            RelationMemberType.Way
           case _: Relation =>
-            Relation
+            RelationMemberType.Relation
         }
-
     }
 
     /** A simple member of a relation which can be either a node a way or a
-      * relation. In contrast to [[ExtendedRelationMember]] it holds the id of
-      * the specific OSM element rather than a reference to the object.
+      * relation.
       *
       * @param id
       *   osm specific identifier of the member

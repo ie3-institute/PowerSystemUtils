@@ -7,16 +7,11 @@ package edu.ie3.util.osm
 
 import edu.ie3.util.osm.model.OsmContainer.{ParOsmContainer, SeqOsmContainer}
 import edu.ie3.util.osm.model.OsmEntity.{Relation, Way}
-import edu.ie3.util.osm.model.{
-  OsmContainer,
-  OsmEntity,
-  RelationEntitiesSupport,
-  RichClosedWaySupport
-}
+import edu.ie3.util.osm.model.{OsmContainer, OsmEntity}
 
-import scala.collection.parallel.immutable.{ParMap, ParSeq}
-import scala.concurrent.Future
 import scala.collection.parallel.CollectionConverters._
+import scala.collection.parallel.immutable.ParMap
+import scala.concurrent.Future
 
 object OsmContainerUtils {
 
@@ -26,7 +21,8 @@ object OsmContainerUtils {
     * which only refers to instances available in the container.
     *
     * Note: this method does only remove entity ids w/o considering special
-    * cases, e.g., adapting [[ClosedWay]] s that become [[OpenWay]] s due to the
+    * cases, e.g., adapting [[edu.ie3.util.osm.model.OsmEntity.Way.ClosedWay]] s
+    * that become [[edu.ie3.util.osm.model.OsmEntity.Way.OpenWay]] s due to the
     * id removal.
     *
     * @param osmContainer
@@ -134,7 +130,7 @@ object OsmContainerUtils {
   private def updateRelations(
       relation: Relation,
       contains: Long => Boolean
-  ): (Long, Relation) =
+  ): (Long, Relation) = {
     val availableMemberRelationEntityIds: Seq[Long] =
       relation.members.map(_.id).filter(contains)
     val relationMemberEntityMap: Map[Long, Relation.RelationMember] =
@@ -142,8 +138,9 @@ object OsmContainerUtils {
     relation.id -> relation.copy(members =
       availableMemberRelationEntityIds.flatMap(relationMemberEntityMap.get)
     )
+  }
 
-  private def updateWays(way: Way, contains: Long => Boolean) = {
+  private def updateWays(way: Way, contains: Long => Boolean): (Long, Way) = {
     val availableNodes = way.nodes.filter(contains)
     way match {
       case openWay: Way.OpenWay =>

@@ -6,11 +6,7 @@
 package edu.ie3.util.osm.model
 
 import com.typesafe.scalalogging.LazyLogging
-import edu.ie3.util.exceptions.OsmException
-import edu.ie3.util.osm.model.OsmEntity.Relation.{
-  RelationMember,
-  RelationMemberType
-}
+import edu.ie3.util.osm.model.OsmEntity.Relation.RelationMemberType
 import edu.ie3.util.osm.model.OsmEntity.{Node, Relation, Way}
 import edu.ie3.util.osm.model.RelationEntitiesSupport.RelationEntities
 
@@ -24,7 +20,7 @@ trait RelationEntitiesSupport extends WayCache with LazyLogging {
   type RelationId = Long
 
   private val _relationEntityCache =
-    java.util.concurrent.ConcurrentHashMap[RelationId, RelationEntities]()
+    new java.util.concurrent.ConcurrentHashMap[RelationId, RelationEntities]()
 
   /** Tries to create a [[RelationEntities]] instance based on the provided
     * identifier of the requested [[Relation]]

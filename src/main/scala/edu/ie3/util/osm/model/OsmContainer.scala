@@ -5,17 +5,11 @@
 */
 package edu.ie3.util.osm.model
 
-import com.typesafe.scalalogging.LazyLogging
-import edu.ie3.util.exceptions.OsmException
-import edu.ie3.util.osm.model.OsmEntity
-import edu.ie3.util.osm.model.CommonOsmKey.{Building, Highway, Landuse}
 import edu.ie3.util.osm.model.OsmContainer.{ParOsmContainer, SeqOsmContainer}
-import edu.ie3.util.osm.model.OsmEntity.{Relation, Way}
-import edu.ie3.util.osm.model.OsmEntity.Node
+import edu.ie3.util.osm.model.OsmEntity.{Node, Relation, Way}
 
+import scala.collection.parallel.CollectionConverters._
 import scala.collection.parallel.immutable.{ParMap, ParSeq}
-import scala.util.{Failure, Success, Try}
-import scala.collection.parallel.CollectionConverters.*
 
 /** A container entity holding all entities (nodes, ways, relations) related to
   * OpenStreetMap data. This container class is intended to represent an area of

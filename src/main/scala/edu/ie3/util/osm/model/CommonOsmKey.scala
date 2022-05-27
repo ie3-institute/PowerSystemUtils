@@ -5,19 +5,32 @@
 */
 package edu.ie3.util.osm.model
 
+sealed abstract class CommonOsmKey {
+  val key: String
+  override def toString: String = key
+}
+
 /** Some cherry picked osm keys that are often used. Taken from
   * https://taginfo.openstreetmap.org/keys
   */
-enum CommonOsmKey(key: String):
+object CommonOsmKey {
 
-  override def toString: String = key
+  case class Amenity(override val key: String = "amenity") extends CommonOsmKey
 
-  case Amenity extends CommonOsmKey("amenity")
-  case Building extends CommonOsmKey("building")
-  case Highway extends CommonOsmKey("highway")
-  case Landuse extends CommonOsmKey("landuse")
-  case Name extends CommonOsmKey("name")
-  case Power extends CommonOsmKey("power")
-  case Surface extends CommonOsmKey("surface")
-  case Boundary extends CommonOsmKey("boundary")
-end CommonOsmKey
+  case class Building(override val key: String = "building")
+      extends CommonOsmKey
+
+  case class Highway(override val key: String = "highway") extends CommonOsmKey
+
+  case class Landuse(override val key: String = "landuse") extends CommonOsmKey
+
+  case class Name(override val key: String = "name") extends CommonOsmKey
+
+  case class Power(override val key: String = "power") extends CommonOsmKey
+
+  case class Surface(override val key: String = "surface") extends CommonOsmKey
+
+  case class Boundary(override val key: String = "boundary")
+      extends CommonOsmKey
+
+}

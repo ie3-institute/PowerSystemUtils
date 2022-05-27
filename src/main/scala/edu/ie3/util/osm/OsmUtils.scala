@@ -8,12 +8,11 @@ package edu.ie3.util.osm
 import com.typesafe.scalalogging.LazyLogging
 import edu.ie3.util.exceptions.OsmException
 import edu.ie3.util.geo.GeoUtils
-import edu.ie3.util.geo.RichGeometries.RichCoordinate
 import edu.ie3.util.osm.model.CommonOsmKey.{Building, Highway, Landuse}
 import edu.ie3.util.osm.model.OsmEntity
 import edu.ie3.util.osm.model.OsmEntity.Node
-import edu.ie3.util.osm.model.OsmEntity.Way.{ClosedWay, OpenWay}
-import org.locationtech.jts.geom.{Coordinate, LineString, Point, Polygon}
+import edu.ie3.util.osm.model.OsmEntity.Way.ClosedWay
+import org.locationtech.jts.geom.{Coordinate, Polygon}
 
 import scala.collection.parallel.immutable.ParSeq
 import scala.util.{Failure, Success, Try}
