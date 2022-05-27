@@ -9,13 +9,14 @@ plugins {
 	id 'com.diffplug.spotless' version '6.6.1'//code format
 	id 'jacoco' // java code coverage plugin
 	id "org.sonarqube" version "3.3" // sonarqube
+	id "org.scoverage" version "7.0.0" // scala code coverage scoverage
 	id "com.github.maiflai.scalatest" version "0.32" // run scalatest without specific spec task
 }
 
 ext {
 	javaVersion = JavaVersion.VERSION_17
-	scalaVersion = '3'
-	scalaBinaryVersion = '3.1.2'
+	scalaVersion = '2.13'
+	scalaBinaryVersion = '2.13.8'
 	scriptsLocation = 'gradle' + File.separator + 'scripts' + File.separator //location of script plugins
 }
 
@@ -33,6 +34,7 @@ apply from: scriptsLocation + 'test.gradle'
 apply from: scriptsLocation + 'jacoco.gradle' // jacoco java code coverage
 apply from: scriptsLocation + 'mavenCentralPublish.gradle'
 apply from: scriptsLocation + 'sonarqube.gradle'
+apply from: scriptsLocation + 'scoverage.gradle' // scoverage scala code coverage
 
 repositories {
 	mavenCentral()
@@ -74,15 +76,13 @@ dependencies {
 
 	/* --- Scala libs --- */
 	// CORE Scala //
-	implementation "org.scala-lang:scala3-library_3:${scalaBinaryVersion}"
-	implementation 'org.scala-lang.modules:scala-parallel-collections_3:1.0.4'
-	implementation group: 'org.typelevel', name: 'cats-core_3', version: '2.7.0' // advanced functional programming
+	implementation "org.scala-lang:scala-library:${scalaBinaryVersion}"
+	implementation "org.scala-lang.modules:scala-parallel-collections_${scalaVersion}:1.0.4"
+	implementation "org.typelevel:cats-core_${scalaVersion}:2.7.0" // advanced functional programming
 
 	// TEST Scala //
 	implementation "org.scalatest:scalatest_$scalaVersion:3.2.12"
 	testRuntimeClasspath 'com.vladsch.flexmark:flexmark-all:0.64.0'
-
-
 }
 
 tasks.withType(JavaCompile) {

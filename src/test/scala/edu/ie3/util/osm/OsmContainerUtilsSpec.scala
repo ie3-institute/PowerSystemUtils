@@ -12,7 +12,7 @@ import org.scalatest.Inside.inside
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
-import scala.collection.parallel.CollectionConverters.*
+import scala.collection.parallel.CollectionConverters._
 import scala.collection.parallel.immutable.ParMap
 import scala.concurrent.Await
 import scala.concurrent.duration.{Duration, SECONDS}

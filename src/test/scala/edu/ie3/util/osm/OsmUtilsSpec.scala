@@ -5,15 +5,11 @@
 */
 package edu.ie3.util.osm
 
-import edu.ie3.util.osm.OsmUtils
 import edu.ie3.util.osm.OsmUtils.GeometryUtils.buildPolygon
-import edu.ie3.util.osm.model.OsmContainer
 import edu.ie3.util.osm.model.OsmEntity.Way.{ClosedWay, OpenWay}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
-import java.time.ZonedDateTime
-import java.util.UUID
 import scala.util.{Failure, Success}
 
 class OsmUtilsSpec
@@ -50,7 +46,7 @@ class OsmUtilsSpec
     "extract buildings correctly" in {
       val extracted = OsmUtils.extractBuildings(List(wayA, wayB, wayC))
       extracted.length shouldBe 2
-      extracted contains allOf(wayB, wayC)
+      extracted should contain allOf (wayB, wayC)
     }
 
     "extract highways correctly" in {

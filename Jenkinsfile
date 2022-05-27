@@ -55,7 +55,7 @@ String featureBranchName = ""
 
 //// gradle tasks that are executed
 def gradleTasks = "--refresh-dependencies clean spotlessCheck pmdMain pmdTest spotbugsMain spotbugsTest test" // the gradle tasks that are executed on ALL projects
-def mainProjectGradleTasks = "jacocoTestReport jacocoTestCoverageVerification" // additional tasks that are only executed on project 0 (== main project)
+def mainProjectGradleTasks = "jacocoTestReport jacocoTestCoverageVerification reportScoverage checkScoverage" // additional tasks that are only executed on project 0 (== main project)
 // if you need additional tasks for deployment add them here
 // NOTE: artifactory task with credentials will be added below
 def deployGradleTasks = ""
@@ -445,6 +445,9 @@ def publishReports() {
 
   // publish spotbugs report for main project only
   publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, escapeUnderscores: false, keepAll: true, reportDir: projects.get(0) + '/build/reports/spotbugs', reportFiles: 'main.html', reportName: "${projects.get(0)}_spotbugs_report", reportTitles: ''])
+
+  // scoverage report dir
+  publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, escapeUnderscores: false, keepAll: true, reportDir: projects.get(0) + '/build/reports/scoverageTest', reportFiles: 'scoverage.xml', reportName: "${projects.get(0)}_scoverage_report", reportTitles: ''])
 
 }
 

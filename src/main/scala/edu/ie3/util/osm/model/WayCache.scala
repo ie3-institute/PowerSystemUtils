@@ -5,11 +5,10 @@
 */
 package edu.ie3.util.osm.model
 
+import cats.implicits._
 import edu.ie3.util.osm.model.OsmEntity.{Node, Way}
-import cats.implicits.*
-import org.locationtech.jts.geom.Polygon
 
-import java.util.concurrent.{ConcurrentHashMap, ConcurrentMap}
+import java.util.concurrent.ConcurrentMap
 import scala.util.Try
 
 /** A cache to speed up retrieval of nodes of a specific way
@@ -29,7 +28,7 @@ private[model] trait WayCache {
   type WayId = Long
 
   private val _wayNodeCache =
-    java.util.concurrent.ConcurrentHashMap[WayId, Seq[Node]]()
+    new java.util.concurrent.ConcurrentHashMap[WayId, Seq[Node]]()
 
   protected def wayNodes(way: Way): Option[Seq[Node]] =
     _wayNodeCache

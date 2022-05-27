@@ -6,12 +6,11 @@
 package edu.ie3.util.osm.model
 
 import com.typesafe.scalalogging.LazyLogging
-import edu.ie3.util.geo.GeoUtils
-import edu.ie3.util.osm.model.OsmEntity.{Node, Way}
-import org.locationtech.jts.geom.{Coordinate, Point, Polygon}
-import edu.ie3.util.geo.RichGeometries.*
+import edu.ie3.util.geo.RichGeometries._
 import edu.ie3.util.osm.OsmUtils
+import edu.ie3.util.osm.model.OsmEntity.Way
 import edu.ie3.util.osm.model.OsmEntity.Way.ClosedWay
+import org.locationtech.jts.geom.{Point, Polygon}
 import tech.units.indriya.ComparableQuantity
 import tech.units.indriya.unit.Units
 
@@ -118,7 +117,7 @@ trait RichClosedWaySupport extends WayCache with LazyLogging {
       .safeGet(wayId)
       .orElse(
         _getWay(wayId).flatMap {
-          case Way.OpenWay(id, nodes, tags, metaInformation) =>
+          case Way.OpenWay(_, _, _, _) =>
             logger
               .error(s"Cannot create polygon for OpenWay with id '$wayId'!")
             None
@@ -133,6 +132,6 @@ trait RichClosedWaySupport extends WayCache with LazyLogging {
       )
 
   private val _wayPolygonCache =
-    java.util.concurrent.ConcurrentHashMap[Long, Polygon]()
+    new java.util.concurrent.ConcurrentHashMap[Long, Polygon]()
 
 }
