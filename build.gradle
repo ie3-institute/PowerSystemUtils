@@ -65,7 +65,7 @@ dependencies {
 	implementation 'com.github.johanneshiry:OSMonaut:v1.1.1' // pbf parser
 	implementation 'org.apache.commons:commons-math3:3.6.1' // mathematics and statistics components
 	// JTS Topology Suite for GeoPositions, License: EPL 1.0 / EDL 1.0
-	implementation 'org.locationtech.jts:jts-core:1.18.2'
+	implementation 'org.locationtech.jts:jts-core:1.19.0'
 	implementation 'org.locationtech.jts.io:jts-io-common:1.18.2'
 
 	implementation 'commons-io:commons-io:2.11.0' // I/O functionalities
