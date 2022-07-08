@@ -26,6 +26,7 @@ import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.geom.PrecisionModel;
 import org.locationtech.jts.geom.impl.CoordinateArraySequence;
+import org.locationtech.jts.math.Vector2D;
 import tech.units.indriya.ComparableQuantity;
 import tech.units.indriya.quantity.Quantities;
 
@@ -336,5 +337,29 @@ public class GeoUtils {
             .toArray(Coordinate[]::new);
 
     return buildPolygon(coordinates);
+  }
+
+  public static Coordinate orthogonalProjection(
+      Coordinate linePtA, Coordinate linePtB, Coordinate pt) {
+    return orthogonalProjection(
+            Vector2D.create(linePtA), Vector2D.create(linePtB), Vector2D.create(pt))
+        .toCoordinate();
+  }
+
+  /**
+   * Calculate the orthogonal projection of a point onto a line. Credits to Andrey Tyukin. Check out
+   * how and why this works here: <a
+   * href="https://stackoverflow.com/questions/54009832/scala-orthogonal-projection-of-a-point-onto-a-line">Orthogonal
+   * projection of a point onto a line</a>
+   *
+   * @param linePtA first point of the line
+   * @param linePtB second point of the line
+   * @param pt the point for which to calculate the projection
+   * @return the projected point
+   */
+  public static Vector2D orthogonalProjection(Vector2D linePtA, Vector2D linePtB, Vector2D pt) {
+    Vector2D v = pt.subtract(linePtA);
+    Vector2D d = linePtB.subtract(linePtA);
+    return linePtA.add(d.multiply(v.dot(d) / d.lengthSquared()));
   }
 }
