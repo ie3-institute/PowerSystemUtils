@@ -360,6 +360,6 @@ public class GeoUtils {
   public static Vector2D orthogonalProjection(Vector2D linePtA, Vector2D linePtB, Vector2D pt) {
     Vector2D v = pt.subtract(linePtA);
     Vector2D d = linePtB.subtract(linePtA);
-    return linePtA.add(d.multiply((v.dot(d)) / d.lengthSquared()));
+    return linePtA.add(d.multiply(v.dot(d) / d.lengthSquared()));
   }
 }
