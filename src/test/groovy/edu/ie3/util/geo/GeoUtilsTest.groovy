@@ -291,7 +291,7 @@ class GeoUtilsTest extends Specification {
         when:
             def actual = GeoUtils.orthogonalProjection coordinateA, coordinateB, point
         then:
-            Math.abs(actual.getX() -7.5) < 1e-9
-            Math.abs(actual.getY() -50d) < 1e-9
+            Math.abs(actual.x - 7.5) < 1e-9
+            Math.abs(actual.y - 50d) < 1e-9
     }
 }
