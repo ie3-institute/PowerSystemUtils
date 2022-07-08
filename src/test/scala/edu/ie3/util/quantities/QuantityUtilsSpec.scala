@@ -18,6 +18,7 @@ import scala.math.BigDecimal.RoundingMode
 
 class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
   "The quantity utils" when {
+    implicit val quantityTolerance: Double = 1e-9
 
     "rounding a quantity" should {
       val qty = 10.1245.asAmpere
@@ -35,7 +36,6 @@ class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
     }
 
     "converting a double" should {
-      implicit val quantityTolerance: Double = 1e-9
       val value = 10.123154122
 
       /* javax measure units */

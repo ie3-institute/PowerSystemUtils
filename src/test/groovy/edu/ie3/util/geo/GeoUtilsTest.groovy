@@ -282,4 +282,16 @@ class GeoUtilsTest extends Specification {
                 assert Math.abs(distance - radius.to(METRE).value.doubleValue()) < precision
             })
     }
+
+    def "GeoUtils calculates an orthogonal projection correctly"() {
+        given:
+            def coordinateA = GeoUtils.buildCoordinate(50d, 7)
+            def coordinateB = GeoUtils.buildCoordinate(50d, 8)
+            def point = GeoUtils.buildCoordinate(49d, 7.5)
+        when:
+            def actual = GeoUtils.orthogonalProjection coordinateA, coordinateB, point
+        then:
+            Math.abs(actual.getX() -7.5) < 1e-9
+            Math.abs(actual.getY() -50d) < 1e-9
+    }
 }
