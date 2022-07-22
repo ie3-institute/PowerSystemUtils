@@ -204,7 +204,7 @@ public class GeoUtils {
    * @return the length of the linestring as a quantity
    */
   public static ComparableQuantity<Length> calcHaversine(LineString lineString) {
-    ComparableQuantity<Length> y = Quantities.getQuantity(0, KILOMETRE);
+    ComparableQuantity<Length> y = Quantities.getQuantity(0, METRE);
     for (int i = 0; i < lineString.getNumPoints() - 1; i++) {
       y = y.add(calcHaversine(lineString.getCoordinateN(i), lineString.getCoordinateN(i + 1)));
     }

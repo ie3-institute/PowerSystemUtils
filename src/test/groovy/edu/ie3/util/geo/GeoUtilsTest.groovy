@@ -171,7 +171,7 @@ class GeoUtilsTest extends Specification {
             ComparableQuantity<Length> y = GeoUtils.calcHaversine(lineString)
 
         then:
-            QuantityUtil.isEquivalentAbs(y, Quantities.getQuantity(3463.37, PowerSystemUnits.KILOMETRE), 10)
+            QuantityUtil.isEquivalentAbs(y, Quantities.getQuantity(3463370, METRE), 10000)
             // Value from Google Maps, error range of +-10 km
     }
 
