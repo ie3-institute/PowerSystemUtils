@@ -154,14 +154,11 @@ public class GeoUtils {
    * @param lngA longitude of coordinate a
    * @param latB latitude of coordinate b
    * @param lngB longitude of coordinate b
-   * @return The distance between both coordinates in {@link
-   *     edu.ie3.util.quantities.PowerSystemUnits#KILOMETRE}
+   * @return The distance between both coordinates as a {@link Length}
    */
   public static ComparableQuantity<Length> calcHaversine(
       double latA, double lngA, double latB, double lngB) {
 
-    // average radius of the earth in km
-    ComparableQuantity<Length> r = EARTH_RADIUS.to(KILOMETRE);
     ComparableQuantity<Angle> dLat = Quantities.getQuantity(toRadians(latB - latA), RADIAN);
     ComparableQuantity<Angle> dLon = Quantities.getQuantity(toRadians(lngB - lngA), RADIAN);
     double a =
@@ -171,7 +168,7 @@ public class GeoUtils {
                 * sin(dLon.getValue().doubleValue() / 2)
                 * sin(dLon.getValue().doubleValue() / 2);
     double c = 2 * atan2(sqrt(a), sqrt(1 - a));
-    return r.multiply(c);
+    return EARTH_RADIUS.multiply(c);
   }
 
   /**
