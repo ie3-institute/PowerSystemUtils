@@ -207,7 +207,7 @@ public class PowerSystemUnits extends Units {
     addUnit(VAR, "var");
     addUnit(KILOVAR, "kvar");
     addUnit(MEGAVAR, "Mvar");
-    addUnit(PU, "PU");
+    addUnit(PU, "p.u.");
     addUnit(EURO, "EUR");
     addUnit(EURO_PER_KILOMETRE, "EUR/km");
     addUnit(EURO_PER_WATTHOUR, "EUR/Wh");
