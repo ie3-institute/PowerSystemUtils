@@ -73,4 +73,26 @@ class PowerSystemUnitsTest extends Specification {
 		Math.PI         || 180.0
 		Math.PI * 3 / 2 || 270.0
 	}
+
+	def "Units are labeled with the correct label of the expected unit symbol"() {
+		when:
+		def getUnitLabel = PowerSystemUnits.addUnit(input).symbol
+
+		then:
+		getUnitLabel.equals(expectedLabel)
+
+		where:
+		input										|| expectedLabel
+		WATTHOUR    								|| "Wh"
+		KILOWATTHOUR_PER_KILOMETRE 					|| "kWh/km"
+		VOLTAMPERE									|| "VA"
+		PU_PER_HOUR									|| "p.u./h"
+		VAR											|| "var"
+		VARHOUR										|| "varh"
+		PU											|| "p.u."
+		EURO										|| "€"
+		MICROFARAD_PER_KILOMETRE 					|| "µF/km"
+		FARAD_PER_KILOMETRE							|| "F/km"
+		DEGREE_GEOM									|| "°"
+	}
 }
