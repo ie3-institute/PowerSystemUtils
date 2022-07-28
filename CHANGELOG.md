@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added implicit classes for `loactiontec.jts` Geometries that represent geographical geometries with functionality before located in `GeoUtils` [#163] (https://github.com/ie3-institute/PowerSystemUtils/issues/163)
 - `OsmEntity` and `OsmContainer` to provide a simple, lightweight representation of openstreetmap data
+- Register missing units for serialization/deserialization. Added test for labeling unit symbols correctly within PowerSystemUnits  [#280] (https://github.com/ie3-institute/PowerSystemUtils/issues/280)
 
 ### Changed
 - Refactored `GeoUtils`, moved them to the scala package and tailored them toward the `loactiontec.jts` Geometries used in the `OsmContainer` [#163] (https://github.com/ie3-institute/PowerSystemUtils/issues/163)
