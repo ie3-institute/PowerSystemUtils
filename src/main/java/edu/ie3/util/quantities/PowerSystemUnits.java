@@ -78,7 +78,7 @@ public class PowerSystemUnits extends Units {
       new TransformedUnit<>("Wh", JOULE, MultiplyConverter.of(3600));
 
   public static final Unit<Energy> VARHOUR =
-      new TransformedUnit<>("VArh", JOULE, MultiplyConverter.of(3600));
+      new TransformedUnit<>("varh", JOULE, MultiplyConverter.of(3600));
 
   /** Kilowatthour */
   public static final Unit<Energy> KILOWATTHOUR = MetricPrefix.KILO(WATTHOUR);
@@ -112,8 +112,8 @@ public class PowerSystemUnits extends Units {
   /** Megavoltampere */
   public static final Unit<Power> MEGAVOLTAMPERE = MetricPrefix.MEGA(VOLTAMPERE);
 
-  /** Volt ampere reactive */
-  public static final Unit<Power> VAR = new AlternateUnit<>(WATT, "VAr");
+  /** Voltampere reactive */
+  public static final Unit<Power> VAR = new AlternateUnit<>(WATT, "var");
 
   /** Megavar */
   public static final Unit<Power> MEGAVAR = MetricPrefix.MEGA(VAR);
@@ -204,10 +204,10 @@ public class PowerSystemUnits extends Units {
     addUnit(WATT_PER_SQUAREMETRE, "W/m²");
     addUnit(PERCENT_PER_HOUR, "%/h");
     addUnit(PU_PER_HOUR, "p.u./h");
-    addUnit(VAR, "VAr");
-    addUnit(KILOVAR, "kVAr");
-    addUnit(MEGAVAR, "MVAr");
-    addUnit(PU, "PU");
+    addUnit(VAR, "var");
+    addUnit(KILOVAR, "kvar");
+    addUnit(MEGAVAR, "Mvar");
+    addUnit(PU, "p.u.");
     addUnit(EURO, "EUR");
     addUnit(EURO_PER_KILOMETRE, "EUR/km");
     addUnit(EURO_PER_WATTHOUR, "EUR/Wh");
