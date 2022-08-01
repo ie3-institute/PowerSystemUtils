@@ -7,8 +7,14 @@ package edu.ie3.util.quantities
 
 import edu.ie3.util.quantities.PowerSystemUnits._
 import edu.ie3.util.quantities.QuantityMatchers.equalWithTolerance
-import edu.ie3.util.quantities.QuantityUtils.{RichQuantityDouble, round}
+import edu.ie3.util.quantities.QuantityUtils.{
+  RichQuantity,
+  RichQuantityDouble,
+  RichUnit,
+  round
+}
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.wordspec.AnyWordSpecLike
 import tech.units.indriya.quantity.Quantities
 import tech.units.indriya.unit.Units._
@@ -16,7 +22,10 @@ import tech.units.indriya.unit.Units._
 import javax.measure.MetricPrefix
 import scala.math.BigDecimal.RoundingMode
 
-class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
+class QuantityUtilsSpec
+    extends Matchers
+    with AnyWordSpecLike
+    with TableDrivenPropertyChecks {
   "The quantity utils" when {
     implicit val quantityTolerance: Double = 1e-9
 
@@ -337,6 +346,52 @@ class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
         value.asKiloWattPerKelvin should equalWithTolerance(
           Quantities.getQuantity(value, KILOWATT_PER_KELVIN)
         )
+      }
+    }
+
+    "extend the quantity functionality" should {
+
+      "return min and max of quantities" in {
+
+        val smaller = 1.asAmpere
+        val bigger = 2.asAmpere
+
+        smaller.min(bigger) shouldBe smaller
+        bigger.min(smaller) shouldBe smaller
+        smaller.max(bigger) shouldBe bigger
+        bigger.max(smaller) shouldBe bigger
+
+      }
+
+    }
+
+    "converting units to alternative units" should {
+      "succeed if units are compatible" in {
+        val cases = Table(
+          ("sourceUnit", "targetUnit", "expectedUnit"),
+          (VOLTAMPERE, WATT, WATT),
+          (KILOVOLTAMPERE, WATT, KILOWATT),
+          (MEGAVOLTAMPERE, WATT, MEGAWATT),
+          (VAR, WATT, WATT),
+          (KILOVAR, WATT, KILOWATT),
+          (MEGAVAR, WATT, MEGAWATT),
+          (VOLTAMPERE, VAR, VAR),
+          (KILOVOLTAMPERE, VAR, KILOVAR),
+          (MEGAVOLTAMPERE, VAR, MEGAVAR),
+          (WATT, VAR, VAR),
+          (KILOWATT, VAR, KILOVAR),
+          (MEGAWATT, VAR, MEGAVAR),
+          (VAR, VOLTAMPERE, VOLTAMPERE),
+          (KILOVAR, VOLTAMPERE, KILOVOLTAMPERE),
+          (MEGAVAR, VOLTAMPERE, MEGAVOLTAMPERE),
+          (WATT, VOLTAMPERE, VOLTAMPERE),
+          (KILOWATT, VOLTAMPERE, KILOVOLTAMPERE),
+          (MEGAWATT, VOLTAMPERE, MEGAVOLTAMPERE)
+        )
+
+        forAll(cases) { (sourceUnit, targetUnit, expectedUnit) =>
+          sourceUnit.toEquivalentIn(targetUnit) shouldBe expectedUnit
+        }
       }
     }
   }
