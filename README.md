@@ -5,5 +5,6 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0c6df0a8a7ec4ae08ed07f4d925100aa)](https://app.codacy.com/gh/ie3-institute/PowerSystemUtils?utm_source=github.com&utm_medium=referral&utm_content=ie3-institute/PowerSystemUtils&utm_campaign=Badge_Grade_Dashboard)
 [![codecov](https://codecov.io/gh/ie3-institute/PowerSystemUtils/branch/main/graph/badge.svg)](https://codecov.io/gh/ie3-institute/PowerSystemUtils)
 [![License](https://img.shields.io/github/license/ie3-institute/powersystemdatamodel)](https://github.com/ie3-institute/powersystemdatamodel/blob/main/LICENSE)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.ie3-institute/PowerSystemUtils.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.ie3-institute%22%20AND%20a:%22PowerSystemUtils%22)
 
 Contains utility classes that are used by several ie3 subprojects
