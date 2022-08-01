@@ -26,6 +26,7 @@ import tech.units.indriya.ComparableQuantity
 import tech.units.indriya.quantity.Quantities
 import tech.units.indriya.unit.Units._
 
+import javax.measure
 import javax.measure.{MetricPrefix, Quantity}
 import javax.measure.quantity.{
   Angle,
@@ -254,4 +255,46 @@ object QuantityUtils {
       Quantities.getQuantity(value, KILOWATT_PER_KELVIN)
 
   }
+
+  implicit class RichQuantity[Q <: Quantity[Q]](
+      private val q: ComparableQuantity[Q]
+  ) extends AnyVal {
+
+    /** Returns the smaller of two Quantities
+      *
+      * @param other
+      *   the other Quantity
+      * @return
+      *   the smaller of both Quantities
+      */
+    def min(other: ComparableQuantity[Q]): ComparableQuantity[Q] = {
+      if (q.isLessThanOrEqualTo(other)) q else other
+    }
+
+    /** Returns the bigger of two Quantities
+      *
+      * @param other
+      *   the other Quantity
+      * @return
+      *   the bigger of both Quantities
+      */
+    def max(other: ComparableQuantity[Q]): ComparableQuantity[Q] = {
+      if (q.isGreaterThan(other)) q else other
+    }
+  }
+
+  implicit class RichUnit[Q <: Quantity[Q]](
+      private val unit: measure.Unit[Q]
+  ) extends AnyVal {
+
+    /** Transform some power unit to given unit with the same prefix
+      * @param targetUnit
+      *   the target system unit
+      * @return
+      *   this unit converted to given
+      */
+    def toEquivalentIn(targetUnit: measure.Unit[Q]): measure.Unit[Q] =
+      targetUnit.transform(unit.getConverterTo(unit.getSystemUnit))
+  }
+
 }
