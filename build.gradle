@@ -5,7 +5,7 @@ plugins {
 	id 'maven-publish'
 	id 'signing'
 	id 'pmd' //code check, working on source code
-	id 'com.github.spotbugs' version '5.0.12' //code check, working on byte code
+	id 'com.github.spotbugs' version '5.0.13' //code check, working on byte code
 	id 'com.diffplug.spotless' version '6.11.0'//code format
 	id 'jacoco' // java code coverage plugin
 	id "org.sonarqube" version "3.4.0.2513" // sonarqube
