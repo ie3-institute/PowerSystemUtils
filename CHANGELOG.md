@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Refactored `GeoUtils`, moved them to the scala package and tailored them toward the `loactiontec.jts` Geometries used in the `OsmContainer` [#163] (https://github.com/ie3-institute/PowerSystemUtils/issues/163)
-- Changed unit symbols according to DIN 1301-1 for apparent and reactive power [#278] (https://github.com/ie3-institute/PowerSystemUtils/issues/278)qty
+- Changed unit symbols according to DIN 1301-1 for apparent and reactive power [#278](https://github.com/ie3-institute/PowerSystemUtils/issues/278)
 - Rounding for quantities is now part of the `RichQuantity` [#314](https://github.com/ie3-institute/PowerSystemUtils/issues/314)
 
 ### Fixed
