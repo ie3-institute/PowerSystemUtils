@@ -109,7 +109,13 @@ class QuantityUtilsSpec
 
       /* PowerSystemUnits */
 
-      /* ==== Basic non electric units ==== */
+      /* ==== Basic non-electric units ==== */
+
+      "convert a double to a metre quantity" in {
+        value.asMetre should equalWithTolerance(
+          Quantities.getQuantity(value, METRE)
+        )
+      }
 
       "convert a double to a kilometre quantity" in {
         value.asKilometre should equalWithTolerance(
@@ -120,6 +126,24 @@ class QuantityUtilsSpec
       "convert a double to a millisecond quantity" in {
         value.asMillisecond should equalWithTolerance(
           Quantities.getQuantity(value, MILLISECOND)
+        )
+      }
+
+      "convert a double to a second quantity" in {
+        value.asSecond should equalWithTolerance(
+          Quantities.getQuantity(value, SECOND)
+        )
+      }
+
+      "convert a double to a minute quantity" in {
+        value.asMinute should equalWithTolerance(
+          Quantities.getQuantity(value, MINUTE)
+        )
+      }
+
+      "convert a double to an hour quantity" in {
+        value.asHour should equalWithTolerance(
+          Quantities.getQuantity(value, HOUR)
         )
       }
 
@@ -183,6 +207,12 @@ class QuantityUtilsSpec
         )
       }
 
+      "convert a double to a megawatt-hour quantity" in {
+        value.asMegaWattHour should equalWithTolerance(
+          Quantities.getQuantity(value, MEGAWATTHOUR)
+        )
+      }
+
       "convert a double to a var-hour quantity" in {
         value.asVarHour should equalWithTolerance(
           Quantities.getQuantity(value, VARHOUR)
@@ -192,6 +222,24 @@ class QuantityUtilsSpec
       "convert a double to a kilovar-hour quantity" in {
         value.asKiloVarHour should equalWithTolerance(
           Quantities.getQuantity(value, KILOVARHOUR)
+        )
+      }
+
+      "convert a double to a megavar-hour quantity" in {
+        value.asMegaVarHour should equalWithTolerance(
+          Quantities.getQuantity(value, MEGAVARHOUR)
+        )
+      }
+
+      "convert a double to a watt-hour per metre quantity" in {
+        value.asWattHourPerMetre should equalWithTolerance(
+          Quantities.getQuantity(value, WATTHOUR_PER_METRE)
+        )
+      }
+
+      "convert a double to a kilowatt-hour per kilometre quantity" in {
+        value.asKiloWattHourPerKiloMetre should equalWithTolerance(
+          Quantities.getQuantity(value, KILOWATTHOUR_PER_KILOMETRE)
         )
       }
 
@@ -336,6 +384,15 @@ class QuantityUtilsSpec
       "convert a double to a kilowatthour per kelvin quantity" in {
         value.asKiloWattHourPerKelvin should equalWithTolerance(
           Quantities.getQuantity(value, KILOWATTHOUR_PER_KELVIN)
+        )
+      }
+
+      "convert a double to a kilowatthour per kelvin times cubic metre quantity" in {
+        value.asKiloWattHourPerKelvinTimesCubicMetre should equalWithTolerance(
+          Quantities.getQuantity(
+            value,
+            KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE
+          )
         )
       }
 
