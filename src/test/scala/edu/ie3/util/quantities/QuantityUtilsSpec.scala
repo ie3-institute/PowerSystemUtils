@@ -10,8 +10,7 @@ import edu.ie3.util.quantities.QuantityMatchers.equalWithTolerance
 import edu.ie3.util.quantities.QuantityUtils.{
   RichQuantity,
   RichQuantityDouble,
-  RichUnit,
-  round
+  RichUnit
 }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
@@ -33,12 +32,12 @@ class QuantityUtilsSpec
       val qty = 10.1245.asAmpere
 
       "round a quantity half up by default" in {
-        round(qty, 2) should equalWithTolerance(10.12.asAmpere)
-        round(qty, 3) should equalWithTolerance(10.125.asAmpere)
+        qty.round(2) should equalWithTolerance(10.12.asAmpere)
+        qty.round(3) should equalWithTolerance(10.125.asAmpere)
       }
 
       "round a quantity with the given rounding mode" in {
-        round(qty, 3, RoundingMode.HALF_DOWN) should equalWithTolerance(
+        qty.round(3, RoundingMode.HALF_DOWN) should equalWithTolerance(
           10.124.asAmpere
         )
       }
