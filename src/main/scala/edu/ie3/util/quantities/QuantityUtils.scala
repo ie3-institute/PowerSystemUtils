@@ -46,36 +46,6 @@ import scala.math.BigDecimal.RoundingMode.RoundingMode
 
 object QuantityUtils {
 
-  /** Rounds a quantity given a specified rounding mode after a specified
-    * decimal.
-    *
-    * @param quantity
-    *   the quantity to round
-    * @param decimals
-    *   how many decimals to consider
-    * @param roundingMode
-    *   the rounding mode to use
-    * @tparam T
-    *   type of the quantity
-    * @return
-    *   the rounded quantity
-    */
-  def round[T <: Quantity[T]](
-      quantity: ComparableQuantity[T],
-      decimals: Int,
-      roundingMode: RoundingMode = RoundingMode.HALF_UP
-  ): ComparableQuantity[T] = {
-    if (decimals < 0)
-      throw new IllegalArgumentException(
-        "You can not round to negative decimal places."
-      )
-    val rounded = BigDecimal
-      .valueOf(quantity.getValue.doubleValue())
-      .setScale(decimals, roundingMode)
-      .doubleValue
-    Quantities.getQuantity(rounded, quantity.getUnit)
-  }
-
   /** Implicit class to enrich the [[Double]] with [[ComparableQuantity]]
     * conversion capabilities
     *
@@ -280,6 +250,33 @@ object QuantityUtils {
       */
     def max(other: ComparableQuantity[Q]): ComparableQuantity[Q] = {
       if (q.isGreaterThan(other)) q else other
+    }
+
+    /** Rounds a quantity given a specified rounding mode after a specified
+      * decimal.
+      *
+      * @param decimals
+      *   how many decimals to consider
+      * @param roundingMode
+      *   the rounding mode to use
+      * @tparam Q
+      *   type of the quantity
+      * @return
+      *   the rounded quantity
+      */
+    def round(
+        decimals: Int,
+        roundingMode: RoundingMode = RoundingMode.HALF_UP
+    ): ComparableQuantity[Q] = {
+      if (decimals < 0)
+        throw new IllegalArgumentException(
+          "You can not round to negative decimal places."
+        )
+      val rounded = BigDecimal
+        .valueOf(q.getValue.doubleValue())
+        .setScale(decimals, roundingMode)
+        .doubleValue
+      Quantities.getQuantity(rounded, q.getUnit)
     }
   }
 
