@@ -85,6 +85,11 @@ public class PowerSystemUnits extends Units {
 
   public static final Unit<Energy> KILOVARHOUR = MetricPrefix.KILO(VARHOUR);
 
+  /** Megawatthour */
+  public static final Unit<Energy> MEGAWATTHOUR = MetricPrefix.MEGA(WATTHOUR);
+
+  public static final Unit<Energy> MEGAVARHOUR = MetricPrefix.MEGA(VARHOUR);
+
   /** Watthour per metre */
   public static final Unit<SpecificEnergy> WATTHOUR_PER_METRE =
       new ProductUnit<>(WATTHOUR.divide(METRE));
