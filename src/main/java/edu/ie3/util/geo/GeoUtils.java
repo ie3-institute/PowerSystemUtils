@@ -5,7 +5,8 @@
 */
 package edu.ie3.util.geo;
 
-import static edu.ie3.util.quantities.PowerSystemUnits.*;
+import static edu.ie3.util.quantities.PowerSystemUnits.METRE;
+import static edu.ie3.util.quantities.PowerSystemUnits.RADIAN;
 import static java.lang.Math.*;
 
 import edu.ie3.util.exceptions.GeoException;
@@ -16,15 +17,7 @@ import javax.measure.Quantity;
 import javax.measure.quantity.Angle;
 import javax.measure.quantity.Length;
 import org.locationtech.jts.algorithm.ConvexHull;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.GeometryCollection;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.LineString;
-import org.locationtech.jts.geom.LinearRing;
-import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.geom.Polygon;
-import org.locationtech.jts.geom.PrecisionModel;
+import org.locationtech.jts.geom.*;
 import org.locationtech.jts.geom.impl.CoordinateArraySequence;
 import org.locationtech.jts.math.Vector2D;
 import tech.units.indriya.ComparableQuantity;
@@ -34,7 +27,7 @@ public class GeoUtils {
   public static final GeometryFactory DEFAULT_GEOMETRY_FACTORY =
       new GeometryFactory(new PrecisionModel(), 4326);
 
-  private static final ComparableQuantity<Length> EARTH_RADIUS =
+  public static final ComparableQuantity<Length> EARTH_RADIUS =
       Quantities.getQuantity(6378137.0, METRE);
 
   protected GeoUtils() {
@@ -209,6 +202,34 @@ public class GeoUtils {
       y = y.add(calcHaversine(lineString.getCoordinateN(i), lineString.getCoordinateN(i + 1)));
     }
     return y;
+  }
+
+  /**
+   * Method to turn a distance into a latitude and longitude deltas. The methode can be found here:
+   * <a
+   * href="https://math.stackexchange.com/questions/474602/reverse-use-of-haversine-formula">source</a>
+   *
+   * @param coordinate the starting point for the calculation
+   * @param distance maximal distance in x- and y-direction
+   * @return x- and y-delta in degree as a coordinate
+   */
+  public static Coordinate calculateXYDelta(Point coordinate, ComparableQuantity<Length> distance) {
+    // y-degrees are evenly spaced, so we can just divide a distance
+    // by the earth's radius to get a y-delta in radians
+    double deltaY = distance.divide(EARTH_RADIUS).getValue().doubleValue();
+
+    // because the spacing between x-degrees change between the equator
+    // and the poles, we need to calculate the x-delta using the inverse
+    // haversine formula
+    double sinus = Math.sin(deltaY / 2);
+    double squaredSinus = Math.pow(sinus, 2);
+    double cosine = Math.cos(Math.toRadians(coordinate.getY()));
+    double squaredCosine = Math.pow(cosine, 2);
+
+    double deltaX = 2 * Math.asin(Math.sqrt(squaredSinus / squaredCosine));
+
+    // converting the deltas to degree and returning them as a coordinate
+    return new Coordinate(Math.toDegrees(deltaX), Math.toDegrees(deltaY));
   }
 
   /**
