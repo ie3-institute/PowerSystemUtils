@@ -396,6 +396,42 @@ class QuantityUtilsSpec
         )
       }
 
+      "convert a double to a degree kelvin quantity" in {
+        value.asDegreeKelvin should equalWithTolerance(
+          Quantities.getQuantity(
+            value,
+            KELVIN
+          )
+        )
+      }
+
+      "convert a double to a degree celsius quantity" in {
+        value.asDegreeCelsius should equalWithTolerance(
+          Quantities.getQuantity(
+            value,
+            CELSIUS
+          )
+        )
+      }
+
+      "convert a double to a cubic metre quantity" in {
+        value.asCubicMetre should equalWithTolerance(
+          Quantities.getQuantity(
+            value,
+            CUBIC_METRE
+          )
+        )
+      }
+
+      "convert a double to a litre quantity" in {
+        value.asLitre should equalWithTolerance(
+          Quantities.getQuantity(
+            value,
+            LITRE
+          )
+        )
+      }
+
       /* ==== Thermal Conductance ==== */
 
       "convert a double to a kilowatt per kelvin quantity" in {
