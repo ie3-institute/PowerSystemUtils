@@ -39,7 +39,9 @@ import javax.measure.quantity.{
   Energy,
   Length,
   Power,
-  Time
+  Temperature,
+  Time,
+  Volume
 }
 import scala.math.BigDecimal.RoundingMode
 import scala.math.BigDecimal.RoundingMode.RoundingMode
@@ -211,6 +213,20 @@ object QuantityUtils {
     def asMicroFarradPerKilometre: ComparableQuantity[SpecificCapacitance] =
       as(MICROFARAD_PER_KILOMETRE)
 
+    /* ==== Thermal ==== */
+
+    def asKelvin: ComparableQuantity[Temperature] = as(
+      KELVIN
+    )
+
+    def asDegreeCelsius: ComparableQuantity[Temperature] = as(
+      CELSIUS
+    )
+
+    def asKiloWattPerKelvin: ComparableQuantity[ThermalConductance] = as(
+      KILOWATT_PER_KELVIN
+    )
+
     def asKiloWattHourPerKelvin: ComparableQuantity[HeatCapacity] =
       as(KILOWATTHOUR_PER_KELVIN)
 
@@ -218,11 +234,13 @@ object QuantityUtils {
         : ComparableQuantity[SpecificHeatCapacity] =
       as(KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE)
 
-    /* ==== Thermal Conductance ==== */
+    /* ==== Volume ==== */
 
-    def asKiloWattPerKelvin: ComparableQuantity[ThermalConductance] = as(
-      KILOWATT_PER_KELVIN
-    )
+    def asCubicMetre: ComparableQuantity[Volume] =
+      as(CUBIC_METRE)
+
+    def asLitre: ComparableQuantity[Volume] =
+      as(LITRE)
 
     /** Create a quantity from the double with given unit
       * @param unit
