@@ -381,7 +381,6 @@ class QuantityUtilsSpec
         )
       }
 
-
       /* ==== Thermal ==== */
 
       "convert a double to kelvin quantity" in {

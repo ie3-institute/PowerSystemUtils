@@ -230,8 +230,7 @@ object QuantityUtils {
     def asKiloWattHourPerKelvin: ComparableQuantity[HeatCapacity] =
       as(KILOWATTHOUR_PER_KELVIN)
 
-    def asKiloWattHourPerKelvinTimesCubicMetre
-    : ComparableQuantity[SpecificHeatCapacity] =
+    def asKiloWattHourPerKelvinTimesCubicMetre: ComparableQuantity[SpecificHeatCapacity] =
       as(KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE)
 
     /* ==== Volume ==== */
