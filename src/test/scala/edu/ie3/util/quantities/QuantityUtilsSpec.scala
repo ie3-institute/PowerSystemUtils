@@ -381,14 +381,6 @@ class QuantityUtilsSpec
         )
       }
 
-      "convert a double to a kilowatthour per kelvin times cubic metre quantity" in {
-        value.asKiloWattHourPerKelvinTimesCubicMetre should equalWithTolerance(
-          Quantities.getQuantity(
-            value,
-            KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE
-          )
-        )
-      }
 
       /* ==== Thermal ==== */
 
@@ -419,6 +411,15 @@ class QuantityUtilsSpec
       "convert a double to a kilowatthour per kelvin quantity" in {
         value.asKiloWattHourPerKelvin should equalWithTolerance(
           Quantities.getQuantity(value, KILOWATTHOUR_PER_KELVIN)
+        )
+      }
+
+      "convert a double to a kilowatthour per kelvin times cubic metre quantity" in {
+        value.asKiloWattHourPerKelvinTimesCubicMetre should equalWithTolerance(
+          Quantities.getQuantity(
+            value,
+            KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE
+          )
         )
       }
 

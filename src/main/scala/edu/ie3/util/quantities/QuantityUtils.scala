@@ -213,10 +213,6 @@ object QuantityUtils {
     def asMicroFarradPerKilometre: ComparableQuantity[SpecificCapacitance] =
       as(MICROFARAD_PER_KILOMETRE)
 
-    def asKiloWattHourPerKelvinTimesCubicMetre
-        : ComparableQuantity[SpecificHeatCapacity] =
-      as(KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE)
-
     /* ==== Thermal ==== */
 
     def asKelvin: ComparableQuantity[Temperature] = as(
@@ -233,6 +229,10 @@ object QuantityUtils {
 
     def asKiloWattHourPerKelvin: ComparableQuantity[HeatCapacity] =
       as(KILOWATTHOUR_PER_KELVIN)
+
+    def asKiloWattHourPerKelvinTimesCubicMetre
+    : ComparableQuantity[SpecificHeatCapacity] =
+      as(KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE)
 
     /* ==== Volume ==== */
 
