@@ -219,7 +219,7 @@ object QuantityUtils {
 
     /* ==== Thermal ==== */
 
-    def asDegreeKelvin: ComparableQuantity[Temperature] = as(
+    def asKelvin: ComparableQuantity[Temperature] = as(
       KELVIN
     )
 

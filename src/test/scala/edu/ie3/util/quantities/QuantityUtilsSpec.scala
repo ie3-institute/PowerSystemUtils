@@ -381,12 +381,6 @@ class QuantityUtilsSpec
         )
       }
 
-      "convert a double to a kilowatthour per kelvin quantity" in {
-        value.asKiloWattHourPerKelvin should equalWithTolerance(
-          Quantities.getQuantity(value, KILOWATTHOUR_PER_KELVIN)
-        )
-      }
-
       "convert a double to a kilowatthour per kelvin times cubic metre quantity" in {
         value.asKiloWattHourPerKelvinTimesCubicMetre should equalWithTolerance(
           Quantities.getQuantity(
@@ -396,8 +390,10 @@ class QuantityUtilsSpec
         )
       }
 
-      "convert a double to a degree kelvin quantity" in {
-        value.asDegreeKelvin should equalWithTolerance(
+      /* ==== Thermal ==== */
+
+      "convert a double to kelvin quantity" in {
+        value.asKelvin should equalWithTolerance(
           Quantities.getQuantity(
             value,
             KELVIN
@@ -414,6 +410,20 @@ class QuantityUtilsSpec
         )
       }
 
+      "convert a double to a kilowatt per kelvin quantity" in {
+        value.asKiloWattPerKelvin should equalWithTolerance(
+          Quantities.getQuantity(value, KILOWATT_PER_KELVIN)
+        )
+      }
+
+      "convert a double to a kilowatthour per kelvin quantity" in {
+        value.asKiloWattHourPerKelvin should equalWithTolerance(
+          Quantities.getQuantity(value, KILOWATTHOUR_PER_KELVIN)
+        )
+      }
+
+      /* ==== Volume ==== */
+
       "convert a double to a cubic metre quantity" in {
         value.asCubicMetre should equalWithTolerance(
           Quantities.getQuantity(
@@ -429,14 +439,6 @@ class QuantityUtilsSpec
             value,
             LITRE
           )
-        )
-      }
-
-      /* ==== Thermal Conductance ==== */
-
-      "convert a double to a kilowatt per kelvin quantity" in {
-        value.asKiloWattPerKelvin should equalWithTolerance(
-          Quantities.getQuantity(value, KILOWATT_PER_KELVIN)
         )
       }
     }
