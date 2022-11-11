@@ -205,17 +205,17 @@ public class GeoUtils {
   }
 
   /**
-   * Method for calculating a bounding box around a point. This method uses an inverse haversine to turn
-   * a distance into x- and y-deltas. These deltas are used to create an envelope which represents the
-   * bounding box. The methode can be found here:
-   * <a
+   * Method for calculating a bounding box around a point. This method uses an inverse haversine to
+   * turn a distance into x- and y-deltas. These deltas are used to create an envelope which
+   * represents the bounding box. The methode can be found here: <a
    * href="https://math.stackexchange.com/questions/474602/reverse-use-of-haversine-formula">source</a>
    *
    * @param coordinate the starting point for the calculation
    * @param distance maximal distance in x- and y-direction
    * @return envelope
    */
-  public static Envelope calculateBoundingBox(Point coordinate, ComparableQuantity<Length> distance) {
+  public static Envelope calculateBoundingBox(
+      Point coordinate, ComparableQuantity<Length> distance) {
     // y-degrees are evenly spaced, so we can just divide a distance
     // by the earth's radius to get a y-delta in radians
     double deltaY = distance.divide(EARTH_RADIUS).getValue().doubleValue();
@@ -234,8 +234,13 @@ public class GeoUtils {
     double deltaXDegree = Math.toDegrees(deltaX);
     double deltaYDegree = Math.toDegrees(deltaY);
 
-    // calculating minimums and maximums for longitude and latitude and returning them as an envelope
-    return new Envelope(coordinate.getX() - deltaXDegree, coordinate.getX() + deltaXDegree, coordinate.getY() - deltaYDegree, coordinate.getY() + deltaYDegree);
+    // calculating minimums and maximums for longitude and latitude and returning them as an
+    // envelope
+    return new Envelope(
+        coordinate.getX() - deltaXDegree,
+        coordinate.getX() + deltaXDegree,
+        coordinate.getY() - deltaYDegree,
+        coordinate.getY() + deltaYDegree);
   }
 
   /**
