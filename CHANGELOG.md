@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `OsmEntity` and `OsmContainer` to provide a simple, lightweight representation of openstreetmap data
 - QuantityUtils previously implemented in SIMONA [#288](https://github.com/ie3-institute/PowerSystemUtils/issues/288)
 - Enhanced `RichQuantityDouble` with new units and generic method [#312](https://github.com/ie3-institute/PowerSystemUtils/issues/312), [#322](https://github.com/ie3-institute/PowerSystemUtils/issues/322)
+- Calculation of bounding box to `GeoUtils` [#320](https://github.com/ie3-institute/PowerSystemUtils/issues/320)
 
 ### Changed
 - Refactored `GeoUtils`, moved them to the scala package and tailored them toward the `loactiontec.jts` Geometries used in the `OsmContainer` [#163](https://github.com/ie3-institute/PowerSystemUtils/issues/163)
