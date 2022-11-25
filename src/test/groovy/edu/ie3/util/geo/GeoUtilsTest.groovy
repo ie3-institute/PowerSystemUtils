@@ -291,7 +291,7 @@ class GeoUtilsTest extends Specification {
             Math.abs(actual.y - 50d) < 1e-9
     }
 
-    def "GeoUtils calculates x-delta (longitude) correctly"(){
+    def "GeoUtils calculates x-delta (longitude) correctly"() {
         given:
         Point coordinate = GeoUtils.buildPoint(50, 7)
         ComparableQuantity<Length> distanceX = GeoUtils.calcHaversine(50, 7, 50, 6)
@@ -300,17 +300,17 @@ class GeoUtilsTest extends Specification {
         Envelope envelope = GeoUtils.calculateBoundingBox(coordinate, distanceX)
 
         then:
-        envelope.getMinX() == 6
-        envelope.getMaxX() == 8
+        envelope.minX == 6
+        envelope.maxX == 8
 
         double yMin = 49.35721717797476
         double yMax = 50.64278282202524
 
-        envelope.getMinY() == yMin
-        envelope.getMaxY() == yMax
+        envelope.minY == yMin
+        envelope.maxY == yMax
     }
 
-    def "GeoUtils calculates y-delta (latitude) correctly"(){
+    def "GeoUtils calculates y-delta (latitude) correctly"() {
         given:
         Point coordinate = GeoUtils.buildPoint(50, 7)
         ComparableQuantity<Length> distanceX = GeoUtils.calcHaversine(51, 7, 52, 7)
@@ -322,10 +322,10 @@ class GeoUtilsTest extends Specification {
         double xMin = 5.444248126340358
         double xMax = 8.555751873659641
 
-        envelope.getMinX() == xMin
-        envelope.getMaxX() == xMax
+        envelope.minX == xMin
+        envelope.maxX == xMax
 
-        envelope.getMinY() == 49
-        envelope.getMaxY() == 51
+        envelope.minY == 49
+        envelope.maxY == 51
     }
 }

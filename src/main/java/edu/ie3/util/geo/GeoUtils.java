@@ -223,16 +223,16 @@ public class GeoUtils {
     // because the spacing between x-degrees change between the equator
     // and the poles, we need to calculate the x-delta using the inverse
     // haversine formula
-    double sinus = Math.sin(deltaY / 2);
-    double squaredSinus = Math.pow(sinus, 2);
-    double cosine = Math.cos(Math.toRadians(coordinate.getY()));
-    double squaredCosine = Math.pow(cosine, 2);
+    double sinus = sin(deltaY / 2);
+    double squaredSinus = pow(sinus, 2);
+    double cosine = cos(toRadians(coordinate.getY()));
+    double squaredCosine = pow(cosine, 2);
 
-    double deltaX = 2 * Math.asin(Math.sqrt(squaredSinus / squaredCosine));
+    double deltaX = 2 * asin(sqrt(squaredSinus / squaredCosine));
 
     // turning the deltas to degree
-    double deltaXDegree = Math.toDegrees(deltaX);
-    double deltaYDegree = Math.toDegrees(deltaY);
+    double deltaXDegree = toDegrees(deltaX);
+    double deltaYDegree = toDegrees(deltaY);
 
     // calculating minimums and maximums for longitude and latitude and returning them as an
     // envelope
