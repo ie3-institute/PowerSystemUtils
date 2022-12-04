@@ -18,7 +18,7 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import tech.units.indriya.quantity.Quantities
 import tech.units.indriya.unit.Units._
 
-import javax.measure.MetricPrefix
+import javax.measure.MetricPrefix.{MILLI, NANO}
 import scala.math.BigDecimal.RoundingMode
 
 class QuantityUtilsSpec
@@ -73,16 +73,16 @@ class QuantityUtilsSpec
 
       "convert a double to a kilo ampere quantity" in {
         value.asKiloAmpere should equalWithTolerance(
-          Quantities.getQuantity(
-            value,
-            MetricPrefix.KILO(AMPERE)
-          )
+          Quantities.getQuantity(value, KILOAMPERE)
         )
       }
 
       "convert a double to a nano siemens quantity" in {
         value.asNanoSiemens should equalWithTolerance(
-          Quantities.getQuantity(value, MetricPrefix.NANO(SIEMENS))
+          Quantities.getQuantity(
+            value,
+            MetricPrefixDouble.prefix(NANO, SIEMENS)
+          )
         )
       }
 
@@ -94,7 +94,7 @@ class QuantityUtilsSpec
 
       "convert a double to a milli ohm quantity" in {
         value.asMilliOhm should equalWithTolerance(
-          Quantities.getQuantity(value, MetricPrefix.MILLI(OHM))
+          Quantities.getQuantity(value, MetricPrefixDouble.prefix(MILLI, OHM))
         )
       }
 

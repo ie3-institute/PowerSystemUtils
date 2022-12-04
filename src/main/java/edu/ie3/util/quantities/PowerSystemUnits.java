@@ -149,6 +149,9 @@ public class PowerSystemUnits extends Units {
 
   /* ==== Basic electric units ==== */
 
+  /** Kiloampere */
+  public static final Unit<ElectricCurrent> KILOAMPERE = MetricPrefixDouble.prefix(KILO, AMPERE);
+
   /** Kilovolt */
   public static final Unit<ElectricPotential> KILOVOLT = MetricPrefixDouble.prefix(KILO, VOLT);
 

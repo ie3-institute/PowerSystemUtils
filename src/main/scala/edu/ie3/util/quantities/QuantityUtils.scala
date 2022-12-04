@@ -70,7 +70,7 @@ object QuantityUtils {
     def asAmpere: ComparableQuantity[ElectricCurrent] = as(AMPERE)
 
     def asKiloAmpere: ComparableQuantity[ElectricCurrent] = as(
-      MetricPrefixDouble.prefix(KILO, AMPERE)
+      KILOAMPERE
     )
 
     def asNanoSiemens: ComparableQuantity[ElectricConductance] = as(
