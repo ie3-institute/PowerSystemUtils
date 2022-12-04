@@ -9,7 +9,7 @@ import javax.measure.MetricPrefix
 
 class MetricPrefixDoubleTest extends Specification  {
 
-    def "creates a prefixed unit correctly"()  {
+    def "combines a unit with a prefix correctly"()  {
         when:
         def prefixedUnit = MetricPrefixDouble.prefix(prefix, baseUnit)
 
