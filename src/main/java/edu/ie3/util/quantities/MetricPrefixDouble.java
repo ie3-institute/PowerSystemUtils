@@ -12,6 +12,7 @@ import javax.measure.MetricPrefix;
 import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.UnitConverter;
+import tech.units.indriya.unit.TransformedUnit;
 
 /**
  * Offers a way to create units with double conversion, i.e. without involving BigDecimals or
@@ -34,7 +35,16 @@ public class MetricPrefixDouble {
       double factor = Math.pow(prefix.getValue(), prefix.getExponent());
       UnitConverter converter = (UnitConverter) construct.invoke(null, factor);
 
-      return unit.transform(converter);
+      Unit<Q> newUnit = unit.transform(converter);
+      if (newUnit instanceof TransformedUnit<Q> tu) {
+        // manually add symbol, because Unit.transform does not do it
+        final String symbol = prefix.getSymbol() + unit.getSymbol();
+        newUnit =
+            new TransformedUnit<>(
+                symbol, tu.getParentUnit(), tu.getSystemUnit(), tu.getConverter());
+      }
+
+      return newUnit;
     } catch (ClassNotFoundException
         | NoSuchMethodException
         | IllegalAccessException
