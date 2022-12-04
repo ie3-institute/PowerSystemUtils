@@ -18,14 +18,35 @@ import tech.units.indriya.unit.TransformedUnit;
  * Offers a way to create units with double conversion, i.e. without involving BigDecimals or
  * BigIntegers. This saves time when converting units, while losing a tiny bit of accuracy.
  */
-public class MetricPrefixDouble {
+public class DoubleConverterFactory {
 
-  private MetricPrefixDouble() {
+  private DoubleConverterFactory() {
     throw new IllegalStateException("This is a utility class and not meant to be instantiated.");
   }
 
+  public static <Q extends Quantity<Q>> Unit<Q> withPrefix(Unit<Q> unit, MetricPrefix prefix) {
+    // manually add symbol, because Unit.transform does not do it
+    final String symbol = prefix.getSymbol() + unit.getSymbol();
+    return withPrefix(unit, prefix, symbol);
+  }
+
+  public static <Q extends Quantity<Q>> Unit<Q> withPrefix(
+      Unit<Q> unit, MetricPrefix prefix, String symbol) {
+    double factor = Math.pow(prefix.getValue(), prefix.getExponent());
+    UnitConverter converter = withFactor(factor);
+
+    Unit<Q> newUnit = unit.transform(converter);
+    if (newUnit instanceof TransformedUnit<Q> tu) {
+      // manually add symbol, because Unit.transform does not do it
+      newUnit =
+          new TransformedUnit<>(symbol, tu.getParentUnit(), tu.getSystemUnit(), tu.getConverter());
+    }
+
+    return newUnit;
+  }
+
   @SuppressWarnings({"java:S3011", "PMD.AvoidAccessibilityAlteration"})
-  public static <Q extends Quantity<Q>> Unit<Q> prefix(MetricPrefix prefix, Unit<Q> unit) {
+  public static UnitConverter withFactor(double factor) {
     try {
       // dirty hack: Since DoubleMultiplyConverter is package-private, we need reflections to call
       // it
@@ -34,25 +55,13 @@ public class MetricPrefixDouble {
       // altering accessibility, warnings are suppressed
       construct.setAccessible(true);
 
-      double factor = Math.pow(prefix.getValue(), prefix.getExponent());
-      UnitConverter converter = (UnitConverter) construct.invoke(null, factor);
-
-      Unit<Q> newUnit = unit.transform(converter);
-      if (newUnit instanceof TransformedUnit<Q> tu) {
-        // manually add symbol, because Unit.transform does not do it
-        final String symbol = prefix.getSymbol() + unit.getSymbol();
-        newUnit =
-            new TransformedUnit<>(
-                symbol, tu.getParentUnit(), tu.getSystemUnit(), tu.getConverter());
-      }
-
-      return newUnit;
+      return (UnitConverter) construct.invoke(null, factor);
     } catch (ClassNotFoundException
         | NoSuchMethodException
         | IllegalAccessException
         | InvocationTargetException e) {
       throw new QuantityException(
-          "Creation of unit " + unit + " with prefix " + prefix + "failed.", e);
+          "Creation of DoubleMultiplyConverter with factor " + factor + "failed.", e);
     }
   }
 }

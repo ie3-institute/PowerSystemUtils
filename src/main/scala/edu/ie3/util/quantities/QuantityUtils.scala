@@ -27,7 +27,6 @@ import tech.units.indriya.quantity.Quantities
 import tech.units.indriya.unit.Units._
 
 import javax.measure
-import javax.measure.MetricPrefix._
 import javax.measure.{Quantity, Unit}
 import javax.measure.quantity.{
   Angle,
@@ -74,14 +73,12 @@ object QuantityUtils {
     )
 
     def asNanoSiemens: ComparableQuantity[ElectricConductance] = as(
-      MetricPrefixDouble.prefix(NANO, SIEMENS)
+      NANOSIEMENS
     )
 
     def asSiemens: ComparableQuantity[ElectricConductance] = as(SIEMENS)
 
-    def asMilliOhm: ComparableQuantity[ElectricResistance] = as(
-      MetricPrefixDouble.prefix(MILLI, OHM)
-    )
+    def asMilliOhm: ComparableQuantity[ElectricResistance] = as(MILLIOHM)
 
     def asOhm: ComparableQuantity[ElectricResistance] = as(OHM)
 
