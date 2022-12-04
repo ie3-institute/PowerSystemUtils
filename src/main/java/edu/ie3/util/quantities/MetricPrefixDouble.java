@@ -24,6 +24,7 @@ public class MetricPrefixDouble {
     throw new IllegalStateException("This is a utility class and not meant to be instantiated.");
   }
 
+  @SuppressWarnings("java:S3011")
   public static <Q extends Quantity<Q>> Unit<Q> prefix(MetricPrefix prefix, Unit<Q> unit) {
     try {
       // dirty hack: Since DoubleMultiplyConverter is package-private, we need reflections to call
