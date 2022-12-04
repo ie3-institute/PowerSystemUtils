@@ -24,13 +24,14 @@ public class MetricPrefixDouble {
     throw new IllegalStateException("This is a utility class and not meant to be instantiated.");
   }
 
-  @SuppressWarnings("java:S3011")
+  @SuppressWarnings({"java:S3011", "PMD.AvoidAccessibilityAlteration"})
   public static <Q extends Quantity<Q>> Unit<Q> prefix(MetricPrefix prefix, Unit<Q> unit) {
     try {
       // dirty hack: Since DoubleMultiplyConverter is package-private, we need reflections to call
       // it
       Class<?> clazz = Class.forName("tech.units.indriya.function.DoubleMultiplyConverter");
       Method construct = clazz.getDeclaredMethod("of", double.class);
+      // altering accessibility, warnings are suppressed
       construct.setAccessible(true);
 
       double factor = Math.pow(prefix.getValue(), prefix.getExponent());
