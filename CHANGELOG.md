@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix formatting for MarkDown files
 - Configure gradle jacoco plugin according to newest documentation 
 - Fixed badges in README.md [#290](https://github.com/ie3-institute/PowerSystemUtils/issues/290)
+- Fix (PowerSystem)Units and converters [#330](https://github.com/ie3-institute/PowerSystemUtils/issues/330)
 
 ## [1.6.0]
 
