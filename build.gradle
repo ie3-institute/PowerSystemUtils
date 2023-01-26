@@ -21,7 +21,7 @@ ext {
 }
 
 group = 'com.github.ie3-institute'
-version = '2.0-SNAPSHOT'
+version = '2.0'
 description = 'PowerSystemUtils'
 sourceCompatibility = javaVersion
 targetCompatibility = javaVersion
@@ -82,7 +82,7 @@ dependencies {
 
 	// TEST Scala //
 	implementation "org.scalatest:scalatest_$scalaVersion:3.2.15"
-	testRuntimeClasspath 'com.vladsch.flexmark:flexmark-all:0.64.0'
+	testCompileOnly 'com.vladsch.flexmark:flexmark-all:0.64.0'
 }
 
 tasks.withType(JavaCompile) {
