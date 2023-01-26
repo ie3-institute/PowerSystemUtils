@@ -82,7 +82,7 @@ dependencies {
 
 	// TEST Scala //
 	implementation "org.scalatest:scalatest_$scalaVersion:3.2.15"
-	testCompileOnly 'com.vladsch.flexmark:flexmark-all:0.64.0'
+	testRuntimeOnly 'com.vladsch.flexmark:flexmark-all:0.64.0'
 }
 
 tasks.withType(JavaCompile) {
