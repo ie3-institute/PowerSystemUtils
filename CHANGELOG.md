@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased/Snapshot]
 
+## [2.0.0]
+
 ### Added
 - Added implicit classes for `loactiontec.jts` Geometries that represent geographical geometries with functionality before located in `GeoUtils` [#163](https://github.com/ie3-institute/PowerSystemUtils/issues/163)
 - `OsmEntity` and `OsmContainer` to provide a simple, lightweight representation of openstreetmap data
@@ -110,7 +112,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 -   fixes + extensions in StandardUnits
 
-[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v1.6.0...HEAD
+[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/ie3-institute/powersystemutils/compare/v1.6.0...v2.0.0
 [1.6.0]: https://github.com/ie3-institute/powersystemutils/compare/v1.5.3...v1.6.0
 [1.5.3]: https://github.com/ie3-institute/powersystemutils/compare/v1.5.2...v1.5.3
 [1.5.2]: https://github.com/ie3-institute/powersystemutils/compare/v1.4...v1.5.2
