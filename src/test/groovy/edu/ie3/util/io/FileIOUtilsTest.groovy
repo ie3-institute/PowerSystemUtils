@@ -84,8 +84,8 @@ class FileIOUtilsTest extends Specification {
 		def archiveFile = Paths.get(FilenameUtils.concat(tmpDirectory.toString(), "test.tar.gz"))
 
 		when:
-		def f1 = FileIOUtils.compressDir(dirPath, archiveFile)
-		f1.join()
+		// testing without posix extension, because that leads to variable output sizes across systems
+		FileIOUtils.compressDir(dirPath, archiveFile.toFile(), false)
 
 		then:
 		noExceptionThrown()
@@ -99,8 +99,8 @@ class FileIOUtilsTest extends Specification {
 		def archiveFile = Paths.get(FilenameUtils.concat(tmpDirectory.toString(), "test.tar.gz"))
 
 		when:
-		def f1 = FileIOUtils.compressDir(dirPath, archiveFile)
-		f1.join()
+		// testing without posix extension, because that leads to variable output sizes across systems
+		FileIOUtils.compressDir(dirPath, archiveFile.toFile(), false)
 
 		then:
 		noExceptionThrown()
