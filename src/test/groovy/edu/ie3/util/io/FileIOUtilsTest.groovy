@@ -90,7 +90,9 @@ class FileIOUtilsTest extends Specification {
 		then:
 		noExceptionThrown()
 		Files.exists(archiveFile)
-		Files.size(archiveFile) >= 1317 && Files.size(archiveFile) <= 1399 // Should be around 1385 bytes +/- 3 %
+		// Should be around 1385 bytes +/- 3 %
+		def targetSize = 1385
+		Files.size(archiveFile) >= targetSize * 0.97 && Files.size(archiveFile) <= targetSize * 1.03
 	}
 
 	def "The fileio utils is able to zip the contents of a directory with nested structure to .tar.gz"() {
@@ -105,7 +107,9 @@ class FileIOUtilsTest extends Specification {
 		then:
 		noExceptionThrown()
 		Files.exists(archiveFile)
-		Files.size(archiveFile) >= 1384 && Files.size(archiveFile) <= 1470 // Should be around 1427 bytes +/- 3 %
+		// Should be around 1427 bytes +/- 3 %
+		def targetSize = 1427
+		Files.size(archiveFile) >= targetSize * 0.97 && Files.size(archiveFile) <= targetSize * 1.03
 	}
 
 	def "The fileio utils throws an exception, if the input path is null when called to compress a file"() {
