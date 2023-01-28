@@ -46,30 +46,11 @@ if (project.hasProperty('user') && project.hasProperty('password')) {
 							name = 'BSD 3-Clause License'
 							url = 'https:github.com/ie3-institute/PowerSystemUtils/blob/main/LICENSE'
 						}
-						scm {
-							connection = 'scm:git:git:github.com/ie3-institute/PowerSystemUtils.git'
-							developerConnection = 'scm:git:ssh:github.com:ie3-institute/PowerSystemUtils.git'
-							url = 'https:github.com/ie3-institute/PowerSystemUtils'
-						}
-						developers {
-							[
-								developer {
-									id = 'johanneshiry'
-									name = 'Johannes Hiry'
-									email = 'johannes.hiry@tu-dortmund.de'
-								},
-								developer {
-									id = 'ckittl'
-									name = 'Chris Kittl'
-									email = 'chris.kittl@tu-dortmund.de'
-								},
-								developer {
-									id = 'sensarmad'
-									name = 'Debopama Sen Sarma'
-									email = 'debopama-sen.sarma@tu-dortmund.de'
-								}
-							]
-						}
+					}
+					scm {
+						connection = 'scm:git:git:github.com/ie3-institute/PowerSystemUtils.git'
+						developerConnection = 'scm:git:ssh:github.com:ie3-institute/PowerSystemUtils.git'
+						url = 'https:github.com/ie3-institute/PowerSystemUtils'
 					}
 				}
 
