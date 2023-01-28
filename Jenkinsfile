@@ -32,7 +32,7 @@ codeCovTokenId = "psu-codecov-token"
 def sshCredentialsId = "19f16959-8a0d-4a60-bd1f-5adb4572b702"
 
 //// internal maven central credentials
-def mavenCentralCredentialsId = "87bfb2d4-7613-4816-9fe1-70dfd7e6dec2"
+def mavenCentralCredentialsId = "197ffae7-08b2-4641-aa15-a2351d8011cd"
 
 def mavenCentralSignKeyFileId = "dc96216c-d20a-48ff-98c0-1c7ba096d08d"
 
