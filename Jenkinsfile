@@ -56,9 +56,6 @@ String featureBranchName = ""
 //// gradle tasks that are executed
 def gradleTasks = "--refresh-dependencies clean spotlessCheck pmdMain pmdTest spotbugsMain spotbugsTest test" // the gradle tasks that are executed on ALL projects
 def mainProjectGradleTasks = "jacocoTestReport jacocoTestCoverageVerification reportScoverage checkScoverage" // additional tasks that are only executed on project 0 (== main project)
-// if you need additional tasks for deployment add them here
-// NOTE: artifactory task with credentials will be added below
-def deployGradleTasks = ""
 
 /// commit hash
 def commitHash = ""
@@ -69,6 +66,7 @@ if (env.BRANCH_NAME == "main") {
   getMasterBranchProps()
 
   // pure deployment
+  // TODO SP: this can probably be removed
   if (params.deploy == "true") {
 
     node {
@@ -126,10 +124,10 @@ if (env.BRANCH_NAME == "main") {
 
             // inform codecov.io
             withCredentials([
-              string(credentialsId: codeCovTokenId, variable: 'codeCovToken')
+              string(credentialsId: codeCovTokenId, variable: 'CODECOV_TOKEN')
             ]) {
               // call codecov
-              sh "curl -s https://codecov.io/bash | bash -s - -t ${env.codeCovToken} -C ${commitHash}"
+              sh 'curl -s https://codecov.io/bash | bash -s - -t ${CODECOV_TOKEN} -C ' + commitHash
             }
 
           }
@@ -138,15 +136,13 @@ if (env.BRANCH_NAME == "main") {
           stage('deploy') {
             // get the sonatype credentials stored in the jenkins secure keychain
             withCredentials([
-              usernamePassword(credentialsId: mavenCentralCredentialsId, usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password'),
-              file(credentialsId: mavenCentralSignKeyFileId, variable: 'mavenCentralKeyFile'),
-              usernamePassword(credentialsId: mavenCentralSignKeyId, passwordVariable: 'signingPassword', usernameVariable: 'signingKeyId')
+              usernamePassword(credentialsId: mavenCentralCredentialsId, usernameVariable: 'MAVENCENTRAL_USER', passwordVariable: 'MAVENCENTRAL_PASS'),
+              file(credentialsId: mavenCentralSignKeyFileId, variable: 'MAVENCENTRAL_KEYFILE'),
+              usernamePassword(credentialsId: mavenCentralSignKeyId, usernameVariable: 'MAVENCENTRAL_SIGNINGKEYID', passwordVariable: 'MAVENCENTRAL_SIGNINGPASS')
             ]) {
-              deployGradleTasks = "--refresh-dependencies clean test " + deployGradleTasks + "publish -Puser=${env.mavencentral_username} -Ppassword=${env.mavencentral_password} -Psigning.keyId=${env.signingKeyId} -Psigning.password=${env.signingPassword} -Psigning.secretKeyRingFile=${env.mavenCentralKeyFile}"
+              deployGradleTasks = '--refresh-dependencies clean test publish -Puser=${MAVENCENTRAL_USER} -Ppassword=${MAVENCENTRAL_PASS} -Psigning.keyId=${MAVENCENTRAL_SIGNINGKEYID} -Psigning.password=${MAVENCENTRAL_SIGNINGPASS} -Psigning.secretKeyRingFile=${MAVENCENTRAL_KEYFILE}'
 
-              // see https://docs.gradle.org/6.0.1/release-notes.html "Publication of SHA256 and SHA512 checksums"
-              def preventSHACheckSums = "-Dorg.gradle.internal.publish.checksums.insecure=true"
-              gradle("${deployGradleTasks} $preventSHACheckSums")
+              gradle(deployGradleTasks)
 
             }
           }
@@ -233,10 +229,10 @@ if (env.BRANCH_NAME == "main") {
 
             // inform codecov.io
             withCredentials([
-              string(credentialsId: codeCovTokenId, variable: 'codeCovToken')
+              string(credentialsId: codeCovTokenId, variable: 'CODECOV_TOKEN')
             ]) {
               // call codecov
-              sh "curl -s https://codecov.io/bash | bash -s - -t ${env.codeCovToken} -C ${commitHash}"
+              sh 'curl -s https://codecov.io/bash | bash -s - -t ${CODECOV_TOKEN} -C ' + commitHash
             }
 
           }
@@ -246,13 +242,13 @@ if (env.BRANCH_NAME == "main") {
           stage('deploy') {
             // get the sonatype credentials stored in the jenkins secure keychain
             withCredentials([
-              usernamePassword(credentialsId: mavenCentralCredentialsId, usernameVariable: 'mavencentral_username', passwordVariable: 'mavencentral_password'),
-              file(credentialsId: mavenCentralSignKeyFileId, variable: 'mavenCentralKeyFile'),
-              usernamePassword(credentialsId: mavenCentralSignKeyId, passwordVariable: 'signingPassword', usernameVariable: 'signingKeyId')
+              usernamePassword(credentialsId: mavenCentralCredentialsId, usernameVariable: 'MAVENCENTRAL_USER', passwordVariable: 'MAVENCENTRAL_PASS'),
+              file(credentialsId: mavenCentralSignKeyFileId, variable: 'MAVENCENTRAL_KEYFILE'),
+              usernamePassword(credentialsId: mavenCentralSignKeyId, usernameVariable: 'MAVENCENTRAL_SIGNINGKEYID', passwordVariable: 'MAVENCENTRAL_SIGNINGPASS')
             ]) {
-              deployGradleTasks = "--refresh-dependencies clean test " + deployGradleTasks + "publish -Puser=${env.mavencentral_username} -Ppassword=${env.mavencentral_password} -Psigning.keyId=${env.signingKeyId} -Psigning.password=${env.signingPassword} -Psigning.secretKeyRingFile=${env.mavenCentralKeyFile}"
+              deployGradleTasks = '--refresh-dependencies clean test publish -Puser=${MAVENCENTRAL_USER} -Ppassword=${MAVENCENTRAL_PASS} -Psigning.keyId=${MAVENCENTRAL_SIGNINGKEYID} -Psigning.password=${MAVENCENTRAL_SIGNINGPASS} -Psigning.secretKeyRingFile=${MAVENCENTRAL_KEYFILE}'
 
-              gradle("${deployGradleTasks}")
+              gradle(deployGradleTasks)
 
             }
 
@@ -362,10 +358,10 @@ if (env.BRANCH_NAME == "main") {
           publishReports()
 
           withCredentials([
-            string(credentialsId: codeCovTokenId, variable: 'codeCovToken')
+            string(credentialsId: codeCovTokenId, variable: 'CODECOV_TOKEN')
           ]) {
             // call codecov
-            sh "curl -s https://codecov.io/bash | bash -s - -t ${env.codeCovToken} -C ${commitHash}"
+            sh 'curl -s https://codecov.io/bash | bash -s - -t ${CODECOV_TOKEN} -C ' + commitHash
           }
         }
       } catch (Exception e) {
@@ -458,7 +454,7 @@ def gradle(String command) {
   env.JENKINS_NODE_COOKIE = 'dontKillMe' // this is necessary for the Gradle daemon to be kept alive
 
   // switch directory to be able to use gradle wrapper
-  sh """cd ${projects.get(0)}""" + ''' set +x; ./gradlew ''' + """$command"""
+  sh """cd ${projects.get(0)}""" + ''' set +x; ./gradlew ''' + command
 }
 
 def getGithubPRJsonObj(String prId, String orgName, String repoName) {
