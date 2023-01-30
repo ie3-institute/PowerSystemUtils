@@ -35,7 +35,7 @@ if (project.hasProperty('user') && project.hasProperty('password')) {
 					url = 'https:github.com/ie3-institute/PowerSystemUtils'
 					organization {
 						name = 'Institute of Energy Systems, Energy Efficiency and Energy Economics (ie3)/TU Dortmund University'
-						url = 'http:www.ie3.tu-dortmund.de/'
+						url = 'https:www.ie3.tu-dortmund.de'
 					}
 					issueManagement {
 						system = 'GitHub'
@@ -45,6 +45,12 @@ if (project.hasProperty('user') && project.hasProperty('password')) {
 						license {
 							name = 'BSD 3-Clause License'
 							url = 'https:github.com/ie3-institute/PowerSystemUtils/blob/main/LICENSE'
+						}
+					}
+					developers {
+						developer {
+							organization = "Institute of Energy Systems, Energy Efficiency and Energy Economics (ie3)/TU Dortmund University"
+							organizationUrl = "https:ie3.etit.tu-dortmund.de"
 						}
 					}
 					scm {
