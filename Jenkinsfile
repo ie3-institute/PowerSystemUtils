@@ -129,7 +129,6 @@ if (env.BRANCH_NAME == "main") {
               // call codecov
               sh 'curl -s https://codecov.io/bash | bash -s - -t ${CODECOV_TOKEN} -C ' + commitHash
             }
-
           }
 
           // deploy snapshot version to oss sonatype
@@ -143,10 +142,8 @@ if (env.BRANCH_NAME == "main") {
               deployGradleTasks = '--refresh-dependencies clean test publish -Puser=${MAVENCENTRAL_USER} -Ppassword=${MAVENCENTRAL_PASS} -Psigning.keyId=${MAVENCENTRAL_SIGNINGKEYID} -Psigning.password=${MAVENCENTRAL_SIGNINGPASS} -Psigning.secretKeyRingFile=${MAVENCENTRAL_KEYFILE}'
 
               gradle(deployGradleTasks)
-
             }
           }
-
         } catch (Exception e) {
           // set build result to failure
           currentBuild.result = 'FAILURE'
@@ -158,12 +155,8 @@ if (env.BRANCH_NAME == "main") {
           Date date = new Date()
           println("[ERROR] [${date.format("dd/MM/yyyy")} - ${date.format("HH:mm:ss")}]" + e)
         }
-
       }
-
     }
-
-
   } else {
     // merge of features
 
@@ -234,7 +227,6 @@ if (env.BRANCH_NAME == "main") {
               // call codecov
               sh 'curl -s https://codecov.io/bash | bash -s - -t ${CODECOV_TOKEN} -C ' + commitHash
             }
-
           }
 
 
@@ -249,12 +241,8 @@ if (env.BRANCH_NAME == "main") {
               deployGradleTasks = '--refresh-dependencies clean test publish -Puser=${MAVENCENTRAL_USER} -Ppassword=${MAVENCENTRAL_PASS} -Psigning.keyId=${MAVENCENTRAL_SIGNINGKEYID} -Psigning.password=${MAVENCENTRAL_SIGNINGPASS} -Psigning.secretKeyRingFile=${MAVENCENTRAL_KEYFILE}'
 
               gradle(deployGradleTasks)
-
             }
-
           }
-
-
         } catch (Exception e) {
           // set build result to failure
           currentBuild.result = 'FAILURE'
@@ -266,13 +254,9 @@ if (env.BRANCH_NAME == "main") {
           Date date = new Date()
           println("[ERROR] [${date.format("dd/MM/yyyy")} - ${date.format("HH:mm:ss")}]" + e)
         }
-
       }
-
     }
-
   }
-
 } else {
 
   // setup
@@ -293,7 +277,6 @@ if (env.BRANCH_NAME == "main") {
 
       featureBranchName = jsonObj.head.ref
       repoName = jsonObj.head.repo.full_name
-
     }
 
 
@@ -313,7 +296,6 @@ if (env.BRANCH_NAME == "main") {
             // our target repo failed during checkout
             sh 'exit 1' // failure due to not found forcedPR branch
           }
-
         }
 
         // test the project
@@ -375,7 +357,6 @@ if (env.BRANCH_NAME == "main") {
         Date date = new Date()
         println("[ERROR] [${date.format("dd/MM/yyyy")} - ${date.format("HH:mm:ss")}]" + e)
       }
-
     }
   }
 }
@@ -389,7 +370,6 @@ def getFeatureBranchProps() {
           issueCommentTrigger('.*!test.*')
         ])
       ])
-
 }
 
 
@@ -444,7 +424,6 @@ def publishReports() {
 
   // scoverage report dir
   publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, escapeUnderscores: false, keepAll: true, reportDir: projects.get(0) + '/build/reports/scoverageTest', reportFiles: 'scoverage.xml', reportName: "${projects.get(0)}_scoverage_report", reportTitles: ''])
-
 }
 
 
