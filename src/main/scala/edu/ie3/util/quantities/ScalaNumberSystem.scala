@@ -3,7 +3,7 @@
  * Institute of Energy Systems, Energy Efficiency and Energy Economics,
  * Research group Distribution grid planning and operation
 */
-package edu.ie3.util.scala.quantities
+package edu.ie3.util.quantities
 
 import tech.units.indriya.function.DefaultNumberSystem
 
