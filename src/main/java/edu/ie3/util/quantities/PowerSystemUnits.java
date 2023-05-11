@@ -218,6 +218,12 @@ public class PowerSystemUnits extends Units {
   public static final Unit<ThermalConductance> KILOWATT_PER_KELVIN =
       new ProductUnit<>(KILOWATT.divide(KELVIN));
 
+
+  /* ==== Volumetric Flow Rate ==== */
+  /** m^3/s */
+  public static final Unit<VolumetricFlowRate> CUBIC_METRE_PER_SECOND =
+          new ProductUnit<>(CUBIC_METRE.divide(SECOND));
+
   private static final HashSet<String> REGISTERED_LABELS = new HashSet<>();
 
   static {
@@ -249,6 +255,7 @@ public class PowerSystemUnits extends Units {
     addUnit(KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE, "kWh/K*m³");
     addUnit(KILOWATT_PER_KELVIN, "kW/K");
     addUnit(KILOGRAM_PER_CUBIC_METRE, "kg/m³");
+    addUnit(CUBIC_METRE_PER_SECOND, "m³/s");
   }
 
   /**
