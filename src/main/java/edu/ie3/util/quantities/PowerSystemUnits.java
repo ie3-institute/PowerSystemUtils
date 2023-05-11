@@ -218,11 +218,10 @@ public class PowerSystemUnits extends Units {
   public static final Unit<ThermalConductance> KILOWATT_PER_KELVIN =
       new ProductUnit<>(KILOWATT.divide(KELVIN));
 
-
   /* ==== Volumetric Flow Rate ==== */
   /** m^3/s */
   public static final Unit<VolumetricFlowRate> CUBIC_METRE_PER_SECOND =
-          new ProductUnit<>(CUBIC_METRE.divide(SECOND));
+      new ProductUnit<>(CUBIC_METRE.divide(SECOND));
 
   private static final HashSet<String> REGISTERED_LABELS = new HashSet<>();
 
