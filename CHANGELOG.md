@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased/Snapshot]
 
 ### Added
-- Added quantity for volumetric flow rate [#363](https://github.com/ie3-institute/PowerSystemUtils/issues/363)
+- Added implicit classes for `loactiontec.jts` Geometries that represent geographical geometries with functionality before located in `GeoUtils` [#163](https://github.com/ie3-institute/PowerSystemUtils/issues/163)
 
 ## [2.0.0]
 
