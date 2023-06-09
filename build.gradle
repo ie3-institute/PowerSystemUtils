@@ -69,7 +69,7 @@ dependencies {
 	// Used in EmpiricalRandom.java, could be removed
 	implementation 'org.eclipse.collections:eclipse-collections:11.1.0'
 
-	implementation 'commons-io:commons-io:2.12.0' // I/O functionalities
+	implementation 'commons-io:commons-io:2.13.0' // I/O functionalities
 	implementation 'org.apache.commons:commons-compress:1.23.0' // I/O functionalities
 
 	// testing
