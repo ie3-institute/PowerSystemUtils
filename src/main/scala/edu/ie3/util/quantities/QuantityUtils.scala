@@ -329,8 +329,6 @@ object QuantityUtils {
     */
   def adjustNumberSystem() =
     Calculus.setCurrentNumberSystem(
-      Calculus.getNumberSystem(
-        "edu.ie3.util.scala.quantities.ScalaNumberSystem"
-      )
+      Calculus.getNumberSystem("edu.ie3.util.quantities.ScalaNumberSystem")
     )
 }
