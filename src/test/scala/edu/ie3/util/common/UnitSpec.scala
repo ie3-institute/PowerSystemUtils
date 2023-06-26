@@ -5,15 +5,13 @@
 */
 package edu.ie3.util.common
 
-import java.util.Locale
 import com.typesafe.scalalogging.LazyLogging
-import edu.ie3.util.quantities.{
-  QuantityMatchers,
-  QuantityUtils => PSQuantityUtil
-}
+import edu.ie3.util.quantities.{QuantityMatchers, QuantityUtils => PSQuantityUtil}
 import org.scalatest._
 import org.scalatest.matchers.should
 import org.scalatest.wordspec.AnyWordSpecLike
+
+import java.util.Locale
 
 /** Base class to be used with all scala unit tests. All data that should be
   * commonly available to all unit tests should be placed here instead of mixing
@@ -36,7 +34,4 @@ trait UnitSpec
     with AppendedClues {
   /* Set default locale in order to ensure proper number parsing - among others */
   Locale.setDefault(Locale.ENGLISH)
-
-  /* The quantity library cannot handle scala's BigDecimal by default. Therefore, adjust the number system to use */
-  PSQuantityUtil.adjustNumberSystem()
 }

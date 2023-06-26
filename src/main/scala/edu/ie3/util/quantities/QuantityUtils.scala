@@ -6,44 +6,14 @@
 package edu.ie3.util.quantities
 
 import edu.ie3.util.quantities.PowerSystemUnits._
-import edu.ie3.util.quantities.interfaces.{
-  Currency,
-  Density,
-  DimensionlessRate,
-  EnergyPrice,
-  HeatCapacity,
-  Irradiance,
-  Irradiation,
-  PricePerLength,
-  SpecificCapacitance,
-  SpecificConductance,
-  SpecificEnergy,
-  SpecificHeatCapacity,
-  SpecificResistance,
-  ThermalConductance
-}
+import edu.ie3.util.quantities.interfaces._
 import tech.units.indriya.ComparableQuantity
-import tech.units.indriya.function.Calculus
 import tech.units.indriya.quantity.Quantities
 import tech.units.indriya.unit.Units._
 
 import javax.measure
+import javax.measure.quantity._
 import javax.measure.{Quantity, Unit}
-import javax.measure.quantity.{
-  Angle,
-  Area,
-  Dimensionless,
-  ElectricConductance,
-  ElectricCurrent,
-  ElectricPotential,
-  ElectricResistance,
-  Energy,
-  Length,
-  Power,
-  Temperature,
-  Time,
-  Volume
-}
 import scala.math.BigDecimal.RoundingMode
 import scala.math.BigDecimal.RoundingMode.RoundingMode
 
@@ -320,15 +290,4 @@ object QuantityUtils {
       targetUnit.transform(unit.getConverterTo(unit.getSystemUnit))
   }
 
-  /** The [[tech.units.indriya.function.DefaultNumberSystem]] is only covering
-    * java [[Number]] children. As [[BigDecimal]] is not related to
-    * [[java.math.BigDecimal]], this causes issues, why the
-    * [[tech.units.indriya.spi.NumberSystem]] has to be to be used has to be
-    * specified to something, that actually is able to handle the scala number
-    * system.
-    */
-  def adjustNumberSystem() =
-    Calculus.setCurrentNumberSystem(
-      Calculus.getNumberSystem("edu.ie3.util.quantities.ScalaNumberSystem")
-    )
 }
