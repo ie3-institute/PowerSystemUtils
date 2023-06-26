@@ -16,7 +16,6 @@ import javax.measure.MetricPrefix;
 import javax.measure.Unit;
 import javax.measure.quantity.*;
 import tech.units.indriya.format.SimpleUnitFormat;
-import tech.units.indriya.function.MultiplyConverter;
 import tech.units.indriya.unit.*;
 import tech.units.indriya.unit.Units;
 
@@ -100,7 +99,7 @@ public class PowerSystemUnits extends Units {
 
   /** Kilowatthour per Kilometre */
   public static final Unit<SpecificEnergy> KILOWATTHOUR_PER_KILOMETRE =
-      new TransformedUnit<>("kWh/km", WATTHOUR_PER_METRE, MultiplyConverter.of(1d));
+      new TransformedUnit<>("kWh/km", WATTHOUR_PER_METRE, DoubleConverterFactory.withFactor(1d));
 
   /** Watthour per squaremetre */
   public static final Unit<Irradiation> WATTHOUR_PER_SQUAREMETRE =
