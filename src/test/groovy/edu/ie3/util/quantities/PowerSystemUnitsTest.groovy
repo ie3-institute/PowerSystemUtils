@@ -5,9 +5,12 @@
  */
 package edu.ie3.util.quantities
 
+import edu.ie3.util.interval.LeftOpenInterval
 import spock.lang.Shared
 import spock.lang.Specification
 import tech.units.indriya.quantity.Quantities
+
+import javax.measure.format.MeasurementParseException
 
 import static edu.ie3.util.quantities.PowerSystemUnits.*
 import static tech.units.indriya.unit.Units.JOULE
@@ -100,4 +103,14 @@ class PowerSystemUnitsTest extends Specification {
 		MEGAWATT									|| "87 MW"
 		KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE	|| "2.034 kWh/K*m³"
 	}
+
+	def "when an unregistered Unit should be parsed an Exception should be thrown"() {
+		when:
+		def dut = Quantities.getQuantity("1 abc")
+
+		then:
+		MeasurementParseException exception = thrown(MeasurementParseException.class)
+		exception.message == "Parse Error"
+	}
+
 }
