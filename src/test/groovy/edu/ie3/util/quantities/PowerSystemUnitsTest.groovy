@@ -76,23 +76,28 @@ class PowerSystemUnitsTest extends Specification {
 
 	def "Units are labeled with the correct label of the expected unit symbol"() {
 		when:
-		def getUnitLabel = PowerSystemUnits.addUnit(input).symbol
+		def dut = Quantities.getQuantity(input)
 
 		then:
-		getUnitLabel.equals(expectedLabel)
+		dut.unit.equals(expectedUnit)
 
 		where:
-		input										|| expectedLabel
-		WATTHOUR    								|| "Wh"
-		KILOWATTHOUR_PER_KILOMETRE 					|| "kWh/km"
-		VOLTAMPERE									|| "VA"
-		PU_PER_HOUR									|| "p.u./h"
-		VAR											|| "var"
-		VARHOUR										|| "varh"
-		PU											|| "p.u."
-		EURO										|| "€"
-		MICROFARAD_PER_KILOMETRE 					|| "µF/km"
-		FARAD_PER_KILOMETRE							|| "F/km"
-		DEGREE_GEOM									|| "°"
+		expectedUnit								|| input
+		WATTHOUR    								|| "1 Wh"
+		KILOWATTHOUR_PER_KILOMETRE 					|| "1 kWh/km"
+		VOLTAMPERE									|| "1 VA"
+		PU_PER_HOUR									|| "1 p.u./h"
+		VAR											|| "1 var"
+		VARHOUR										|| "1 varh"
+		PU											|| "1 p.u."
+		EURO										|| "99 EUR"
+		EURO										|| "99 €"
+		MICROFARAD_PER_KILOMETRE 					|| "5 µF/km"
+		FARAD_PER_KILOMETRE							|| "3.14 F/km"
+		DEGREE_GEOM									|| "42 °"
+		CUBIC_METRE_PER_SECOND						|| "430431 m³/s"
+		PERCENT_PER_HOUR							|| "4 %/h"
+		MEGAWATT									|| "87 MW"
+		KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE	|| "2.034 kWh/K*m³"
 	}
 }
