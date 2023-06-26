@@ -7,13 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased/Snapshot]
 
 ### Added
-- Added implicit classes for `loactiontec.jts` Geometries that represent geographical geometries with functionality before located in `GeoUtils` [#163] (https://github.com/ie3-institute/PowerSystemUtils/issues/163)
-- `OsmEntity` and `OsmContainer` to provide a simple, lightweight representation of openstreetmap data
+- Added quantity for volumetric flow rate [#363](https://github.com/ie3-institute/PowerSystemUtils/issues/363)
 - Register missing units for serialization/deserialization. Added test for labeling unit symbols correctly within PowerSystemUnits  [#280] (https://github.com/ie3-institute/PowerSystemUtils/issues/280)
 
+## [2.0.0]
+
+### Added
+- Added implicit classes for `loactiontec.jts` Geometries that represent geographical geometries with functionality before located in `GeoUtils` [#163](https://github.com/ie3-institute/PowerSystemUtils/issues/163)
+- `OsmEntity` and `OsmContainer` to provide a simple, lightweight representation of openstreetmap data
+- QuantityUtils previously implemented in SIMONA [#288](https://github.com/ie3-institute/PowerSystemUtils/issues/288)
+- Enhanced `RichQuantityDouble` with new units and generic method [#312](https://github.com/ie3-institute/PowerSystemUtils/issues/312), [#322](https://github.com/ie3-institute/PowerSystemUtils/issues/322)
+- Calculation of bounding box to `GeoUtils` [#320](https://github.com/ie3-institute/PowerSystemUtils/issues/320)
+
 ### Changed
-- Refactored `GeoUtils`, moved them to the scala package and tailored them toward the `loactiontec.jts` Geometries used in the `OsmContainer` [#163] (https://github.com/ie3-institute/PowerSystemUtils/issues/163)
-- Changed unit symbols according to DIN 1301-1 for apparent and reactive power [#278] (https://github.com/ie3-institute/PowerSystemUtils/issues/278)
+- Refactored `GeoUtils`, moved them to the scala package and tailored them toward the `loactiontec.jts` Geometries used in the `OsmContainer` [#163](https://github.com/ie3-institute/PowerSystemUtils/issues/163)
+- Changed unit symbols according to DIN 1301-1 for apparent and reactive power [#278](https://github.com/ie3-institute/PowerSystemUtils/issues/278)
+- Rounding for quantities is now part of the `RichQuantity` [#314](https://github.com/ie3-institute/PowerSystemUtils/issues/314)
+- Power system units rely on fast double unit conversions now [#328](https://github.com/ie3-institute/PowerSystemUtils/issues/328)
 
 ### Fixed
 - Fix tests in CI [#206](https://github.com/ie3-institute/PowerSystemUtils/issues/206)
@@ -25,6 +35,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Enhance deprecation annotations
 - Fix formatting for MarkDown files
 - Configure gradle jacoco plugin according to newest documentation 
+- Fixed badges in README.md [#290](https://github.com/ie3-institute/PowerSystemUtils/issues/290)
+- Fix (PowerSystem)Units and converters [#330](https://github.com/ie3-institute/PowerSystemUtils/issues/330)
 
 ## [1.6.0]
 
@@ -104,7 +116,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 -   fixes + extensions in StandardUnits
 
-[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v1.6.0...HEAD
+[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/ie3-institute/powersystemutils/compare/v1.6.0...v2.0.0
 [1.6.0]: https://github.com/ie3-institute/powersystemutils/compare/v1.5.3...v1.6.0
 [1.5.3]: https://github.com/ie3-institute/powersystemutils/compare/v1.5.2...v1.5.3
 [1.5.2]: https://github.com/ie3-institute/powersystemutils/compare/v1.4...v1.5.2

@@ -5,14 +5,8 @@
  */
 package edu.ie3.util.geo
 
-import static edu.ie3.util.quantities.PowerSystemUnits.METRE
-
-import edu.ie3.util.quantities.PowerSystemUnits
 import edu.ie3.util.quantities.QuantityUtil
-import org.locationtech.jts.geom.Coordinate
-import org.locationtech.jts.geom.GeometryFactory
-import org.locationtech.jts.geom.LineString
-import org.locationtech.jts.geom.PrecisionModel
+import org.locationtech.jts.geom.*
 import org.locationtech.jts.io.geojson.GeoJsonReader
 import spock.lang.Shared
 import spock.lang.Specification
@@ -20,6 +14,8 @@ import tech.units.indriya.ComparableQuantity
 import tech.units.indriya.quantity.Quantities
 
 import javax.measure.quantity.Length
+
+import static edu.ie3.util.quantities.PowerSystemUnits.METRE
 
 class GeoUtilsTest extends Specification {
 
@@ -293,5 +289,43 @@ class GeoUtilsTest extends Specification {
         then:
             Math.abs(actual.x - 7.5) < 1e-9
             Math.abs(actual.y - 50d) < 1e-9
+    }
+
+    def "GeoUtils calculates x-delta (longitude) correctly"() {
+        given:
+        Point coordinate = GeoUtils.buildPoint(50, 7)
+        ComparableQuantity<Length> distanceX = GeoUtils.calcHaversine(50, 7, 50, 6)
+
+        when:
+        Envelope envelope = GeoUtils.calculateBoundingBox(coordinate, distanceX)
+
+        then:
+        envelope.minX == 6
+        envelope.maxX == 8
+
+        double yMin = 49.35721717797476
+        double yMax = 50.64278282202524
+
+        envelope.minY == yMin
+        envelope.maxY == yMax
+    }
+
+    def "GeoUtils calculates y-delta (latitude) correctly"() {
+        given:
+        Point coordinate = GeoUtils.buildPoint(50, 7)
+        ComparableQuantity<Length> distanceX = GeoUtils.calcHaversine(51, 7, 52, 7)
+
+        when:
+        Envelope envelope = GeoUtils.calculateBoundingBox(coordinate, distanceX)
+
+        then:
+        double xMin = 5.444248126340358
+        double xMax = 8.555751873659641
+
+        envelope.minX == xMin
+        envelope.maxX == xMax
+
+        envelope.minY == 49
+        envelope.maxY == 51
     }
 }

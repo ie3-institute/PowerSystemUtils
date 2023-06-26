@@ -7,16 +7,23 @@ package edu.ie3.util.quantities
 
 import edu.ie3.util.quantities.PowerSystemUnits._
 import edu.ie3.util.quantities.QuantityMatchers.equalWithTolerance
-import edu.ie3.util.quantities.QuantityUtils.{RichQuantityDouble, round}
+import edu.ie3.util.quantities.QuantityUtils.{
+  RichQuantity,
+  RichQuantityDouble,
+  RichUnit
+}
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.wordspec.AnyWordSpecLike
 import tech.units.indriya.quantity.Quantities
 import tech.units.indriya.unit.Units._
 
-import javax.measure.MetricPrefix
 import scala.math.BigDecimal.RoundingMode
 
-class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
+class QuantityUtilsSpec
+    extends Matchers
+    with AnyWordSpecLike
+    with TableDrivenPropertyChecks {
   "The quantity utils" when {
     implicit val quantityTolerance: Double = 1e-9
 
@@ -24,12 +31,12 @@ class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
       val qty = 10.1245.asAmpere
 
       "round a quantity half up by default" in {
-        round(qty, 2) should equalWithTolerance(10.12.asAmpere)
-        round(qty, 3) should equalWithTolerance(10.125.asAmpere)
+        qty.round(2) should equalWithTolerance(10.12.asAmpere)
+        qty.round(3) should equalWithTolerance(10.125.asAmpere)
       }
 
       "round a quantity with the given rounding mode" in {
-        round(qty, 3, RoundingMode.HALF_DOWN) should equalWithTolerance(
+        qty.round(3, RoundingMode.HALF_DOWN) should equalWithTolerance(
           10.124.asAmpere
         )
       }
@@ -65,16 +72,13 @@ class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
 
       "convert a double to a kilo ampere quantity" in {
         value.asKiloAmpere should equalWithTolerance(
-          Quantities.getQuantity(
-            value,
-            MetricPrefix.KILO(AMPERE)
-          )
+          Quantities.getQuantity(value, KILOAMPERE)
         )
       }
 
       "convert a double to a nano siemens quantity" in {
         value.asNanoSiemens should equalWithTolerance(
-          Quantities.getQuantity(value, MetricPrefix.NANO(SIEMENS))
+          Quantities.getQuantity(value, NANOSIEMENS)
         )
       }
 
@@ -86,22 +90,25 @@ class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
 
       "convert a double to a milli ohm quantity" in {
         value.asMilliOhm should equalWithTolerance(
-          Quantities.getQuantity(value, MetricPrefix.MILLI(OHM))
+          Quantities.getQuantity(value, MILLIOHM)
         )
       }
 
       "convert a double to an ohm quantity" in {
         value.asOhm should equalWithTolerance(
-          Quantities.getQuantity(
-            value,
-            OHM
-          )
+          Quantities.getQuantity(value, OHM)
         )
       }
 
       /* PowerSystemUnits */
 
-      /* ==== Basic non electric units ==== */
+      /* ==== Basic non-electric units ==== */
+
+      "convert a double to a metre quantity" in {
+        value.asMetre should equalWithTolerance(
+          Quantities.getQuantity(value, METRE)
+        )
+      }
 
       "convert a double to a kilometre quantity" in {
         value.asKilometre should equalWithTolerance(
@@ -112,6 +119,24 @@ class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
       "convert a double to a millisecond quantity" in {
         value.asMillisecond should equalWithTolerance(
           Quantities.getQuantity(value, MILLISECOND)
+        )
+      }
+
+      "convert a double to a second quantity" in {
+        value.asSecond should equalWithTolerance(
+          Quantities.getQuantity(value, SECOND)
+        )
+      }
+
+      "convert a double to a minute quantity" in {
+        value.asMinute should equalWithTolerance(
+          Quantities.getQuantity(value, MINUTE)
+        )
+      }
+
+      "convert a double to an hour quantity" in {
+        value.asHour should equalWithTolerance(
+          Quantities.getQuantity(value, HOUR)
         )
       }
 
@@ -175,6 +200,12 @@ class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
         )
       }
 
+      "convert a double to a megawatt-hour quantity" in {
+        value.asMegaWattHour should equalWithTolerance(
+          Quantities.getQuantity(value, MEGAWATTHOUR)
+        )
+      }
+
       "convert a double to a var-hour quantity" in {
         value.asVarHour should equalWithTolerance(
           Quantities.getQuantity(value, VARHOUR)
@@ -184,6 +215,24 @@ class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
       "convert a double to a kilovar-hour quantity" in {
         value.asKiloVarHour should equalWithTolerance(
           Quantities.getQuantity(value, KILOVARHOUR)
+        )
+      }
+
+      "convert a double to a megavar-hour quantity" in {
+        value.asMegaVarHour should equalWithTolerance(
+          Quantities.getQuantity(value, MEGAVARHOUR)
+        )
+      }
+
+      "convert a double to a watt-hour per metre quantity" in {
+        value.asWattHourPerMetre should equalWithTolerance(
+          Quantities.getQuantity(value, WATTHOUR_PER_METRE)
+        )
+      }
+
+      "convert a double to a kilowatt-hour per kilometre quantity" in {
+        value.asKiloWattHourPerKiloMetre should equalWithTolerance(
+          Quantities.getQuantity(value, KILOWATTHOUR_PER_KILOMETRE)
         )
       }
 
@@ -325,18 +374,111 @@ class QuantityUtilsSpec extends Matchers with AnyWordSpecLike {
         )
       }
 
+      /* ==== Thermal ==== */
+
+      "convert a double to kelvin quantity" in {
+        value.asKelvin should equalWithTolerance(
+          Quantities.getQuantity(
+            value,
+            KELVIN
+          )
+        )
+      }
+
+      "convert a double to a degree celsius quantity" in {
+        value.asDegreeCelsius should equalWithTolerance(
+          Quantities.getQuantity(
+            value,
+            CELSIUS
+          )
+        )
+      }
+
+      "convert a double to a kilowatt per kelvin quantity" in {
+        value.asKiloWattPerKelvin should equalWithTolerance(
+          Quantities.getQuantity(value, KILOWATT_PER_KELVIN)
+        )
+      }
+
       "convert a double to a kilowatthour per kelvin quantity" in {
         value.asKiloWattHourPerKelvin should equalWithTolerance(
           Quantities.getQuantity(value, KILOWATTHOUR_PER_KELVIN)
         )
       }
 
-      /* ==== Thermal Conductance ==== */
-
-      "convert a double to a kilowatt per kelvin quantity" in {
-        value.asKiloWattPerKelvin should equalWithTolerance(
-          Quantities.getQuantity(value, KILOWATT_PER_KELVIN)
+      "convert a double to a kilowatthour per kelvin times cubic metre quantity" in {
+        value.asKiloWattHourPerKelvinTimesCubicMetre should equalWithTolerance(
+          Quantities.getQuantity(
+            value,
+            KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE
+          )
         )
+      }
+
+      /* ==== Volume ==== */
+
+      "convert a double to a cubic metre quantity" in {
+        value.asCubicMetre should equalWithTolerance(
+          Quantities.getQuantity(
+            value,
+            CUBIC_METRE
+          )
+        )
+      }
+
+      "convert a double to a litre quantity" in {
+        value.asLitre should equalWithTolerance(
+          Quantities.getQuantity(
+            value,
+            LITRE
+          )
+        )
+      }
+    }
+
+    "extend the quantity functionality" should {
+
+      "return min and max of quantities" in {
+
+        val smaller = 1.asAmpere
+        val bigger = 2.asAmpere
+
+        smaller.min(bigger) shouldBe smaller
+        bigger.min(smaller) shouldBe smaller
+        smaller.max(bigger) shouldBe bigger
+        bigger.max(smaller) shouldBe bigger
+
+      }
+
+    }
+
+    "converting units to alternative units" should {
+      "succeed if units are compatible" in {
+        val cases = Table(
+          ("sourceUnit", "targetUnit", "expectedUnit"),
+          (VOLTAMPERE, WATT, WATT),
+          (KILOVOLTAMPERE, WATT, KILOWATT),
+          (MEGAVOLTAMPERE, WATT, MEGAWATT),
+          (VAR, WATT, WATT),
+          (KILOVAR, WATT, KILOWATT),
+          (MEGAVAR, WATT, MEGAWATT),
+          (VOLTAMPERE, VAR, VAR),
+          (KILOVOLTAMPERE, VAR, KILOVAR),
+          (MEGAVOLTAMPERE, VAR, MEGAVAR),
+          (WATT, VAR, VAR),
+          (KILOWATT, VAR, KILOVAR),
+          (MEGAWATT, VAR, MEGAVAR),
+          (VAR, VOLTAMPERE, VOLTAMPERE),
+          (KILOVAR, VOLTAMPERE, KILOVOLTAMPERE),
+          (MEGAVAR, VOLTAMPERE, MEGAVOLTAMPERE),
+          (WATT, VOLTAMPERE, VOLTAMPERE),
+          (KILOWATT, VOLTAMPERE, KILOVOLTAMPERE),
+          (MEGAWATT, VOLTAMPERE, MEGAVOLTAMPERE)
+        )
+
+        forAll(cases) { (sourceUnit, targetUnit, expectedUnit) =>
+          sourceUnit.toEquivalentIn(targetUnit) shouldBe expectedUnit
+        }
       }
     }
   }

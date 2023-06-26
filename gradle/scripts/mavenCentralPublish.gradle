@@ -35,7 +35,7 @@ if (project.hasProperty('user') && project.hasProperty('password')) {
 					url = 'https:github.com/ie3-institute/PowerSystemUtils'
 					organization {
 						name = 'Institute of Energy Systems, Energy Efficiency and Energy Economics (ie3)/TU Dortmund University'
-						url = 'http:www.ie3.tu-dortmund.de/'
+						url = 'https:www.ie3.tu-dortmund.de'
 					}
 					issueManagement {
 						system = 'GitHub'
@@ -44,32 +44,19 @@ if (project.hasProperty('user') && project.hasProperty('password')) {
 					licenses {
 						license {
 							name = 'BSD 3-Clause License'
-							url = 'https:github.com/ie3-institute/PowerSystemUtils/blob/master/LICENSE'
+							url = 'https:github.com/ie3-institute/PowerSystemUtils/blob/main/LICENSE'
 						}
-						scm {
-							connection = 'scm:git:git:github.com/ie3-institute/PowerSystemUtils.git'
-							developerConnection = 'scm:git:ssh:github.com:ie3-institute/PowerSystemUtils.git'
-							url = 'https:github.com/ie3-institute/PowerSystemUtils'
+					}
+					developers {
+						developer {
+							organization = "Institute of Energy Systems, Energy Efficiency and Energy Economics (ie3)/TU Dortmund University"
+							organizationUrl = "https:ie3.etit.tu-dortmund.de"
 						}
-						developers {
-							[
-								developer {
-									id = 'johanneshiry'
-									name = 'Johannes Hiry'
-									email = 'johannes.hiry@tu-dortmund.de'
-								},
-								developer {
-									id = 'ckittl'
-									name = 'Chris Kittl'
-									email = 'chris.kittl@tu-dortmund.de'
-								},
-								developer {
-									id = 'sensarmad'
-									name = 'Debopama Sen Sarma'
-									email = 'debopama-sen.sarma@tu-dortmund.de'
-								}
-							]
-						}
+					}
+					scm {
+						connection = 'scm:git:git:github.com/ie3-institute/PowerSystemUtils.git'
+						developerConnection = 'scm:git:ssh:github.com:ie3-institute/PowerSystemUtils.git'
+						url = 'https:github.com/ie3-institute/PowerSystemUtils'
 					}
 				}
 
@@ -81,13 +68,12 @@ if (project.hasProperty('user') && project.hasProperty('password')) {
 				from components.java
 				artifact sourcesJar
 				artifact javadocJar
-
 			}
 		}
 		repositories {
 			maven {
-				def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-				def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+				def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+				def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
 				url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
 				credentials {
 					username project.getProperty('user')

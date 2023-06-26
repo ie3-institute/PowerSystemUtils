@@ -11,7 +11,10 @@ import java.util.Objects;
 
 /**
  * A map that also contains an inverse map (e.g. mapping X to Y will map Y to X in the inverse map)
+ *
+ * @deprecated Is this still used somewhere? If so, please let us know.
  */
+@Deprecated(since = "2.0")
 public class OneToOneMap<X, Y> extends HashMap<X, Y> {
 
   private static final long serialVersionUID = 6156332808162504460L;

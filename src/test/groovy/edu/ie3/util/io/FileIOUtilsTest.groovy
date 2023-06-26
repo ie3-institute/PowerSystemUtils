@@ -84,13 +84,15 @@ class FileIOUtilsTest extends Specification {
 		def archiveFile = Paths.get(FilenameUtils.concat(tmpDirectory.toString(), "test.tar.gz"))
 
 		when:
-		def f1 = FileIOUtils.compressDir(dirPath, archiveFile)
-		f1.join()
+		// testing without posix extension, because that leads to variable output sizes across systems
+		FileIOUtils.compressDir(dirPath, archiveFile.toFile(), false)
 
 		then:
 		noExceptionThrown()
 		Files.exists(archiveFile)
-		Files.size(archiveFile) >= 1317 && Files.size(archiveFile) <= 1399 // Should be around 1385 bytes +/- 3 %
+		// Should be around 1385 bytes +/- 3 %
+		def targetSize = 1385
+		Files.size(archiveFile) >= targetSize * 0.97 && Files.size(archiveFile) <= targetSize * 1.03
 	}
 
 	def "The fileio utils is able to zip the contents of a directory with nested structure to .tar.gz"() {
@@ -99,13 +101,15 @@ class FileIOUtilsTest extends Specification {
 		def archiveFile = Paths.get(FilenameUtils.concat(tmpDirectory.toString(), "test.tar.gz"))
 
 		when:
-		def f1 = FileIOUtils.compressDir(dirPath, archiveFile)
-		f1.join()
+		// testing without posix extension, because that leads to variable output sizes across systems
+		FileIOUtils.compressDir(dirPath, archiveFile.toFile(), false)
 
 		then:
 		noExceptionThrown()
 		Files.exists(archiveFile)
-		Files.size(archiveFile) >= 1384 && Files.size(archiveFile) <= 1470 // Should be around 1427 bytes +/- 3 %
+		// Should be around 1427 bytes +/- 3 %
+		def targetSize = 1427
+		Files.size(archiveFile) >= targetSize * 0.97 && Files.size(archiveFile) <= targetSize * 1.03
 	}
 
 	def "The fileio utils throws an exception, if the input path is null when called to compress a file"() {
@@ -292,31 +296,31 @@ class FileIOUtilsTest extends Specification {
 		noExceptionThrown()
 		Files.exists(targetDirectory)
 		Files.list(targetDirectory).map { it.toString() }.sorted().collect(Collectors.toList()) == [
-			tmpDirectory.toString() + "/extract/default_directory_hierarchy"
+			tmpDirectory.resolve("extract/default_directory_hierarchy").toString()
 		]
 
 		def nestedTargetDirectoryPath = Paths.get(FilenameUtils.concat(targetDirectory.toString(), "default_directory_hierarchy"))
 		Files.exists(nestedTargetDirectoryPath)
 		Files.list(nestedTargetDirectoryPath).map { it.toString() }.sorted().collect(Collectors.toList()) == [
-			tmpDirectory.toString() + "/extract/default_directory_hierarchy/grid",
-			tmpDirectory.toString() + "/extract/default_directory_hierarchy/participants"
+			tmpDirectory.resolve("extract/default_directory_hierarchy/grid").toString(),
+			tmpDirectory.resolve("extract/default_directory_hierarchy/participants").toString()
 		]
 
 		def gridPath = Paths.get(FilenameUtils.concat(nestedTargetDirectoryPath.toString(), "grid"))
 		Files.exists(gridPath)
 		Files.list(gridPath).map { it.toString() }.sorted().collect(Collectors.toList()) == [
-			tmpDirectory.toString() + "/extract/default_directory_hierarchy/grid/line_input.csv",
-			tmpDirectory.toString() + "/extract/default_directory_hierarchy/grid/measurement_unit_input.csv",
-			tmpDirectory.toString() + "/extract/default_directory_hierarchy/grid/node_input.csv",
-			tmpDirectory.toString() + "/extract/default_directory_hierarchy/grid/switch_input.csv",
-			tmpDirectory.toString() + "/extract/default_directory_hierarchy/grid/transformer_2_w_input.csv",
-			tmpDirectory.toString() + "/extract/default_directory_hierarchy/grid/transformer_3_w_input.csv"
+			tmpDirectory.resolve("extract/default_directory_hierarchy/grid/line_input.csv").toString(),
+			tmpDirectory.resolve("extract/default_directory_hierarchy/grid/measurement_unit_input.csv").toString(),
+			tmpDirectory.resolve("extract/default_directory_hierarchy/grid/node_input.csv").toString(),
+			tmpDirectory.resolve("extract/default_directory_hierarchy/grid/switch_input.csv").toString(),
+			tmpDirectory.resolve("extract/default_directory_hierarchy/grid/transformer_2_w_input.csv").toString(),
+			tmpDirectory.resolve("extract/default_directory_hierarchy/grid/transformer_3_w_input.csv").toString()
 		]
 
 		def participantsPath = Paths.get(FilenameUtils.concat(FilenameUtils.concat(targetDirectory.toString(), "default_directory_hierarchy"), "participants"))
 		Files.exists(participantsPath)
 		Files.list(participantsPath).map { it.toString() }.sorted().collect(Collectors.toList()) == [
-			tmpDirectory.toString() + "/extract/default_directory_hierarchy/participants/ev_input.csv"
+			tmpDirectory.resolve("extract/default_directory_hierarchy/participants/ev_input.csv").toString()
 		]
 	}
 
@@ -434,9 +438,10 @@ class FileIOUtilsTest extends Specification {
 		noExceptionThrown()
 		Files.exists(unzippedFile)
 		Files.list(targetDirectory).map { it.toString() }.sorted().collect(Collectors.toList()) == [
-			tmpDirectory.toString() + "/extract/line_input.csv"
+			tmpDirectory.resolve("extract/line_input.csv").toString()
 		]
 		/* Check unzipped file size */
-		Files.size(unzippedFile) == Files.size(testFile)
+		// second case covers tests on Windows, where the test file might be checked out with CRLF endings, adding 2 bytes
+		Files.size(unzippedFile) == Files.size(testFile) || Files.size(unzippedFile) == Files.size(testFile) - 2
 	}
 }

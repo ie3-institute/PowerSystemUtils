@@ -18,7 +18,9 @@ import org.slf4j.LoggerFactory;
  *
  * @author Kittl
  * @since 27.03.2019
+ * @deprecated Is this still used somewhere? If so, please let us know.
  */
+@Deprecated(since = "2.0")
 public class EmpiricalRandom<C> {
   private static final Logger logger = LoggerFactory.getLogger(EmpiricalRandom.class);
 
