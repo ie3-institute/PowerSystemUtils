@@ -6,7 +6,10 @@
 package edu.ie3.util.common
 
 import com.typesafe.scalalogging.LazyLogging
-import edu.ie3.util.quantities.{QuantityMatchers, QuantityUtils => PSQuantityUtil}
+import edu.ie3.util.quantities.{
+  QuantityMatchers,
+  QuantityUtils => PSQuantityUtil
+}
 import org.scalatest._
 import org.scalatest.matchers.should
 import org.scalatest.wordspec.AnyWordSpecLike
