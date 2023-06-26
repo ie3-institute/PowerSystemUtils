@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 -   Added quantity for volumetric flow rate [#363](https://github.com/ie3-institute/PowerSystemUtils/issues/363)
+-   Transfer QuantityMatchers from SIMONA [#361](https://github.com/ie3-institute/PowerSystemUtils/issues/361)
 
 ## [2.0.0]
 
