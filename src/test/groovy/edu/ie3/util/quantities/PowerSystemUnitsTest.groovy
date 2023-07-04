@@ -5,7 +5,6 @@
  */
 package edu.ie3.util.quantities
 
-import edu.ie3.util.interval.LeftOpenInterval
 import spock.lang.Shared
 import spock.lang.Specification
 import tech.units.indriya.quantity.Quantities
@@ -82,7 +81,7 @@ class PowerSystemUnitsTest extends Specification {
 		def dut = Quantities.getQuantity(input)
 
 		then:
-		dut.unit.equals(expectedUnit)
+		dut.unit ==  expectedUnit
 
 		where:
 		expectedUnit								|| input
@@ -106,11 +105,11 @@ class PowerSystemUnitsTest extends Specification {
 
 	def "when an unregistered Unit should be parsed an Exception should be thrown"() {
 		when:
-		def dut = Quantities.getQuantity("1 abc")
+		def dut = Quantities.getQuantity("1 kWh")
+		dut
 
 		then:
-		MeasurementParseException exception = thrown(MeasurementParseException.class)
+		MeasurementParseException exception = thrown(MeasurementParseException)
 		exception.message == "Parse Error"
 	}
-
 }

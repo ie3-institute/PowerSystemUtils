@@ -12,7 +12,6 @@ import edu.ie3.util.quantities.interfaces.*;
 import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.measure.MetricPrefix;
 import javax.measure.Unit;
 import javax.measure.quantity.*;
 import tech.units.indriya.format.SimpleUnitFormat;
@@ -85,13 +84,13 @@ public class PowerSystemUnits extends Units {
   public static final Unit<Energy> KILOWATTHOUR = DoubleConverterFactory.withPrefix(WATTHOUR, KILO);
 
   /** Kilovarhour */
-  public static final Unit<Energy> KILOVARHOUR = MetricPrefix.KILO(VARHOUR);
+  public static final Unit<Energy> KILOVARHOUR = KILO(VARHOUR);
 
   /** Megawatthour */
   public static final Unit<Energy> MEGAWATTHOUR = DoubleConverterFactory.withPrefix(WATTHOUR, MEGA);
 
   /** Megavarhour */
-  public static final Unit<Energy> MEGAVARHOUR = MetricPrefix.MEGA(VARHOUR);
+  public static final Unit<Energy> MEGAVARHOUR = MEGA(VARHOUR);
 
   /** Watthour per metre */
   public static final Unit<SpecificEnergy> WATTHOUR_PER_METRE =
