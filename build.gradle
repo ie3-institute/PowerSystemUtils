@@ -8,7 +8,7 @@ plugins {
 	id 'com.github.spotbugs' version '5.1.3' //code check, working on byte code
 	id 'com.diffplug.spotless' version '6.22.0'//code format
 	id 'jacoco' // java code coverage plugin
-	id "org.sonarqube" version "4.4.0.3356" // sonarqube
+	id "org.sonarqube" version "4.4.1.3373" // sonarqube
 	id "org.scoverage" version "8.0.3" // scala code coverage scoverage
 	id "com.github.maiflai.scalatest" version "0.32" // run scalatest without specific spec task
 }
