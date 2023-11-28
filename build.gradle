@@ -6,7 +6,7 @@ plugins {
 	id 'signing'
 	id 'pmd' //code check, working on source code
 	id 'com.github.spotbugs' version '5.2.4' //code check, working on byte code
-	id 'com.diffplug.spotless' version '6.22.0'//code format
+	id 'com.diffplug.spotless' version '6.23.0'//code format
 	id 'jacoco' // java code coverage plugin
 	id "org.sonarqube" version "4.4.1.3373" // sonarqube
 	id "org.scoverage" version "8.0.3" // scala code coverage scoverage
