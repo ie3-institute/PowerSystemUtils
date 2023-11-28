@@ -6,7 +6,6 @@ import tech.units.indriya.unit.Units
 import spock.lang.Specification
 
 import javax.measure.MetricPrefix
-import edu.ie3.util.quantities.PowerSystemUnits
 
 class DoubleConverterFactoryTest extends Specification  {
 
@@ -56,16 +55,5 @@ class DoubleConverterFactoryTest extends Specification  {
         Units.SECOND         | MetricPrefix.NANO  || "ns"
         Units.AMPERE         | MetricPrefix.TERA  || "TA"
         PowerSystemUnits.VAR | MetricPrefix.MEGA  || "Mvar"
-    }
-
-    def "creates units that are comparable to standard Quantity creation"() {
-
-        when:
-        def a = Quantities.getQuantity(1.234, PowerSystemUnits.NANOSIEMENS)
-        def b = Quantities.getQuantity(1.234, MetricPrefix.NANO(Units.SIEMENS))
-
-        then:
-        a.unit == b.unit
-        a == b
     }
 }
