@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased/Snapshot]
 
 ### Added
--   Added quantity for volumetric flow rate [#363](https://github.com/ie3-institute/PowerSystemUtils/issues/363)
+- Added quantity for volumetric flow rate [#363](https://github.com/ie3-institute/PowerSystemUtils/issues/363)
+
+### Breaking
+- Changed default date time formatter to ISO 8601 ISO_OFFSET_DATE_TIME [#415](https://github.com/ie3-institute/PowerSystemUtils/issues/415)
 
 ## [2.0.0]
 

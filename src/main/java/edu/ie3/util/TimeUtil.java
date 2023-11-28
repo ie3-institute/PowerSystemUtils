@@ -21,12 +21,13 @@ import java.util.TimeZone;
 public class TimeUtil {
 
   public static final TimeUtil withDefaults =
-      new TimeUtil(ZoneId.of("UTC"), Locale.GERMANY, "yyyy-MM-dd HH:mm:ss");
+      new TimeUtil(ZoneId.of("UTC"), Locale.GERMANY, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+
+  public static final String localDateTimePattern = "yyyy-MM-dd HH:mm:ss";
 
   private final ZoneId zoneId;
   private final TimeZone timeZone;
   private final Locale locale;
-  private final String dtfPattern;
 
   private final DateTimeFormatter dateTimeFormatter;
 
@@ -34,9 +35,15 @@ public class TimeUtil {
     this.zoneId = zoneId;
     this.timeZone = TimeZone.getTimeZone(zoneId);
     this.locale = locale;
-    this.dtfPattern = dtfPattern;
     this.dateTimeFormatter =
         DateTimeFormatter.ofPattern(dtfPattern).withZone(zoneId).withLocale(locale);
+  }
+
+  public TimeUtil(ZoneId zoneId, Locale locale, DateTimeFormatter dtf) {
+    this.zoneId = zoneId;
+    this.timeZone = TimeZone.getTimeZone(zoneId);
+    this.locale = locale;
+    this.dateTimeFormatter = dtf;
   }
 
   /**
@@ -57,6 +64,10 @@ public class TimeUtil {
    */
   public String toString(ZonedDateTime zonedDateTime) {
     return dateTimeFormatter.format(zonedDateTime);
+  }
+
+  public String toLocalDateTimeString(ZonedDateTime zonedDateTime) {
+    return DateTimeFormatter.ofPattern(localDateTimePattern).format(zonedDateTime);
   }
 
   /**
@@ -81,10 +92,6 @@ public class TimeUtil {
 
   public Locale getLocale() {
     return locale;
-  }
-
-  public String getDtfPattern() {
-    return dtfPattern;
   }
 
   public DateTimeFormatter getDateTimeFormatter() {
