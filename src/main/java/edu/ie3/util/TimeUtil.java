@@ -8,7 +8,10 @@ package edu.ie3.util;
 import static java.time.temporal.ChronoField.HOUR_OF_DAY;
 import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
 
-import java.time.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
@@ -23,7 +26,7 @@ public class TimeUtil {
   public static final TimeUtil withDefaults =
       new TimeUtil(ZoneId.of("UTC"), Locale.GERMANY, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
-  public static final String localDateTimePattern = "yyyy-MM-dd HH:mm:ss";
+  public static final String LOCAL_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
   private final ZoneId zoneId;
   private final TimeZone timeZone;
@@ -66,8 +69,8 @@ public class TimeUtil {
     return dateTimeFormatter.format(zonedDateTime);
   }
 
-  public String toLocalDateTimeString(ZonedDateTime zonedDateTime) {
-    return DateTimeFormatter.ofPattern(localDateTimePattern).format(zonedDateTime);
+  public static String toLocalDateTimeString(ZonedDateTime zonedDateTime) {
+    return DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_PATTERN).format(zonedDateTime);
   }
 
   /**
