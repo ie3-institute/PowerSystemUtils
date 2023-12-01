@@ -5,8 +5,8 @@ plugins {
 	id 'maven-publish'
 	id 'signing'
 	id 'pmd' //code check, working on source code
-	id 'com.github.spotbugs' version '5.2.4' //code check, working on byte code
-	id 'com.diffplug.spotless' version '6.23.0'//code format
+	id 'com.github.spotbugs' version '5.2.5' //code check, working on byte code
+	id 'com.diffplug.spotless' version '6.23.2'//code format
 	id 'jacoco' // java code coverage plugin
 	id "org.sonarqube" version "4.4.1.3373" // sonarqube
 	id "org.scoverage" version "8.0.3" // scala code coverage scoverage
@@ -69,7 +69,7 @@ dependencies {
 	// Used in EmpiricalRandom.java, could be removed
 	implementation 'org.eclipse.collections:eclipse-collections:11.1.0'
 
-	implementation 'commons-io:commons-io:2.15.0' // I/O functionalities
+	implementation 'commons-io:commons-io:2.15.1' // I/O functionalities
 	implementation 'org.apache.commons:commons-compress:1.25.0' // I/O functionalities
 
 	// testing
