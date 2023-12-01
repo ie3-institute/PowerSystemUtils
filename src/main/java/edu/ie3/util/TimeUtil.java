@@ -1,5 +1,5 @@
 /*
- * © 2020. TU Dortmund University,
+   * © 2020. TU Dortmund University,
  * Institute of Energy Systems, Energy Efficiency and Energy Economics,
  * Research group Distribution grid planning and operation
 */
@@ -70,7 +70,8 @@ public class TimeUtil {
   }
 
   public static String toLocalDateTimeString(ZonedDateTime zonedDateTime) {
-    return DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_PATTERN).format(zonedDateTime);
+    return DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_PATTERN)
+        .format(zonedDateTime.toLocalDateTime());
   }
 
   /**
