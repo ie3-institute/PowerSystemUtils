@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added quantity for volumetric flow rate [#363](https://github.com/ie3-institute/PowerSystemUtils/issues/363)
 
+### Fixed
+- `TimeUtil` changes time zone when parsing `ZonedDateTime` [#422](https://github.com/ie3-institute/PowerSystemUtils/issues/422)
+
 ### Breaking
 - Changed default date time formatter to ISO 8601 ISO_OFFSET_DATE_TIME [#415](https://github.com/ie3-institute/PowerSystemUtils/issues/415)
 
