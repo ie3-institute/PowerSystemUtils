@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Breaking
 - Changed default date time formatter to ISO 8601 ISO_OFFSET_DATE_TIME [#415](https://github.com/ie3-institute/PowerSystemUtils/issues/415)
 
+### Changed
+- Updated to gradle 8.4 [#425](https://github.com/ie3-institute/PowerSystemUtils/issues/425)
+
 ## [2.0.0]
 
 ### Added
