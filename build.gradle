@@ -23,9 +23,11 @@ ext {
 group = 'com.github.ie3-institute'
 version = '3.0-SNAPSHOT'
 description = 'PowerSystemUtils'
-sourceCompatibility = javaVersion
-targetCompatibility = javaVersion
 
+java {
+	sourceCompatibility = javaVersion
+	targetCompatibility = javaVersion
+}
 apply from: scriptsLocation + 'pmd.gradle'
 apply from: scriptsLocation + 'spotbugs.gradle'
 apply from: scriptsLocation + 'spotless.gradle'
