@@ -9,7 +9,6 @@ import static java.time.temporal.ChronoField.HOUR_OF_DAY;
 import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -70,7 +69,8 @@ public class TimeUtil {
   }
 
   public static String toLocalDateTimeString(ZonedDateTime zonedDateTime) {
-    return DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_PATTERN).format(zonedDateTime);
+    return DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_PATTERN)
+        .format(zonedDateTime.toLocalDateTime());
   }
 
   /**
@@ -81,8 +81,7 @@ public class TimeUtil {
    * @return Instant object
    */
   public ZonedDateTime toZonedDateTime(String timeString) {
-    LocalDateTime localDateTime = LocalDateTime.parse(timeString, dateTimeFormatter);
-    return ZonedDateTime.of(localDateTime, zoneId);
+    return ZonedDateTime.parse(timeString, dateTimeFormatter);
   }
 
   public ZoneId getZoneId() {
