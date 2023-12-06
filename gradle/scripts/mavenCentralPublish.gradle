@@ -86,7 +86,7 @@ if (project.hasProperty('user') && project.hasProperty('password')) {
 
 	model {
 		tasks.generatePomFileForMavenJavaPublication {
-			destination = layout.buildDirectory.dir("generated-pom.xml")
+			destination = file("$rootDir/build/generated-pom.xml")
 		}
 	}
 }

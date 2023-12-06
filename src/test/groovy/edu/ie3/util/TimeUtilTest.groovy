@@ -9,6 +9,7 @@ import spock.lang.Specification
 
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 
@@ -27,7 +28,6 @@ class TimeUtilTest extends Specification {
 		TimeUtil timeUtil = new TimeUtil(ZoneId.of("UTC"), Locale.GERMANY, "dd/MM/yyyy HH:mm:ss")
 		ZonedDateTime testDate = ZonedDateTime.of(1990, 1, 1, 0, 15, 0, 0, ZoneId.of("UTC"))
 
-
 		expect:
 		timeUtil.toString(testDate) == "01/01/1990 00:15:00"
 		timeUtil.toString(testDate.toInstant()) == "01/01/1990 00:15:00"
@@ -35,10 +35,18 @@ class TimeUtilTest extends Specification {
 
 	def "A TimeUtil should convert ZonedDateTime objects to local date time strings correctly"() {
 		given:
-		def time = TimeUtil.withDefaults.toZonedDateTime("2020-04-22T00:00:00Z")
+		def zonedDateTime = ZonedDateTime.parse("2020-04-22T00:00:00+01:00")
 
 		expect:
-		TimeUtil.withDefaults.toLocalDateTimeString(time) == "2020-04-22 00:00:00"
+		TimeUtil.withDefaults.toLocalDateTimeString(zonedDateTime) == "2020-04-22 00:00:00"
+	}
+
+	def "A TimeUtil should parse ZonedDateTime objects with time zone correctly"() {
+		when:
+		def zonedDateTime = TimeUtil.withDefaults.toZonedDateTime("2020-04-22T00:00:00+01:00")
+
+		then:
+		DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(zonedDateTime) == "2020-04-22T00:00:00+01:00"
 	}
 
 	def "A TimeUtil should determine the correct quarter hour of the day within a quarter hour"() {
