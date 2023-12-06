@@ -69,7 +69,8 @@ public class TimeUtil {
   }
 
   public static String toLocalDateTimeString(ZonedDateTime zonedDateTime) {
-    return DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_PATTERN).format(zonedDateTime);
+    return DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_PATTERN)
+        .format(zonedDateTime.toLocalDateTime());
   }
 
   /**
