@@ -25,8 +25,8 @@ version = '3.0-SNAPSHOT'
 description = 'PowerSystemUtils'
 
 java {
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
+	sourceCompatibility = javaVersion
+	targetCompatibility = javaVersion
 }
 
 apply from: scriptsLocation + 'pmd.gradle'
