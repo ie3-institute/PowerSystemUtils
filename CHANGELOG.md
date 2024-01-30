@@ -10,6 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added quantity for volumetric flow rate [#363](https://github.com/ie3-institute/PowerSystemUtils/issues/363)
 - Register missing units for serialization/deserialization. Added test for labeling unit symbols correctly within PowerSystemUnits  [#280](https://github.com/ie3-institute/PowerSystemUtils/issues/280)
 
+### Fixed
+- `TimeUtil` changes time zone when parsing `ZonedDateTime` [#422](https://github.com/ie3-institute/PowerSystemUtils/issues/422)
+
+### Breaking
+- Changed default date time formatter to ISO 8601 ISO_OFFSET_DATE_TIME [#415](https://github.com/ie3-institute/PowerSystemUtils/issues/415)
+
+### Changed
+- Updated to gradle 8.5 [#425](https://github.com/ie3-institute/PowerSystemUtils/issues/425)
+
 ## [2.0.0]
 
 ### Added
