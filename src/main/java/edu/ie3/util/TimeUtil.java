@@ -8,7 +8,9 @@ package edu.ie3.util;
 import static java.time.temporal.ChronoField.HOUR_OF_DAY;
 import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
 
-import java.time.*;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
@@ -21,12 +23,13 @@ import java.util.TimeZone;
 public class TimeUtil {
 
   public static final TimeUtil withDefaults =
-      new TimeUtil(ZoneId.of("UTC"), Locale.GERMANY, "yyyy-MM-dd HH:mm:ss");
+      new TimeUtil(ZoneId.of("UTC"), Locale.GERMANY, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+
+  public static final String LOCAL_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
   private final ZoneId zoneId;
   private final TimeZone timeZone;
   private final Locale locale;
-  private final String dtfPattern;
 
   private final DateTimeFormatter dateTimeFormatter;
 
@@ -34,9 +37,15 @@ public class TimeUtil {
     this.zoneId = zoneId;
     this.timeZone = TimeZone.getTimeZone(zoneId);
     this.locale = locale;
-    this.dtfPattern = dtfPattern;
     this.dateTimeFormatter =
         DateTimeFormatter.ofPattern(dtfPattern).withZone(zoneId).withLocale(locale);
+  }
+
+  public TimeUtil(ZoneId zoneId, Locale locale, DateTimeFormatter dtf) {
+    this.zoneId = zoneId;
+    this.timeZone = TimeZone.getTimeZone(zoneId);
+    this.locale = locale;
+    this.dateTimeFormatter = dtf;
   }
 
   /**
@@ -59,6 +68,11 @@ public class TimeUtil {
     return dateTimeFormatter.format(zonedDateTime);
   }
 
+  public static String toLocalDateTimeString(ZonedDateTime zonedDateTime) {
+    return DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_PATTERN)
+        .format(zonedDateTime.toLocalDateTime());
+  }
+
   /**
    * Returns an ZoneDateTime based on a given String, which can be understood by the class private
    * DateTimeFormatter
@@ -67,8 +81,7 @@ public class TimeUtil {
    * @return Instant object
    */
   public ZonedDateTime toZonedDateTime(String timeString) {
-    LocalDateTime localDateTime = LocalDateTime.parse(timeString, dateTimeFormatter);
-    return ZonedDateTime.of(localDateTime, zoneId);
+    return ZonedDateTime.parse(timeString, dateTimeFormatter);
   }
 
   public ZoneId getZoneId() {
@@ -81,10 +94,6 @@ public class TimeUtil {
 
   public Locale getLocale() {
     return locale;
-  }
-
-  public String getDtfPattern() {
-    return dtfPattern;
   }
 
   public DateTimeFormatter getDateTimeFormatter() {

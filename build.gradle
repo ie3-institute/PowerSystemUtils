@@ -5,8 +5,8 @@ plugins {
 	id 'maven-publish'
 	id 'signing'
 	id 'pmd' //code check, working on source code
-	id 'com.github.spotbugs' version '5.2.1' //code check, working on byte code
-	id 'com.diffplug.spotless' version '6.22.0'//code format
+	id 'com.github.spotbugs' version '6.0.7' //code check, working on byte code
+	id 'com.diffplug.spotless' version '6.25.0'//code format
 	id 'jacoco' // java code coverage plugin
 	id "org.sonarqube" version "4.4.1.3373" // sonarqube
 	id "org.scoverage" version "8.0.3" // scala code coverage scoverage
@@ -23,8 +23,11 @@ ext {
 group = 'com.github.ie3-institute'
 version = '3.0-SNAPSHOT'
 description = 'PowerSystemUtils'
-sourceCompatibility = javaVersion
-targetCompatibility = javaVersion
+
+java {
+	sourceCompatibility = javaVersion
+	targetCompatibility = javaVersion
+}
 
 apply from: scriptsLocation + 'pmd.gradle'
 apply from: scriptsLocation + 'spotbugs.gradle'
@@ -42,15 +45,15 @@ repositories {
 
 dependencies {
 	constraints {
-		implementation( 'org.jsoup:jsoup:1.16.2' ){
+		implementation( 'org.jsoup:jsoup:1.17.2' ){
 			because "CVE-2022-36033 6.1 Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting') vulnerability pending CVSS allocation"
 		}
 	}
 
 	// logging
-	implementation 'org.slf4j:slf4j-api:2.0.9'  // slf4j wrapper
+	implementation 'org.slf4j:slf4j-api:2.0.11'  // slf4j wrapper
 	implementation 'com.lmax:disruptor:4.0.0' // async logging
-	implementation platform('org.apache.logging.log4j:log4j-bom:2.21.1')
+	implementation platform('org.apache.logging.log4j:log4j-bom:2.22.1')
 	implementation 'org.apache.logging.log4j:log4j-api' // log4j
 	implementation 'org.apache.logging.log4j:log4j-core' // log4j
 	implementation 'org.apache.logging.log4j:log4j-slf4j-impl' // log4j -> slf4j
@@ -60,7 +63,7 @@ dependencies {
 	implementation 'javax.measure:unit-api:2.2' // quantities
 	implementation 'tech.units:indriya:2.2'  // quantities
 	implementation 'com.google.code.gson:gson:2.10.1' // java serialization, POJOs -> JSON
-	implementation 'org.apache.commons:commons-lang3:3.13.0' // for HashCodeBuilder
+	implementation 'org.apache.commons:commons-lang3:3.14.0' // for HashCodeBuilder
 	implementation 'org.apache.commons:commons-math3:3.6.1' // mathematics and statistics components
 	// JTS Topology Suite for GeoPositions, License: EPL 1.0 / EDL 1.0
 	implementation 'org.locationtech.jts:jts-core:1.19.0'
@@ -69,8 +72,8 @@ dependencies {
 	// Used in EmpiricalRandom.java, could be removed
 	implementation 'org.eclipse.collections:eclipse-collections:11.1.0'
 
-	implementation 'commons-io:commons-io:2.15.0' // I/O functionalities
-	implementation 'org.apache.commons:commons-compress:1.24.0' // I/O functionalities
+	implementation 'commons-io:commons-io:2.15.1' // I/O functionalities
+	implementation 'org.apache.commons:commons-compress:1.25.0' // I/O functionalities
 
 	// testing
 	testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
