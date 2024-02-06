@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased/Snapshot]
 
 ### Added
+
+### Fixed
+
+### Breaking
+
+### Changed
+
+
+## [2.1.0]
+
+### Added
 - Added quantity for volumetric flow rate [#363](https://github.com/ie3-institute/PowerSystemUtils/issues/363)
 
 ### Fixed
@@ -125,7 +136,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 -   fixes + extensions in StandardUnits
 
-[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v2.0.0...HEAD
+[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v2.1.0...HEAD
+[2.0.0]: https://github.com/ie3-institute/powersystemutils/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/ie3-institute/powersystemutils/compare/v1.6.0...v2.0.0
 [1.6.0]: https://github.com/ie3-institute/powersystemutils/compare/v1.5.3...v1.6.0
 [1.5.3]: https://github.com/ie3-institute/powersystemutils/compare/v1.5.2...v1.5.3
