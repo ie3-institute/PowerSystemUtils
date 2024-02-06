@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Updated to gradle 8.5 [#425](https://github.com/ie3-institute/PowerSystemUtils/issues/425)
+- Updated to gradle 8.6 [#437](https://github.com/ie3-institute/PowerSystemUtils/issues/437)
 
 ## [2.0.0]
 
