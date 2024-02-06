@@ -44,12 +44,6 @@ repositories {
 }
 
 dependencies {
-	constraints {
-		implementation( 'org.jsoup:jsoup:1.17.2' ){
-			because "CVE-2022-36033 6.1 Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting') vulnerability pending CVSS allocation"
-		}
-	}
-
 	// logging
 	implementation 'org.slf4j:slf4j-api:2.0.12'  // slf4j wrapper
 	implementation 'com.lmax:disruptor:4.0.0' // async logging
