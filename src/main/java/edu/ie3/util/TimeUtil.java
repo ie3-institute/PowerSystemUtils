@@ -9,6 +9,7 @@ import static java.time.temporal.ChronoField.HOUR_OF_DAY;
 import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
 
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -36,7 +37,8 @@ public class TimeUtil {
    * @return A String of the given Instant
    */
   public String toString(Instant instant) {
-    return dateTimeFormatter.format(instant);
+    ZonedDateTime zonedDateTime = instant.atZone(ZoneId.of("UTC"));
+    return dateTimeFormatter.format(zonedDateTime);
   }
 
   /**
