@@ -18,7 +18,7 @@ class TimeUtilTest extends Specification {
 
 	def "A TimeUtil should format correctly"() {
 		given:
-		TimeUtil timeUtil = new TimeUtil(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+		TimeUtil timeUtil = TimeUtil.withDefaults
 		ZonedDateTime testDateUTC = ZonedDateTime.of(1990, 1, 1, 0, 15, 0, 0, ZoneId.of("UTC"))
 		ZonedDateTime testDateBerlin = ZonedDateTime.of(2024, 7, 1, 0, 15, 0, 0, ZoneId.of("Europe/Berlin"))
 		expect:
