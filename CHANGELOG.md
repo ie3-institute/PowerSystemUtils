@@ -6,14 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased/Snapshot]
 
-### Added
-
-### Fixed
-
-### Breaking
+## [2.2.0]
 
 ### Changed
-
+-  Remove unused fields from TimeUtil [#442](https://github.com/ie3-institute/PowerSystemUtils/issues/442)
 
 ## [2.1.0]
 
@@ -136,8 +132,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 -   fixes + extensions in StandardUnits
 
-[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v2.1.0...HEAD
-[2.0.0]: https://github.com/ie3-institute/powersystemutils/compare/v2.0.0...v2.1.0
+[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/ie3-institute/powersystemutils/compare/v2.1.0...v2.2.0
+[2.1.0]: https://github.com/ie3-institute/powersystemutils/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/ie3-institute/powersystemutils/compare/v1.6.0...v2.0.0
 [1.6.0]: https://github.com/ie3-institute/powersystemutils/compare/v1.5.3...v1.6.0
 [1.5.3]: https://github.com/ie3-institute/powersystemutils/compare/v1.5.2...v1.5.3
