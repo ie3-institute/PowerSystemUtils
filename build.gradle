@@ -67,7 +67,7 @@ dependencies {
 	implementation 'org.eclipse.collections:eclipse-collections:11.1.0'
 
 	implementation 'commons-io:commons-io:2.15.1' // I/O functionalities
-	implementation 'org.apache.commons:commons-compress:1.25.0' // I/O functionalities
+	implementation 'org.apache.commons:commons-compress:1.26.0' // I/O functionalities
 
 	// testing
 	testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
