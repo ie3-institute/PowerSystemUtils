@@ -15,17 +15,20 @@ import java.time.temporal.ChronoUnit
 
 class TimeUtilTest extends Specification {
 
-	def "A TimeUtil should provide a default constant with expected configuration"() {
+
+	def "A TimeUtil should format correctly"() {
+		given:
+		TimeUtil timeUtil = TimeUtil.withDefaults
+		ZonedDateTime testDateUTC = ZonedDateTime.of(1990, 1, 1, 0, 15, 0, 0, ZoneId.of("UTC"))
+		ZonedDateTime testDateBerlin = ZonedDateTime.of(2024, 7, 1, 0, 15, 0, 0, ZoneId.of("Europe/Berlin"))
 		expect:
-		verifyAll(TimeUtil.withDefaults) {
-			zoneId == ZoneId.of("UTC")
-			locale == Locale.GERMANY
-		}
+		timeUtil.toString(testDateUTC) == "1990-01-01T00:15:00Z"
+		timeUtil.toString(testDateBerlin) == "2024-07-01T00:15:00+02:00"
 	}
 
 	def "A TimeUtil should convert given instances to a String correctly"() {
 		given:
-		TimeUtil timeUtil = new TimeUtil(ZoneId.of("UTC"), Locale.GERMANY, "dd/MM/yyyy HH:mm:ss")
+		TimeUtil timeUtil = new TimeUtil(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
 		ZonedDateTime testDate = ZonedDateTime.of(1990, 1, 1, 0, 15, 0, 0, ZoneId.of("UTC"))
 
 		expect:
