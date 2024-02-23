@@ -120,7 +120,7 @@ public class GeoUtils {
    * @deprecated Use {@link #calcOrderedCoordinateDistances(Point, Collection)} instead.
    */
   @Deprecated(since = "2.0", forRemoval = true)
-  public static SortedSet<CoordinateDistance> getCoordinateDistances(
+  public static Set<CoordinateDistance> getCoordinateDistances(
       Point baseCoordinate, Collection<Point> coordinates) {
     return calcOrderedCoordinateDistances(baseCoordinate, coordinates);
   }
@@ -133,11 +133,12 @@ public class GeoUtils {
    * @param coordinates the points to calculate the distance from the base point for
    * @return a sorted set of distances between the base and other coordinates
    */
-  public static SortedSet<CoordinateDistance> calcOrderedCoordinateDistances(
+  public static Set<CoordinateDistance> calcOrderedCoordinateDistances(
       Point baseCoordinate, Collection<Point> coordinates) {
     return coordinates.stream()
         .map(coordinate -> new CoordinateDistance(baseCoordinate, coordinate))
-        .collect(Collectors.toCollection(TreeSet::new));
+        .sorted(Comparator.comparing(CoordinateDistance::getDistance))
+        .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
   /**

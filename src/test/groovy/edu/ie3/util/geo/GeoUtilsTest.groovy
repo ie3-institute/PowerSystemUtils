@@ -131,14 +131,29 @@ class GeoUtilsTest extends Specification {
                     GeoUtils.buildPoint(49d, 7.1d)
             ]
             def coordinateDistances = [
+                    new CoordinateDistance(basePoint, points[3]),
                     new CoordinateDistance(basePoint, points[0]),
                     new CoordinateDistance(basePoint, points[1]),
-                    new CoordinateDistance(basePoint, points[3]),
                     new CoordinateDistance(basePoint, points[2])
             ]
 
         expect:
-            GeoUtils.calcOrderedCoordinateDistances(basePoint, points) == new TreeSet(coordinateDistances)
+            GeoUtils.calcOrderedCoordinateDistances(basePoint, points) == new HashSet(coordinateDistances)
+    }
+
+    def "GeoUtils should return all CoordinateDistances correctly"() {
+        given:
+        def basePoint = GeoUtils.buildPoint(50.5, 7d)
+        def points = [
+                GeoUtils.buildPoint(50d, 7d),
+                GeoUtils.buildPoint(51d, 7d)
+        ]
+
+        when:
+        def actual = GeoUtils.calcOrderedCoordinateDistances(basePoint, points)
+
+        then:
+        actual.size() == 2
     }
 
     def "GeoUtils should calculate haversine distance between two points correctly"() {
