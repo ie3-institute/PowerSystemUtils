@@ -11,7 +11,6 @@ import static java.lang.Math.*;
 
 import edu.ie3.util.exceptions.GeoException;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.measure.Quantity;
 import javax.measure.quantity.Angle;
@@ -116,29 +115,14 @@ public class GeoUtils {
    *
    * @param baseCoordinate the base point
    * @param coordinates the points to calculate the distance from the base point for
-   * @return a sorted set of distances between the base and other coordinates
-   * @deprecated Use {@link #calcOrderedCoordinateDistances(Point, Collection)} instead.
+   * @return a sorted list of distances between the base and other coordinates
    */
-  @Deprecated(since = "2.0", forRemoval = true)
-  public static Set<CoordinateDistance> getCoordinateDistances(
-      Point baseCoordinate, Collection<Point> coordinates) {
-    return calcOrderedCoordinateDistances(baseCoordinate, coordinates);
-  }
-
-  /**
-   * Calculates and sorts the distances between a base coordinate and other given coordinates using
-   * {@link #calcHaversine(double, double, double, double)}
-   *
-   * @param baseCoordinate the base point
-   * @param coordinates the points to calculate the distance from the base point for
-   * @return a sorted set of distances between the base and other coordinates
-   */
-  public static Set<CoordinateDistance> calcOrderedCoordinateDistances(
+  public static List<CoordinateDistance> calcOrderedCoordinateDistances(
       Point baseCoordinate, Collection<Point> coordinates) {
     return coordinates.stream()
         .map(coordinate -> new CoordinateDistance(baseCoordinate, coordinate))
         .sorted(Comparator.comparing(CoordinateDistance::getDistance))
-        .collect(Collectors.toCollection(LinkedHashSet::new));
+        .toList();
   }
 
   /**

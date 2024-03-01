@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased/Snapshot]
 
 ### Changed
-- `GeoUtils.calcOrderedCoordinateDistances()` now returns a manually sorted `Set` instead of a `SortedSet` [#449](https://github.com/ie3-institute/PowerSystemUtils/issues/449)
+- `GeoUtils.calcOrderedCoordinateDistances()` now returns a manually sorted `List` instead of a `SortedSet` [#449](https://github.com/ie3-institute/PowerSystemUtils/issues/449)
+
 
 ### Fixed
 - Bug where `GeoUtils.calcOrderedCoordinateDistances()` didn't return all `CoordinateDistance` [#449](https://github.com/ie3-institute/PowerSystemUtils/issues/449)

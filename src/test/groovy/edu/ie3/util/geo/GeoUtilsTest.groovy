@@ -138,7 +138,7 @@ class GeoUtilsTest extends Specification {
             ]
 
         expect:
-            GeoUtils.calcOrderedCoordinateDistances(basePoint, points) == new HashSet(coordinateDistances)
+            GeoUtils.calcOrderedCoordinateDistances(basePoint, points) == coordinateDistances
     }
 
     def "GeoUtils should return all CoordinateDistances correctly"() {
