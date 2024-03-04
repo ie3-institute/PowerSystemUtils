@@ -6,13 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased/Snapshot]
 
+## [2.2.1]
+
 ### Changed
 - `GeoUtils.calcOrderedCoordinateDistances()` now returns a manually sorted `List` instead of a `SortedSet` [#449](https://github.com/ie3-institute/PowerSystemUtils/issues/449)
 
-
 ### Fixed
 - Bug where `GeoUtils.calcOrderedCoordinateDistances()` didn't return all `CoordinateDistance` [#449](https://github.com/ie3-institute/PowerSystemUtils/issues/449)
-
 
 ## [2.2.0]
 
@@ -140,7 +140,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 -   fixes + extensions in StandardUnits
 
-[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v2.2.0...HEAD
+[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v2.2.1...HEAD
+[2.2.1]: https://github.com/ie3-institute/powersystemutils/compare/v2.2.0...v2.2.1
 [2.2.0]: https://github.com/ie3-institute/powersystemutils/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/ie3-institute/powersystemutils/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/ie3-institute/powersystemutils/compare/v1.6.0...v2.0.0
