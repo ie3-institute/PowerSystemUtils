@@ -6,43 +6,14 @@
 package edu.ie3.util.quantities
 
 import edu.ie3.util.quantities.PowerSystemUnits._
-import edu.ie3.util.quantities.interfaces.{
-  Currency,
-  Density,
-  DimensionlessRate,
-  EnergyPrice,
-  HeatCapacity,
-  Irradiance,
-  Irradiation,
-  PricePerLength,
-  SpecificCapacitance,
-  SpecificConductance,
-  SpecificEnergy,
-  SpecificHeatCapacity,
-  SpecificResistance,
-  ThermalConductance
-}
+import edu.ie3.util.quantities.interfaces._
 import tech.units.indriya.ComparableQuantity
 import tech.units.indriya.quantity.Quantities
 import tech.units.indriya.unit.Units._
 
 import javax.measure
+import javax.measure.quantity._
 import javax.measure.{Quantity, Unit}
-import javax.measure.quantity.{
-  Angle,
-  Area,
-  Dimensionless,
-  ElectricConductance,
-  ElectricCurrent,
-  ElectricPotential,
-  ElectricResistance,
-  Energy,
-  Length,
-  Power,
-  Temperature,
-  Time,
-  Volume
-}
 import scala.math.BigDecimal.RoundingMode
 import scala.math.BigDecimal.RoundingMode.RoundingMode
 
