@@ -76,18 +76,21 @@ public class PowerSystemUnits extends Units {
   public static final Unit<Energy> WATTHOUR =
       new TransformedUnit<>("Wh", JOULE, DoubleConverterFactory.withFactor(3600));
 
+  /** Varhour */
   public static final Unit<Energy> VARHOUR =
       new TransformedUnit<>("varh", JOULE, DoubleConverterFactory.withFactor(3600));
 
   /** Kilowatthour */
   public static final Unit<Energy> KILOWATTHOUR = DoubleConverterFactory.withPrefix(WATTHOUR, KILO);
 
-  public static final Unit<Energy> KILOVARHOUR = DoubleConverterFactory.withPrefix(VARHOUR, KILO);
+  /** Kilovarhour */
+  public static final Unit<Energy> KILOVARHOUR = KILO(VARHOUR);
 
   /** Megawatthour */
   public static final Unit<Energy> MEGAWATTHOUR = DoubleConverterFactory.withPrefix(WATTHOUR, MEGA);
 
-  public static final Unit<Energy> MEGAVARHOUR = DoubleConverterFactory.withPrefix(VARHOUR, MEGA);
+  /** Megavarhour */
+  public static final Unit<Energy> MEGAVARHOUR = MEGA(VARHOUR);
 
   /** Watthour per metre */
   public static final Unit<SpecificEnergy> WATTHOUR_PER_METRE =
@@ -226,13 +229,17 @@ public class PowerSystemUnits extends Units {
   private static final HashSet<String> REGISTERED_LABELS = new HashSet<>();
 
   static {
-    // varh, kvarh, Mvarh are kept out of this because they register for the same units as Wh, kWh,
-    // MWh
+    addUnit(WATTHOUR, "Wh");
     addUnit(WATTHOUR_PER_METRE, "Wh/m");
     addUnit(KILOWATTHOUR_PER_KILOMETRE, "kWh/km");
+    addUnit(KILOWATTHOUR, "kWh");
+    addUnit(MEGAWATTHOUR, "MWh");
     addUnit(OHM_PER_KILOMETRE, "Ω/km");
     addUnit(SIEMENS_PER_KILOMETRE, "S/km");
     addUnit(VOLTAMPERE, "VA");
+    addUnit(WATT, "W");
+    addUnit(KILOWATT, "kW");
+    addUnit(MEGAWATT, "MW");
     addUnit(KILOVOLTAMPERE, "kVA");
     addUnit(MEGAVOLTAMPERE, "MVA");
     addUnit(WATT_PER_SQUAREMETRE, "W/m²");
@@ -241,8 +248,12 @@ public class PowerSystemUnits extends Units {
     addUnit(VAR, "var");
     addUnit(KILOVAR, "kvar");
     addUnit(MEGAVAR, "Mvar");
+    addUnit(VARHOUR, "varh");
+    addUnit(KILOVARHOUR, "kvarh");
+    addUnit(MEGAVARHOUR, "Mvarh");
     addUnit(PU, "p.u.");
     addUnit(EURO, "EUR");
+    addUnit(EURO, "€");
     addUnit(EURO_PER_KILOMETRE, "EUR/km");
     addUnit(EURO_PER_WATTHOUR, "EUR/Wh");
     addUnit(EURO_PER_KILOWATTHOUR, "EUR/kWh");
