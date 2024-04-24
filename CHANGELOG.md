@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased/Snapshot]
 
+## [2.2.1]
+
+### Changed
+- `GeoUtils.calcOrderedCoordinateDistances()` now returns a manually sorted `List` instead of a `SortedSet` [#449](https://github.com/ie3-institute/PowerSystemUtils/issues/449)
+
+### Fixed
+- Bug where `GeoUtils.calcOrderedCoordinateDistances()` didn't return all `CoordinateDistance` [#449](https://github.com/ie3-institute/PowerSystemUtils/issues/449)
+
+## [2.2.0]
+
+### Changed
+-  Remove unused fields from TimeUtil [#442](https://github.com/ie3-institute/PowerSystemUtils/issues/442)
+
+## [2.1.0]
+
 ### Added
 - Added quantity for volumetric flow rate [#363](https://github.com/ie3-institute/PowerSystemUtils/issues/363)
 -   Transfer QuantityMatchers from SIMONA [#361](https://github.com/ie3-institute/PowerSystemUtils/issues/361)
@@ -18,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Updated to gradle 8.5 [#425](https://github.com/ie3-institute/PowerSystemUtils/issues/425)
+- Updated to gradle 8.6 [#437](https://github.com/ie3-institute/PowerSystemUtils/issues/437)
 
 ## [2.0.0]
 
@@ -125,7 +141,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 -   fixes + extensions in StandardUnits
 
-[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v2.0.0...HEAD
+[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v2.2.1...HEAD
+[2.2.1]: https://github.com/ie3-institute/powersystemutils/compare/v2.2.0...v2.2.1
+[2.2.0]: https://github.com/ie3-institute/powersystemutils/compare/v2.1.0...v2.2.0
+[2.1.0]: https://github.com/ie3-institute/powersystemutils/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/ie3-institute/powersystemutils/compare/v1.6.0...v2.0.0
 [1.6.0]: https://github.com/ie3-institute/powersystemutils/compare/v1.5.3...v1.6.0
 [1.5.3]: https://github.com/ie3-institute/powersystemutils/compare/v1.5.2...v1.5.3

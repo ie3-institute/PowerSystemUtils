@@ -5,10 +5,10 @@ plugins {
 	id 'maven-publish'
 	id 'signing'
 	id 'pmd' //code check, working on source code
-	id 'com.github.spotbugs' version '6.0.7' //code check, working on byte code
+	id 'com.github.spotbugs' version '6.0.12' //code check, working on byte code
 	id 'com.diffplug.spotless' version '6.25.0'//code format
 	id 'jacoco' // java code coverage plugin
-	id "org.sonarqube" version "4.4.1.3373" // sonarqube
+	id "org.sonarqube" version "5.0.0.4638" // sonarqube
 	id "org.scoverage" version "8.0.3" // scala code coverage scoverage
 	id "com.github.maiflai.scalatest" version "0.32" // run scalatest without specific spec task
 }
@@ -16,7 +16,7 @@ plugins {
 ext {
 	javaVersion = JavaVersion.VERSION_17
 	scalaVersion = '2.13'
-	scalaBinaryVersion = '2.13.12'
+	scalaBinaryVersion = '2.13.13'
 	scriptsLocation = 'gradle' + File.separator + 'scripts' + File.separator //location of script plugins
 }
 
@@ -44,16 +44,10 @@ repositories {
 }
 
 dependencies {
-	constraints {
-		implementation( 'org.jsoup:jsoup:1.17.2' ){
-			because "CVE-2022-36033 6.1 Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting') vulnerability pending CVSS allocation"
-		}
-	}
-
 	// logging
-	implementation 'org.slf4j:slf4j-api:2.0.11'  // slf4j wrapper
+	implementation 'org.slf4j:slf4j-api:2.0.13'  // slf4j wrapper
 	implementation 'com.lmax:disruptor:4.0.0' // async logging
-	implementation platform('org.apache.logging.log4j:log4j-bom:2.22.1')
+	implementation platform('org.apache.logging.log4j:log4j-bom:2.23.1')
 	implementation 'org.apache.logging.log4j:log4j-api' // log4j
 	implementation 'org.apache.logging.log4j:log4j-core' // log4j
 	implementation 'org.apache.logging.log4j:log4j-slf4j-impl' // log4j -> slf4j
@@ -72,8 +66,9 @@ dependencies {
 	// Used in EmpiricalRandom.java, could be removed
 	implementation 'org.eclipse.collections:eclipse-collections:11.1.0'
 
-	implementation 'commons-io:commons-io:2.15.1' // I/O functionalities
-	implementation 'org.apache.commons:commons-compress:1.25.0' // I/O functionalities
+	implementation 'commons-io:commons-io:2.16.1' // I/O functionalities
+	implementation 'commons-codec:commons-codec:1.16.1' // needed by commons-compress
+	implementation 'org.apache.commons:commons-compress:1.26.1' // I/O functionalities
 
 	// testing
 	testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
@@ -85,7 +80,7 @@ dependencies {
 	implementation "org.typelevel:cats-core_${scalaVersion}:2.10.0" // advanced functional programming
 
 	// TEST Scala //
-	implementation "org.scalatest:scalatest_$scalaVersion:3.2.17"
+	implementation "org.scalatest:scalatest_$scalaVersion:3.2.18"
 	testRuntimeOnly 'com.vladsch.flexmark:flexmark-all:0.64.8'
 }
 
