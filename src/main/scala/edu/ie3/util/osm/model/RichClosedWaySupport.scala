@@ -117,7 +117,7 @@ trait RichClosedWaySupport extends WayCache with LazyLogging {
       .safeGet(wayId)
       .orElse(
         _getWay(wayId).flatMap {
-          case Way.OpenWay(_, _, _, _) =>
+          case Way.OpenWay(_, _, _, _, _) =>
             logger
               .error(s"Cannot create polygon for OpenWay with id '$wayId'!")
             None

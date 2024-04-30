@@ -23,11 +23,12 @@ trait SimpleOsmTestData {
     100L,
     Seq(n1.id, n2.id, n3.id, n1.id),
     Map.empty,
-    None
+    None,
+    Some(1)
   )
 
   protected val openWay: OpenWay =
-    OpenWay(11L, Seq(n1.id, n2.id, n3.id), Map.empty, None)
+    OpenWay(11L, Seq(n1.id, n2.id, n3.id), Map.empty, None, Some(1))
 
   protected val nodes = Seq(
     n1,

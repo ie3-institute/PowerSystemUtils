@@ -24,7 +24,8 @@ class OsmUtilsSpec
       Map(
         "shop" -> "supermarket"
       ),
-      None
+      None,
+      Some(1)
     )
     val wayB = ClosedWay(
       1,
@@ -32,7 +33,8 @@ class OsmUtilsSpec
       Map(
         "building" -> "supermarket"
       ),
-      None
+      None,
+      Some(1)
     )
     val wayC = OpenWay(
       1,
@@ -40,7 +42,8 @@ class OsmUtilsSpec
       Map(
         "building" -> "supermarket"
       ),
-      None
+      None,
+      Some(1)
     )
 
     "extract buildings correctly" in {

@@ -35,9 +35,10 @@ class OsmContainerUtilsSpec
             100L,
             Seq(n1.id, n2.id, n1.id),
             Map.empty,
-            None
+            None,
+            Some(1)
           ),
-        11L -> OpenWay(11L, Seq(n1.id, n2.id), Map.empty, None)
+        11L -> OpenWay(11L, Seq(n1.id, n2.id), Map.empty, None, Some(1))
       )
 
       inside(OsmContainerUtils.reduce(seqContainer)) {
@@ -60,9 +61,10 @@ class OsmContainerUtilsSpec
             100L,
             Seq(n1.id, n2.id, n1.id),
             Map.empty,
-            None
+            None,
+            Some(1)
           ),
-        11L -> OpenWay(11L, Seq(n1.id, n2.id), Map.empty, None)
+        11L -> OpenWay(11L, Seq(n1.id, n2.id), Map.empty, None, Some(1))
       )
 
       inside(OsmContainerUtils.reduce(parContainer)) {
@@ -84,9 +86,10 @@ class OsmContainerUtilsSpec
             100L,
             Seq(n1.id, n2.id, n1.id),
             Map.empty,
-            None
+            None,
+            Some(1)
           ),
-        11L -> OpenWay(11L, Seq(n1.id, n2.id), Map.empty, None)
+        11L -> OpenWay(11L, Seq(n1.id, n2.id), Map.empty, None, Some(1))
       )
 
       inside(
@@ -113,9 +116,10 @@ class OsmContainerUtilsSpec
             100L,
             Seq(n1.id, n2.id, n1.id),
             Map.empty,
-            None
+            None,
+            Some(1)
           ),
-        11L -> OpenWay(11L, Seq(n1.id, n2.id), Map.empty, None)
+        11L -> OpenWay(11L, Seq(n1.id, n2.id), Map.empty, None, Some(1))
       )
 
       inside(

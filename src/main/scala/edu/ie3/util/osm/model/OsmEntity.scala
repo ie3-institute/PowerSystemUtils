@@ -184,6 +184,7 @@ object OsmEntity {
     */
   sealed trait Way extends OsmEntity {
     val nodes: Seq[Long]
+    val version: Option[Int]
   }
 
   object Way {
@@ -200,12 +201,15 @@ object OsmEntity {
       *   pairs
       * @param metaInformation
       *   additional meta information of the data object
+      * @param version
+      *   version number of dataset
       */
     final case class OpenWay(
         override val id: Long,
         override val nodes: Seq[Long],
         override val tags: Map[String, String],
-        override val metaInformation: Option[MetaInformation]
+        override val metaInformation: Option[MetaInformation],
+        override val version: Option[Int]
     ) extends Way
 
     /** [[ClosedWay]] implementation that resemble OSM ways which are closed so
@@ -220,25 +224,30 @@ object OsmEntity {
       *   pairs
       * @param metaInformation
       *   additional meta information of the data object
+      * @param version
+      *   version number of dataset
       */
     final case class ClosedWay(
         override val id: Long,
         override val nodes: Seq[Long],
         override val tags: Map[String, String],
-        override val metaInformation: Option[MetaInformation]
+        override val metaInformation: Option[MetaInformation],
+        override val version: Option[Int]
     ) extends Way
 
     def apply(
         id: Long,
         nodes: Seq[Long],
         tags: Map[String, String],
-        metaInformation: Option[MetaInformation]
-    ): Way =
+        metaInformation: Option[MetaInformation],
+        version: Option[Int]
+    ): Way = {
       if (isClosedWay(nodes)) {
-        ClosedWay(id, nodes, tags, metaInformation)
+        ClosedWay(id, nodes, tags, metaInformation, version)
       } else {
-        OpenWay(id, nodes, tags, metaInformation)
+        OpenWay(id, nodes, tags, metaInformation, version)
       }
+    }
 
     /** Checks if a way is closed by assessing if the first and last nodes are
       * identical.
@@ -307,6 +316,5 @@ object OsmEntity {
         relationType: RelationMemberType,
         role: String
     )
-
   }
 }

@@ -12,9 +12,6 @@ import org.scalatest.Inside.inside
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
-import java.time.ZonedDateTime
-import java.util.UUID
-
 class OsmEntitySpec
     extends Matchers
     with AnyWordSpecLike
@@ -29,7 +26,8 @@ class OsmEntitySpec
         "building" -> "residential",
         "landuse" -> "meadow"
       ),
-      None
+      None,
+      Some(1)
     )
     "check if the tags contains a specific key value pair" in {
       entity.hasKeyValuePair("shop", "supermarket") shouldBe true
@@ -48,8 +46,8 @@ class OsmEntitySpec
   "A Way" should {
     "be built correctly as ClosedWay" in {
       val wayNodes = Seq(n1.id, n2.id, n3.id, n1.id)
-      inside(Way(100L, wayNodes, Map.empty, None)) {
-        case ClosedWay(id, nodes, tags, metaInformation) =>
+      inside(Way(100L, wayNodes, Map.empty, None, Some(1))) {
+        case ClosedWay(id, nodes, tags, metaInformation, Some(1)) =>
           id shouldBe 100L
           nodes shouldBe wayNodes
           tags shouldBe Map.empty
@@ -59,8 +57,8 @@ class OsmEntitySpec
 
     "be built correctly as OpenWay" in {
       val wayNodes = Seq(n1.id, n2.id, n3.id)
-      inside(Way(100L, wayNodes, Map.empty, None)) {
-        case OpenWay(id, nodes, tags, metaInformation) =>
+      inside(Way(100L, wayNodes, Map.empty, None, Some(1))) {
+        case OpenWay(id, nodes, tags, metaInformation, Some(1)) =>
           id shouldBe 100L
           nodes shouldBe wayNodes
           tags shouldBe Map.empty
