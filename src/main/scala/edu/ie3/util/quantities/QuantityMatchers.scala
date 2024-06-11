@@ -114,7 +114,7 @@ case object QuantityMatchers extends QuantityMatchers {
     * @param rightWithToleranceFun
     *   Function, how to build the right hand side with tolerance
     * @param compareFun
-    *   Compare function (lhs, rhs) => Condition
+    *   Compare function (lhs, rhs) => Result as boolean
     * @param rawFailureMessage
     *   Failure message in case condition is not satisfied
     * @param rawNegatedFailureMessage
