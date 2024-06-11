@@ -5,7 +5,7 @@ plugins {
 	id 'maven-publish'
 	id 'signing'
 	id 'pmd' //code check, working on source code
-	id 'com.github.spotbugs' version '6.0.12' //code check, working on byte code
+	id 'com.github.spotbugs' version '6.0.16' //code check, working on byte code
 	id 'com.diffplug.spotless' version '6.25.0'//code format
 	id 'jacoco' // java code coverage plugin
 	id "org.sonarqube" version "5.0.0.4638" // sonarqube
@@ -16,7 +16,7 @@ plugins {
 ext {
 	javaVersion = JavaVersion.VERSION_17
 	scalaVersion = '2.13'
-	scalaBinaryVersion = '2.13.13'
+	scalaBinaryVersion = '2.13.14'
 	scriptsLocation = 'gradle' + File.separator + 'scripts' + File.separator //location of script plugins
 }
 
@@ -56,7 +56,7 @@ dependencies {
 
 	implementation 'javax.measure:unit-api:2.2' // quantities
 	implementation 'tech.units:indriya:2.2'  // quantities
-	implementation 'com.google.code.gson:gson:2.10.1' // java serialization, POJOs -> JSON
+	implementation 'com.google.code.gson:gson:2.11.0' // java serialization, POJOs -> JSON
 	implementation 'org.apache.commons:commons-lang3:3.14.0' // for HashCodeBuilder
 	implementation 'org.apache.commons:commons-math3:3.6.1' // mathematics and statistics components
 	// JTS Topology Suite for GeoPositions, License: EPL 1.0 / EDL 1.0
@@ -67,8 +67,8 @@ dependencies {
 	implementation 'org.eclipse.collections:eclipse-collections:11.1.0'
 
 	implementation 'commons-io:commons-io:2.16.1' // I/O functionalities
-	implementation 'commons-codec:commons-codec:1.16.1' // needed by commons-compress
-	implementation 'org.apache.commons:commons-compress:1.26.1' // I/O functionalities
+	implementation 'commons-codec:commons-codec:1.17.0' // needed by commons-compress
+	implementation 'org.apache.commons:commons-compress:1.26.2' // I/O functionalities
 
 	// testing
 	testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
@@ -77,7 +77,7 @@ dependencies {
 	// CORE Scala //
 	implementation "org.scala-lang:scala-library:${scalaBinaryVersion}"
 	implementation "org.scala-lang.modules:scala-parallel-collections_${scalaVersion}:1.0.4"
-	implementation "org.typelevel:cats-core_${scalaVersion}:2.10.0" // advanced functional programming
+	implementation "org.typelevel:cats-core_${scalaVersion}:2.12.0" // advanced functional programming
 
 	// TEST Scala //
 	implementation "org.scalatest:scalatest_$scalaVersion:3.2.18"
