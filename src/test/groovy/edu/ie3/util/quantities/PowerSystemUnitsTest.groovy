@@ -9,6 +9,8 @@ import spock.lang.Shared
 import spock.lang.Specification
 import tech.units.indriya.quantity.Quantities
 
+import javax.measure.format.MeasurementParseException
+
 import static edu.ie3.util.quantities.PowerSystemUnits.*
 import static tech.units.indriya.unit.Units.JOULE
 import static tech.units.indriya.unit.Units.RADIAN
@@ -72,5 +74,42 @@ class PowerSystemUnitsTest extends Specification {
 		Math.PI / 2     || 90.0
 		Math.PI         || 180.0
 		Math.PI * 3 / 2 || 270.0
+	}
+
+	def "Units are labeled with the correct label of the expected unit symbol"() {
+		when:
+		def dut = Quantities.getQuantity(input)
+
+		then:
+		dut.unit ==  expectedUnit
+
+		where:
+		expectedUnit								|| input
+		WATTHOUR    								|| "1 Wh"
+		KILOWATTHOUR_PER_KILOMETRE 					|| "1 kWh/km"
+		VOLTAMPERE									|| "1 VA"
+		PU_PER_HOUR									|| "1 p.u./h"
+		VAR											|| "1 var"
+		VARHOUR										|| "1 varh"
+		PU											|| "1 p.u."
+		EURO										|| "99 EUR"
+		EURO										|| "99 €"
+		MICROFARAD_PER_KILOMETRE 					|| "5 µF/km"
+		FARAD_PER_KILOMETRE							|| "3.14 F/km"
+		DEGREE_GEOM									|| "42 °"
+		CUBIC_METRE_PER_SECOND						|| "430431 m³/s"
+		PERCENT_PER_HOUR							|| "4 %/h"
+		MEGAWATT									|| "87 MW"
+		KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE	|| "2.034 kWh/K*m³"
+	}
+
+	def "when an unregistered Unit should be parsed an Exception should be thrown"() {
+		when:
+		def dut = Quantities.getQuantity("1 kWh")
+		dut
+
+		then:
+		MeasurementParseException exception = thrown(MeasurementParseException)
+		exception.message == "Parse Error"
 	}
 }
