@@ -36,6 +36,19 @@ object RichGeometries {
     ): ComparableQuantity[Length] =
       GeoUtils.calcHaversine(coordinate, coordinateB)
 
+    /** Calculates the great circle distance between two coordinates. Does not
+      * use Quantities for faster calculation.
+      *
+      * @param coordinateB
+      *   coordinate b
+      * @return
+      *   the distance between the coordinates in metres
+      */
+    def haversineDistanceMetres(
+        coordinateB: Coordinate
+    ): Double =
+      GeoUtils.calcHaversineMetres(coordinate, coordinateB)
+
     /** Checks if the coordinate lies between two coordinates a and b by
       * comparing the distances between a and b with the sum of distances
       * between the coordinate and a and the coordinate and b
@@ -54,13 +67,10 @@ object RichGeometries {
         b: Coordinate,
         epsilon: Double = 1e-12
     ): Boolean = {
-      val distance = a.haversineDistance(b)
-      val distancePassingMe = a
-        .haversineDistance(coordinate)
-        .add(coordinate.haversineDistance(b))
-        .getValue
-        .doubleValue
-      abs(1 - (distancePassingMe / distance.getValue.doubleValue())) < epsilon
+      val distance = a.haversineDistanceMetres(b)
+      val distancePassingMe = a.haversineDistanceMetres(coordinate)
+        + coordinate.haversineDistanceMetres(b)
+      abs(1 - (distancePassingMe / distance)) < epsilon
     }
 
     /** Creates a [[Point]] from this coordinate

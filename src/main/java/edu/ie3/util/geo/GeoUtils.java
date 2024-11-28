@@ -126,7 +126,8 @@ public class GeoUtils {
   }
 
   /**
-   * Calculates between two coordinates on earth's surface (great circle distance).
+   * Calculates between two coordinates on earth's surface (great circle distance). Does not use
+   * Quantities for faster calculation.
    *
    * @param latA latitude of coordinate a
    * @param lngA longitude of coordinate a
@@ -142,6 +143,19 @@ public class GeoUtils {
             + cos(toRadians(latA)) * cos(toRadians(latB)) * sin(dLonRad / 2) * sin(dLonRad / 2);
     double c = 2 * atan2(sqrt(a), sqrt(1 - a));
     return EARTH_RADIUS_M * c;
+  }
+
+  /**
+   * Calculates the distance between two coordinates on earth's surface (great circle distance).
+   * Does not use Quantities for faster calculation.
+   *
+   * @param coordinateA coordinate a
+   * @param coordinateB coordinate b
+   * @return the distance between the coordinates in metres
+   */
+  public static double calcHaversineMetres(Coordinate coordinateA, Coordinate coordinateB) {
+    return calcHaversineMetres(
+        coordinateA.getY(), coordinateA.getX(), coordinateB.getY(), coordinateB.getX());
   }
 
   /**
