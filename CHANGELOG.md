@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased/Snapshot]
 
+### Fixed
+- Fix catastrophic runtime of `GeoUtils.calcHaversine` due to Quantities [#508](https://github.com/ie3-institute/PowerSystemUtils/issues/508)
+
 ## [2.2.1]
 
 ### Changed
