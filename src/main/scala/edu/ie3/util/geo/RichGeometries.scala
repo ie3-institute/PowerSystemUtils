@@ -6,7 +6,6 @@
 package edu.ie3.util.geo
 
 import edu.ie3.util.exceptions.GeoException
-import edu.ie3.util.geo.GeoUtils
 import edu.ie3.util.quantities.QuantityUtils.RichQuantityDouble
 import org.locationtech.jts.geom.{
   Coordinate,
@@ -19,7 +18,7 @@ import tech.units.indriya.ComparableQuantity
 
 import javax.measure.quantity.{Area, Length}
 import scala.math.abs
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Try}
 
 object RichGeometries {
 
@@ -48,7 +47,7 @@ object RichGeometries {
       * @param epsilon
       *   permitted relative deviation
       * @return
-      *   whether or not the coordinate lies between
+      *   whether the coordinate lies between
       */
     def isBetween(
         a: Coordinate,
@@ -127,7 +126,7 @@ object RichGeometries {
     }
 
     /** Checks whether the polygon contains the coordinate. Uses "covers()"
-      * insted of "contains()" so borders are included.
+      * instead of "contains()" so borders are included.
       *
       * @param coordinate
       *   the coordinate to check
