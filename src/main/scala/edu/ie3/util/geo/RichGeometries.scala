@@ -6,7 +6,6 @@
 package edu.ie3.util.geo
 
 import edu.ie3.util.exceptions.GeoException
-import edu.ie3.util.geo.GeoUtils
 import edu.ie3.util.quantities.QuantityUtils.RichQuantityDouble
 import org.locationtech.jts.geom.{
   Coordinate,
@@ -19,7 +18,7 @@ import tech.units.indriya.ComparableQuantity
 
 import javax.measure.quantity.{Area, Length}
 import scala.math.abs
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Try}
 
 object RichGeometries {
 
@@ -37,6 +36,19 @@ object RichGeometries {
     ): ComparableQuantity[Length] =
       GeoUtils.calcHaversine(coordinate, coordinateB)
 
+    /** Calculates the great circle distance between two coordinates. Does not
+      * use Quantities for faster calculation.
+      *
+      * @param coordinateB
+      *   coordinate b
+      * @return
+      *   the distance between the coordinates in metres
+      */
+    def haversineDistanceMetres(
+        coordinateB: Coordinate
+    ): Double =
+      GeoUtils.calcHaversineMetres(coordinate, coordinateB)
+
     /** Checks if the coordinate lies between two coordinates a and b by
       * comparing the distances between a and b with the sum of distances
       * between the coordinate and a and the coordinate and b
@@ -48,20 +60,17 @@ object RichGeometries {
       * @param epsilon
       *   permitted relative deviation
       * @return
-      *   whether or not the coordinate lies between
+      *   whether the coordinate lies between
       */
     def isBetween(
         a: Coordinate,
         b: Coordinate,
         epsilon: Double = 1e-12
     ): Boolean = {
-      val distance = a.haversineDistance(b)
-      val distancePassingMe = a
-        .haversineDistance(coordinate)
-        .add(coordinate.haversineDistance(b))
-        .getValue
-        .doubleValue
-      abs(1 - (distancePassingMe / distance.getValue.doubleValue())) < epsilon
+      val distance = a.haversineDistanceMetres(b)
+      val distancePassingMe = a.haversineDistanceMetres(coordinate)
+        + coordinate.haversineDistanceMetres(b)
+      abs(1 - (distancePassingMe / distance)) < epsilon
     }
 
     /** Creates a [[Point]] from this coordinate
@@ -127,7 +136,7 @@ object RichGeometries {
     }
 
     /** Checks whether the polygon contains the coordinate. Uses "covers()"
-      * insted of "contains()" so borders are included.
+      * instead of "contains()" so borders are included.
       *
       * @param coordinate
       *   the coordinate to check

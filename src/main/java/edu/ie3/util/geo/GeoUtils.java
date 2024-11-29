@@ -5,15 +5,13 @@
 */
 package edu.ie3.util.geo;
 
-import static edu.ie3.util.quantities.PowerSystemUnits.METRE;
-import static edu.ie3.util.quantities.PowerSystemUnits.RADIAN;
+import static edu.ie3.util.quantities.PowerSystemUnits.*;
 import static java.lang.Math.*;
 
 import edu.ie3.util.exceptions.GeoException;
 import java.util.*;
 import java.util.stream.IntStream;
 import javax.measure.Quantity;
-import javax.measure.quantity.Angle;
 import javax.measure.quantity.Length;
 import org.locationtech.jts.algorithm.ConvexHull;
 import org.locationtech.jts.geom.*;
@@ -26,8 +24,10 @@ public class GeoUtils {
   public static final GeometryFactory DEFAULT_GEOMETRY_FACTORY =
       new GeometryFactory(new PrecisionModel(), 4326);
 
+  public static final double EARTH_RADIUS_M = 6378137.0;
+
   public static final ComparableQuantity<Length> EARTH_RADIUS =
-      Quantities.getQuantity(6378137.0, METRE);
+      Quantities.getQuantity(EARTH_RADIUS_M, METRE);
 
   protected GeoUtils() {
     throw new IllegalStateException("Utility classes cannot be instantiated.");
@@ -126,6 +126,39 @@ public class GeoUtils {
   }
 
   /**
+   * Calculates between two coordinates on earth's surface (great circle distance). Does not use
+   * Quantities for faster calculation.
+   *
+   * @param latA latitude of coordinate a
+   * @param lngA longitude of coordinate a
+   * @param latB latitude of coordinate b
+   * @param lngB longitude of coordinate b
+   * @return The distance between both coordinates in metres
+   */
+  public static double calcHaversineMetres(double latA, double lngA, double latB, double lngB) {
+    double dLatRad = toRadians(latB - latA);
+    double dLonRad = toRadians(lngB - lngA);
+    double a =
+        sin(dLatRad / 2) * sin(dLatRad / 2)
+            + cos(toRadians(latA)) * cos(toRadians(latB)) * sin(dLonRad / 2) * sin(dLonRad / 2);
+    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    return EARTH_RADIUS_M * c;
+  }
+
+  /**
+   * Calculates the distance between two coordinates on earth's surface (great circle distance).
+   * Does not use Quantities for faster calculation.
+   *
+   * @param coordinateA coordinate a
+   * @param coordinateB coordinate b
+   * @return the distance between the coordinates in metres
+   */
+  public static double calcHaversineMetres(Coordinate coordinateA, Coordinate coordinateB) {
+    return calcHaversineMetres(
+        coordinateA.getY(), coordinateA.getX(), coordinateB.getY(), coordinateB.getX());
+  }
+
+  /**
    * Calculates between two coordinates on earth's surface (great circle distance).
    *
    * @param latA latitude of coordinate a
@@ -136,17 +169,7 @@ public class GeoUtils {
    */
   public static ComparableQuantity<Length> calcHaversine(
       double latA, double lngA, double latB, double lngB) {
-
-    ComparableQuantity<Angle> dLat = Quantities.getQuantity(toRadians(latB - latA), RADIAN);
-    ComparableQuantity<Angle> dLon = Quantities.getQuantity(toRadians(lngB - lngA), RADIAN);
-    double a =
-        sin(dLat.getValue().doubleValue() / 2) * sin(dLat.getValue().doubleValue() / 2)
-            + cos(toRadians(latA))
-                * cos(toRadians(latB))
-                * sin(dLon.getValue().doubleValue() / 2)
-                * sin(dLon.getValue().doubleValue() / 2);
-    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
-    return EARTH_RADIUS.multiply(c);
+    return Quantities.getQuantity(calcHaversineMetres(latA, lngA, latB, lngB), METRE);
   }
 
   /**
