@@ -228,40 +228,40 @@ public class PowerSystemUnits extends Units {
   static {
     // varh, kvarh, Mvarh are kept out of this because they register for the same units as Wh, kWh,
     // MWh
-    addUnit(WATTHOUR_PER_METRE, "Wh/m");
-    addUnit(KILOWATTHOUR_PER_KILOMETRE, "kWh/km");
-    addUnit(OHM_PER_KILOMETRE, "Ω/km");
-    addUnit(SIEMENS_PER_KILOMETRE, "S/km");
-    addUnit(VOLTAMPERE, "VA");
-    addUnit(KILOVOLTAMPERE, "kVA");
-    addUnit(MEGAVOLTAMPERE, "MVA");
-    addUnit(WATT_PER_SQUAREMETRE, "W/m²");
-    addUnit(PERCENT_PER_HOUR, "%/h");
-    addUnit(PU_PER_HOUR, "p.u./h");
-    addUnit(VAR, "var");
-    addUnit(KILOVAR, "kvar");
-    addUnit(MEGAVAR, "Mvar");
-    addUnit(PU, "p.u.");
-    addUnit(EURO, "EUR");
-    addUnit(EURO_PER_KILOMETRE, "EUR/km");
-    addUnit(EURO_PER_WATTHOUR, "EUR/Wh");
-    addUnit(EURO_PER_KILOWATTHOUR, "EUR/kWh");
-    addUnit(EURO_PER_MEGAWATTHOUR, "EUR/MWh");
-    addUnit(FARAD_PER_METRE, "F/m");
-    addUnit(MICROFARAD_PER_KILOMETRE, "µF/km");
-    addUnit(FARAD_PER_KILOMETRE, "F/km");
-    addUnit(DEGREE_GEOM, "°");
-    addUnit(KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE, "kWh/K*m³");
-    addUnit(KILOWATT_PER_KELVIN, "kW/K");
-    addUnit(KILOGRAM_PER_CUBIC_METRE, "kg/m³");
-    addUnit(CUBIC_METRE_PER_SECOND, "m³/s");
+    registerUnit(WATTHOUR_PER_METRE, "Wh/m");
+    registerUnit(KILOWATTHOUR_PER_KILOMETRE, "kWh/km");
+    registerUnit(OHM_PER_KILOMETRE, "Ω/km");
+    registerUnit(SIEMENS_PER_KILOMETRE, "S/km");
+    registerUnit(VOLTAMPERE, "VA");
+    registerUnit(KILOVOLTAMPERE, "kVA");
+    registerUnit(MEGAVOLTAMPERE, "MVA");
+    registerUnit(WATT_PER_SQUAREMETRE, "W/m²");
+    registerUnit(PERCENT_PER_HOUR, "%/h");
+    registerUnit(PU_PER_HOUR, "p.u./h");
+    registerUnit(VAR, "var");
+    registerUnit(KILOVAR, "kvar");
+    registerUnit(MEGAVAR, "Mvar");
+    registerUnit(PU, "p.u.");
+    registerUnit(EURO, "EUR");
+    registerUnit(EURO_PER_KILOMETRE, "EUR/km");
+    registerUnit(EURO_PER_WATTHOUR, "EUR/Wh");
+    registerUnit(EURO_PER_KILOWATTHOUR, "EUR/kWh");
+    registerUnit(EURO_PER_MEGAWATTHOUR, "EUR/MWh");
+    registerUnit(FARAD_PER_METRE, "F/m");
+    registerUnit(MICROFARAD_PER_KILOMETRE, "µF/km");
+    registerUnit(FARAD_PER_KILOMETRE, "F/km");
+    registerUnit(DEGREE_GEOM, "°");
+    registerUnit(KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE, "kWh/K*m³");
+    registerUnit(KILOWATT_PER_KELVIN, "kW/K");
+    registerUnit(KILOGRAM_PER_CUBIC_METRE, "kg/m³");
+    registerUnit(CUBIC_METRE_PER_SECOND, "m³/s");
   }
 
   /**
    * Units must be registered via this method or they cannot be serialized/deserialized! If the
    * return-value is null, the unit was already registered
    */
-  private static void addUnit(Unit<?> unit, String label) {
+  private static void registerUnit(Unit<?> unit, String label) {
     if (REGISTERED_LABELS.contains(label)) {
       logger.log(Level.FINE, "Label {} is already registered. Ignoring", label);
     }

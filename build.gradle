@@ -55,7 +55,7 @@ dependencies {
 	implementation "com.typesafe.scala-logging:scala-logging_$scalaVersion:3.9.5"
 
 	implementation 'javax.measure:unit-api:2.2' // quantities
-	implementation 'tech.units:indriya:2.2'  // quantities
+	implementation 'tech.units:indriya:2.2.1'  // quantities
 	implementation 'com.google.code.gson:gson:2.11.0' // java serialization, POJOs -> JSON
 	implementation 'org.apache.commons:commons-lang3:3.17.0' // for HashCodeBuilder
 	implementation 'org.apache.commons:commons-math3:3.6.1' // mathematics and statistics components
