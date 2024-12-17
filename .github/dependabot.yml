@@ -8,9 +8,10 @@ updates:
   open-pull-requests-limit: 10
   reviewers:
   - t-ober
-  - sensarmad
+  - staudtMarius
   - sebastian-peter
   - danielfeismann
+  - jo-bao
   ignore:
   - dependency-name: org.scalatest:scalatest_2.13
     versions:

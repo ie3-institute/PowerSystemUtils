@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased/Snapshot]
 
+### Changed
+- Added Bao and Staudt to the list of reviewers [#510](https://github.com/ie3-institute/PowerSystemUtils/issues/510)
+
 ## [2.2.1]
 
 ### Changed
