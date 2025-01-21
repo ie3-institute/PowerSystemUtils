@@ -77,7 +77,7 @@ dependencies {
 	// CORE Scala //
 	implementation "org.scala-lang:scala-library:${scalaBinaryVersion}"
 	implementation "org.scala-lang.modules:scala-parallel-collections_${scalaVersion}:1.2.0"
-	implementation "org.typelevel:cats-core_${scalaVersion}:2.12.0" // advanced functional programming
+	implementation "org.typelevel:cats-core_${scalaVersion}:2.13.0" // advanced functional programming
 
 	// TEST Scala //
 	implementation "org.scalatest:scalatest_$scalaVersion:3.2.19"
