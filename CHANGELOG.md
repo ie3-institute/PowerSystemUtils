@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Added Bao and Staudt to the list of reviewers [#510](https://github.com/ie3-institute/PowerSystemUtils/issues/510)
+- Upgraded to `scala3` [#533](https://github.com/ie3-institute/PowerSystemUtils)
 
 ## [2.2.1]
 
