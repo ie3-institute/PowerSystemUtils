@@ -50,11 +50,8 @@ object QuantityUtils {
 
   /** Implicit class to enrich the [[Double]] with [[ComparableQuantity]]
     * conversion capabilities
-    *
-    * @param value
-    *   the actual double value
     */
-  implicit class RichQuantityDouble(value: Double) {
+  extension (value: Double) {
 
     /* javax measure units */
 

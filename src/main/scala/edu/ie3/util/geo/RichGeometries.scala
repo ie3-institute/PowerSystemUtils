@@ -7,7 +7,7 @@ package edu.ie3.util.geo
 
 import edu.ie3.util.exceptions.GeoException
 import edu.ie3.util.geo.GeoUtils
-import edu.ie3.util.quantities.QuantityUtils.RichQuantityDouble
+import edu.ie3.util.quantities.QuantityUtils.asSquareMetre
 import org.locationtech.jts.geom.{
   Coordinate,
   Geometry,
