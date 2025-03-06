@@ -7,11 +7,7 @@ package edu.ie3.util.quantities
 
 import edu.ie3.util.quantities.PowerSystemUnits._
 import edu.ie3.util.quantities.QuantityMatchers.equalWithTolerance
-import edu.ie3.util.quantities.QuantityUtils.{
-  RichQuantity,
-  RichQuantityDouble,
-  RichUnit
-}
+import edu.ie3.util.quantities.QuantityUtils.*
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.wordspec.AnyWordSpecLike

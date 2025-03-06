@@ -8,7 +8,7 @@ package edu.ie3.util
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
-import edu.ie3.util.DoubleUtils.ImplicitDouble
+import edu.ie3.util.DoubleUtils.*
 
 class DoubleUtilsSpec extends Matchers with AnyWordSpecLike {
   "Utilizing the rich class to compare double values" when {

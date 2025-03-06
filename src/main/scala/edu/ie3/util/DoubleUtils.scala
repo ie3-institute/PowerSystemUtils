@@ -6,7 +6,7 @@
 package edu.ie3.util
 
 object DoubleUtils {
-  implicit class ImplicitDouble(d: Double) {
+  extension (d: Double) {
     def ~=(other: Double)(implicit precision: Double): Boolean =
       (d - other).abs <= precision
     def !~=(other: Double)(implicit precision: Double): Boolean =
