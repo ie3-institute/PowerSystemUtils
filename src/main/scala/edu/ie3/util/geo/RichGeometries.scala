@@ -6,24 +6,17 @@
 package edu.ie3.util.geo
 
 import edu.ie3.util.exceptions.GeoException
-import edu.ie3.util.geo.GeoUtils
 import edu.ie3.util.quantities.QuantityUtils.asSquareMetre
-import org.locationtech.jts.geom.{
-  Coordinate,
-  Geometry,
-  LineString,
-  Point,
-  Polygon
-}
+import org.locationtech.jts.geom.*
 import tech.units.indriya.ComparableQuantity
 
 import javax.measure.quantity.{Area, Length}
 import scala.math.abs
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Try}
 
 object RichGeometries {
 
-  implicit class RichCoordinate(coordinate: Coordinate) {
+  extension (coordinate: Coordinate) {
 
     /** Calculates the great circle distance between two coordinates
       *
@@ -71,7 +64,7 @@ object RichGeometries {
     def toPoint: Point = GeoUtils.buildPoint(coordinate)
   }
 
-  implicit class RichLineString(lineString: LineString) {
+  extension (lineString: LineString) {
 
     /** Compute length of a [[LineString]] on earth's surface.
       *
@@ -82,7 +75,7 @@ object RichGeometries {
       GeoUtils.calcHaversine(lineString)
   }
 
-  implicit class RichPolygon(polygon: Polygon) {
+  extension (polygon: Polygon) {
 
     /** Calculates intersection between polygons
       *

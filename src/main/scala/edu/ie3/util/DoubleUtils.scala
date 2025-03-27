@@ -7,9 +7,9 @@ package edu.ie3.util
 
 object DoubleUtils {
   extension (d: Double) {
-    def ~=(other: Double)(implicit precision: Double): Boolean =
+    def ~=(other: Double)(using precision: Double): Boolean =
       (d - other).abs <= precision
-    def !~=(other: Double)(implicit precision: Double): Boolean =
+    def !~=(other: Double)(using precision: Double): Boolean =
       (d - other).abs > precision
   }
 }
