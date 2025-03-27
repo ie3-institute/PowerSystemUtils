@@ -8,7 +8,7 @@ package edu.ie3.util
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
-import edu.ie3.util.DoubleUtils.ImplicitDouble
+import edu.ie3.util.DoubleUtils.*
 
 class DoubleUtilsSpec extends Matchers with AnyWordSpecLike {
   "Utilizing the rich class to compare double values" when {
@@ -17,7 +17,7 @@ class DoubleUtilsSpec extends Matchers with AnyWordSpecLike {
         val lhs = 0.3
         val rhs = 0.3000001
 
-        implicit val precision: Double = 1e-6
+        given precision: Double = 1e-6
 
         (lhs ~= rhs) shouldBe true
         (rhs ~= lhs) shouldBe true
@@ -27,7 +27,7 @@ class DoubleUtilsSpec extends Matchers with AnyWordSpecLike {
         val lhs = 0.3
         val rhs = 0.300001
 
-        implicit val precision: Double = 1e-6
+        given precision: Double = 1e-6
 
         (lhs ~= rhs) shouldBe false
         (rhs ~= lhs) shouldBe false
@@ -38,7 +38,7 @@ class DoubleUtilsSpec extends Matchers with AnyWordSpecLike {
         val lhs = 0.3
         val rhs = 0.3000001
 
-        implicit val precision: Double = 1e-6
+        given precision: Double = 1e-6
 
         (lhs !~= rhs) shouldBe false
         (rhs !~= lhs) shouldBe false
@@ -48,7 +48,7 @@ class DoubleUtilsSpec extends Matchers with AnyWordSpecLike {
         val lhs = 0.3
         val rhs = 0.300001
 
-        implicit val precision: Double = 1e-6
+        given precision: Double = 1e-6
 
         (lhs !~= rhs) shouldBe true
         (rhs !~= lhs) shouldBe true
