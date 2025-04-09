@@ -60,6 +60,12 @@ jobs:
           
           bash scripts/branch_type.sh
 
+      - name: Version Check
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          BASE_BRANCH: ${{ github.event.pull_request.base.ref }}
+        run: bash scripts/run-version-check.sh
+
       - name: Build Project
         run: ./gradlew --refresh-dependencies clean assemble spotlessCheck
 
