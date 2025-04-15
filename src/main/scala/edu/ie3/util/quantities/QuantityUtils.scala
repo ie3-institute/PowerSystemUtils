@@ -50,11 +50,8 @@ object QuantityUtils {
 
   /** Implicit class to enrich the [[Double]] with [[ComparableQuantity]]
     * conversion capabilities
-    *
-    * @param value
-    *   the actual double value
     */
-  implicit class RichQuantityDouble(value: Double) {
+  extension (value: Double) {
 
     /* javax measure units */
 
@@ -253,9 +250,7 @@ object QuantityUtils {
 
   }
 
-  implicit class RichQuantity[Q <: Quantity[Q]](
-      private val q: ComparableQuantity[Q]
-  ) extends AnyVal {
+  extension [Q <: Quantity[Q]](q: ComparableQuantity[Q]) {
 
     /** Returns the smaller of two Quantities
       *
@@ -305,9 +300,7 @@ object QuantityUtils {
     }
   }
 
-  implicit class RichUnit[Q <: Quantity[Q]](
-      private val unit: measure.Unit[Q]
-  ) extends AnyVal {
+  extension [Q <: Quantity[Q]](unit: measure.Unit[Q]) {
 
     /** Transform some power unit to given unit with the same prefix
       * @param targetUnit
