@@ -11,12 +11,15 @@ import edu.ie3.util.geo.GeoUtils.{
   buildPolygon
 }
 import edu.ie3.util.geo.RichGeometries.{
-  RichCoordinate,
-  RichLineString,
-  RichPolygon
+  haversineDistance,
+  isBetween,
+  haversineLength,
+  toPoint,
+  intersect,
+  calcAreaOnEarth
 }
 import edu.ie3.util.quantities.QuantityMatchers.equalWithTolerance
-import edu.ie3.util.quantities.QuantityUtils.RichQuantityDouble
+import edu.ie3.util.quantities.QuantityUtils.asSquareMetre
 import org.locationtech.jts.geom.Coordinate
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike

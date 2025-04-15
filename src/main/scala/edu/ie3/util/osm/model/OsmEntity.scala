@@ -5,7 +5,7 @@
 */
 package edu.ie3.util.osm.model
 
-import edu.ie3.util.geo.RichGeometries.RichCoordinate
+import edu.ie3.util.geo.RichGeometries.toPoint
 import edu.ie3.util.osm.model.OsmEntity.MetaInformation
 import edu.ie3.util.osm.model.OsmEntity.Relation.RelationMember
 import edu.ie3.util.osm.model.OsmEntity.Relation.RelationMemberType.RelationMemberType
