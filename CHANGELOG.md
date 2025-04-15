@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Bao and Staudt to the list of reviewers [#510](https://github.com/ie3-institute/PowerSystemUtils/issues/510)
 - Upgraded to `scala3` [#533](https://github.com/ie3-institute/PowerSystemUtils)
 
+### Fixed
+- Fixed deployment in GitHub Actions pipeline and removed Jenkinsfile [#546](https://github.com/ie3-institute/PowerSystemUtils/issues/546)
+
 ## [2.2.1]
 
 ### Changed
