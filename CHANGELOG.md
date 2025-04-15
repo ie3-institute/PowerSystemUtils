@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased/Snapshot]
+### Added
+- Added semVer Gradle plugin to enable semantic versioning [#544](https://github.com/ie3-institute/PowerSystemUtils/issues/544)
 
 ### Changed
 - Added Bao and Staudt to the list of reviewers [#510](https://github.com/ie3-institute/PowerSystemUtils/issues/510)
