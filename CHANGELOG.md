@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased/Snapshot]
 ### Added
+- Added semVer Gradle plugin to enable semantic versioning [#544](https://github.com/ie3-institute/PowerSystemUtils/issues/544)
 - Implemented GitHub Actions Pipeline [#540](https://github.com/ie3-institute/PowerSystemUtils/issues/540)
 
 ### Changed
