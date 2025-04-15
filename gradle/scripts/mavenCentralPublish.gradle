@@ -1,24 +1,25 @@
 /* Maven publish - start */
-task sourcesJar(type: Jar) {
+
+tasks.register("sourcesJar", Jar) {
 	archiveClassifier.set("sources")
 	from sourceSets.main.allJava
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
+tasks.register("javadocJar", Jar) {
+	dependsOn tasks.named("javadoc", Javadoc)
 	archiveClassifier.set("javadoc")
-	from javadoc.destinationDir
+	from { tasks.named("javadoc", Javadoc).get().destinationDir }
 }
 
-if (project.hasProperty('user') && project.hasProperty('password')) {
-	signing {
-		required { !version.endsWith('SNAPSHOT') }
-		if(required)
-			sign(publishing.publications)
-	}
+if (project.hasProperty('user') && project.hasProperty('password') && project.hasProperty('deployVersion')) {
+
+	// snapshot version differs from normal version
+	String versionString = project.getProperty('deployVersion')
+
 
 	publishing {
 		publications {
-			mavenJava(MavenPublication) {
+			create("mavenJava", MavenPublication) {
 
 				versionMapping {
 					// resolves dynamic versioning to current version number
@@ -30,12 +31,12 @@ if (project.hasProperty('user') && project.hasProperty('password')) {
 					}
 				}
 				pom {
-					description = 'Utility library that is used by several projects @ the Institute of Energy Systems, Energy Efficiency and Energy Economics (ie3) @ TU Dortmund University'
-					name = 'Power System Utils'
+					description = 'PowerSystemUtils - an agent-based power system simulation'
+					name = 'PowerSystemUtils'
 					url = 'https:github.com/ie3-institute/PowerSystemUtils'
 					organization {
 						name = 'Institute of Energy Systems, Energy Efficiency and Energy Economics (ie3)/TU Dortmund University'
-						url = 'https:www.ie3.tu-dortmund.de'
+						url = 'https:www.ie3.tu-dortmund.de/'
 					}
 					issueManagement {
 						system = 'GitHub'
@@ -44,7 +45,7 @@ if (project.hasProperty('user') && project.hasProperty('password')) {
 					licenses {
 						license {
 							name = 'BSD 3-Clause License'
-							url = 'https:github.com/ie3-institute/PowerSystemUtils/blob/main/LICENSE'
+							url = 'https:github.com/ie3-institute/PowerSystemUtils/blob/master/LICENSE'
 						}
 					}
 					developers {
@@ -61,38 +62,41 @@ if (project.hasProperty('user') && project.hasProperty('password')) {
 				}
 
 				removeTestDependenciesFromPom(pom)
-				groupId group
-				artifactId 'PowerSystemUtils'
-				version version
+				groupId = group
+				artifactId = 'PowerSystemUtils'
+				version = versionString
 
 				from components.java
-				artifact sourcesJar
-				artifact javadocJar
+				artifact tasks.named("sourcesJar")
+				artifact tasks.named("javadocJar")
 			}
 		}
 		repositories {
 			maven {
 				def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
 				def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-				url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+				url = versionString.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
 				credentials {
 					username project.getProperty('user')
 					password project.getProperty('password')
 				}
 			}
 		}
+		signing {
+			useInMemoryPgpKeys(
+					findProperty('signingKey') as String,
+					findProperty('signingPassword') as String
+			)
+			sign publications.mavenJava
+		}
 	}
 
-
-	model {
-		tasks.generatePomFileForMavenJavaPublication {
-			destination = file("$rootDir/build/generated-pom.xml")
-		}
+	tasks.named("generatePomFileForMavenJavaPublication") {
+		destination = layout.buildDirectory.file("generated-pom.xml").get().asFile
 	}
 }
 
 def removeTestDependenciesFromPom(pom) {
-
 	pom.withXml {
 		def root = asNode()
 		// eliminate test-scoped dependencies (no need in maven central POMs)
@@ -101,6 +105,5 @@ def removeTestDependenciesFromPom(pom) {
 		}
 	}
 }
-
 
 /* Maven publish - end */
