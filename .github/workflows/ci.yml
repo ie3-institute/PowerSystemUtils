@@ -87,19 +87,15 @@ jobs:
 
       #Deployment
       - name: Deploy
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+        if: github.ref == 'refs/heads/main'
         env:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.MAVENCENTRAL_SIGNINGKEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.MAVENCENTRAL_SIGNINGPASS }}
           ORG_GRADLE_PROJECT_user: ${{ secrets.MAVENCENTRAL_USER }}
           ORG_GRADLE_PROJECT_password: ${{ secrets.MAVENCENTRAL_PASS }}
         run: |
-          if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
-            currentVersion=$(./gradlew -q currentVersion)
-          else
-            currentVersion=$(./gradlew -q devVersion)
-          fi
-          
+          currentVersion=$(./gradlew -q devVersion)
+
           echo "currentVersion=$currentVersion"
 
           ./gradlew publish -PdeployVersion=$currentVersion
