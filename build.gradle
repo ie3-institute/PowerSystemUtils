@@ -82,7 +82,7 @@ dependencies {
 	implementation "org.typelevel:cats-core_${scalaVersion}:2.13.0" // advanced functional programming
 
 	// TEST Scala //
-	implementation "org.scalatest:scalatest_$scalaVersion:3.2.19"
+	implementation "org.scalatest:scalatest_$scalaVersion:3.3.0-SNAP4"
 	testRuntimeOnly 'com.vladsch.flexmark:flexmark-all:0.64.8'
 }
 
