@@ -91,7 +91,5 @@ tasks.withType(JavaCompile) {
 }
 
 tasks.withType(ScalaCompile).configureEach {
-	scalaCompileOptions.additionalParameters = [
-			"-print-tasty"
-	]
+	scalaCompileOptions.additionalParameters = ["-print-tasty"]
 }
