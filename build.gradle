@@ -89,3 +89,9 @@ dependencies {
 tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
+
+tasks.withType(ScalaCompile).configureEach {
+	scalaCompileOptions.additionalParameters = [
+			"-print-tasty"
+	]
+}

@@ -2,7 +2,7 @@
 
 tasks.register("sourcesJar", Jar) {
 	archiveClassifier.set("sources")
-	from sourceSets.main.allJava
+	from sourceSets.main.allSource
 }
 
 tasks.register("javadocJar", Jar) {
