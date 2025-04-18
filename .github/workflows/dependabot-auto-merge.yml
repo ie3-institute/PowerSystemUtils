@@ -6,9 +6,28 @@ permissions:
   pull-requests: write
 
 jobs:
-  dependabot:
+  approve:
     runs-on: ubuntu-latest
     if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'ie3-institute/PowerSystemUtils'
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@d7267f607e9d3fb96fc2fbe83e0af444713e90b7
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Auto approval of PR
+        if: ${{ !contains(steps.meta.outputs.new-version, 'snap') }}
+        run: gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+  merge:
+    needs: approve
+    runs-on: ubuntu-latest
+    if:  ${{ needs.approve.result == 'success' && !contains((steps.approve.outputs.new-version), 'snap') }}
     steps:
       - name: Dependabot metadata
         id: metadata
