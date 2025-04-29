@@ -42,6 +42,9 @@ if [ "$BASE_BRANCH" = "main" ]; then
   if [ "$PR_VERSION" = "$MAIN_VERSION" ] && [ "$BRANCH_TYPE" = "feature" ]; then
     echo "OK: PR Version ($PR_VERSION) is identical with the current Main version ($MAIN_VERSION)."
     exit 0
+  elif [ "$BRANCH_TYPE" = "dependabot" ]; then
+      echo "OK: dependabot-PR – skipping version Check."
+      exit 0
   elif semver_gt "$PR_VERSION" "$MAIN_VERSION" && [ "$BRANCH_TYPE" = "release" ]; then
     echo "OK: PR Version ($PR_VERSION) is higher than Main version ($MAIN_VERSION)."
     exit 0
