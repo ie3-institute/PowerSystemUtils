@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed missing scala sources in releases [#549](https://github.com/ie3-institute/PowerSystemUtils/issues/549)
 - Fixed missing if-block in Version-Check [#557](https://github.com/ie3-institute/PowerSystemUtils/issues/557)
+- Improved the fix of Version Check [#559](https://github.com/ie3-institute/PowerSystemUtils/issues/559)
 
 ## [3.0.0]
 
