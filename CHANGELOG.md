@@ -5,11 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased/Snapshot]
-### Fixed
+### Added
 - Added auto-approval to dependabot workflow and restrictions to updates [#551](https://github.com/ie3-institute/PowerSystemUtils/issues/551)
 
 ### Fixed
 - Fixed missing scala sources in releases [#549](https://github.com/ie3-institute/PowerSystemUtils/issues/549)
+- Fixed missing if-block in Version-Check [#557](https://github.com/ie3-institute/PowerSystemUtils/issues/557)
 
 ## [3.0.0]
 
