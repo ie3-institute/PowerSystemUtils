@@ -5,8 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased/Snapshot]
+
+## [3.1.0]
+
 ### Added
 - Added auto-approval to dependabot workflow and restrictions to updates [#551](https://github.com/ie3-institute/PowerSystemUtils/issues/551)
+
+### Changed
+- Bumped scala to 3.7.0 [#561](https://github.com/ie3-institute/PowerSystemUtils/pull/561)
 
 ### Fixed
 - Fixed missing scala sources in releases [#549](https://github.com/ie3-institute/PowerSystemUtils/issues/549)
@@ -160,7 +166,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 -   fixes + extensions in StandardUnits
 
-[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v3.0.0...HEAD
+[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v3.1.0...HEAD
+[3.1.0]: https://github.com/ie3-institute/powersystemutils/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/ie3-institute/powersystemutils/compare/v2.2.1...v3.0.0
 [2.2.1]: https://github.com/ie3-institute/powersystemutils/compare/v2.2.0...v2.2.1
 [2.2.0]: https://github.com/ie3-institute/powersystemutils/compare/v2.1.0...v2.2.0
