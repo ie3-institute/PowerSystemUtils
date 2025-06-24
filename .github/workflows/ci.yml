@@ -78,6 +78,7 @@ jobs:
         run: ./gradlew scaladoc
 
       - name: SonarQube
+        if: ${{ !startsWith(github.head_ref, 'dependabot/') && !startsWith(github.ref_name, 'dependabot/') }}
         run: |
           ./gradlew sonar \
           -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }} \
