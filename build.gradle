@@ -49,7 +49,7 @@ dependencies {
 	// logging
 	implementation 'org.slf4j:slf4j-api:2.0.17'  // slf4j wrapper
 	implementation 'com.lmax:disruptor:4.0.0' // async logging
-	implementation platform('org.apache.logging.log4j:log4j-bom:2.25.1')
+	implementation platform('org.apache.logging.log4j:log4j-bom:2.25.2')
 	implementation 'org.apache.logging.log4j:log4j-api' // log4j
 	implementation 'org.apache.logging.log4j:log4j-core' // log4j
 	implementation 'org.apache.logging.log4j:log4j-slf4j-impl' // log4j -> slf4j
