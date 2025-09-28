@@ -146,6 +146,15 @@ public class QuantityUtil {
     double aVal = a.getValue().doubleValue();
     double bVal = b.to(a.getUnit()).getValue().doubleValue();
 
+    if (aVal== 0.0){
+        if (bVal==0.0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     return (Math.abs(aVal - bVal) / Math.abs(aVal)) <= relQuantityTolerance;
   }
 
