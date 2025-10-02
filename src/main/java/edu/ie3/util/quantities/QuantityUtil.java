@@ -134,9 +134,8 @@ public class QuantityUtil {
    * of both quantities' value with regard to <i>{@code a}</i>'s value. Both quantities are
    * converted into <i>{@code a}</i>'s unit before the comparison.
    *
-   * <p>A special case for handling zero values is introduced:- If {@code a} is 0 and {@code b} is
-   * also 0, the quantities are considered equivalent then returns true. If {@code a} is 0 and
-   * {@code b} is not 0, the quantities are considered not equivalent then returns false.
+   * <p>If {@code a} is 0, the result is just based on strict equality with {@code b}, since no
+   * relative comparison is possible.
    *
    * @param a First quantity to compare
    * @param b Second quantity to compare
