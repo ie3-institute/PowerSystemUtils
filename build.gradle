@@ -47,29 +47,19 @@ repositories {
 
 dependencies {
 	// logging
-	implementation 'org.slf4j:slf4j-api:2.0.17'  // slf4j wrapper
-	implementation 'com.lmax:disruptor:4.0.0' // async logging
-	implementation platform('org.apache.logging.log4j:log4j-bom:2.25.2')
-	implementation 'org.apache.logging.log4j:log4j-api' // log4j
-	implementation 'org.apache.logging.log4j:log4j-core' // log4j
-	implementation 'org.apache.logging.log4j:log4j-slf4j-impl' // log4j -> slf4j
-
 	implementation "com.typesafe.scala-logging:scala-logging_$scalaVersion:3.9.6"
 
-	implementation 'javax.measure:unit-api:2.2' // quantities
 	implementation 'tech.units:indriya:2.2.3'  // quantities
 	implementation 'com.google.code.gson:gson:2.13.2' // java serialization, POJOs -> JSON
-	implementation 'org.apache.commons:commons-lang3:3.19.0' // for HashCodeBuilder
+
 	implementation 'org.apache.commons:commons-math3:3.6.1' // mathematics and statistics components
 	// JTS Topology Suite for GeoPositions, License: EPL 1.0 / EDL 1.0
-	implementation 'org.locationtech.jts:jts-core:1.20.0'
+
 	implementation 'org.locationtech.jts.io:jts-io-common:1.20.0'
 
 	// Used in EmpiricalRandom.java, could be removed
 	implementation 'org.eclipse.collections:eclipse-collections:13.0.0'
 
-	implementation 'commons-io:commons-io:2.20.0' // I/O functionalities
-	implementation 'commons-codec:commons-codec:1.19.0' // needed by commons-compress
 	implementation 'org.apache.commons:commons-compress:1.28.0' // I/O functionalities
 
 	// testing
@@ -77,7 +67,6 @@ dependencies {
 
 	/* --- Scala libs --- */
 	// CORE Scala //
-	implementation "org.scala-lang:scala3-library_3:${scalaBinaryVersion}"
 	implementation "org.scala-lang.modules:scala-parallel-collections_${scalaVersion}:1.2.0"
 	implementation "org.typelevel:cats-core_${scalaVersion}:2.13.0" // advanced functional programming
 
