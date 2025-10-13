@@ -75,6 +75,8 @@ dependencies {
 	// testing
 	testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
 	testImplementation 'org.apache.groovy:groovy:4.0.26'
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.0'
 
 	/* --- Scala libs --- */
 	// CORE Scala //
@@ -91,8 +93,6 @@ tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
 
-tasks.register('printJavaVersion') {
-	doLast {
-		println javaVersion
-	}
+tasks.test {
+	useJUnitPlatform() // Gradle using JUnit Platform
 }
