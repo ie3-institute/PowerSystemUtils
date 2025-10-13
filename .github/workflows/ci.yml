@@ -62,10 +62,10 @@ jobs:
 
       - name: Validate Java Version Consistency
         run: |
-        # Extract expected Java-Version from build.gradle
+          # Extract expected Java-Version from build.gradle
           EXPECTED_JAVA=$(grep "javaVersion = " build.gradle | sed 's/.*JavaVersion\.VERSION_\([0-9]*\).*/\1/')
     
-        # Extract current Java-Version from JAVA_HOME
+          # Extract current Java-Version from JAVA_HOME
           ACTUAL_JAVA=$(echo $JAVA_HOME | sed 's/.*jdk\/\([0-9]*\)\..*/\1/')
 
           echo "Expected Java version from build.gradle: $EXPECTED_JAVA"
