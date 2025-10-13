@@ -63,7 +63,7 @@ jobs:
       - name: Extract Java Version from build.gradle
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          JAVA_VERSION=$(grep "javaVersion = " build.gradle | sed 's/.*javaVersion = \(.*\)/\1/')
+          JAVA_VERSION=$(grep "javaVersion = " build.gradle | sed 's/.*javaVersion = JavaVersion\.VERSION_\([0-9]*\).*/\1/')
           echo "JAVA_VERSION=$JAVA_VERSION" >> $GITHUB_ENV
           echo "Extracted Java version from PR branch: $JAVA_VERSION"
 
