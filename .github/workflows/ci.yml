@@ -35,13 +35,10 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: ${{ steps.gradle-java.outputs.java-version }}
+          java-version: 21
 
-      - name: Get Java Version from Gradle
-        id: gradle-java
-        run: |
-          JAVA_VERSION=$(./gradlew -q printJavaVersion)
-          echo "java-version=$JAVA_VERSION" >> $GITHUB_OUTPUT
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Check Branch
         run: |
