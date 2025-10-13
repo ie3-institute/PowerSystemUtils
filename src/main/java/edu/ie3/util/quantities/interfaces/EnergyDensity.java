@@ -7,6 +7,8 @@ package edu.ie3.util.quantities.interfaces;
 
 import tech.units.indriya.ComparableQuantity;
 
-/** @deprecated replaced by {@link Irradiation} */
+/**
+ * @deprecated replaced by {@link Irradiation}
+ */
 @Deprecated(since = "1.5", forRemoval = true)
 public interface EnergyDensity extends ComparableQuantity<EnergyDensity> {}
