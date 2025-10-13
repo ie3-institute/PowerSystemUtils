@@ -15,7 +15,7 @@ plugins {
 }
 
 ext {
-	javaVersion = JavaVersion.VERSION_17
+	javaVersion = JavaVersion.VERSION_21
 	scalaVersion = '3'
 	scalaBinaryVersion = '3.7.1'
 	scriptsLocation = 'gradle' + File.separator + 'scripts' + File.separator //location of script plugins
@@ -73,7 +73,8 @@ dependencies {
 	implementation 'org.apache.commons:commons-compress:1.27.1' // I/O functionalities
 
 	// testing
-	testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+    testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+    testImplementation 'org.apache.groovy:groovy:4.0.22'
 
 	/* --- Scala libs --- */
 	// CORE Scala //
