@@ -90,7 +90,6 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         env:
           BASE_BRANCH: ${{ github.event.pull_request.base.ref }}
-          JAVA_VERSION: ${{ env.JAVA_VERSION }}
         run: bash scripts/run-version-check.sh
 
       - name: Build Project
