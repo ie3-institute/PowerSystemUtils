@@ -20,12 +20,6 @@ get_branch_version() {
     git clone --depth 1 --branch "$BRANCH_NAME" "$REPO_URL" "$DIR_NAME"
     cd "$DIR_NAME"
 
-    # Overwrite existing Main-Branch Java-Version after clone by Java-Version from PR
-     if [ -n "${JAVA_VERSION:-}" ]; then
-            sed -i "s/javaVersion = JavaVersion\.VERSION_[0-9]*/javaVersion = JavaVersion.VERSION_$JAVA_VERSION/" build.gradle
-            echo "Updated $BRANCH_NAME branch javaVersion to: JavaVersion.VERSION_$JAVA_VERSION"
-        fi
-
     echo "Fetching version from $BRANCH_NAME branch..."
     BRANCH_VERSION=$(./gradlew -q currentVersion)
     cd ..
