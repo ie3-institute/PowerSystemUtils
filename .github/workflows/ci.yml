@@ -60,10 +60,18 @@ jobs:
           
           bash scripts/branch_type.sh
 
+      - name: Extract Java Version from build.gradle
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          JAVA_VERSION=$(grep "javaVersion = " build.gradle | sed 's/.*javaVersion = JavaVersion\.VERSION_\([0-9]*\).*/\1/')
+          echo "JAVA_VERSION=$JAVA_VERSION" >> $GITHUB_ENV
+          echo "Extracted Java version from PR branch: $JAVA_VERSION"
+
       - name: Version Check
         if: ${{ github.event_name == 'pull_request' }}
         env:
           BASE_BRANCH: ${{ github.event.pull_request.base.ref }}
+          JAVA_VERSION: ${{ env.JAVA_VERSION }}
         run: bash scripts/run-version-check.sh
 
       - name: Build Project
