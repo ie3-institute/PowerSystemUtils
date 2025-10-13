@@ -31,20 +31,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get Java Version from Gradle
-        id: gradle-java
-        run: |
-          JAVA_VERSION=$(./gradlew -q printJavaVersion)
-          echo "java-version=$JAVA_VERSION" >> $GITHUB_OUTPUT
-
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: ${{ steps.gradle-java.outputs.java-version }}
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+      - name: Get Java Version from Gradle
+        id: gradle-java
+        run: |
+          JAVA_VERSION=$(./gradlew -q printJavaVersion)
+          echo "java-version=$JAVA_VERSION" >> $GITHUB_OUTPUT
 
       - name: Check Branch
         run: |
