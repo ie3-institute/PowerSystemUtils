@@ -21,7 +21,7 @@ spotless {
 		// the Groovy Eclipse formatter extends the Java Eclipse formatter,
 		// so it formats Java files by default (unless `excludeJava` is used).
 		greclipse()
-		indentWithSpaces 2
+        leadingTabsToSpaces(2)
 	}
 
 	groovyGradle {
@@ -40,13 +40,13 @@ spotless {
 	format 'misc', {
 		target '**/*.gradle', '**/.gitignore', 'configs/**'
 		trimTrailingWhitespace()
-		indentWithTabs()
+        leadingSpacesToTabs()
 		endWithNewline()
 	}
 
 	format 'markdown', {
 		target '**/*.md'
-		indentWithSpaces(2)
-		endWithNewline()
+        leadingTabsToSpaces(2)
+        endWithNewline()
 	}
 }
