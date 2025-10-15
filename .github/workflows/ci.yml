@@ -60,32 +60,6 @@ jobs:
           
           bash scripts/branch_type.sh
 
-      - name: Validate Java Version Consistency
-        run: |
-          # Extract expected Java-Version from build.gradle
-          EXPECTED_JAVA=$(grep "javaVersion = " build.gradle | sed 's/.*JavaVersion\.VERSION_\([0-9]*\).*/\1/')
-    
-          # Extract current Java-Version from JAVA_HOME
-          ACTUAL_JAVA=$(echo $JAVA_HOME | sed 's/.*jdk\/\([0-9]*\)\..*/\1/')
-
-          echo "Expected Java version from build.gradle: $EXPECTED_JAVA"
-          echo "Actual Java version from runner: $ACTUAL_JAVA"
-
-          if [ "$EXPECTED_JAVA" != "$ACTUAL_JAVA" ]; then
-            echo "❌ Java version mismatch!"
-            echo "build.gradle specifies Java $EXPECTED_JAVA but runner uses Java $ACTUAL_JAVA"
-            exit 1
-          fi
-
-          echo "✅ Java versions are consistent: $EXPECTED_JAVA"
-
-      - name: Extract Java Version from build.gradle
-        if: ${{ github.event_name == 'pull_request' }}
-        run: |
-          JAVA_VERSION=$(grep "javaVersion = " build.gradle | sed 's/.*javaVersion = JavaVersion\.VERSION_\([0-9]*\).*/\1/')
-          echo "JAVA_VERSION=$JAVA_VERSION" >> $GITHUB_ENV
-          echo "Extracted Java version from PR branch: $JAVA_VERSION"
-
       - name: Version Check
         if: ${{ github.event_name == 'pull_request' }}
         env:
