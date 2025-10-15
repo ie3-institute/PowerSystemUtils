@@ -45,6 +45,11 @@ repositories {
 	mavenCentral()
 }
 
+
+pmd {
+    toolVersion = '7.8.0' // PMD >7.x supports Java 21
+}
+
 dependencies {
 	// logging
 	implementation 'org.slf4j:slf4j-api:2.0.17'  // slf4j wrapper
