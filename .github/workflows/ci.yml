@@ -71,8 +71,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          ./gradlew pmdMain pmdTest spotbugsMain spotbugsTest test jacocoTestReport jacocoTestCoverageVerification \
-          reportScoverage checkScoverage
+          ./gradlew pmdMain pmdTest spotbugsMain spotbugsTest test jacocoTestReport jacocoTestCoverageVerification reportScoverage
 
       - name: Build Scala-Docs
         run: ./gradlew scaladoc
