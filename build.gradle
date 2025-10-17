@@ -15,7 +15,7 @@ plugins {
 }
 
 ext {
-	javaVersion = JavaVersion.VERSION_17
+	javaVersion = JavaVersion.VERSION_21
 	scalaVersion = '3'
 	scalaBinaryVersion = '3.7.3'
 	scriptsLocation = 'gradle' + File.separator + 'scripts' + File.separator //location of script plugins
@@ -43,6 +43,11 @@ apply from: scriptsLocation + 'branchName.gradle'
 
 repositories {
 	mavenCentral()
+}
+
+
+pmd {
+	toolVersion = '7.8.0' // PMD >7.x supports Java 21
 }
 
 dependencies {
@@ -74,6 +79,9 @@ dependencies {
 
 	// testing
 	testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+	testImplementation 'org.apache.groovy:groovy:4.0.26'
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.0'
 
 	/* --- Scala libs --- */
 	// CORE Scala //
@@ -88,4 +96,8 @@ dependencies {
 
 tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
+}
+
+tasks.test {
+	useJUnitPlatform() // Gradle using JUnit Platform
 }

@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Bumped scala to 3.7.0 [#561](https://github.com/ie3-institute/PowerSystemUtils/pull/561)
+- Updated to Java 21 and Gradle 9.1.0 [#607](https://github.com/ie3-institute/PowerSystemUtils/issue/607)
 
 ### Fixed
 - Fixed missing scala sources in releases [#549](https://github.com/ie3-institute/PowerSystemUtils/issues/549)
