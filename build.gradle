@@ -78,7 +78,7 @@ dependencies {
 	implementation 'org.apache.commons:commons-compress:1.28.0' // I/O functionalities
 
 	// testing
-	testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+	testImplementation 'org.spockframework:spock-core:2.4-groovy-5.0'
 	testImplementation 'org.apache.groovy:groovy:4.0.26'
 	testImplementation 'org.junit.jupiter:junit-jupiter:6.0.1'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher:6.0.1'
