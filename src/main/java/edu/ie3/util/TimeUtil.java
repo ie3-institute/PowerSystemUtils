@@ -5,9 +5,6 @@
 */
 package edu.ie3.util;
 
-import static java.time.temporal.ChronoField.HOUR_OF_DAY;
-import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
-
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -72,15 +69,15 @@ public class TimeUtil {
   }
 
   /**
-   * Determines the number of quarter hour of the day (starting with 0). The definition of quarter
-   * hour relates to something comparable than a right open interval. Example: 00:00:00 = 0 ...
-   * 00:14:59 = 0 00:15:00 = 1
+   * Determines the number of quarter-hour of the day (starting with 0). The definition of
+   * quarter-hour relates to something comparable than a right open interval. Example: 00:00:00 = 0
+   * ... 00:14:59 = 0 00:15:00 = 1
    *
-   * @param time Time, from which the number of quarter hour may be determined
-   * @return Number of the quarter hour of the day
+   * @param time Time, from which the number of quarter-hour may be determined
+   * @return Number of the quarter-hour of the day
    */
   public int getQuarterHourOfDay(ZonedDateTime time) {
-    return time.get(HOUR_OF_DAY) * 4 + time.get(MINUTE_OF_HOUR) / 15;
+    return time.getHour() * 4 + time.getMinute() / 15;
   }
 
   /**

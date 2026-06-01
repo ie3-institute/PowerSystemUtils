@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased/Snapshot]
+### Added
+- Enhance GeoUtils to work with Points and Coordinates including z-direction [#679](https://github.com/ie3-institute/PowerSystemUtils/issues/679) 
 
 ### Changed
 - Reincluded SonarQube step for Dependabot PRs [#575](https://github.com/ie3-institute/PowerSystemUtils/issues/575)
