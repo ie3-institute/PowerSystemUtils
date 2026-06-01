@@ -94,10 +94,19 @@ dependencies {
 	testRuntimeOnly 'com.vladsch.flexmark:flexmark-all:0.64.8'
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
 	options.encoding = 'UTF-8'
 }
 
+// Ensure scala compiler receives a valid java output version for -Xunchecked-java-output-version
+// Some scala/scoverage combinations may add an invalid value (e.g. '8') based on JAVA target.
+// Map it explicitly to a supported modern Java target (17) to avoid the scalac error.
+tasks.withType(ScalaCompile).configureEach {
+	scalaCompileOptions.additionalParameters = [
+		"-Xunchecked-java-output-version",
+		"17"
+	]
+}
 tasks.test {
 	useJUnitPlatform() // Gradle using JUnit Platform
 }
