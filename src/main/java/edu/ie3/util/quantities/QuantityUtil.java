@@ -134,6 +134,9 @@ public class QuantityUtil {
    * of both quantities' value with regard to <i>{@code a}</i>'s value. Both quantities are
    * converted into <i>{@code a}</i>'s unit before the comparison.
    *
+   * <p>If {@code a} is 0, the result is just based on strict equality with {@code b}, since no
+   * relative comparison is possible.
+   *
    * @param a First quantity to compare
    * @param b Second quantity to compare
    * @param relQuantityTolerance Permissible relative tolerance
@@ -145,6 +148,10 @@ public class QuantityUtil {
 
     double aVal = a.getValue().doubleValue();
     double bVal = b.to(a.getUnit()).getValue().doubleValue();
+
+    if (aVal == 0.0) {
+      return bVal == 0.0;
+    }
 
     return (Math.abs(aVal - bVal) / Math.abs(aVal)) <= relQuantityTolerance;
   }

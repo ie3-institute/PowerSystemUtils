@@ -5,19 +5,19 @@ plugins {
 	id 'maven-publish'
 	id 'signing'
 	id 'pmd' //code check, working on source code
-	id 'com.github.spotbugs' version '6.4.2' //code check, working on byte code
-	id 'com.diffplug.spotless' version '8.0.0'//code format
+	id 'com.github.spotbugs' version '6.5.5' //code check, working on byte code
+	id 'com.diffplug.spotless' version '8.6.0'//code format
 	id 'jacoco' // java code coverage plugin
-	id "org.sonarqube" version "6.3.1.5724" // sonarqube
+	id "org.sonarqube" version "7.3.0.8198" // sonarqube
 	id "org.scoverage" version "8.1" // scala code coverage scoverage
 	id "com.github.maiflai.scalatest" version "0.33" // run scalatest without specific spec task
 	id 'net.thauvin.erik.gradle.semver' version '1.0.4' // semantic versioning
 }
 
 ext {
-	javaVersion = JavaVersion.VERSION_17
+	javaVersion = JavaVersion.VERSION_21
 	scalaVersion = '3'
-	scalaBinaryVersion = '3.7.3'
+	scalaBinaryVersion = '3.7.4'
 	scriptsLocation = 'gradle' + File.separator + 'scripts' + File.separator //location of script plugins
 }
 
@@ -45,12 +45,17 @@ repositories {
 	mavenCentral()
 }
 
+
+pmd {
+	toolVersion = '7.8.0' // PMD >7.x supports Java 21
+}
+
 dependencies {
 	// logging
 	implementation "com.typesafe.scala-logging:scala-logging_$scalaVersion:3.9.6"
 
-	implementation 'tech.units:indriya:2.2.3'  // quantities
-	implementation 'com.google.code.gson:gson:2.13.2' // java serialization, POJOs -> JSON
+	implementation 'tech.units:indriya:2.2.4'  // quantities
+	implementation 'com.google.code.gson:gson:2.14.0' // java serialization, POJOs -> JSON
 
 	implementation 'org.apache.commons:commons-math3:3.6.1' // mathematics and statistics components
 	// JTS Topology Suite for GeoPositions, License: EPL 1.0 / EDL 1.0
@@ -63,7 +68,10 @@ dependencies {
 	implementation 'org.apache.commons:commons-compress:1.28.0' // I/O functionalities
 
 	// testing
-	testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+	testImplementation 'org.spockframework:spock-core:2.4-groovy-5.0'
+	testImplementation 'org.apache.groovy:groovy:5.0.6'
+	testImplementation 'org.junit.jupiter:junit-jupiter:6.1.0'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher:6.1.0'
 
 	/* --- Scala libs --- */
 	// CORE Scala //
@@ -71,10 +79,14 @@ dependencies {
 	implementation "org.typelevel:cats-core_${scalaVersion}:2.13.0" // advanced functional programming
 
 	// TEST Scala //
-	implementation "org.scalatest:scalatest_$scalaVersion:3.2.19"
+	implementation "org.scalatest:scalatest_$scalaVersion:3.2.20"
 	testRuntimeOnly 'com.vladsch.flexmark:flexmark-all:0.64.8'
 }
 
 tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
+}
+
+tasks.test {
+	useJUnitPlatform() // Gradle using JUnit Platform
 }

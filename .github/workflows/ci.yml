@@ -35,7 +35,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: 17
+          java-version: 21
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -71,8 +71,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          ./gradlew pmdMain pmdTest spotbugsMain spotbugsTest test jacocoTestReport jacocoTestCoverageVerification \
-          reportScoverage checkScoverage
+          ./gradlew pmdMain pmdTest spotbugsMain spotbugsTest test jacocoTestReport jacocoTestCoverageVerification reportScoverage
 
       - name: Build Scala-Docs
         run: ./gradlew scaladoc

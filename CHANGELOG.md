@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Reincluded SonarQube step for Dependabot PRs [#575](https://github.com/ie3-institute/PowerSystemUtils/issues/575)
 - Cleaned up dependencies[#601](https://github.com/ie3-institute/PowerSystemUtils/issues/601)
-  
+
+### Fixed
+- updated zero divison error issue in Qualityutil[#295](https://github.com/ie3-institute/PowerSystemUtils/issues/295)
+- Included a doFirst clause into `checkJavaVersion.gradle` [#612](https://github.com/ie3-institute/PowerSystemUtils/issues/612)
+
 ## [3.1.0]
 
 ### Added
@@ -17,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Bumped scala to 3.7.0 [#561](https://github.com/ie3-institute/PowerSystemUtils/pull/561)
+- Updated to Java 21 and Gradle 9.1.0 [#607](https://github.com/ie3-institute/PowerSystemUtils/issue/607)
 
 ### Fixed
 - Fixed missing scala sources in releases [#549](https://github.com/ie3-institute/PowerSystemUtils/issues/549)
