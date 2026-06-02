@@ -93,7 +93,7 @@ jobs:
           ORG_GRADLE_PROJECT_mavenCentralUser: ${{ github.actor == 'sebastian-peter' && secrets.MAVENCENTRAL_USER ||
             github.actor == 'danielfeismann' && secrets.MAVENCENTRAL_DANIEL_USER || github.actor == staudtMarius && secrets.MAVENCENTRAL_MARIUS_USER}}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ github.actor == 'sebastian-peter' && secrets.MAVENCENTRAL_PASS ||
-            github.actor == 'danielfeismann' && secrets.MAVENCENTRAL_DANIEL_PASS || github.actor == staudtMarius && secrets.MAVENCENTRAL_MARIUS_USER}}
+            github.actor == 'danielfeismann' && secrets.MAVENCENTRAL_DANIEL_PASS || github.actor == 'staudtMarius' && secrets.MAVENCENTRAL_MARIUS_PASS}}
 
         run: |
           echo "Using MavenCentral Token of GitHub Actor: ${{ github.actor }}"
