@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Reincluded SonarQube step for Dependabot PRs [#575](https://github.com/ie3-institute/PowerSystemUtils/issues/575)
+- Cleaned up dependencies[#601](https://github.com/ie3-institute/PowerSystemUtils/issues/601)
 
 ### Fixed
 - updated zero divison error issue in Qualityutil[#295](https://github.com/ie3-institute/PowerSystemUtils/issues/295)
