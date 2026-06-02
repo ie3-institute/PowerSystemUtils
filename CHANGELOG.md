@@ -10,9 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Reincluded SonarQube step for Dependabot PRs [#575](https://github.com/ie3-institute/PowerSystemUtils/issues/575)
+- Include more users that can start deployment through CI-Pipeline [#683](https://github.com/ie3-institute/PowerSystemUtils/issues/683)
 
 ### Fixed
-- updated zero divison error issue in Qualityutil[#295](https://github.com/ie3-institute/PowerSystemUtils/issues/295)
+- Updated zero division error issue in `QualityUtil`[#295](https://github.com/ie3-institute/PowerSystemUtils/issues/295)
 - Included a doFirst clause into `checkJavaVersion.gradle` [#612](https://github.com/ie3-institute/PowerSystemUtils/issues/612)
 
 ## [3.1.0]
