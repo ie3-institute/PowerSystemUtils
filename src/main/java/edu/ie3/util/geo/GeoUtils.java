@@ -35,7 +35,7 @@ public class GeoUtils {
 
   /**
    * Convert a given {@link LineString} with at least two points into a 'safe to be compared' {@link
-   * LineString} This is done by removing duplicates in the points in the provided linestring as
+   * LineString}. This is done by removing duplicates in the points in the provided linestring as
    * well as a small change of the start coordinate if the linestring only consists of two
    * coordinates. For details on the bug inside {@link LineString} that is addressed here, see
    * https://github.com/locationtech/jts/issues/531
@@ -128,6 +128,9 @@ public class GeoUtils {
   /**
    * Calculates between two coordinates on earth's surface (great circle distance).
    *
+   * <p><b>Note:</b> The calculation ignores z-coordinates. Only latitude and longitude are
+   * considered.
+   *
    * @param latA latitude of coordinate a
    * @param lngA longitude of coordinate a
    * @param latB latitude of coordinate b
@@ -151,6 +154,9 @@ public class GeoUtils {
 
   /**
    * Calculates the distance between two coordinates on earth's surface (great circle distance).
+   *
+   * <p><b>Note:</b> The calculation ignores z-coordinates. Only latitude and longitude are
+   * considered.
    *
    * @param coordinateA coordinate a
    * @param coordinateB coordinate b
@@ -195,6 +201,9 @@ public class GeoUtils {
    * represents the bounding box. The methode can be found here: <a
    * href="https://math.stackexchange.com/questions/474602/reverse-use-of-haversine-formula">source</a>
    *
+   * <p><b>Note:</b> The calculation ignores z-coordinates. Only latitude and longitude are
+   * considered.
+   *
    * @param coordinate the starting point for the calculation
    * @param distance maximal distance in x- and y-direction
    * @return envelope
@@ -229,7 +238,8 @@ public class GeoUtils {
   }
 
   /**
-   * Builds a convex hull from a set of latitude/longitude coordinates.
+   * Builds a convex hull from a set of latitude/longitude coordinates (z-Direction will be set as
+   * zero).
    *
    * @param coordinates the coordinates to consider
    * @return a Try of the resulting polygon
@@ -257,6 +267,19 @@ public class GeoUtils {
     return DEFAULT_GEOMETRY_FACTORY.createPoint(buildCoordinate(lat, lng));
   }
 
+  /**
+   * Builds a point from latitude, longitude and an optional z coordinate (height). If no z is
+   * provided via the 2-arg overload, the coordinate's z is set to 0.0.
+   *
+   * @param lat latitude value
+   * @param lng longitude value
+   * @param z z-value (height)
+   * @return the built Point containing the provided z value
+   */
+  public static Point buildPoint(double lat, double lng, double z) {
+    return DEFAULT_GEOMETRY_FACTORY.createPoint(buildCoordinate(lat, lng, z));
+  }
+
   public static Point buildPoint(Coordinate coordinate) {
     return DEFAULT_GEOMETRY_FACTORY.createPoint(coordinate);
   }
@@ -269,7 +292,20 @@ public class GeoUtils {
    * @return the built [[Coordinate]]
    */
   public static Coordinate buildCoordinate(double lat, double lng) {
-    return new Coordinate(lng, lat);
+    // Default z-value is set to 0.0 when no z is provided
+    return new Coordinate(lng, lat, 0.0);
+  }
+
+  /**
+   * Build a coordinate from latitude, longitude and z values.
+   *
+   * @param lat latitude value
+   * @param lng longitude value
+   * @param z z-value (height)
+   * @return the built Coordinate containing the z value
+   */
+  public static Coordinate buildCoordinate(double lat, double lng, double z) {
+    return new Coordinate(lng, lat, z);
   }
 
   /**
@@ -292,8 +328,11 @@ public class GeoUtils {
    * <p>Credits to Joe Kington
    * (https://stackoverflow.com/questions/4681737/how-to-calculate-the-area-of-a-polygon-on-the-earths-surface-using-python#:~:text=Basically%2C%20you%20just%20multiply%20the,the%20cosine%20of%20the%20latitude.)
    *
+   * <p><b>Note:</b> The z-coordinate of the input is discarded and set to 0.0 in the result, as
+   * only x and y dimensions are projected.
+   *
    * @param coordinate the coordinate to project
-   * @return a projected Coordinate with values in metre
+   * @return a projected Coordinate with values in metre and z=0.0
    */
   public static Coordinate equalAreaProjection(Coordinate coordinate) {
     double lat = coordinate.getY();
@@ -301,15 +340,17 @@ public class GeoUtils {
     double latDist = PI * (EARTH_RADIUS.to(METRE).getValue().doubleValue() / 180d);
     double y = lat * latDist;
     double x = lng * latDist * cos(toRadians(lat));
-    return new Coordinate(x, y);
+    return new Coordinate(x, y, 0.0);
   }
 
   /**
    * Reverses the {@link #equalAreaProjection(Coordinate)} and returns a coordinate on earths
    * surface
    *
+   * <p><b>Note:</b> The z-coordinate of the input is discarded and set to 0.0 in the result.
+   *
    * @param coordinate the projected coordinate
-   * @return the latitude longitude based coordinate
+   * @return the latitude longitude based coordinate with z=0.0
    */
   public static Coordinate reverseEqualAreaProjection(Coordinate coordinate) {
     double latDist = PI * (EARTH_RADIUS.to(METRE).getValue().doubleValue() / 180d);
@@ -325,9 +366,12 @@ public class GeoUtils {
    * <p>Source: https://www.movable-type.co.uk/scripts/latlong.html "Destination point given
    * distance and bearing from start point"
    *
+   * <p><b>Note:</b> The z-coordinate of the center point is discarded and set to 0.0 for all
+   * polygon points, as the circle is calculated on a 2D surface.
+   *
    * @param center coordinate of the circle's center
    * @param radius radius of the circle
-   * @return a polygon without the center, but with all points of the circle
+   * @return a polygon without the center, but with all points of the circle (z=0.0)
    */
   public static Polygon buildCirclePolygon(Coordinate center, Quantity<Length> radius) {
     double centerLat = toRadians(center.y);
@@ -346,7 +390,7 @@ public class GeoUtils {
                           + atan2(
                               sin(bearing) * sin(d) * cos(centerLat),
                               cos(d) - sin(centerLat) * sin(latRad));
-                  return new Coordinate(toDegrees(lonRad), toDegrees(latRad));
+                  return new Coordinate(toDegrees(lonRad), toDegrees(latRad), 0.0);
                 })
             .toArray(Coordinate[]::new);
 

@@ -343,4 +343,113 @@ class GeoUtilsTest extends Specification {
         envelope.minY == 49
         envelope.maxY == 51
     }
+
+    def "GeoUtils creates a Point with explicit z-coordinate"() {
+        given:
+            def lat = 50.5
+            def lng = 7.5
+            def z = 120.5
+
+        when:
+            def point = GeoUtils.buildPoint(lat, lng, z)
+
+        then:
+            point.coordinate.x == lng
+            point.coordinate.y == lat
+            point.coordinate.z == z
+    }
+
+    def "GeoUtils creates a Coordinate with explicit z-coordinate"() {
+        given:
+            def lat = 50.5
+            def lng = 7.5
+            def z = 120.5
+
+        when:
+            def coord = GeoUtils.buildCoordinate(lat, lng, z)
+
+        then:
+            coord.x == lng
+            coord.y == lat
+            coord.z == z
+    }
+
+    def "GeoUtils sets default z=0.0 when building Point without z"() {
+        given:
+            def lat = 50.5
+            def lng = 7.5
+
+        when:
+            def point = GeoUtils.buildPoint(lat, lng)
+
+        then:
+            point.coordinate.x == lng
+            point.coordinate.y == lat
+            point.coordinate.z == 0.0
+    }
+
+    def "GeoUtils sets default z=0.0 when building Coordinate without z"() {
+        given:
+            def lat = 50.5
+            def lng = 7.5
+
+        when:
+            def coord = GeoUtils.buildCoordinate(lat, lng)
+
+        then:
+            coord.x == lng
+            coord.y == lat
+            coord.z == 0.0
+    }
+
+    def "Equal area projection discards z-coordinate and sets it to 0.0"() {
+        given:
+            def coordWithZ = new Coordinate(8.5, 51.5, 100.0)
+
+        when:
+            def projected = GeoUtils.equalAreaProjection(coordWithZ)
+
+        then:
+        projected.z == 0.0
+    }
+
+    def "Reverse equal area projection discards z-coordinate and sets it to 0.0"() {
+        given:
+            def projectedCoord = new Coordinate(600000.0, 5750000.0, 50.0)
+
+        when:
+            def reversed = GeoUtils.reverseEqualAreaProjection(projectedCoord)
+
+        then:
+            reversed.z == 0.0
+    }
+
+    def "Build circle polygon sets z=0.0 for all points regardless of center z"() {
+        given:
+            def center = new Coordinate(7.5, 50.5, 200.0)
+            def radius = Quantities.getQuantity(1.0, METRE)
+
+        when:
+            def polygon = GeoUtils.buildCirclePolygon(center, radius)
+
+        then:
+            def coords = polygon.coordinates
+            coords.every { it.z == 0.0 }
+    }
+
+    def "Haversine distance ignores z-coordinate"() {
+        given:
+            def coordA = new Coordinate(7.0, 50.0, 100.0)
+            def coordB = new Coordinate(8.0, 51.0, 200.0)
+            def coordANoZ = new Coordinate(7.0, 50.0, 0.0)
+            def coordBNoZ = new Coordinate(8.0, 51.0, 0.0)
+
+        when:
+            def distanceWithZ = GeoUtils.calcHaversine(coordA, coordB)
+            def distanceWithoutZ = GeoUtils.calcHaversine(coordANoZ, coordBNoZ)
+
+        then:
+            distanceWithZ == distanceWithoutZ
+    }
 }
+
