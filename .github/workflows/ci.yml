@@ -23,9 +23,11 @@ on:
       - opened
       - synchronize
       - reopened
+      - closed
 
 jobs:
   buildAndTest:
+    if: github.event.action != 'closed'
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
