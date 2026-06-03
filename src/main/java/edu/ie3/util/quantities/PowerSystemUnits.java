@@ -37,6 +37,9 @@ public class PowerSystemUnits extends Units {
   /** Kilometre */
   public static final Unit<Length> KILOMETRE = DoubleConverterFactory.withPrefix(METRE, KILO);
 
+  /** Millimetre */
+  public static final Unit<Length> MILLIMETRE = DoubleConverterFactory.withPrefix(METRE, MILLI);
+
   /** Millisecond */
   public static final Unit<Time> MILLISECOND = DoubleConverterFactory.withPrefix(SECOND, MILLI);
 

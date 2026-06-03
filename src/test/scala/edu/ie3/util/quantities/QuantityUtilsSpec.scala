@@ -112,6 +112,12 @@ class QuantityUtilsSpec
         )
       }
 
+      "convert a double to a millimetre quantity" in {
+        value.asMillimetre should equalWithTolerance(
+          Quantities.getQuantity(value, MILLIMETRE)
+        )
+      }
+
       "convert a double to a millisecond quantity" in {
         value.asMillisecond should equalWithTolerance(
           Quantities.getQuantity(value, MILLISECOND)
