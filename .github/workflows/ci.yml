@@ -124,7 +124,7 @@ jobs:
 
         run: |
           echo "Using MavenCentral Token of GitHub Actor: ${{ github.actor }}"
-          currentVersion=$(./gradlew -q devVersion)
+          currentVersion=$(./gradlew -q currentVersion)
 
           echo "currentVersion=$currentVersion"
 
