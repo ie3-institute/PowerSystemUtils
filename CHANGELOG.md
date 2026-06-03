@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Include more users that can start deployment through CI-Pipeline [#683](https://github.com/ie3-institute/PowerSystemUtils/issues/683)
 
 ### Fixed
-- Updated zero division error issue in `QualityUtils`[#295](https://github.com/ie3-institute/PowerSystemUtils/issues/295)
+- Updated zero division error issue in `QuantityUtils`[#295](https://github.com/ie3-institute/PowerSystemUtils/issues/295)
 - Included a doFirst clause into `checkJavaVersion.gradle` [#612](https://github.com/ie3-institute/PowerSystemUtils/issues/612)
 
 ## [3.1.0]
