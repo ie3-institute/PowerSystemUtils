@@ -26,7 +26,7 @@ abstract class Interval<T extends Comparable<? super T> & Serializable> implemen
    *
    * @param u The desired upper boundary.
    */
-  protected final void setUpperBound(T u) {
+  public final void setUpperBound(T u) {
     if (u == null) throw new NullPointerException("Bound must not be null");
     if (lower == null) {
       lower = u;
@@ -44,7 +44,7 @@ abstract class Interval<T extends Comparable<? super T> & Serializable> implemen
    *
    * @param l The desired lower boundary.
    */
-  protected final void setLowerBound(T l) {
+  public final void setLowerBound(T l) {
     if (l == null) throw new NullPointerException("Bound must not be null");
     if (lower == null) {
       lower = l;
@@ -69,7 +69,7 @@ abstract class Interval<T extends Comparable<? super T> & Serializable> implemen
    *
    * @return The lower boundary
    */
-  protected final T getLower() {
+  public final T getLower() {
     return lower;
   }
 
@@ -78,7 +78,7 @@ abstract class Interval<T extends Comparable<? super T> & Serializable> implemen
    *
    * @return The upper boundary.
    */
-  protected final T getUpper() {
+  public final T getUpper() {
     return upper;
   }
 
