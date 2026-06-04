@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Fixed
+- Make getters of `Interval` public again [#694](https://github.com/ie3-institute/PowerSystemUtils/issues/694) 
 
 ## [3.2.0]
 
