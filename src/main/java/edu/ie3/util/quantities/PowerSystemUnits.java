@@ -177,7 +177,7 @@ public class PowerSystemUnits extends Units {
   public static final Unit<SpecificResistance> OHM_PER_KILOMETRE =
       new ProductUnit<>(OHM.divide(KILOMETRE));
 
-  /** Ohm * Metre - Thermal Resistivity */
+  /** Ohm * Metre - Electrical Resistivity */
   public static final Unit<ElectricalResistivity> OHM_METRE =
       new ProductUnit<>(OHM.multiply(METRE));
 
