@@ -42,7 +42,7 @@ public class PowerSystemUnits extends Units {
 
   /** Square-Millimetre */
   public static final Unit<Area> SQUARE_MILLIMETRE =
-      DoubleConverterFactory.withPrefix(SQUARE_METRE, MICRO);
+      DoubleConverterFactory.withPrefix(SQUARE_METRE, MICRO); // MILLI Squared == MICRO
 
   /** Millisecond */
   public static final Unit<Time> MILLISECOND = DoubleConverterFactory.withPrefix(SECOND, MILLI);
