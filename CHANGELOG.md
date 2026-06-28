@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased/Snapshot]
 
+## [3.2.2]
+
 ### Added
 - Include some units [#705](https://github.com/ie3-institute/PowerSystemUtils/issues/705)
 
@@ -192,7 +194,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 -   fixes + extensions in StandardUnits
 
-[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v3.2.1...HEAD
+[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v3.2.2...HEAD
+[3.2.2]: https://github.com/ie3-institute/powersystemutils/compare/v3.2.1...v3.2.2
 [3.2.1]: https://github.com/ie3-institute/powersystemutils/compare/v3.2.0...v3.2.1
 [3.2.0]: https://github.com/ie3-institute/powersystemutils/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/ie3-institute/powersystemutils/compare/v3.0.0...v3.1.0
