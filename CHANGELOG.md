@@ -6,13 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased/Snapshot]
 
+### Fixed
+- Fixed building jars with `Gradle` [#703](https://github.com/ie3-institute/PowerSystemUtils/issues/703)
+
 ## [3.2.2]
 
 ### Added
 - Include some units [#705](https://github.com/ie3-institute/PowerSystemUtils/issues/705)
-
-### Fixed
-- Fixed building jars with `Gradle` [#703](https://github.com/ie3-institute/PowerSystemUtils/issues/703)
 
 ## [3.2.1]
 
