@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add Millimetre to `QuantityUtils` [#689](https://github.com/ie3-institute/PowerSystemUtils/issues/689)
 - New files for numeric implementation for Quantity created [#341](https://github.com/ie3-institute/PowerSystemUtils/issues/341)
 
+
 ### Changed
 - Reincluded SonarQube step for Dependabot PRs [#575](https://github.com/ie3-institute/PowerSystemUtils/issues/575)
 - Include more users that can start deployment through CI-Pipeline [#683](https://github.com/ie3-institute/PowerSystemUtils/issues/683)
