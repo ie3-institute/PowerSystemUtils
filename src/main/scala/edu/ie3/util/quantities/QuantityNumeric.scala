@@ -8,7 +8,7 @@ import tech.units.indriya.ComparableQuantity
 import tech.units.indriya.quantity.Quantities
 import javax.measure.{Quantity, Unit}
 
-// Numeric Implementation
+// Numeric Implementation for quantities
 final class ComparableQuantityNumeric[Q <: Quantity[Q]](unit: Unit[Q])
     extends Numeric[ComparableQuantity[Q]] {
 
