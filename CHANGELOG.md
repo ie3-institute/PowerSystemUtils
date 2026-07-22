@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Enhance GeoUtils to work with Points and Coordinates including z-direction [#679](https://github.com/ie3-institute/PowerSystemUtils/issues/679) 
 - Add Millimetre to `QuantityUtils` [#689](https://github.com/ie3-institute/PowerSystemUtils/issues/689)
+- New test cases are added for RichGeometriesSpec [#660](https://github.com/ie3-institute/PowerSystemUtils/issues/660)
 
 ### Changed
 - Reincluded SonarQube step for Dependabot PRs [#575](https://github.com/ie3-institute/PowerSystemUtils/issues/575)
