@@ -217,6 +217,16 @@ class RichGeometriesSpec extends Matchers with AnyWordSpecLike {
 
       projected should not be null
       projected.getCoordinates.length shouldBe polygon.getCoordinates.length
+      
+      val expectedCoordinates = polygon.getCoordinates.map { coordinate =>
+    GeoUtils.equalAreaProjection(coordinate)
+  }
+
+  projected.getCoordinates.zip(expectedCoordinates).foreach {
+    case (actual, expected) =>
+      actual.x shouldBe expected.x
+      actual.y shouldBe expected.y
+  }
     }
 
     "detect if polygon contains coordinate" in {
