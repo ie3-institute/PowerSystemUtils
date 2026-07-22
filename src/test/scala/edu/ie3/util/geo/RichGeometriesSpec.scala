@@ -202,7 +202,6 @@ class RichGeometriesSpec extends Matchers with AnyWordSpecLike {
         .doubleValue() shouldBe 1d +- 0.01
     }
 
-    //new test cases sample coordinates??
     "project polygon using equal area projection" in {
       val coordinateA = buildCoordinate(0, 0)
       val coordinateB = buildCoordinate(0, 1)
