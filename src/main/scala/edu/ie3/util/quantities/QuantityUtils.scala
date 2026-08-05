@@ -87,6 +87,8 @@ object QuantityUtils {
 
     def asKilometre: ComparableQuantity[Length] = as(KILOMETRE)
 
+    def asMillimetre: ComparableQuantity[Length] = as(MILLIMETRE)
+
     def asMillisecond: ComparableQuantity[Time] = as(MILLISECOND)
 
     def asSecond: ComparableQuantity[Time] = as(SECOND)

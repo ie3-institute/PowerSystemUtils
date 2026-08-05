@@ -46,7 +46,7 @@ if [ "$BASE_BRANCH" = "main" ]; then
     echo "OK: PR Version ($PR_VERSION) is higher than Main version ($MAIN_VERSION)."
     exit 0
   else
-    echo "FAIL: PR Version ($PR_VERSION) is neither equal to nor higher than the current Main version ($MAIN_VERSION)."
+    echo "FAIL: PR Version ($PR_VERSION) is not higher than the current Main version ($MAIN_VERSION)."
     exit 1
   fi
 

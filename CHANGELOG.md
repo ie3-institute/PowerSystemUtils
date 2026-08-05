@@ -5,15 +5,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased/Snapshot]
+
+## Changed
+- Cleaned up dependencies [#601](https://github.com/ie3-institute/PowerSystemUtils/issues/601)
+
+## [3.2.2]
+
+### Added
+- Include some units [#705](https://github.com/ie3-institute/PowerSystemUtils/issues/705)
+
+## [3.2.1]
+
+### Fixed
+- Make getters of `Interval` public again [#694](https://github.com/ie3-institute/PowerSystemUtils/issues/694) 
+
+## [3.2.0]
+
 ### Added
 - Enhance GeoUtils to work with Points and Coordinates including z-direction [#679](https://github.com/ie3-institute/PowerSystemUtils/issues/679) 
+- Add Millimetre to `QuantityUtils` [#689](https://github.com/ie3-institute/PowerSystemUtils/issues/689)
+- New files for numeric implementation for Quantity created [#341](https://github.com/ie3-institute/PowerSystemUtils/issues/341)
+
 
 ### Changed
 - Reincluded SonarQube step for Dependabot PRs [#575](https://github.com/ie3-institute/PowerSystemUtils/issues/575)
-- Cleaned up dependencies[#601](https://github.com/ie3-institute/PowerSystemUtils/issues/601)
+- Include more users that can start deployment through CI-Pipeline [#683](https://github.com/ie3-institute/PowerSystemUtils/issues/683)
 
 ### Fixed
-- updated zero divison error issue in Qualityutil[#295](https://github.com/ie3-institute/PowerSystemUtils/issues/295)
+- Updated zero division error issue in `QuantityUtils`[#295](https://github.com/ie3-institute/PowerSystemUtils/issues/295)
 - Included a doFirst clause into `checkJavaVersion.gradle` [#612](https://github.com/ie3-institute/PowerSystemUtils/issues/612)
 
 ## [3.1.0]
@@ -177,7 +196,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 -   fixes + extensions in StandardUnits
 
-[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v3.1.0...HEAD
+[Unreleased/Snapshot]: https://github.com/ie3-institute/powersystemutils/compare/v3.2.2...HEAD
+[3.2.2]: https://github.com/ie3-institute/powersystemutils/compare/v3.2.1...v3.2.2
+[3.2.1]: https://github.com/ie3-institute/powersystemutils/compare/v3.2.0...v3.2.1
+[3.2.0]: https://github.com/ie3-institute/powersystemutils/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/ie3-institute/powersystemutils/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/ie3-institute/powersystemutils/compare/v2.2.1...v3.0.0
 [2.2.1]: https://github.com/ie3-institute/powersystemutils/compare/v2.2.0...v2.2.1
