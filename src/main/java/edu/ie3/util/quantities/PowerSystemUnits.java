@@ -40,6 +40,10 @@ public class PowerSystemUnits extends Units {
   /** Millimetre */
   public static final Unit<Length> MILLIMETRE = DoubleConverterFactory.withPrefix(METRE, MILLI);
 
+  /** Square-Millimetre */
+  public static final Unit<Area> SQUARE_MILLIMETRE =
+      DoubleConverterFactory.withPrefix(SQUARE_METRE, MICRO); // MILLI Squared == MICRO
+
   /** Millisecond */
   public static final Unit<Time> MILLISECOND = DoubleConverterFactory.withPrefix(SECOND, MILLI);
 
@@ -173,6 +177,10 @@ public class PowerSystemUnits extends Units {
   public static final Unit<SpecificResistance> OHM_PER_KILOMETRE =
       new ProductUnit<>(OHM.divide(KILOMETRE));
 
+  /** Ohm * Metre - Electrical Resistivity */
+  public static final Unit<ElectricalResistivity> OHM_METRE =
+      new ProductUnit<>(OHM.multiply(METRE));
+
   /** Millisiemens */
   public static final Unit<ElectricConductance> MILLISIEMENS =
       DoubleConverterFactory.withPrefix(SIEMENS, MILLI);
@@ -228,6 +236,16 @@ public class PowerSystemUnits extends Units {
 
   private static final HashSet<String> REGISTERED_LABELS = new HashSet<>();
 
+  /* ==== Thermal Cable Modeling Units ==== */
+
+  /** Kelvin * Metre / Watt (K*m/W) - Thermal Resistivity */
+  public static final Unit<ThermalResistivity> KELVIN_METRE_PER_WATT =
+      new ProductUnit<>(KELVIN.multiply(METRE).divide(WATT));
+
+  /** Joule / (Cubic Metre * Kelvin) (J/(m³*K)) - Volumetric Thermal Capacitance */
+  public static final Unit<ThermalCapacitance> JOULE_PER_CUBIC_METRE_KELVIN =
+      new ProductUnit<>(JOULE.divide(CUBIC_METRE.multiply(KELVIN)));
+
   static {
     // varh, kvarh, Mvarh are kept out of this because they register for the same units as Wh, kWh,
     // MWh
@@ -258,10 +276,14 @@ public class PowerSystemUnits extends Units {
     registerUnit(KILOWATT_PER_KELVIN, "kW/K");
     registerUnit(KILOGRAM_PER_CUBIC_METRE, "kg/m³");
     registerUnit(CUBIC_METRE_PER_SECOND, "m³/s");
+    registerUnit(KELVIN_METRE_PER_WATT, "K*m/W");
+    registerUnit(JOULE_PER_CUBIC_METRE_KELVIN, "J/m³*K");
+    registerUnit(OHM_METRE, "Ωm");
+    registerUnit(SQUARE_MILLIMETRE, "mm²");
   }
 
   /**
-   * Units must be registered via this method or they cannot be serialized/deserialized! If the
+   * Units must be registered via this method, or they cannot be serialized/deserialized! If the
    * return-value is null, the unit was already registered
    */
   private static void registerUnit(Unit<?> unit, String label) {
