@@ -99,6 +99,10 @@ tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
 
+tasks.withType(Jar) {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 tasks.test {
 	useJUnitPlatform() // Gradle using JUnit Platform
 }
