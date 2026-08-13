@@ -16,7 +16,9 @@ import edu.ie3.util.geo.RichGeometries.{
   haversineLength,
   toPoint,
   intersect,
-  calcAreaOnEarth
+  calcAreaOnEarth,
+  equalAreaProjection,
+  containsCoordinate
 }
 import edu.ie3.util.quantities.QuantityMatchers.equalWithTolerance
 import edu.ie3.util.quantities.QuantityUtils.asSquareMetre
@@ -198,6 +200,62 @@ class RichGeometriesSpec extends Matchers with AnyWordSpecLike {
         .divide(actual)
         .getValue
         .doubleValue() shouldBe 1d +- 0.01
+    }
+
+    "project polygon using equal area projection" in {
+      val coordinateA = buildCoordinate(0, 0)
+      val coordinateB = buildCoordinate(0, 1)
+      val coordinateC = buildCoordinate(1, 1)
+      val coordinateD = buildCoordinate(1, 0)
+
+      val polygon = buildPolygon(
+        Array(coordinateA, coordinateB, coordinateC, coordinateD, coordinateA)
+      )
+
+      val projected = polygon.equalAreaProjection
+
+      projected should not be null
+      projected.getCoordinates.length shouldBe polygon.getCoordinates.length
+
+      val expectedCoordinates = polygon.getCoordinates.map { coordinate =>
+        GeoUtils.equalAreaProjection(coordinate)
+      }
+
+      projected.getCoordinates.zip(expectedCoordinates).foreach {
+        case (actual, expected) =>
+          actual.x shouldBe expected.x
+          actual.y shouldBe expected.y
+      }
+    }
+
+    "detect if polygon contains coordinate" in {
+      val coordinateA = buildCoordinate(0, 0)
+      val coordinateB = buildCoordinate(0, 10)
+      val coordinateC = buildCoordinate(10, 10)
+      val coordinateD = buildCoordinate(10, 0)
+
+      val polygon = buildPolygon(
+        Array(coordinateA, coordinateB, coordinateC, coordinateD, coordinateA)
+      )
+
+      val inside = buildCoordinate(5, 5)
+
+      polygon.containsCoordinate(inside) shouldBe true
+    }
+
+    "detect if polygon does not contain coordinate" in {
+      val coordinateA = buildCoordinate(0, 0)
+      val coordinateB = buildCoordinate(0, 10)
+      val coordinateC = buildCoordinate(10, 10)
+      val coordinateD = buildCoordinate(10, 0)
+
+      val polygon = buildPolygon(
+        Array(coordinateA, coordinateB, coordinateC, coordinateD, coordinateA)
+      )
+
+      val outside = buildCoordinate(20, 20)
+
+      polygon.containsCoordinate(outside) shouldBe false
     }
   }
 }
