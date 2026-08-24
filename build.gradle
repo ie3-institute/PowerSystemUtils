@@ -17,7 +17,7 @@ plugins {
 ext {
 	javaVersion = JavaVersion.VERSION_21
 	scalaVersion = '3'
-	scalaBinaryVersion = '3.7.4'
+	scalaBinaryVersion = '3.8.4'
 	scriptsLocation = 'gradle' + File.separator + 'scripts' + File.separator //location of script plugins
 }
 
@@ -49,6 +49,10 @@ repositories {
 
 pmd {
 	toolVersion = '7.8.0' // PMD >7.x supports Java 21
+}
+
+configurations {
+	create('scalaCompiler')
 }
 
 dependencies {
@@ -90,9 +94,19 @@ dependencies {
 	implementation "org.scala-lang.modules:scala-parallel-collections_${scalaVersion}:1.2.0"
 	implementation "org.typelevel:cats-core_${scalaVersion}:2.13.0" // advanced functional programming
 
+	scalaCompiler "org.scala-lang:scala3-compiler_3:${scalaBinaryVersion}"
+
 	// TEST Scala //
 	implementation "org.scalatest:scalatest_$scalaVersion:3.2.20"
 	testRuntimeOnly 'com.vladsch.flexmark:flexmark-all:0.64.8'
+}
+
+tasks.withType(org.gradle.api.tasks.scala.ScalaCompile).configureEach {
+	scalaClasspath = scalaClasspath + configurations.scalaCompiler
+	scalaCompileOptions.additionalParameters = [
+		'-Xunchecked-java-output-version',
+		'21'
+	]
 }
 
 tasks.withType(JavaCompile) {
