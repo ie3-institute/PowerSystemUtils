@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased/Snapshot]
 
+## Changed
+- Cleaned up dependencies [#601](https://github.com/ie3-institute/PowerSystemUtils/issues/601)
+
 ## [3.2.2]
 
 ### Added
