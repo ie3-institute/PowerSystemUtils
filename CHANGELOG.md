@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased/Snapshot]
 
+## Changed
+- Cleaned up dependencies [#601](https://github.com/ie3-institute/PowerSystemUtils/issues/601)
+
 ### Fixed
 - Fixed building jars with `Gradle` [#703](https://github.com/ie3-institute/PowerSystemUtils/issues/703)
 
@@ -24,6 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Enhance GeoUtils to work with Points and Coordinates including z-direction [#679](https://github.com/ie3-institute/PowerSystemUtils/issues/679) 
 - Add Millimetre to `QuantityUtils` [#689](https://github.com/ie3-institute/PowerSystemUtils/issues/689)
+- New files for numeric implementation for Quantity created [#341](https://github.com/ie3-institute/PowerSystemUtils/issues/341)
+- New test cases added for RichGeometriesSpec [#660](https://github.com/ie3-institute/PowerSystemUtils/issues/660)
 
 ### Changed
 - Reincluded SonarQube step for Dependabot PRs [#575](https://github.com/ie3-institute/PowerSystemUtils/issues/575)

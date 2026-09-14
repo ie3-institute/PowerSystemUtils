@@ -4,7 +4,7 @@ tasks.register('stagingAtMavenCentralPortal') {
 
 	doLast {
 		def username = project.getProperty('mavenCentralUser')
-		def password =  project.getProperty('mavenCentralPassword')
+		def password = project.getProperty('mavenCentralPassword')
 		def deployVersion = project.findProperty('deployVersion') ?: project.version
 
 		if (!username || !password) {
