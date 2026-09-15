@@ -2,8 +2,7 @@
  * © 2024. TU Dortmund University,
  * Institute of Energy Systems, Energy Efficiency and Energy Economics,
  * Research group Distribution grid planning and operation
- */
-
+*/
 package edu.ie3.util.quantities
 
 import org.scalatest.matchers.{MatchResult, Matcher}
@@ -16,13 +15,13 @@ trait SquantsMatchers {
     override def apply(left: Quantity[Q]): MatchResult = MatchResult(
       left =~ right,
       s"The quantities $left and $right differ more than $tolerance in value",
-      s"The quantities $left and $right differ less than $tolerance in value",
+      s"The quantities $left and $right differ less than $tolerance in value"
     )
   }
 
   class OptionalSquantsMatcher[Q <: Quantity[Q]](
       right: Option[Q],
-      implicit val tolerance: Q,
+      implicit val tolerance: Q
   ) extends Matcher[Option[Q]] {
     override def apply(left: Option[Q]): MatchResult = {
       (left, right) match {
@@ -30,19 +29,19 @@ trait SquantsMatchers {
           MatchResult(
             leftValue =~ rightValue,
             s"The quantities $leftValue and $rightValue differ more than $tolerance in value",
-            s"The quantities $leftValue and $rightValue differ less than $tolerance in value",
+            s"The quantities $leftValue and $rightValue differ less than $tolerance in value"
           )
         case (None, _) =>
           MatchResult(
             false,
             s"Expected $right but got None",
-            s"Got None when a value was expected",
+            s"Got None when a value was expected"
           )
         case (Some(v), None) =>
           MatchResult(
             false,
             s"Expected None but got Some($v)",
-            s"Got a value when None was expected",
+            s"Got a value when None was expected"
           )
       }
     }

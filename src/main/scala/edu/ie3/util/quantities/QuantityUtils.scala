@@ -5,15 +5,20 @@
 */
 package edu.ie3.util.quantities
 
+import edu.ie3.util.quantities
 import edu.ie3.util.quantities.PowerSystemUnits.*
 import edu.ie3.util.quantities.electro.*
 import edu.ie3.util.quantities.interfaces.*
 import edu.ie3.util.quantities.prices.*
 import edu.ie3.util.quantities.energy.*
 import edu.ie3.util.quantities.radio.*
-import edu.ie3.util.quantities.thermal.{SpecificHeatCapacity, ThermalConductance, *}
+import edu.ie3.util.quantities.thermal.{
+  SpecificHeatCapacity,
+  ThermalConductance,
+  *
+}
 import squants.*
-import squants.electro.*
+import squants.electro.{ElectricPotential, *}
 import squants.thermal.*
 import squants.energy.{Energy, Power, *}
 import squants.market.*
@@ -33,8 +38,8 @@ import scala.math.BigDecimal.RoundingMode.RoundingMode
 
 object QuantityUtils {
 
-  /** Extension to enrich the [[Double]] with [[ComparableQuantity]] and [[squants.Quantity]]
-    * conversion capabilities.
+  /** Extension to enrich the [[Double]] with [[ComparableQuantity]] and
+    * [[squants.Quantity]] conversion capabilities.
     */
   extension (value: Double) {
 
@@ -98,7 +103,9 @@ object QuantityUtils {
 
     def milliMeter: squants.Length = Millimeters(value)
 
-    def asMillisecond: ComparableQuantity[javax.measure.quantity.Time] = as(MILLISECOND)
+    def asMillisecond: ComparableQuantity[javax.measure.quantity.Time] = as(
+      MILLISECOND
+    )
 
     def milliSecond: squants.Time = Milliseconds(value)
 
@@ -200,7 +207,9 @@ object QuantityUtils {
       KILOWATTHOUR_PER_SQUAREMETRE
     )
 
-    def kilowattHourPerSquareMeter: Irradiation = KilowattHoursPerSquareMeter(value)
+    def kilowattHourPerSquareMeter: Irradiation = KilowattHoursPerSquareMeter(
+      value
+    )
 
     /* ==== Power ==== */
 
@@ -246,9 +255,10 @@ object QuantityUtils {
 
     def wattPerSquareMeter: Irradiance = WattsPerSquareMeter(value)
 
-    def asKiloWattPerSquareMetre: ComparableQuantity[interfaces.Irradiance] = as(
-      KILOWATT_PER_SQUAREMETRE
-    )
+    def asKiloWattPerSquareMetre: ComparableQuantity[interfaces.Irradiance] =
+      as(
+        KILOWATT_PER_SQUAREMETRE
+      )
 
     def kilowattPerSquareMeter: Irradiance = KilowattsPerSquareMeter(value)
 
@@ -258,13 +268,21 @@ object QuantityUtils {
       PERCENT_PER_HOUR
     )
 
+    def percentPerHour: quantities.DimensionlessRate = PercentPerHours(value)
+
     def asPuPerHour: ComparableQuantity[DimensionlessRate] = as(PU_PER_HOUR)
+
+    def puPerHour: quantities.DimensionlessRate = PuPerHours(value)
 
     /* ==== Basic electric units ==== */
 
     def asKiloVolt: ComparableQuantity[ElectricPotential] = as(KILOVOLT)
 
+    def kilovolt: ElectricPotential = Kilovolts(value)
+
     def asMegaVolt: ComparableQuantity[ElectricPotential] = as(MEGAVOLT)
+
+    def megavolt: ElectricPotential = Megavolts(value)
 
     def asOhmPerKilometre: ComparableQuantity[SpecificResistance] =
       as(OHM_PER_KILOMETRE)
@@ -272,6 +290,8 @@ object QuantityUtils {
     def asSiemensPerKilometre: ComparableQuantity[SpecificConductance] =
       as(SIEMENS_PER_KILOMETRE)
 
+    
+    
     def asMicroSiemensPerKilometre: ComparableQuantity[SpecificConductance] =
       as(MICRO_SIEMENS_PER_KILOMETRE)
 
@@ -295,9 +315,10 @@ object QuantityUtils {
 
     def celsius: squants.Temperature = Celsius(value)
 
-    def asKiloWattPerKelvin: ComparableQuantity[interfaces.ThermalConductance] = as(
-      KILOWATT_PER_KELVIN
-    )
+    def asKiloWattPerKelvin: ComparableQuantity[interfaces.ThermalConductance] =
+      as(
+        KILOWATT_PER_KELVIN
+      )
 
     def kilowattPerKelvin: ThermalConductance = KilowattsPerKelvin(value)
 
@@ -310,7 +331,8 @@ object QuantityUtils {
         : ComparableQuantity[interfaces.SpecificHeatCapacity] =
       as(KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE)
 
-    def kiloWattHourPerKelvinTimesCubicMeter: SpecificHeatCapacity = KilowattHoursPerKelvinCubicMeters(value)
+    def kiloWattHourPerKelvinTimesCubicMeter: SpecificHeatCapacity =
+      KilowattHoursPerKelvinCubicMeters(value)
 
     /* ==== Volume ==== */
 
@@ -416,19 +438,19 @@ object QuantityUtils {
   }
 
   extension (
-              electricPotential: ElectricPotential
-            ) {
+      electricPotential: ElectricPotential
+  ) {
     def multiplyWithDimensionless(
-                                   that: Dimensionless
-                                 ): ElectricPotential = Volts(
+        that: Dimensionless
+    ): ElectricPotential = Volts(
       electricPotential.toVolts * that.toEach
     )
 
   }
 
   extension (
-              thermalCapacity: ThermalCapacity
-            ) {
+      thermalCapacity: ThermalCapacity
+  ) {
     def toWattHoursPerKelvin: Double =
       thermalCapacity.toJoulesPerKelvin / 3600
     def toWattSecondsPerKelvin: Double =
@@ -436,8 +458,8 @@ object QuantityUtils {
   }
 
   extension (
-              irradiance: Irradiance
-            ) {
+      irradiance: Irradiance
+  ) {
     def *(that: Time): Irradiation = WattHoursPerSquareMeter(
       irradiance.toWattsPerSquareMeter * that.toSeconds / Hours(1).toSeconds
     )

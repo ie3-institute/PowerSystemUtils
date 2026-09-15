@@ -2,8 +2,7 @@
  * © 2023. TU Dortmund University,
  * Institute of Energy Systems, Energy Efficiency and Energy Economics,
  * Research group Distribution grid planning and operation
- */
-
+*/
 package edu.ie3.util.quantities.thermal
 
 import squants.*
@@ -17,7 +16,7 @@ import scala.util.Try
   */
 final class ThermalConductance private (
     val value: Double,
-    val unit: ThermalConductanceUnit,
+    val unit: ThermalConductanceUnit
 ) extends Quantity[ThermalConductance] {
 
   def dimension: ThermalConductance.type = ThermalConductance
@@ -37,7 +36,7 @@ final class ThermalConductance private (
   def calcThermalEnergyChange(
       temperatureInner: Temperature,
       temperatureOuter: Temperature,
-      time: squants.Time,
+      time: squants.Time
   ): Energy = WattHours(
     this.toWattsPerKelvin * (temperatureInner.toKelvinScale - temperatureOuter.toKelvinScale) * time.toHours
   )
@@ -54,7 +53,7 @@ final class ThermalConductance private (
     */
   def calcQDot(
       temperatureInner: Temperature,
-      temperatureOuter: Temperature,
+      temperatureOuter: Temperature
   ): Power = Watts(
     this.toWattsPerKelvin * (temperatureInner.toKelvinScale - temperatureOuter.toKelvinScale).abs
   )
@@ -92,4 +91,3 @@ object KilowattsPerKelvin extends ThermalConductanceUnit {
   val symbol: String = "k" + WattsPerKelvin.symbol
   val conversionFactor: Double = MetricSystem.Kilo
 }
-

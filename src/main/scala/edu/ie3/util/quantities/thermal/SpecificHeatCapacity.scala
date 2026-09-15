@@ -2,8 +2,7 @@
  * © 2023. TU Dortmund University,
  * Institute of Energy Systems, Energy Efficiency and Energy Economics,
  * Research group Distribution grid planning and operation
- */
-
+*/
 package edu.ie3.util.quantities.thermal
 
 import edu.ie3.quantities.energy.KilowattHoursPerCubicMeter
@@ -21,7 +20,7 @@ import scala.util.Try
   */
 final class SpecificHeatCapacity private (
     val value: Double,
-    val unit: SpecificHeatCapacityUnit,
+    val unit: SpecificHeatCapacityUnit
 ) extends Quantity[SpecificHeatCapacity] {
 
   def dimension: SpecificHeatCapacity.type = SpecificHeatCapacity
@@ -37,7 +36,7 @@ final class SpecificHeatCapacity private (
     */
   def calcEnergyDensity(
       temperatureA: Temperature,
-      temperatureB: Temperature,
+      temperatureB: Temperature
   ): EnergyDensity =
     KilowattHoursPerCubicMeter(
       this.toKilowattHoursPerKelvinCubicMeters * math.abs(
@@ -60,7 +59,7 @@ final class SpecificHeatCapacity private (
   def calcEnergy(
       temperatureA: Temperature,
       temperatureB: Temperature,
-      volume: Volume,
+      volume: Volume
   ): Energy =
     KilowattHours(
       this.toKilowattHoursPerKelvinCubicMeters * math.abs(

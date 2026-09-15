@@ -2,8 +2,7 @@
  * © 2023. TU Dortmund University,
  * Institute of Energy Systems, Energy Efficiency and Energy Economics,
  * Research group Distribution grid planning and operation
- */
-
+*/
 package edu.ie3.util.quantities.prices
 
 import edu.ie3.quantities.*
@@ -18,7 +17,7 @@ import scala.util.Try
   */
 final class EnergyPrice private (
     override val value: Double,
-    override val unit: EnergyPriceUnit,
+    override val unit: EnergyPriceUnit
 ) extends squants.Quantity[EnergyPrice] {
 
   override def dimension: EnergyPrice.type = EnergyPrice
@@ -42,7 +41,7 @@ object EnergyPrice extends Dimension[EnergyPrice] {
   override def units: Set[UnitOfMeasure[EnergyPrice]] = Set(
     EuroPerWattHours,
     EuroPerKilowattHours,
-    EuroPerMegawattHours,
+    EuroPerMegawattHours
   )
 }
 

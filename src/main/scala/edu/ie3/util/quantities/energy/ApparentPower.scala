@@ -2,8 +2,7 @@
  * © 2022. TU Dortmund University,
  * Institute of Energy Systems, Energy Efficiency and Energy Economics,
  * Research group Distribution grid planning and operation
- */
-
+*/
 package edu.ie3.util.quantities.energy
 
 import edu.ie3.quantities.*
@@ -24,7 +23,7 @@ import scala.util.Try
   */
 final class ApparentPower private (
     val value: Double,
-    val unit: ApparentPowerUnit,
+    val unit: ApparentPowerUnit
 ) extends Quantity[ApparentPower] {
 
   def dimension: ApparentPower.type = ApparentPower
@@ -82,7 +81,7 @@ object ApparentPower extends Dimension[ApparentPower] {
       Millivoltamperes,
       Kilovoltamperes,
       Megavoltamperes,
-      Gigavoltamperes,
+      Gigavoltamperes
     )
 }
 
