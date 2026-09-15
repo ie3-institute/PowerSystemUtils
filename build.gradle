@@ -17,7 +17,7 @@ plugins {
 ext {
 	javaVersion = JavaVersion.VERSION_21
 	scalaVersion = '3'
-	scalaBinaryVersion = '3.9.0'
+	scalaBinaryVersion = '3.8.4'
 	scriptsLocation = 'gradle' + File.separator + 'scripts' + File.separator //location of script plugins
 }
 
@@ -66,6 +66,7 @@ dependencies {
 	implementation 'org.apache.logging.log4j:log4j-slf4j-impl' // log4j -> slf4j
 
 	implementation "com.typesafe.scala-logging:scala-logging_$scalaVersion:3.9.6" // slf4j wrapper
+	implementation "org.typelevel:squants_${scalaVersion}:1.8.3"
 
 	implementation 'javax.measure:unit-api:2.2' // quantities
 	implementation 'tech.units:indriya:2.2.4' // quantities

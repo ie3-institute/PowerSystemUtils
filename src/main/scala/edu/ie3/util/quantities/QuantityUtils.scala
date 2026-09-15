@@ -5,51 +5,36 @@
 */
 package edu.ie3.util.quantities
 
-import edu.ie3.util.quantities.PowerSystemUnits._
-import edu.ie3.util.quantities.interfaces.{
-  Currency,
-  Density,
-  DimensionlessRate,
-  EnergyPrice,
-  HeatCapacity,
-  Irradiance,
-  Irradiation,
-  PricePerLength,
-  SpecificCapacitance,
-  SpecificConductance,
-  SpecificEnergy,
-  SpecificHeatCapacity,
-  SpecificResistance,
-  ThermalConductance
-}
+import edu.ie3.util.quantities.PowerSystemUnits.*
+import edu.ie3.util.quantities.electro.*
+import edu.ie3.util.quantities.interfaces.*
+import edu.ie3.util.quantities.prices.*
+import edu.ie3.util.quantities.energy.*
+import edu.ie3.util.quantities.radio.*
+import edu.ie3.util.quantities.thermal.{SpecificHeatCapacity, ThermalConductance, *}
+import squants.*
+import squants.electro.*
+import squants.thermal.*
+import squants.energy.{Energy, Power, *}
+import squants.market.*
+import squants.radio.{Irradiance, *}
+import squants.mass.{Density, KilogramsPerCubicMeter}
+import squants.space.{Angle, Volume, *}
+import squants.time.*
 import tech.units.indriya.ComparableQuantity
 import tech.units.indriya.quantity.Quantities
-import tech.units.indriya.unit.Units._
+import tech.units.indriya.unit.Units.*
 
 import javax.measure
+import javax.measure.quantity.*
 import javax.measure.{Quantity, Unit}
-import javax.measure.quantity.{
-  Angle,
-  Area,
-  Dimensionless,
-  ElectricConductance,
-  ElectricCurrent,
-  ElectricPotential,
-  ElectricResistance,
-  Energy,
-  Length,
-  Power,
-  Temperature,
-  Time,
-  Volume
-}
 import scala.math.BigDecimal.RoundingMode
 import scala.math.BigDecimal.RoundingMode.RoundingMode
 
 object QuantityUtils {
 
-  /** Implicit class to enrich the [[Double]] with [[ComparableQuantity]]
-    * conversion capabilities
+  /** Extension to enrich the [[Double]] with [[ComparableQuantity]] and [[squants.Quantity]]
+    * conversion capabilities.
     */
   extension (value: Double) {
 
@@ -57,27 +42,45 @@ object QuantityUtils {
 
     def asPercent: ComparableQuantity[Dimensionless] = as(PERCENT)
 
+    def percent: squants.Dimensionless = squants.Percent(value)
+
     /* indriya units */
 
     def asSquareMetre: ComparableQuantity[Area] = as(SQUARE_METRE)
 
+    def squareMeter: squants.Area = SquareMeters(value)
+
     def asVolt: ComparableQuantity[ElectricPotential] = as(VOLT)
 
+    def volt: squants.electro.ElectricPotential = Volts(value)
+
     def asAmpere: ComparableQuantity[ElectricCurrent] = as(AMPERE)
+
+    def ampere: squants.ElectricCurrent = Amperes(value)
 
     def asKiloAmpere: ComparableQuantity[ElectricCurrent] = as(
       KILOAMPERE
     )
 
+    def kiloAmpere: squants.ElectricCurrent = KiloAmperes(value)
+
     def asNanoSiemens: ComparableQuantity[ElectricConductance] = as(
       NANOSIEMENS
     )
 
+    def nanoSiemens: ElectricalConductance = NanoSiemens(value)
+
     def asSiemens: ComparableQuantity[ElectricConductance] = as(SIEMENS)
+
+    def siemens: ElectricalConductance = Siemens(value)
 
     def asMilliOhm: ComparableQuantity[ElectricResistance] = as(MILLIOHM)
 
+    def milliOhm: ElectricalResistance = Milliohms(value)
+
     def asOhm: ComparableQuantity[ElectricResistance] = as(OHM)
+
+    def ohm: ElectricalResistance = Ohms(value)
 
     /* PowerSystemUnits */
 
@@ -85,57 +88,99 @@ object QuantityUtils {
 
     def asMetre: ComparableQuantity[Length] = as(METRE)
 
+    def meter: squants.Length = Meters(value)
+
     def asKilometre: ComparableQuantity[Length] = as(KILOMETRE)
+
+    def kilometer: squants.Length = Kilometers(value)
 
     def asMillimetre: ComparableQuantity[Length] = as(MILLIMETRE)
 
-    def asMillisecond: ComparableQuantity[Time] = as(MILLISECOND)
+    def milliMeter: squants.Length = Millimeters(value)
 
-    def asSecond: ComparableQuantity[Time] = as(SECOND)
+    def asMillisecond: ComparableQuantity[javax.measure.quantity.Time] = as(MILLISECOND)
 
-    def asMinute: ComparableQuantity[Time] = as(MINUTE)
+    def milliSecond: squants.Time = Milliseconds(value)
 
-    def asHour: ComparableQuantity[Time] = as(HOUR)
+    def asSecond: ComparableQuantity[javax.measure.quantity.Time] = as(SECOND)
 
-    def asPu: ComparableQuantity[Dimensionless] = as(PU)
+    def second: Any = Seconds(value)
+
+    def asMinute: ComparableQuantity[javax.measure.quantity.Time] = as(MINUTE)
+
+    def minute: Time = Minutes(value)
+
+    def asHour: ComparableQuantity[javax.measure.quantity.Time] = as(HOUR)
+
+    def hour: Time = Hours(value)
+
+    def asPu: ComparableQuantity[javax.measure.quantity.Dimensionless] = as(PU)
+
+    def pu: squants.Dimensionless = Each(value)
 
     def asEuro: ComparableQuantity[Currency] = as(EURO)
+
+    def euro: squants.market.Money = EUR(value)
 
     def asEuroPerKilometre: ComparableQuantity[PricePerLength] = as(
       EURO_PER_KILOMETRE
     )
 
+    def euroPerKilometer: prices.PricePerLength = EuroPerKilometers(value)
+
     def asEuroPerWattHour: ComparableQuantity[EnergyPrice] = as(
       EURO_PER_WATTHOUR
     )
+
+    def euroPerWattHour: EnergyPrice = EuroPerWattHours(value)
 
     def asEuroPerKiloWattHour: ComparableQuantity[EnergyPrice] = as(
       EURO_PER_KILOWATTHOUR
     )
 
+    def euroPerKiloWattHour: EnergyPrice = EuroPerKilowattHours(value)
+
     def asEuroPerMegaWattHour: ComparableQuantity[EnergyPrice] = as(
       EURO_PER_MEGAWATTHOUR
     )
 
+    def euroPerMegaWattHour: EnergyPrice = EuroPerMegawattHours(value)
+
     def asDegreeGeom: ComparableQuantity[Angle] = as(DEGREE_GEOM)
+
+    def degreeGeom: Angle = Degrees(value)
 
     def asKilogramPerCubicMetre: ComparableQuantity[Density] = as(
       KILOGRAM_PER_CUBIC_METRE
     )
 
+    def kilogramPerCubicMeter: Density = KilogramsPerCubicMeter(value)
+
     /* ==== Energy ==== */
 
     def asWattHour: ComparableQuantity[Energy] = as(WATTHOUR)
 
+    def wattHour: Energy = WattHours(value)
+
     def asKiloWattHour: ComparableQuantity[Energy] = as(KILOWATTHOUR)
+
+    def kilowattHours: Energy = KilowattHours(value)
 
     def asMegaWattHour: ComparableQuantity[Energy] = as(MEGAWATTHOUR)
 
+    def megawattHour: Energy = MegawattHours(value)
+
     def asVarHour: ComparableQuantity[Energy] = as(VARHOUR)
+
+    def varHours: Energy = VarHours(value)
 
     def asKiloVarHour: ComparableQuantity[Energy] = as(KILOVARHOUR)
 
+    def kilovarHour: Energy = KilovarHours(value)
+
     def asMegaVarHour: ComparableQuantity[Energy] = as(MEGAVARHOUR)
+
+    def megavarHour: Energy = MegavarHours(value)
 
     def asWattHourPerMetre: ComparableQuantity[SpecificEnergy] = as(
       WATTHOUR_PER_METRE
@@ -149,37 +194,63 @@ object QuantityUtils {
       WATTHOUR_PER_SQUAREMETRE
     )
 
+    def wattHourPerSquareMeter: Irradiation = WattHoursPerSquareMeter(value)
+
     def asKiloWattHourPerSquareMetre: ComparableQuantity[Irradiation] = as(
       KILOWATTHOUR_PER_SQUAREMETRE
     )
+
+    def kilowattHourPerSquareMeter: Irradiation = KilowattHoursPerSquareMeter(value)
 
     /* ==== Power ==== */
 
     def asVoltAmpere: ComparableQuantity[Power] = as(VOLTAMPERE)
 
+    def voltampere: ApparentPower = Voltamperes(value)
+
     def asKiloVoltAmpere: ComparableQuantity[Power] = as(KILOVOLTAMPERE)
+
+    def kilovoltampere: ApparentPower = Kilovoltamperes(value)
 
     def asMegaVoltAmpere: ComparableQuantity[Power] = as(MEGAVOLTAMPERE)
 
+    def megavoltampere: ApparentPower = Megavoltamperes(value)
+
     def asVar: ComparableQuantity[Power] = as(VAR)
+
+    def `var`: ReactivePower = Vars(value)
 
     def asKiloVar: ComparableQuantity[Power] = as(KILOVAR)
 
+    def kilovar: ReactivePower = Kilovars(value)
+
     def asMegaVar: ComparableQuantity[Power] = as(MEGAVAR)
+
+    def megavar: ReactivePower = Megavars(value)
 
     def asWatt: ComparableQuantity[Power] = as(WATT)
 
+    def watt: Power = Watts(value)
+
     def asKiloWatt: ComparableQuantity[Power] = as(KILOWATT)
+
+    def kilowatt: Power = Kilowatts(value)
 
     def asMegaWatt: ComparableQuantity[Power] = as(MEGAWATT)
 
-    def asWattPerSquareMetre: ComparableQuantity[Irradiance] = as(
+    def megawatt: Power = Megawatts(value)
+
+    def asWattPerSquareMetre: ComparableQuantity[interfaces.Irradiance] = as(
       WATT_PER_SQUAREMETRE
     )
 
-    def asKiloWattPerSquareMetre: ComparableQuantity[Irradiance] = as(
+    def wattPerSquareMeter: Irradiance = WattsPerSquareMeter(value)
+
+    def asKiloWattPerSquareMetre: ComparableQuantity[interfaces.Irradiance] = as(
       KILOWATT_PER_SQUAREMETRE
     )
+
+    def kilowattPerSquareMeter: Irradiance = KilowattsPerSquareMeter(value)
 
     /* ==== Composed units ==== */
 
@@ -216,28 +287,42 @@ object QuantityUtils {
       KELVIN
     )
 
+    def kelvin: squants.Temperature = Kelvin(value)
+
     def asDegreeCelsius: ComparableQuantity[Temperature] = as(
       CELSIUS
     )
 
-    def asKiloWattPerKelvin: ComparableQuantity[ThermalConductance] = as(
+    def celsius: squants.Temperature = Celsius(value)
+
+    def asKiloWattPerKelvin: ComparableQuantity[interfaces.ThermalConductance] = as(
       KILOWATT_PER_KELVIN
     )
+
+    def kilowattPerKelvin: ThermalConductance = KilowattsPerKelvin(value)
 
     def asKiloWattHourPerKelvin: ComparableQuantity[HeatCapacity] =
       as(KILOWATTHOUR_PER_KELVIN)
 
+    def kilowattHourPerKelvin: ThermalCapacity = KilowattHourPerKelvin(value)
+
     def asKiloWattHourPerKelvinTimesCubicMetre
-        : ComparableQuantity[SpecificHeatCapacity] =
+        : ComparableQuantity[interfaces.SpecificHeatCapacity] =
       as(KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE)
+
+    def kiloWattHourPerKelvinTimesCubicMeter: SpecificHeatCapacity = KilowattHoursPerKelvinCubicMeters(value)
 
     /* ==== Volume ==== */
 
     def asCubicMetre: ComparableQuantity[Volume] =
       as(CUBIC_METRE)
 
+    def cubicMeter: Volume = CubicMeters(value)
+
     def asLitre: ComparableQuantity[Volume] =
       as(LITRE)
+
+    def litre: Volume = Litres(value)
 
     /** Create a quantity from the double with given unit
       * @param unit
@@ -249,7 +334,6 @@ object QuantityUtils {
       */
     def as[Q <: Quantity[Q]](unit: Unit[Q]): ComparableQuantity[Q] =
       Quantities.getQuantity(value, unit)
-
   }
 
   extension [Q <: Quantity[Q]](q: ComparableQuantity[Q]) {
@@ -312,6 +396,51 @@ object QuantityUtils {
       */
     def toEquivalentIn(targetUnit: measure.Unit[Q]): measure.Unit[Q] =
       targetUnit.transform(unit.getConverterTo(unit.getSystemUnit))
+  }
+
+  extension (energyDensity: EnergyDensity) {
+    def toKilowattHoursPerCubicMeter: Double =
+      energyDensity.to(KilowattHoursPerCubicMeter)
+  }
+
+  extension (energy: Energy) {
+    def calcVolume(that: EnergyDensity): Volume = CubicMeters(
+      energy.toKilowattHours / that.toKilowattHoursPerCubicMeter
+    )
+  }
+
+  extension (power: squants.Power) {
+    def /(that: ReactivePower): Dimensionless = Each(
+      power.toWatts / that.toVars
+    )
+  }
+
+  extension (
+              electricPotential: ElectricPotential
+            ) {
+    def multiplyWithDimensionless(
+                                   that: Dimensionless
+                                 ): ElectricPotential = Volts(
+      electricPotential.toVolts * that.toEach
+    )
+
+  }
+
+  extension (
+              thermalCapacity: ThermalCapacity
+            ) {
+    def toWattHoursPerKelvin: Double =
+      thermalCapacity.toJoulesPerKelvin / 3600
+    def toWattSecondsPerKelvin: Double =
+      thermalCapacity.toJoulesPerKelvin // Joule == Ws
+  }
+
+  extension (
+              irradiance: Irradiance
+            ) {
+    def *(that: Time): Irradiation = WattHoursPerSquareMeter(
+      irradiance.toWattsPerSquareMeter * that.toSeconds / Hours(1).toSeconds
+    )
   }
 
 }
