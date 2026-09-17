@@ -290,8 +290,6 @@ object QuantityUtils {
     def asSiemensPerKilometre: ComparableQuantity[SpecificConductance] =
       as(SIEMENS_PER_KILOMETRE)
 
-    
-    
     def asMicroSiemensPerKilometre: ComparableQuantity[SpecificConductance] =
       as(MICRO_SIEMENS_PER_KILOMETRE)
 

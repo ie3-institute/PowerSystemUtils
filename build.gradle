@@ -18,7 +18,19 @@ ext {
 	javaVersion = JavaVersion.VERSION_21
 	scalaVersion = '3'
 	scalaBinaryVersion = '3.8.4'
+	scapegoatVersion = '3.3.6'
+
 	scriptsLocation = 'gradle' + File.separator + 'scripts' + File.separator //location of script plugins
+
+	scala3compilerOptions = [
+		"-print-tasty",
+		"-feature",
+		"-language:implicitConversions",
+		"-language:existentials",
+		"-Wunused:all",
+		"-Xmax-inlines:128",
+		"-Xunchecked-java-output-version:21"
+	]
 }
 
 group = 'com.github.ie3-institute'
@@ -52,7 +64,7 @@ pmd {
 }
 
 configurations {
-	create('scalaCompiler')
+	scalaCompilerPlugin
 }
 
 dependencies {
@@ -95,18 +107,36 @@ dependencies {
 	implementation "org.scala-lang.modules:scala-parallel-collections_${scalaVersion}:1.2.0"
 	implementation "org.typelevel:cats-core_${scalaVersion}:2.13.0" // advanced functional programming
 
-	scalaCompiler "org.scala-lang:scala3-compiler_3:${scalaBinaryVersion}"
-
 	// TEST Scala //
 	implementation "org.scalatest:scalatest_$scalaVersion:3.2.20"
 	testRuntimeOnly 'com.vladsch.flexmark:flexmark-all:0.64.8'
+
+	/* Scala compiler plugin for static code analysis */
+	implementation "com.sksamuel.scapegoat:scalac-scapegoat-plugin_${scalaBinaryVersion}:${scapegoatVersion}"
+	scalaCompilerPlugin "com.sksamuel.scapegoat:scalac-scapegoat-plugin_${scalaBinaryVersion}:${scapegoatVersion}"
 }
 
-tasks.withType(org.gradle.api.tasks.scala.ScalaCompile).configureEach {
-	scalaClasspath = scalaClasspath + configurations.scalaCompiler
-	scalaCompileOptions.additionalParameters = [
-		'-Xunchecked-java-output-version',
-		'21'
+tasks.withType(ScalaCompile).configureEach {
+	scalaCompileOptions.additionalParameters = scala3compilerOptions + [
+			"-Xplugin:" + configurations.scalaCompilerPlugin.asPath,
+			"-P:scapegoat:dataDir:" + project.layout.buildDirectory.get().asFile.absolutePath + "/reports/scapegoat/src/",
+			"-P:scapegoat:disabledInspections:TryGet:ComparingFloatingPointTypes"
+	]
+	scalaCompileOptions.forkOptions.jvmArgs = [
+		'-Xss2m',
+		'-XX:-UseGCOverheadLimit',
+		'-Xmx4g'
+	]
+}
+
+compileTestScala {
+	scalaCompileOptions.additionalParameters = scalaCompileOptions.additionalParameters + [
+			"-P:scapegoat:dataDir:" + project.layout.buildDirectory.get().asFile.absolutePath + "/reports/scapegoat/testsrc/"
+	]
+	scalaCompileOptions.forkOptions.jvmArgs = [
+		'-Xss2m',
+		'-XX:-UseGCOverheadLimit',
+		'-Xmx4g'
 	]
 }
 
