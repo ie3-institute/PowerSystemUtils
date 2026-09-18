@@ -112,9 +112,7 @@ dependencies {
 }
 
 tasks.withType(ScalaCompile).configureEach {
-	scalaCompileOptions.additionalParameters = scala3compilerOptions + [
-		"-Xplugin:" + configurations.scalaCompilerPlugin.asPath,
-	]
+	scalaCompileOptions.additionalParameters = scala3compilerOptions
 	scalaCompileOptions.forkOptions.jvmArgs = [
 		'-Xss2m',
 		'-XX:-UseGCOverheadLimit',

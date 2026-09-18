@@ -10,7 +10,7 @@ import squants.Quantity
 
 /** Trait, to simplify test coding, that is reliant on squants */
 trait SquantsMatchers {
-  class SquantsMatcher[Q <: Quantity[Q]](right: Q, implicit val tolerance: Q)
+  class SquantsMatcher[Q <: Quantity[Q]](right: Q)(using tolerance: Q)
       extends Matcher[Quantity[Q]] {
     override def apply(left: Quantity[Q]): MatchResult = MatchResult(
       left =~ right,
@@ -20,8 +20,9 @@ trait SquantsMatchers {
   }
 
   class OptionalSquantsMatcher[Q <: Quantity[Q]](
-      right: Option[Q],
-      implicit val tolerance: Q
+      right: Option[Q]
+  )(using
+      tolerance: Q
   ) extends Matcher[Option[Q]] {
     override def apply(left: Option[Q]): MatchResult = {
       (left, right) match {
@@ -47,13 +48,10 @@ trait SquantsMatchers {
     }
   }
 
-  def approximate[Q <: Quantity[Q]](right: Q)(implicit
-      tolerance: Q
-  ): Matcher[Q] =
-    new SquantsMatcher(right, tolerance)
+  def approximate[Q <: Quantity[Q]](right: Q)(using tolerance: Q): Matcher[Q] =
+    new SquantsMatcher(right)
 
-  def approximate[Q <: Quantity[Q]](right: Option[Q])(implicit
+  def approximate[Q <: Quantity[Q]](right: Option[Q])(using
       tolerance: Q
-  ): Matcher[Option[Q]] =
-    new OptionalSquantsMatcher(right, tolerance)
+  ): Matcher[Option[Q]] = new OptionalSquantsMatcher(right)
 }
