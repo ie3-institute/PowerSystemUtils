@@ -5,10 +5,10 @@
 */
 package edu.ie3.util.quantities.energy
 
-import squants.{MetricSystem, PrimaryUnit}
 import squants.energy.{EnergyUnit, Watts}
+import squants.{MetricSystem, PrimaryUnit}
 
-object VarHours extends EnergyUnit {
+object VarHours extends EnergyUnit with PrimaryUnit {
   val symbol = "VArh"
 }
 

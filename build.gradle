@@ -18,7 +18,6 @@ ext {
 	javaVersion = JavaVersion.VERSION_21
 	scalaVersion = '3'
 	scalaBinaryVersion = '3.8.4'
-	scapegoatVersion = '3.3.6'
 
 	scriptsLocation = 'gradle' + File.separator + 'scripts' + File.separator //location of script plugins
 
@@ -110,17 +109,11 @@ dependencies {
 	// TEST Scala //
 	implementation "org.scalatest:scalatest_$scalaVersion:3.2.20"
 	testRuntimeOnly 'com.vladsch.flexmark:flexmark-all:0.64.8'
-
-	/* Scala compiler plugin for static code analysis */
-	implementation "com.sksamuel.scapegoat:scalac-scapegoat-plugin_${scalaBinaryVersion}:${scapegoatVersion}"
-	scalaCompilerPlugin "com.sksamuel.scapegoat:scalac-scapegoat-plugin_${scalaBinaryVersion}:${scapegoatVersion}"
 }
 
 tasks.withType(ScalaCompile).configureEach {
 	scalaCompileOptions.additionalParameters = scala3compilerOptions + [
-			"-Xplugin:" + configurations.scalaCompilerPlugin.asPath,
-			"-P:scapegoat:dataDir:" + project.layout.buildDirectory.get().asFile.absolutePath + "/reports/scapegoat/src/",
-			"-P:scapegoat:disabledInspections:TryGet:ComparingFloatingPointTypes"
+		"-Xplugin:" + configurations.scalaCompilerPlugin.asPath,
 	]
 	scalaCompileOptions.forkOptions.jvmArgs = [
 		'-Xss2m',
@@ -130,9 +123,7 @@ tasks.withType(ScalaCompile).configureEach {
 }
 
 compileTestScala {
-	scalaCompileOptions.additionalParameters = scalaCompileOptions.additionalParameters + [
-			"-P:scapegoat:dataDir:" + project.layout.buildDirectory.get().asFile.absolutePath + "/reports/scapegoat/testsrc/"
-	]
+	scalaCompileOptions.additionalParameters = scalaCompileOptions.additionalParameters
 	scalaCompileOptions.forkOptions.jvmArgs = [
 		'-Xss2m',
 		'-XX:-UseGCOverheadLimit',

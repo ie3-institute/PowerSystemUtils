@@ -5,7 +5,7 @@
 */
 package edu.ie3.util.quantities.thermal
 
-import edu.ie3.quantities.energy.KilowattHoursPerCubicMeter
+import edu.ie3.util.quantities.energy.KilowattHoursPerCubicMeter
 import squants.*
 import squants.energy.{EnergyDensity, KilowattHours}
 

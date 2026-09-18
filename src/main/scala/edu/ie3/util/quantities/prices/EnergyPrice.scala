@@ -5,8 +5,6 @@
 */
 package edu.ie3.util.quantities.prices
 
-import edu.ie3.quantities.*
-import edu.ie3.quantities.energy.*
 import squants.energy.{Energy, KilowattHours, MegawattHours}
 import squants.market.{EUR, Money}
 import squants.{Dimension, PrimaryUnit, SiUnit, UnitConverter, UnitOfMeasure}

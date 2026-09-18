@@ -5,7 +5,6 @@
 */
 package edu.ie3.util.quantities.thermal
 
-import squants.{MetricSystem, PrimaryUnit, SiUnit}
 import squants.thermal.ThermalCapacityUnit
 import squants.time.Time
 

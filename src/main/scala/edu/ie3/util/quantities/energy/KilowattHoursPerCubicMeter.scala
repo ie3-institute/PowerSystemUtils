@@ -9,12 +9,9 @@ import squants.{PrimaryUnit, SiUnit}
 import squants.energy.{EnergyDensityUnit, WattHours}
 import squants.space.CubicMeters
 
-import scala.util.Try
-
 object KilowattHoursPerCubicMeter
     extends EnergyDensityUnit
     with PrimaryUnit
     with SiUnit {
   val symbol: String = "k" + WattHours.symbol + "/" + CubicMeters.symbol
-
 }

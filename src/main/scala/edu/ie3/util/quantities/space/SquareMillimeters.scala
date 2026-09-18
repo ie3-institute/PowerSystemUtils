@@ -5,11 +5,8 @@
 */
 package edu.ie3.util.quantities.space
 
-import squants.{MetricSystem, PrimaryUnit, SiUnit}
-import squants.energy.{EnergyDensityUnit, WattHours}
-import squants.space.{AreaUnit, CubicMeters}
-
-import scala.util.Try
+import squants.MetricSystem
+import squants.space.AreaUnit
 
 object SquareMillimeters extends AreaUnit {
   val symbol: String = "mm²"

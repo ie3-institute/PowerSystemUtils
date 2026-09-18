@@ -6,24 +6,26 @@
 package edu.ie3.util.quantities
 
 import squants.*
-import squants.time.{Frequency, TimeIntegral}
 
 final class DimensionlessRate private (
     val value: Double,
     val unit: DimensionlessRateUnit
 ) extends Quantity[DimensionlessRate] {
 
+  def dimension: DimensionlessRate.type = DimensionlessRate
+
   def toPuPerHour: Double = to(PuPerHours)
   def toPercentPerHour: Double = to(PercentPerHours)
 }
 
 object DimensionlessRate extends Dimension[DimensionlessRate] {
-  def apply[A](n: A, unit: DimensionlessUnit)(implicit num: Numeric[A]) =
-    new DimensionlessRate(n, unit)
+  def apply[A](n: A, unit: DimensionlessRateUnit)(implicit num: Numeric[A]) =
+    new DimensionlessRate(num.toDouble(n), unit)
   def name = "DimensionlessRate"
   def primaryUnit: PuPerHours.type = PuPerHours
   def siUnit: PuPerHours.type = PuPerHours
-  def units: Set[DimensionlessRateUnit] = Set(PuPerHours, PercentPerHours)
+  def units: Set[UnitOfMeasure[DimensionlessRate]] =
+    Set(PuPerHours, PercentPerHours)
 }
 
 trait DimensionlessRateUnit

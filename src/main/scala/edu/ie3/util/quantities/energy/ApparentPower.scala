@@ -5,7 +5,6 @@
 */
 package edu.ie3.util.quantities.energy
 
-import edu.ie3.quantities.*
 import squants.*
 import squants.electro.{Amperes, ElectricPotential, Volts}
 import squants.energy.*
