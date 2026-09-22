@@ -39,7 +39,7 @@ final class SpecificHeatCapacity private (
       temperatureB: Temperature
   ): EnergyDensity =
     KilowattHoursPerCubicMeter(
-      this.toKilowattHoursPerKelvinCubicMeters * math.abs(
+      this.toKilowattHoursPerKelvinTimesCubicMeters * math.abs(
         temperatureA.toKelvinScale - temperatureB.toKelvinScale
       )
     )
@@ -62,13 +62,13 @@ final class SpecificHeatCapacity private (
       volume: Volume
   ): Energy =
     KilowattHours(
-      this.toKilowattHoursPerKelvinCubicMeters * math.abs(
+      this.toKilowattHoursPerKelvinTimesCubicMeters * math.abs(
         temperatureA.toKelvinScale - temperatureB.toKelvinScale
       ) * volume.toCubicMeters
     )
 
-  def toKilowattHoursPerKelvinCubicMeters: Double = to(
-    KilowattHoursPerKelvinCubicMeters
+  def toKilowattHoursPerKelvinTimesCubicMeters: Double = to(
+    KilowattHoursPerKelvinTimesCubicMeters
   )
 }
 
@@ -77,12 +77,12 @@ object SpecificHeatCapacity extends Dimension[SpecificHeatCapacity] {
     new SpecificHeatCapacity(num.toDouble(n), unit)
   def apply(value: Any): Try[SpecificHeatCapacity] = parse(value)
   def name = "SpecificHeatCapacity"
-  def primaryUnit: KilowattHoursPerKelvinCubicMeters.type =
-    KilowattHoursPerKelvinCubicMeters
-  def siUnit: KilowattHoursPerKelvinCubicMeters.type =
-    KilowattHoursPerKelvinCubicMeters
+  def primaryUnit: KilowattHoursPerKelvinTimesCubicMeters.type =
+    KilowattHoursPerKelvinTimesCubicMeters
+  def siUnit: KilowattHoursPerKelvinTimesCubicMeters.type =
+    KilowattHoursPerKelvinTimesCubicMeters
   def units: Set[UnitOfMeasure[SpecificHeatCapacity]] = Set(
-    KilowattHoursPerKelvinCubicMeters
+    KilowattHoursPerKelvinTimesCubicMeters
   )
 }
 
@@ -93,7 +93,7 @@ trait SpecificHeatCapacityUnit
     SpecificHeatCapacity(n, this)
 }
 
-object KilowattHoursPerKelvinCubicMeters
+object KilowattHoursPerKelvinTimesCubicMeters
     extends SpecificHeatCapacityUnit
     with PrimaryUnit
     with SiUnit {

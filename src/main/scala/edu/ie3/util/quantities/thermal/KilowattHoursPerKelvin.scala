@@ -8,7 +8,7 @@ package edu.ie3.util.quantities.thermal
 import squants.thermal.ThermalCapacityUnit
 import squants.time.Time
 
-object KilowattHourPerKelvin extends ThermalCapacityUnit {
+object KilowattHoursPerKelvin extends ThermalCapacityUnit {
   val symbol = "J/K"
   val conversionFactor: Double = Time.MillisecondsPerHour
 }

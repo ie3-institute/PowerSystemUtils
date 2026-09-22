@@ -33,6 +33,7 @@ object EnergyPrice extends Dimension[EnergyPrice] {
   def apply[A](n: A, unit: EnergyPriceUnit)(implicit num: Numeric[A]) =
     new EnergyPrice(num.toDouble(n), unit)
   def apply(value: Any): Try[EnergyPrice] = parse(value)
+
   override def name = "EnergyPrice"
   override def primaryUnit: EuroPerWattHours.type = EuroPerWattHours
   override def siUnit: EuroPerWattHours.type = EuroPerWattHours

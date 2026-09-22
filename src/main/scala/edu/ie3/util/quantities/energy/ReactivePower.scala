@@ -47,7 +47,7 @@ object ReactivePower extends Dimension[ReactivePower] {
     apply(energy.toWattHours / time.toHours, Vars)
   def apply(value: Any): Try[ReactivePower] = parse(value)
 
-  def name = "Power"
+  def name = "ReactivePower"
   def primaryUnit: Vars.type = Vars
   def siUnit: Vars.type = Vars
   def units: Set[UnitOfMeasure[ReactivePower]] =

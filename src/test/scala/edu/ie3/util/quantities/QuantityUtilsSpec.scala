@@ -5,23 +5,45 @@
 */
 package edu.ie3.util.quantities
 
-import edu.ie3.util.quantities.PowerSystemUnits._
+import edu.ie3.util.quantities.PowerSystemUnits.*
 import edu.ie3.util.quantities.QuantityMatchers.equalWithTolerance
 import edu.ie3.util.quantities.QuantityUtils.*
+import edu.ie3.util.quantities.electro.*
+import edu.ie3.util.quantities.energy.*
+import edu.ie3.util.quantities.prices.*
+import edu.ie3.util.quantities.radio.{
+  KilowattHoursPerSquareMeter,
+  WattHoursPerSquareMeter
+}
+import edu.ie3.util.quantities.thermal.{
+  KilowattHoursPerKelvin,
+  KilowattHoursPerKelvinTimesCubicMeters,
+  KilowattsPerKelvin
+}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.wordspec.AnyWordSpecLike
+import squants.*
+import squants.electro.*
+import squants.energy.*
+import squants.market.EUR
+import squants.mass.KilogramsPerCubicMeter
+import squants.radio.WattsPerSquareMeter
+import squants.space.*
+import squants.thermal.Celsius
+import squants.time.{Hours, Milliseconds, Minutes}
 import tech.units.indriya.quantity.Quantities
-import tech.units.indriya.unit.Units._
+import tech.units.indriya.unit.Units.*
 
 import scala.math.BigDecimal.RoundingMode
 
 class QuantityUtilsSpec
     extends Matchers
+    with SquantsMatchers
     with AnyWordSpecLike
     with TableDrivenPropertyChecks {
   "The quantity utils" when {
-    implicit val quantityTolerance: Double = 1e-9
+    given quantityTolerance: Double = 1e-9
 
     "rounding a quantity" should {
       val qty = 10.1245.asAmpere
@@ -47,6 +69,10 @@ class QuantityUtilsSpec
         value.asPercent should equalWithTolerance(
           Quantities.getQuantity(value, PERCENT)
         )
+
+        value.percent should approximate(Percent(value))(using
+          Percent(quantityTolerance)
+        )
       }
 
       /* indriya units */
@@ -54,6 +80,10 @@ class QuantityUtilsSpec
       "convert a double to a volt quantity" in {
         value.asVolt should equalWithTolerance(
           Quantities.getQuantity(value, VOLT)
+        )
+
+        value.volt should approximate(Volts(value))(using
+          Volts(quantityTolerance)
         )
       }
 
@@ -64,11 +94,19 @@ class QuantityUtilsSpec
             AMPERE
           )
         )
+
+        value.ampere should approximate(Amperes(value))(using
+          Amperes(quantityTolerance)
+        )
       }
 
       "convert a double to a kilo ampere quantity" in {
         value.asKiloAmpere should equalWithTolerance(
           Quantities.getQuantity(value, KILOAMPERE)
+        )
+
+        value.kiloAmpere should approximate(Kiloamperes(value))(using
+          Kiloamperes(quantityTolerance)
         )
       }
 
@@ -76,11 +114,19 @@ class QuantityUtilsSpec
         value.asNanoSiemens should equalWithTolerance(
           Quantities.getQuantity(value, NANOSIEMENS)
         )
+
+        value.nanoSiemens should approximate(Nanosiemens(value))(using
+          Nanosiemens(quantityTolerance)
+        )
       }
 
       "convert a double to a siemens quantity" in {
         value.asSiemens should equalWithTolerance(
           Quantities.getQuantity(value, SIEMENS)
+        )
+
+        value.siemens should approximate(Siemens(value))(using
+          Siemens(quantityTolerance)
         )
       }
 
@@ -88,12 +134,18 @@ class QuantityUtilsSpec
         value.asMilliOhm should equalWithTolerance(
           Quantities.getQuantity(value, MILLIOHM)
         )
+
+        value.milliOhm should approximate(Milliohms(value))(using
+          Milliohms(quantityTolerance)
+        )
       }
 
       "convert a double to an ohm quantity" in {
         value.asOhm should equalWithTolerance(
           Quantities.getQuantity(value, OHM)
         )
+
+        value.ohm should approximate(Ohms(value))(using Ohms(quantityTolerance))
       }
 
       /* PowerSystemUnits */
@@ -104,11 +156,19 @@ class QuantityUtilsSpec
         value.asMetre should equalWithTolerance(
           Quantities.getQuantity(value, METRE)
         )
+
+        value.meter should approximate(Meters(value))(using
+          Meters(quantityTolerance)
+        )
       }
 
       "convert a double to a kilometre quantity" in {
         value.asKilometre should equalWithTolerance(
           Quantities.getQuantity(value, KILOMETRE)
+        )
+
+        value.kilometer should approximate(Kilometers(value))(using
+          Kilometers(quantityTolerance)
         )
       }
 
@@ -116,11 +176,19 @@ class QuantityUtilsSpec
         value.asMillimetre should equalWithTolerance(
           Quantities.getQuantity(value, MILLIMETRE)
         )
+
+        value.milliMeter should approximate(Millimeters(value))(using
+          Millimeters(quantityTolerance)
+        )
       }
 
       "convert a double to a millisecond quantity" in {
         value.asMillisecond should equalWithTolerance(
           Quantities.getQuantity(value, MILLISECOND)
+        )
+
+        value.milliSecond should approximate(Milliseconds(value))(using
+          Milliseconds(quantityTolerance)
         )
       }
 
@@ -128,11 +196,19 @@ class QuantityUtilsSpec
         value.asSecond should equalWithTolerance(
           Quantities.getQuantity(value, SECOND)
         )
+
+        value.second should approximate(Seconds(value))(using
+          Seconds(quantityTolerance)
+        )
       }
 
       "convert a double to a minute quantity" in {
         value.asMinute should equalWithTolerance(
           Quantities.getQuantity(value, MINUTE)
+        )
+
+        value.minute should approximate(Minutes(value))(using
+          Minutes(quantityTolerance)
         )
       }
 
@@ -140,21 +216,33 @@ class QuantityUtilsSpec
         value.asHour should equalWithTolerance(
           Quantities.getQuantity(value, HOUR)
         )
+
+        value.hour should approximate(Hours(value))(using
+          Hours(quantityTolerance)
+        )
       }
 
       "convert a double to a pu quantity" in {
         value.asPu should equalWithTolerance(Quantities.getQuantity(value, PU))
+
+        value.pu should approximate(Each(value))(using Each(quantityTolerance))
       }
 
       "convert a double to a euro quantity" in {
         value.asEuro should equalWithTolerance(
           Quantities.getQuantity(value, EURO)
         )
+
+        value.euro should approximate(EUR(value))(using EUR(quantityTolerance))
       }
 
       "convert a double to a euro per kilometre quantity" in {
         value.asEuroPerKilometre should equalWithTolerance(
           Quantities.getQuantity(value, EURO_PER_KILOMETRE)
+        )
+
+        value.euroPerKilometer should approximate(EuroPerKilometers(value))(
+          using EuroPerKilometers(quantityTolerance)
         )
       }
 
@@ -162,23 +250,39 @@ class QuantityUtilsSpec
         value.asEuroPerWattHour should equalWithTolerance(
           Quantities.getQuantity(value, EURO_PER_WATTHOUR)
         )
+
+        value.euroPerWattHour should approximate(EuroPerWattHours(value))(using
+          EuroPerWattHours(quantityTolerance)
+        )
       }
 
       "convert a double to a euro per kilo watt hour quantity" in {
         value.asEuroPerKiloWattHour should equalWithTolerance(
           Quantities.getQuantity(value, EURO_PER_KILOWATTHOUR)
         )
+
+        value.euroPerKiloWattHour should approximate(
+          EuroPerKilowattHours(value)
+        )(using EuroPerKilowattHours(quantityTolerance))
       }
 
       "convert a double to a euro per megawatt quantity" in {
         value.asEuroPerMegaWattHour should equalWithTolerance(
           Quantities.getQuantity(value, EURO_PER_MEGAWATTHOUR)
         )
+
+        value.euroPerMegaWattHour should approximate(
+          EuroPerMegawattHours(value)
+        )(using EuroPerMegawattHours(quantityTolerance))
       }
 
       "convert a double to a degree geom quantity" in {
         value.asDegreeGeom should equalWithTolerance(
           Quantities.getQuantity(value, DEGREE_GEOM)
+        )
+
+        value.degreeGeom should approximate(Degrees(value))(using
+          Degrees(quantityTolerance)
         )
       }
 
@@ -186,6 +290,10 @@ class QuantityUtilsSpec
         value.asKilogramPerCubicMetre should equalWithTolerance(
           Quantities.getQuantity(value, KILOGRAM_PER_CUBIC_METRE)
         )
+
+        value.kilogramPerCubicMeter should approximate(
+          KilogramsPerCubicMeter(value)
+        )(using KilogramsPerCubicMeter(quantityTolerance))
       }
 
       /* ==== Energy ==== */
@@ -194,11 +302,19 @@ class QuantityUtilsSpec
         value.asWattHour should equalWithTolerance(
           Quantities.getQuantity(value, WATTHOUR)
         )
+
+        value.wattHour should approximate(WattHours(value))(using
+          WattHours(quantityTolerance)
+        )
       }
 
       "convert a double to a kilowatt-hour quantity" in {
         value.asKiloWattHour should equalWithTolerance(
           Quantities.getQuantity(value, KILOWATTHOUR)
+        )
+
+        value.kilowattHours should approximate(KilowattHours(value))(using
+          KilowattHours(quantityTolerance)
         )
       }
 
@@ -206,11 +322,19 @@ class QuantityUtilsSpec
         value.asMegaWattHour should equalWithTolerance(
           Quantities.getQuantity(value, MEGAWATTHOUR)
         )
+
+        value.megawattHour should approximate(MegawattHours(value))(using
+          MegawattHours(quantityTolerance)
+        )
       }
 
       "convert a double to a var-hour quantity" in {
         value.asVarHour should equalWithTolerance(
           Quantities.getQuantity(value, VARHOUR)
+        )
+
+        value.varHour should approximate(VarHours(value))(using
+          VarHours(quantityTolerance)
         )
       }
 
@@ -218,11 +342,19 @@ class QuantityUtilsSpec
         value.asKiloVarHour should equalWithTolerance(
           Quantities.getQuantity(value, KILOVARHOUR)
         )
+
+        value.kilovarHour should approximate(KilovarHours(value))(using
+          KilovarHours(quantityTolerance)
+        )
       }
 
       "convert a double to a megavar-hour quantity" in {
         value.asMegaVarHour should equalWithTolerance(
           Quantities.getQuantity(value, MEGAVARHOUR)
+        )
+
+        value.megavarHour should approximate(MegavarHours(value))(using
+          MegavarHours(quantityTolerance)
         )
       }
 
@@ -242,12 +374,20 @@ class QuantityUtilsSpec
         value.asWattHourPerSquareMetre should equalWithTolerance(
           Quantities.getQuantity(value, WATTHOUR_PER_SQUAREMETRE)
         )
+
+        value.wattHourPerSquareMeter should approximate(
+          WattHoursPerSquareMeter(value)
+        )(using WattHoursPerSquareMeter(quantityTolerance))
       }
 
       "convert a double to a kilowatt-hour per square metre quantity" in {
         value.asKiloWattHourPerSquareMetre should equalWithTolerance(
           Quantities.getQuantity(value, KILOWATTHOUR_PER_SQUAREMETRE)
         )
+
+        value.kilowattHourPerSquareMeter should approximate(
+          KilowattHoursPerSquareMeter(value)
+        )(using KilowattHoursPerSquareMeter(quantityTolerance))
       }
 
       /* ==== Power ==== */
@@ -256,11 +396,19 @@ class QuantityUtilsSpec
         value.asVoltAmpere should equalWithTolerance(
           Quantities.getQuantity(value, VOLTAMPERE)
         )
+
+        value.voltampere should approximate(Voltamperes(value))(using
+          Voltamperes(quantityTolerance)
+        )
       }
 
       "convert a double to a kilovolt-ampere quantity" in {
         value.asKiloVoltAmpere should equalWithTolerance(
           Quantities.getQuantity(value, KILOVOLTAMPERE)
+        )
+
+        value.kilovoltampere should approximate(Kilovoltamperes(value))(using
+          Kilovoltamperes(quantityTolerance)
         )
       }
 
@@ -268,11 +416,19 @@ class QuantityUtilsSpec
         value.asMegaVoltAmpere should equalWithTolerance(
           Quantities.getQuantity(value, MEGAVOLTAMPERE)
         )
+
+        value.megavoltampere should approximate(Megavoltamperes(value))(using
+          Megavoltamperes(quantityTolerance)
+        )
       }
 
       "convert a double to a var quantity" in {
         value.asVar should equalWithTolerance(
           Quantities.getQuantity(value, VAR)
+        )
+
+        value.`var` should approximate(Vars(value))(using
+          Vars(quantityTolerance)
         )
       }
 
@@ -280,11 +436,19 @@ class QuantityUtilsSpec
         value.asKiloVar should equalWithTolerance(
           Quantities.getQuantity(value, KILOVAR)
         )
+
+        value.kilovar should approximate(Kilovars(value))(using
+          Kilovars(quantityTolerance)
+        )
       }
 
       "convert a double to a megavar quantity" in {
         value.asMegaVar should equalWithTolerance(
           Quantities.getQuantity(value, MEGAVAR)
+        )
+
+        value.megavar should approximate(Megavars(value))(using
+          Megavars(quantityTolerance)
         )
       }
 
@@ -292,11 +456,19 @@ class QuantityUtilsSpec
         value.asWatt should equalWithTolerance(
           Quantities.getQuantity(value, WATT)
         )
+
+        value.watt should approximate(Watts(value))(using
+          Watts(quantityTolerance)
+        )
       }
 
       "convert a double to a kilowatt quantity" in {
         value.asKiloWatt should equalWithTolerance(
           Quantities.getQuantity(value, KILOWATT)
+        )
+
+        value.kilowatt should approximate(Kilowatts(value))(using
+          Kilowatts(quantityTolerance)
         )
       }
 
@@ -304,11 +476,19 @@ class QuantityUtilsSpec
         value.asMegaWatt should equalWithTolerance(
           Quantities.getQuantity(value, MEGAWATT)
         )
+
+        value.megawatt should approximate(Megawatts(value))(using
+          Megawatts(quantityTolerance)
+        )
       }
 
       "convert a double to a watt per square metre quantity" in {
         value.asWattPerSquareMetre should equalWithTolerance(
           Quantities.getQuantity(value, WATT_PER_SQUAREMETRE)
+        )
+
+        value.wattPerSquareMeter should approximate(WattsPerSquareMeter(value))(
+          using WattsPerSquareMeter(quantityTolerance)
         )
       }
 
@@ -316,6 +496,10 @@ class QuantityUtilsSpec
         value.asKiloWattPerSquareMetre should equalWithTolerance(
           Quantities.getQuantity(value, KILOWATT_PER_SQUAREMETRE)
         )
+
+        value.kilowattHourPerSquareMeter should approximate(
+          KilowattHoursPerSquareMeter(value)
+        )(using KilowattHoursPerSquareMeter(quantityTolerance))
       }
 
       /* ==== Composed units ==== */
@@ -324,11 +508,19 @@ class QuantityUtilsSpec
         value.asPercentPerHour should equalWithTolerance(
           Quantities.getQuantity(value, PERCENT_PER_HOUR)
         )
+
+        value.percentPerHour should approximate(PercentsPerHour(value))(using
+          PercentsPerHour(quantityTolerance)
+        )
       }
 
       "convert a double to a pu per hour quantity" in {
         value.asPuPerHour should equalWithTolerance(
           Quantities.getQuantity(value, PU_PER_HOUR)
+        )
+
+        value.puPerHour should approximate(PuPerHour(value))(using
+          PuPerHour(quantityTolerance)
         )
       }
 
@@ -338,11 +530,19 @@ class QuantityUtilsSpec
         value.asKiloVolt should equalWithTolerance(
           Quantities.getQuantity(value, KILOVOLT)
         )
+
+        value.kilovolt should approximate(Kilovolts(value))(using
+          Kilovolts(quantityTolerance)
+        )
       }
 
       "convert a double to a megavolt quantity" in {
         value.asMegaVolt should equalWithTolerance(
           Quantities.getQuantity(value, MEGAVOLT)
+        )
+
+        value.megavolt should approximate(Megavolts(value))(using
+          Megavolts(quantityTolerance)
         )
       }
 
@@ -350,23 +550,39 @@ class QuantityUtilsSpec
         value.asOhmPerKilometre should equalWithTolerance(
           Quantities.getQuantity(value, OHM_PER_KILOMETRE)
         )
+
+        value.ohmPerKilometer should approximate(OhmsPerKilometer(value))(using
+          OhmsPerKilometer(quantityTolerance)
+        )
       }
 
       "convert a double to a siemens per kilometre quantity" in {
         value.asSiemensPerKilometre should equalWithTolerance(
           Quantities.getQuantity(value, SIEMENS_PER_KILOMETRE)
         )
+
+        value.siemensPerKilometer should approximate(
+          SiemensPerKilometer(value)
+        )(using SiemensPerKilometer(quantityTolerance))
       }
 
       "convert a double to a microsiemens per kilometre quantity" in {
         value.asMicroSiemensPerKilometre should equalWithTolerance(
           Quantities.getQuantity(value, MICRO_SIEMENS_PER_KILOMETRE)
         )
+
+        value.microsiemensPerKilometer should approximate(
+          MicrosiemensPerKilometer(value)
+        )(using MicrosiemensPerKilometer(quantityTolerance))
       }
 
       "convert a double to a farrad per metre quantity" in {
         value.asFarradPerMetre should equalWithTolerance(
           Quantities.getQuantity(value, FARAD_PER_METRE)
+        )
+
+        value.faradPerMeter should approximate(FaradPerMeter(value))(
+          using FaradPerMeter(quantityTolerance)
         )
       }
 
@@ -374,6 +590,10 @@ class QuantityUtilsSpec
         value.asMicroFarradPerKilometre should equalWithTolerance(
           Quantities.getQuantity(value, MICROFARAD_PER_KILOMETRE)
         )
+
+        value.microfaradsPerKilometer should approximate(
+          MicrofaradsPerKilometer(value)
+        )(using MicrofaradsPerKilometer(quantityTolerance))
       }
 
       /* ==== Thermal ==== */
@@ -385,6 +605,10 @@ class QuantityUtilsSpec
             KELVIN
           )
         )
+
+        value.kelvin should approximate(Kelvin(value))(using
+          Kelvin(quantityTolerance)
+        )
       }
 
       "convert a double to a degree celsius quantity" in {
@@ -394,11 +618,19 @@ class QuantityUtilsSpec
             CELSIUS
           )
         )
+
+        value.celsius should approximate(Celsius(value))(using
+          Celsius(quantityTolerance)
+        )
       }
 
       "convert a double to a kilowatt per kelvin quantity" in {
         value.asKiloWattPerKelvin should equalWithTolerance(
           Quantities.getQuantity(value, KILOWATT_PER_KELVIN)
+        )
+
+        value.kilowattPerKelvin should approximate(KilowattsPerKelvin(value))(
+          using KilowattsPerKelvin(quantityTolerance)
         )
       }
 
@@ -406,6 +638,10 @@ class QuantityUtilsSpec
         value.asKiloWattHourPerKelvin should equalWithTolerance(
           Quantities.getQuantity(value, KILOWATTHOUR_PER_KELVIN)
         )
+
+        value.kilowattHourPerKelvin should approximate(
+          KilowattHoursPerKelvin(value)
+        )(using KilowattHoursPerKelvin(quantityTolerance))
       }
 
       "convert a double to a kilowatthour per kelvin times cubic metre quantity" in {
@@ -415,6 +651,10 @@ class QuantityUtilsSpec
             KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE
           )
         )
+
+        value.kiloWattHourPerKelvinTimesCubicMeter should approximate(
+          KilowattHoursPerKelvinTimesCubicMeters(value)
+        )(using KilowattHoursPerKelvinTimesCubicMeters(quantityTolerance))
       }
 
       /* ==== Volume ==== */
@@ -426,6 +666,10 @@ class QuantityUtilsSpec
             CUBIC_METRE
           )
         )
+
+        value.cubicMeter should approximate(CubicMeters(value))(using
+          CubicMeters(quantityTolerance)
+        )
       }
 
       "convert a double to a litre quantity" in {
@@ -434,6 +678,10 @@ class QuantityUtilsSpec
             value,
             LITRE
           )
+        )
+
+        value.litre should approximate(Litres(value))(using
+          Litres(quantityTolerance)
         )
       }
     }

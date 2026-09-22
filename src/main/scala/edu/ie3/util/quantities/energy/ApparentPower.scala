@@ -64,14 +64,13 @@ final class ApparentPower private (
 }
 
 object ApparentPower extends Dimension[ApparentPower] {
-  private[quantities] def apply[A](n: A, unit: ApparentPowerUnit)(implicit
+  private[energy] def apply[A](n: A, unit: ApparentPowerUnit)(using
       num: Numeric[A]
   ) = new ApparentPower(num.toDouble(n), unit)
   def apply(energy: Energy, time: Time): ApparentPower =
     apply(energy.toWattHours / time.toHours, Voltamperes)
-  def apply(value: Any): Try[ApparentPower] = parse(value)
 
-  def name = "Power"
+  def name = "ApparentPower"
   def primaryUnit: Voltamperes.type = Voltamperes
   def siUnit: Voltamperes.type = Voltamperes
   def units: Set[UnitOfMeasure[ApparentPower]] =

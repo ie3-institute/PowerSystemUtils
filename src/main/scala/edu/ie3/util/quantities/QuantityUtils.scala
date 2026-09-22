@@ -60,13 +60,13 @@ object QuantityUtils {
       KILOAMPERE
     )
 
-    def kiloAmpere: ElectricCurrent = KiloAmperes(value)
+    def kiloAmpere: ElectricCurrent = Kiloamperes(value)
 
     def asNanoSiemens: ComparableQuantity[jq.ElectricConductance] = as(
       NANOSIEMENS
     )
 
-    def nanoSiemens: ElectricalConductance = NanoSiemens(value)
+    def nanoSiemens: ElectricalConductance = Nanosiemens(value)
 
     def asSiemens: ComparableQuantity[jq.ElectricConductance] = as(SIEMENS)
 
@@ -170,7 +170,7 @@ object QuantityUtils {
 
     def asVarHour: ComparableQuantity[jq.Energy] = as(VARHOUR)
 
-    def varHours: Energy = VarHours(value)
+    def varHour: Energy = VarHours(value)
 
     def asKiloVarHour: ComparableQuantity[jq.Energy] = as(KILOVARHOUR)
 
@@ -262,13 +262,13 @@ object QuantityUtils {
       PERCENT_PER_HOUR
     )
 
-    def percentPerHour: quantities.DimensionlessRate = PercentPerHours(value)
+    def percentPerHour: quantities.DimensionlessRate = PercentsPerHour(value)
 
     def asPuPerHour: ComparableQuantity[interfaces.DimensionlessRate] = as(
       PU_PER_HOUR
     )
 
-    def puPerHour: quantities.DimensionlessRate = PuPerHours(value)
+    def puPerHour: quantities.DimensionlessRate = PuPerHour(value)
 
     /* ==== Basic electric units ==== */
 
@@ -283,20 +283,33 @@ object QuantityUtils {
     def asOhmPerKilometre: ComparableQuantity[interfaces.SpecificResistance] =
       as(OHM_PER_KILOMETRE)
 
+    def ohmPerKilometer: SpecificResistance = OhmsPerKilometer(value)
+
     def asSiemensPerKilometre
         : ComparableQuantity[interfaces.SpecificConductance] =
       as(SIEMENS_PER_KILOMETRE)
+
+    def siemensPerKilometer: SpecificConductance = SiemensPerKilometer(value)
 
     def asMicroSiemensPerKilometre
         : ComparableQuantity[interfaces.SpecificConductance] =
       as(MICRO_SIEMENS_PER_KILOMETRE)
 
+    def microsiemensPerKilometer: SpecificConductance =
+      MicrosiemensPerKilometer(value)
+
     def asFarradPerMetre: ComparableQuantity[interfaces.SpecificCapacitance] =
       as(FARAD_PER_METRE)
+
+    def faradPerMeter: SpecificCapacitance = FaradPerMeter(value)
 
     def asMicroFarradPerKilometre
         : ComparableQuantity[interfaces.SpecificCapacitance] =
       as(MICROFARAD_PER_KILOMETRE)
+
+    def microfaradsPerKilometer: SpecificCapacitance = MicrofaradsPerKilometer(
+      value
+    )
 
     /* ==== Thermal ==== */
 
@@ -322,14 +335,14 @@ object QuantityUtils {
     def asKiloWattHourPerKelvin: ComparableQuantity[interfaces.HeatCapacity] =
       as(KILOWATTHOUR_PER_KELVIN)
 
-    def kilowattHourPerKelvin: ThermalCapacity = KilowattHourPerKelvin(value)
+    def kilowattHourPerKelvin: ThermalCapacity = KilowattHoursPerKelvin(value)
 
     def asKiloWattHourPerKelvinTimesCubicMetre
         : ComparableQuantity[interfaces.SpecificHeatCapacity] =
       as(KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE)
 
     def kiloWattHourPerKelvinTimesCubicMeter: SpecificHeatCapacity =
-      KilowattHoursPerKelvinCubicMeters(value)
+      KilowattHoursPerKelvinTimesCubicMeters(value)
 
     /* ==== Volume ==== */
 
