@@ -124,8 +124,6 @@ object QuantityUtils {
       EURO_PER_KILOMETRE
     )
 
-    def euroPerKilometer: PricePerLength = EuroPerKilometers(value)
-
     def asEuroPerWattHour: ComparableQuantity[interfaces.EnergyPrice] = as(
       EURO_PER_WATTHOUR
     )

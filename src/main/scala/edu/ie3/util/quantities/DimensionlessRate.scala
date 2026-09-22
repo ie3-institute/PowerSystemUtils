@@ -19,7 +19,7 @@ final class DimensionlessRate private (
 }
 
 object DimensionlessRate extends Dimension[DimensionlessRate] {
-  def apply[A](n: A, unit: DimensionlessRateUnit)(implicit num: Numeric[A]) =
+  def apply[A](n: A, unit: DimensionlessRateUnit)(using num: Numeric[A]) =
     new DimensionlessRate(num.toDouble(n), unit)
   def name = "DimensionlessRate"
   def primaryUnit: PuPerHour.type = PuPerHour
@@ -31,7 +31,7 @@ object DimensionlessRate extends Dimension[DimensionlessRate] {
 trait DimensionlessRateUnit
     extends UnitOfMeasure[DimensionlessRate]
     with UnitConverter {
-  def apply[A](n: A)(implicit num: Numeric[A]) = DimensionlessRate(n, this)
+  def apply[A](n: A)(using num: Numeric[A]) = DimensionlessRate(n, this)
 }
 
 object PuPerHour extends DimensionlessRateUnit with PrimaryUnit with SiUnit {

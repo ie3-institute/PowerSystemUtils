@@ -85,7 +85,7 @@ object ApparentPower extends Dimension[ApparentPower] {
 trait ApparentPowerUnit
     extends UnitOfMeasure[ApparentPower]
     with UnitConverter {
-  def apply[A](n: A)(implicit num: Numeric[A]): ApparentPower =
+  def apply[A](n: A)(using num: Numeric[A]): ApparentPower =
     ApparentPower(n, this)
 }
 

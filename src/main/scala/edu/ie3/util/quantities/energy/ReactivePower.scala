@@ -40,7 +40,7 @@ final class ReactivePower private (
 }
 
 object ReactivePower extends Dimension[ReactivePower] {
-  private[quantities] def apply[A](n: A, unit: ReactivePowerUnit)(implicit
+  private[quantities] def apply[A](n: A, unit: ReactivePowerUnit)(using
       num: Numeric[A]
   ) = new ReactivePower(num.toDouble(n), unit)
   def apply(energy: Energy, time: Time): ReactivePower =
@@ -57,7 +57,7 @@ object ReactivePower extends Dimension[ReactivePower] {
 trait ReactivePowerUnit
     extends UnitOfMeasure[ReactivePower]
     with UnitConverter {
-  def apply[A](n: A)(implicit num: Numeric[A]): ReactivePower =
+  def apply[A](n: A)(using num: Numeric[A]): ReactivePower =
     ReactivePower(n, this)
 }
 

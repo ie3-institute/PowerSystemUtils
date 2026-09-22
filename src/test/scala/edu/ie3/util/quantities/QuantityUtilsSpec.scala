@@ -276,12 +276,6 @@ class QuantityUtilsSpec
         )
       }
 
-      "convert a double to a squants euro per kilometre quantity" in {
-        value.euroPerKilometer should approximate(EuroPerKilometers(value))(
-          using EuroPerKilometers(quantityTolerance)
-        )
-      }
-
       "convert a double to a euro per watt hour quantity" in {
         value.asEuroPerWattHour should equalWithTolerance(
           Quantities.getQuantity(value, EURO_PER_WATTHOUR)

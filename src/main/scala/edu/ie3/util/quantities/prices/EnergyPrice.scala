@@ -30,7 +30,7 @@ final class EnergyPrice private (
 }
 
 object EnergyPrice extends Dimension[EnergyPrice] {
-  def apply[A](n: A, unit: EnergyPriceUnit)(implicit num: Numeric[A]) =
+  def apply[A](n: A, unit: EnergyPriceUnit)(using num: Numeric[A]) =
     new EnergyPrice(num.toDouble(n), unit)
   def apply(value: Any): Try[EnergyPrice] = parse(value)
 
@@ -45,7 +45,7 @@ object EnergyPrice extends Dimension[EnergyPrice] {
 }
 
 trait EnergyPriceUnit extends UnitOfMeasure[EnergyPrice] with UnitConverter {
-  override def apply[A](n: A)(implicit num: Numeric[A]): EnergyPrice =
+  override def apply[A](n: A)(using num: Numeric[A]): EnergyPrice =
     EnergyPrice(n, this)
 }
 
