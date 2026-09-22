@@ -25,13 +25,13 @@ import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.wordspec.AnyWordSpecLike
 import squants.*
 import squants.electro.*
-import squants.energy.{Watts, Watts as value, *}
+import squants.energy.*
 import squants.market.EUR
 import squants.mass.KilogramsPerCubicMeter
 import squants.radio.WattsPerSquareMeter
 import squants.space.*
 import squants.thermal.Celsius
-import squants.time.{Hours, Milliseconds, Minutes, Hours as value}
+import squants.time.{Hours, Milliseconds, Minutes}
 import tech.units.indriya.quantity.Quantities
 import tech.units.indriya.unit.Units.*
 
