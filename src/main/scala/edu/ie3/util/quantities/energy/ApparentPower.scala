@@ -11,7 +11,6 @@ import squants.energy.*
 import squants.time.Time
 
 import scala.math.{acos, sin}
-import scala.util.Try
 
 /** Class that represents an apparent power. An apparent power is the absolute
   * value of the complex power (|S|).
