@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Changed
 - Cleaned up dependencies [#601](https://github.com/ie3-institute/PowerSystemUtils/issues/601)
 
+### Fixed
+- Fixed building jars with `Gradle` [#703](https://github.com/ie3-institute/PowerSystemUtils/issues/703)
+
 ## [3.2.2]
 
 ### Added
@@ -17,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.2.1]
 
 ### Fixed
-- Make getters of `Interval` public again [#694](https://github.com/ie3-institute/PowerSystemUtils/issues/694) 
+- Make getters of `Interval` public again [#694](https://github.com/ie3-institute/PowerSystemUtils/issues/694)
 
 ## [3.2.0]
 
