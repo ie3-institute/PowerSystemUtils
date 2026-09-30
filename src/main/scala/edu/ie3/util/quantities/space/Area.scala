@@ -6,8 +6,10 @@
 package edu.ie3.util.quantities.space
 
 import squants.MetricSystem
-import squants.space.AreaUnit
+import squants.space.{Area, AreaUnit}
 
+/** Additional unit for [[Area]].
+  */
 object SquareMillimeters extends AreaUnit {
   val symbol: String = "mm²"
   val conversionFactor: Double = MetricSystem.Milli * MetricSystem.Milli

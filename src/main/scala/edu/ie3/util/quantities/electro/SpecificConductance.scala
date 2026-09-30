@@ -61,7 +61,7 @@ trait SpecificConductanceUnit
 }
 
 object MicrosiemensPerKilometer extends SpecificConductanceUnit with SiUnit {
-  val conversionFactor: Double = MetricSystem.Milli
+  val conversionFactor: Double = MetricSystem.Micro
   val symbol: String = "µ" + SiemensPerKilometer.symbol
 }
 

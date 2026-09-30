@@ -63,7 +63,7 @@ trait SpecificCapacitanceUnit
 }
 
 object MicrofaradsPerKilometer extends SpecificCapacitanceUnit with SiUnit {
-  val conversionFactor: Double = MetricSystem.Milli
+  val conversionFactor: Double = MetricSystem.Micro
   val symbol: String = "µ" + FaradsPerKilometer.symbol
 }
 

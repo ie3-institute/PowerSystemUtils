@@ -30,7 +30,9 @@ final class EnergyPrice private (
 }
 
 object EnergyPrice extends Dimension[EnergyPrice] {
-  def apply[A](n: A, unit: EnergyPriceUnit)(using num: Numeric[A]) =
+  private[prices] def apply[A](n: A, unit: EnergyPriceUnit)(using
+      num: Numeric[A]
+  ) =
     new EnergyPrice(num.toDouble(n), unit)
   def apply(value: Any): Try[EnergyPrice] = parse(value)
 

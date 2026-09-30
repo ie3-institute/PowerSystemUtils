@@ -6,8 +6,10 @@
 package edu.ie3.util.quantities.electro
 
 import squants.MetricSystem
-import squants.electro.ElectricCurrentUnit
+import squants.electro.{ElectricCurrent, ElectricCurrentUnit}
 
+/** Additional unit for [[ElectricCurrent]].
+  */
 object Kiloamperes extends ElectricCurrentUnit {
   val symbol = "kA"
   val conversionFactor: Double = MetricSystem.Kilo

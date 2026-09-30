@@ -62,7 +62,9 @@ final class ThermalConductance private (
 }
 
 object ThermalConductance extends Dimension[ThermalConductance] {
-  def apply[A](n: A, unit: ThermalConductanceUnit)(using num: Numeric[A]) =
+  private[thermal] def apply[A](n: A, unit: ThermalConductanceUnit)(using
+      num: Numeric[A]
+  ) =
     new ThermalConductance(num.toDouble(n), unit)
   def apply(value: Any): Try[ThermalConductance] = parse(value)
   def name = "ThermalConductance"

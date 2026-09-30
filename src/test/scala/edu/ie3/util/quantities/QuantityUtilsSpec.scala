@@ -6,13 +6,13 @@
 package edu.ie3.util.quantities
 
 import edu.ie3.util.quantities.PowerSystemUnits.*
-import edu.ie3.util.quantities.QuantityMatchers.equalWithTolerance
 import edu.ie3.util.quantities.QuantityUtils.*
 import edu.ie3.util.quantities.electro.*
 import edu.ie3.util.quantities.energy.*
 import edu.ie3.util.quantities.prices.*
 import edu.ie3.util.quantities.radio.{
   KilowattHoursPerSquareMeter,
+  KilowattsPerSquareMeter,
   WattHoursPerSquareMeter
 }
 import edu.ie3.util.quantities.thermal.{
@@ -39,6 +39,7 @@ import scala.math.BigDecimal.RoundingMode
 
 class QuantityUtilsSpec
     extends Matchers
+    with QuantityMatchers
     with SquantsMatchers
     with AnyWordSpecLike
     with TableDrivenPropertyChecks {
@@ -440,7 +441,7 @@ class QuantityUtilsSpec
         )
       }
 
-      "convert a double to a squants kilowatt-hour per square metre quantity" in {
+      "convert a double to a squants kilowatt-hour per square meter quantity" in {
         value.kilowattHourPerSquareMeter should approximate(
           KilowattHoursPerSquareMeter(value)
         )(using KilowattHoursPerSquareMeter(quantityTolerance))
@@ -574,10 +575,10 @@ class QuantityUtilsSpec
         )
       }
 
-      "convert a double to a squants kilowatt per square metre quantity" in {
-        value.kilowattHourPerSquareMeter should approximate(
-          KilowattHoursPerSquareMeter(value)
-        )(using KilowattHoursPerSquareMeter(quantityTolerance))
+      "convert a double to a squants kilowatt per square meter quantity" in {
+        value.kilowattPerSquareMeter should approximate(
+          KilowattsPerSquareMeter(value)
+        )(using KilowattsPerSquareMeter(quantityTolerance))
       }
 
       /* ==== Composed units ==== */

@@ -11,13 +11,14 @@ import org.scalatest.matchers.{MatchResult, Matcher}
 trait DoubleMatchers extends TolerantNumerics {
 
   class DoubleMatcher(right: Double)(using tolerance: Double)
-      extends Matcher[Double] {
+      extends Matcher[Double]
+      with MatcherUtils {
     private val equality = tolerantDoubleEquality(tolerance)
 
     override def apply(left: Double): MatchResult = MatchResult(
       equality.areEqual(left, right),
-      s"The values $left and $right differ more than $tolerance in value",
-      s"The values $left and $right differ less than $tolerance in value"
+      assembleRawFailureMessage(left, right, tolerance, "value"),
+      assembleNegatedFailureMessage(left, right, tolerance, "value")
     )
   }
 

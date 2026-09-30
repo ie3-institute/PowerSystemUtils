@@ -6,8 +6,10 @@
 package edu.ie3.util.quantities.radio
 
 import squants.*
-import squants.radio.{IrradianceUnit, WattsPerSquareMeter}
+import squants.radio.{Irradiance, IrradianceUnit, WattsPerSquareMeter}
 
+/** Additional unit for [[Irradiance]].
+  */
 object KilowattsPerSquareMeter extends IrradianceUnit with SiUnit {
   val symbol: String = "k" + WattsPerSquareMeter.symbol
   val conversionFactor: Double = MetricSystem.Kilo

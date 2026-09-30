@@ -20,7 +20,7 @@ import edu.ie3.util.geo.RichGeometries.{
   equalAreaProjection,
   containsCoordinate
 }
-import edu.ie3.util.quantities.QuantityMatchers.equalWithTolerance
+import edu.ie3.util.quantities.QuantityMatchers
 import edu.ie3.util.quantities.QuantityUtils.asSquareMetre
 import org.locationtech.jts.geom.Coordinate
 import org.scalatest.matchers.should.Matchers
@@ -31,7 +31,10 @@ import org.scalatest.prop.TableDrivenPropertyChecks._
 
 import scala.util.{Failure, Success}
 
-class RichGeometriesSpec extends Matchers with AnyWordSpecLike {
+class RichGeometriesSpec
+    extends Matchers
+    with QuantityMatchers
+    with AnyWordSpecLike {
 
   "A rich GeoCordinate" should {
 

@@ -5,10 +5,12 @@
 */
 package edu.ie3.util.quantities.energy
 
-import squants.{PrimaryUnit, SiUnit}
-import squants.energy.{EnergyDensityUnit, WattHours}
+import squants.energy.{EnergyDensity, EnergyDensityUnit, WattHours}
 import squants.space.CubicMeters
+import squants.{PrimaryUnit, SiUnit}
 
+/** Additional unit for [[EnergyDensity]].
+  */
 object KilowattHoursPerCubicMeter
     extends EnergyDensityUnit
     with PrimaryUnit

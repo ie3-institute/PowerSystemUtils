@@ -33,7 +33,9 @@ final class Irradiation private (val value: Double, val unit: IrradiationUnit)
 }
 
 object Irradiation extends Dimension[Irradiation] {
-  def apply[A](n: A, unit: IrradiationUnit)(using num: Numeric[A]) =
+  private[radio] def apply[A](n: A, unit: IrradiationUnit)(using
+      num: Numeric[A]
+  ) =
     new Irradiation(num.toDouble(n), unit)
   def apply(value: Any): Try[Irradiation] = parse(value)
   def name = "Irradiation"
@@ -57,16 +59,4 @@ object WattHoursPerSquareMeter
 object KilowattHoursPerSquareMeter extends IrradiationUnit {
   val symbol: String = "k" + WattHoursPerSquareMeter.symbol
   val conversionFactor: Double = MetricSystem.Kilo
-}
-
-object IrradiationConversions {
-  lazy val wattHoursPerSquareMeter: Irradiation = WattHoursPerSquareMeter(1)
-
-  extension [A](n: A)(using num: Numeric[A]) {
-    def wattHoursPerSquareMeter: Irradiation = WattHoursPerSquareMeter(n)
-  }
-
-  given IrradiationNumeric: AbstractQuantityNumeric[Irradiation](
-    Irradiation.primaryUnit
-  ) with {}
 }

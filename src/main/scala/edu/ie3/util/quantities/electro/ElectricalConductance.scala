@@ -6,13 +6,17 @@
 package edu.ie3.util.quantities.electro
 
 import squants.MetricSystem
-import squants.electro.ElectricalConductanceUnit
+import squants.electro.{ElectricalConductance, ElectricalConductanceUnit}
 
+/** Additional unit for [[ElectricalConductance]].
+  */
 object Nanosiemens extends ElectricalConductanceUnit {
   val symbol = "nS"
   val conversionFactor: Double = MetricSystem.Nano
 }
 
+/** Additional unit for [[ElectricalConductance]].
+  */
 object Millisiemens extends ElectricalConductanceUnit {
   val symbol = "mS"
   val conversionFactor: Double = MetricSystem.Milli

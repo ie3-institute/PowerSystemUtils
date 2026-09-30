@@ -5,10 +5,12 @@
 */
 package edu.ie3.util.quantities.thermal
 
-import squants.thermal.ThermalCapacityUnit
+import squants.thermal.{ThermalCapacity, ThermalCapacityUnit}
 import squants.time.Time
 
+/** Additional unit for [[ThermalCapacity]].
+  */
 object KilowattHoursPerKelvin extends ThermalCapacityUnit {
-  val symbol = "J/K"
-  val conversionFactor: Double = Time.MillisecondsPerHour
+  val symbol = "kWh/K"
+  val conversionFactor: Double = 3.6e6
 }

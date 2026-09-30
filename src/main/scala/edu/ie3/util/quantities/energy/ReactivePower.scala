@@ -40,7 +40,7 @@ final class ReactivePower private (
 }
 
 object ReactivePower extends Dimension[ReactivePower] {
-  private[quantities] def apply[A](n: A, unit: ReactivePowerUnit)(using
+  private[energy] def apply[A](n: A, unit: ReactivePowerUnit)(using
       num: Numeric[A]
   ) = new ReactivePower(num.toDouble(n), unit)
   def apply(energy: Energy, time: Time): ReactivePower =

@@ -5,17 +5,19 @@
 */
 package edu.ie3.util.quantities
 
+import edu.ie3.util.MatcherUtils
 import org.scalatest.matchers.{MatchResult, Matcher}
 import squants.Quantity
 
 /** Trait, to simplify test coding, that is reliant on squants */
 trait SquantsMatchers {
   class SquantsMatcher[Q <: Quantity[Q]](right: Q)(using tolerance: Q)
-      extends Matcher[Quantity[Q]] {
+      extends Matcher[Quantity[Q]]
+      with MatcherUtils {
     override def apply(left: Quantity[Q]): MatchResult = MatchResult(
       left =~ right,
-      s"The quantities $left and $right differ more than $tolerance in value",
-      s"The quantities $left and $right differ less than $tolerance in value"
+      assembleRawFailureMessage(left, right, tolerance, "quantity"),
+      assembleNegatedFailureMessage(left, right, tolerance, "quantity")
     )
   }
 
@@ -23,14 +25,15 @@ trait SquantsMatchers {
       right: Option[Q]
   )(using
       tolerance: Q
-  ) extends Matcher[Option[Q]] {
+  ) extends Matcher[Option[Q]]
+      with MatcherUtils {
     override def apply(left: Option[Q]): MatchResult = {
       (left, right) match {
         case (Some(leftValue), Some(rightValue)) =>
           MatchResult(
             leftValue =~ rightValue,
-            s"The quantities $leftValue and $rightValue differ more than $tolerance in value",
-            s"The quantities $leftValue and $rightValue differ less than $tolerance in value"
+            assembleRawFailureMessage(left, right, tolerance, "quantity"),
+            assembleNegatedFailureMessage(left, right, tolerance, "quantity")
           )
         case (None, _) =>
           MatchResult(

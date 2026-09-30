@@ -39,7 +39,7 @@ final class SpecificHeatCapacity private (
       temperatureB: Temperature
   ): EnergyDensity =
     KilowattHoursPerCubicMeter(
-      this.toKilowattHoursPerKelvinTimesCubicMeters * math.abs(
+      toKilowattHoursPerKelvinTimesCubicMeters * math.abs(
         temperatureA.toKelvinScale - temperatureB.toKelvinScale
       )
     )
@@ -62,7 +62,7 @@ final class SpecificHeatCapacity private (
       volume: Volume
   ): Energy =
     KilowattHours(
-      this.toKilowattHoursPerKelvinTimesCubicMeters * math.abs(
+      toKilowattHoursPerKelvinTimesCubicMeters * math.abs(
         temperatureA.toKelvinScale - temperatureB.toKelvinScale
       ) * volume.toCubicMeters
     )
@@ -73,7 +73,9 @@ final class SpecificHeatCapacity private (
 }
 
 object SpecificHeatCapacity extends Dimension[SpecificHeatCapacity] {
-  def apply[A](n: A, unit: SpecificHeatCapacityUnit)(using num: Numeric[A]) =
+  private[thermal] def apply[A](n: A, unit: SpecificHeatCapacityUnit)(using
+      num: Numeric[A]
+  ) =
     new SpecificHeatCapacity(num.toDouble(n), unit)
   def apply(value: Any): Try[SpecificHeatCapacity] = parse(value)
   def name = "SpecificHeatCapacity"
