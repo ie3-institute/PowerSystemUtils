@@ -5,6 +5,8 @@
 */
 package edu.ie3.util.quantities
 
+import edu.ie3.util.MatcherUtils
+
 import javax.measure.Quantity
 import org.scalatest.matchers.{MatchResult, Matcher}
 
@@ -13,11 +15,12 @@ import org.scalatest.matchers.{MatchResult, Matcher}
 trait QuantityMatchers {
   class QuantityMatcher[Q <: Quantity[Q]](right: Quantity[Q], tolerance: Double)
       extends Matcher[Quantity[Q]]
-      with QuantityMatchers {
+      with QuantityMatchers
+      with MatcherUtils {
     override def apply(left: Quantity[Q]): MatchResult = MatchResult(
       QuantityUtil.equals(left, right, tolerance),
-      QuantityMatchers.assembleRawFailureMessage(left, right, tolerance),
-      QuantityMatchers.assembleNegatedFailureMessage(left, right, tolerance)
+      assembleRawFailureMessage(left, right, tolerance, "quantity"),
+      assembleNegatedFailureMessage(left, right, tolerance, "quantity")
     )
   }
 
@@ -25,17 +28,4 @@ trait QuantityMatchers {
       right: Quantity[Q]
   )(implicit quantityTolerance: Double = 1e-10) =
     new QuantityMatcher(right, quantityTolerance)
-}
-
-case object QuantityMatchers extends QuantityMatchers {
-  private def assembleRawFailureMessage[Q <: Quantity[Q]](
-      lhs: Quantity[Q],
-      rhs: Quantity[Q],
-      tolerance: Double
-  ) = s"The quantities $lhs and $rhs differ more than $tolerance in value"
-  private def assembleNegatedFailureMessage[Q <: Quantity[Q]](
-      lhs: Quantity[Q],
-      rhs: Quantity[Q],
-      tolerance: Double
-  ) = s"The quantities $lhs and $rhs differ less than $tolerance in value"
 }
