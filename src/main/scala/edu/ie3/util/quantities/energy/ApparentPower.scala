@@ -56,10 +56,16 @@ final class ApparentPower private (
     * @return
     *   the resulting reactive power
     */
-  def toReactivePower(cosPhi: Double): ReactivePower = {
-    // Q = |S| * sin(φ), φ = acos(cosPhi)
-    Vars(toVoltamperes * sin(acos(cosPhi)))
-  }
+  def toReactivePower(cosPhi: Double): ReactivePower =
+    if cosPhi < -1 || cosPhi > 1 then {
+      throw new ArithmeticException(
+        s"The cos(φ) needs to be in the interval [-1;1]."
+      )
+    } else {
+      // Q = |S| * sin(φ), φ = acos(cosPhi)
+      Vars(toVoltamperes * sin(acos(cosPhi)))
+    }
+
 }
 
 object ApparentPower extends Dimension[ApparentPower] {
