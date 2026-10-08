@@ -15,6 +15,11 @@ object Nanosiemens extends ElectricalConductanceUnit {
   val conversionFactor: Double = MetricSystem.Nano
 }
 
+object Microsiemens extends ElectricalConductanceUnit {
+  val symbol = "µS"
+  val conversionFactor: Double = MetricSystem.Micro
+}
+
 /** Additional unit for [[ElectricalConductance]].
   */
 object Millisiemens extends ElectricalConductanceUnit {

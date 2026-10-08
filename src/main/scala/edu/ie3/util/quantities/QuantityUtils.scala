@@ -160,7 +160,7 @@ object QuantityUtils {
 
     def asKiloWattHour: ComparableQuantity[jq.Energy] = as(KILOWATTHOUR)
 
-    def kilowattHours: Energy = KilowattHours(value)
+    def kilowattHour: Energy = KilowattHours(value)
 
     def asMegaWattHour: ComparableQuantity[jq.Energy] = as(MEGAWATTHOUR)
 
@@ -339,8 +339,8 @@ object QuantityUtils {
         : ComparableQuantity[interfaces.SpecificHeatCapacity] =
       as(KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE)
 
-    def kiloWattHourPerKelvinTimesCubicMeter: SpecificHeatCapacity =
-      KilowattHoursPerKelvinTimesCubicMeters(value)
+    def kiloWattHourPerCubicMeterTimesKelvin: ThermalCapacitance =
+      KilowattHoursPerCubicMeterKelvin(value)
 
     /* ==== Volume ==== */
 

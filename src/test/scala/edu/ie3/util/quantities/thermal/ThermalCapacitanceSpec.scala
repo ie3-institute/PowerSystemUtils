@@ -5,35 +5,37 @@
 */
 package edu.ie3.util.quantities.thermal
 
+import edu.ie3.util.quantities.energy.KilowattHoursPerCubicMeter
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import squants.energy.KilowattHours
 import squants.space.CubicMeters
 import squants.thermal.{Celsius, Kelvin}
 
-class SpecificHeatCapacitySpec extends AnyFlatSpec with Matchers {
+class ThermalCapacitanceSpec extends AnyFlatSpec with Matchers {
 
-  behavior of "SpecificHeatCapacity and its Units of Measure"
+  behavior of "ThermalCapacitance and its Units of Measure"
 
   it should "create values using UOM factories" in {
-    KilowattHoursPerKelvinTimesCubicMeters(
+    KilowattHoursPerCubicMeterKelvin(
       1
-    ).toKilowattHoursPerKelvinTimesCubicMeters shouldBe 1
+    ).toKilowattHoursPerCubicMeterKelvin shouldBe 1
   }
 
   it should "properly convert to all supported Units of Measure" in {
-    val x = KilowattHoursPerKelvinTimesCubicMeters(1)
-    x.toKilowattHoursPerKelvinTimesCubicMeters shouldBe 1
+    val x = KilowattHoursPerCubicMeterKelvin(1)
+
+    x.toKilowattHoursPerCubicMeterKelvin shouldBe 1
   }
 
   it should "return properly formatted strings for all supported Units of Measure" in {
-    KilowattHoursPerKelvinTimesCubicMeters(1).toString(
-      KilowattHoursPerKelvinTimesCubicMeters
-    ) shouldBe "1.0 kWh/Km³"
+    KilowattHoursPerCubicMeterKelvin(1).toString(
+      KilowattHoursPerCubicMeterKelvin
+    ) shouldBe "1.0 kWh/(m³K)"
   }
 
   it should "return Energy when multiplied by Temperature delta of 1 Kelvin and Volume" in {
-    KilowattHoursPerKelvinTimesCubicMeters(1000).calcEnergy(
+    KilowattHoursPerCubicMeterKelvin(1000).calcEnergy(
       Kelvin(10),
       Kelvin(20),
       CubicMeters(5)
@@ -41,10 +43,17 @@ class SpecificHeatCapacitySpec extends AnyFlatSpec with Matchers {
   }
 
   it should "return Energy when multiplied by Temperature delta of 1 degree Celsius and Volume" in {
-    KilowattHoursPerKelvinTimesCubicMeters(1000).calcEnergy(
+    KilowattHoursPerCubicMeterKelvin(1000).calcEnergy(
       Celsius(100),
       Celsius(101),
       CubicMeters(5)
     ) shouldBe KilowattHours(5000)
+  }
+
+  it should "return EnergyDensity when multiplied by Temperature delta of 1 Kelvin" in {
+    KilowattHoursPerCubicMeterKelvin(1000).calcEnergyDensity(
+      Kelvin(10),
+      Kelvin(20)
+    ) shouldBe KilowattHoursPerCubicMeter(10000.0)
   }
 }

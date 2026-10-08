@@ -17,7 +17,7 @@ import edu.ie3.util.quantities.radio.{
 }
 import edu.ie3.util.quantities.thermal.{
   KilowattHoursPerKelvin,
-  KilowattHoursPerKelvinTimesCubicMeters,
+  KilowattHoursPerCubicMeterKelvin,
   KilowattsPerKelvin
 }
 import org.scalatest.matchers.should.Matchers
@@ -358,7 +358,7 @@ class QuantityUtilsSpec
       }
 
       "convert a double to a squants kilowatt-hour quantity" in {
-        value.kilowattHours should approximate(KilowattHours(value))(using
+        value.kilowattHour should approximate(KilowattHours(value))(using
           KilowattHours(quantityTolerance)
         )
       }
@@ -760,9 +760,9 @@ class QuantityUtilsSpec
       }
 
       "convert a double to a squants kilowatthour per kelvin times cubic metre quantity" in {
-        value.kiloWattHourPerKelvinTimesCubicMeter should approximate(
-          KilowattHoursPerKelvinTimesCubicMeters(value)
-        )(using KilowattHoursPerKelvinTimesCubicMeters(quantityTolerance))
+        value.kiloWattHourPerCubicMeterTimesKelvin should approximate(
+          KilowattHoursPerCubicMeterKelvin(value)
+        )(using KilowattHoursPerCubicMeterKelvin(quantityTolerance))
       }
 
       /* ==== Volume ==== */
