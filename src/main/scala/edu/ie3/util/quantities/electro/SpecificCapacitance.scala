@@ -16,12 +16,12 @@ import squants.{
   UnitOfMeasure
 }
 
-/** Class that represents a specific electrical conductance.
+/** Class that represents a specific electrical capacitance.
   *
   * @param value
-  *   conductance value
+  *   capacitance value
   * @param unit
-  *   of the specific conductance
+  *   of the specific capacitance
   */
 final class SpecificCapacitance private (
     val value: Double,
