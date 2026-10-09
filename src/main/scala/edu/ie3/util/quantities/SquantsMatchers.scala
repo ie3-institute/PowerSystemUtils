@@ -33,8 +33,17 @@ trait SquantsMatchers {
           MatchResult(
             leftValue =~ rightValue,
             assembleRawFailureMessage(left, right, tolerance, "quantity"),
-            assembleNegatedFailureMessage(left, right, tolerance, "quantity")
+            assembleNegatedFailureMessage(
+              leftValue,
+              rightValue,
+              tolerance,
+              "quantity"
+            )
           )
+        case (None, None) =>
+          // since both values are None, we can omit the check
+          MatchResult(true, "", "")
+
         case (None, _) =>
           MatchResult(
             false,

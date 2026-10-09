@@ -5,8 +5,6 @@
 */
 package edu.ie3.util
 
-import javax.measure.Quantity
-
 /** Some common utils for matchers.
   */
 trait MatcherUtils {

@@ -11,9 +11,7 @@ import squants.{PrimaryUnit, SiUnit}
 
 /** Additional unit for [[EnergyDensity]].
   */
-object KilowattHoursPerCubicMeter
-    extends EnergyDensityUnit
-    with PrimaryUnit
-    with SiUnit {
-  val symbol: String = "k" + WattHours.symbol + "/" + CubicMeters.symbol
+object KilowattHoursPerCubicMeter extends EnergyDensityUnit with SiUnit {
+  val symbol: String = "kWh/" + CubicMeters.symbol
+  val conversionFactor = 3.6e6
 }
