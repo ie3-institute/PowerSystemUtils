@@ -149,10 +149,10 @@ public class PowerSystemUnits extends Units {
       new ProductUnit<>(KILOWATT.divide(SQUARE_METRE));
 
   /* ==== Composed units ==== */
-  public static final Unit<DimensionlessRate> PERCENT_PER_HOUR =
+  public static final Unit<edu.ie3.util.quantities.interfaces.DimensionlessRate> PERCENT_PER_HOUR =
       new ProductUnit<>(PERCENT.divide(HOUR));
 
-  public static final Unit<DimensionlessRate> PU_PER_HOUR =
+  public static final Unit<edu.ie3.util.quantities.interfaces.DimensionlessRate> PU_PER_HOUR =
       new TransformedUnit<>("p.u./h", PERCENT_PER_HOUR, DoubleConverterFactory.withFactor(100));
 
   /* ==== Basic electric units ==== */
