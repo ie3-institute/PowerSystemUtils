@@ -5,7 +5,7 @@
 */
 package edu.ie3.util.quantities.electro
 
-import squants.electro.Ohms
+import squants.electro.{ElectricalResistance, Ohms}
 import squants.{
   Dimension,
   MetricSystem,
@@ -15,6 +15,7 @@ import squants.{
   UnitConverter,
   UnitOfMeasure
 }
+import squants.space.Length
 
 /** Class that represents a specific electrical resistance.
   *
@@ -33,6 +34,15 @@ final class SpecificResistance private (
   def toMilliohmsPerKilometer: Double = to(MilliohmsPerKilometer)
   def toOhmsPerKilometer: Double = to(OhmsPerKilometer)
   def toKiloohmsPerKilometer: Double = to(KiloohmsPerKilometer)
+  def toOhmsPerMeter: Double = to(OhmsPerMeter)
+  def toMilliohmsPerMeter: Double = to(MilliohmsPerMeter)
+  def toMicroohmsPerMeter: Double = to(MicroohmsPerMeter)
+
+  /** Multiplies this specific resistance by a length to obtain a total
+    * resistance.
+    */
+  def *(that: Length): ElectricalResistance =
+    Ohms(this.toOhmsPerMeter * that.toMeters)
 }
 
 object SpecificResistance extends Dimension[SpecificResistance] {
@@ -47,7 +57,10 @@ object SpecificResistance extends Dimension[SpecificResistance] {
     Set(
       OhmsPerKilometer,
       MilliohmsPerKilometer,
-      KiloohmsPerKilometer
+      KiloohmsPerKilometer,
+      OhmsPerMeter,
+      MilliohmsPerMeter,
+      MicroohmsPerMeter
     )
 }
 
@@ -73,4 +86,20 @@ object OhmsPerKilometer
 object KiloohmsPerKilometer extends SpecificResistanceUnit with SiUnit {
   val conversionFactor: Double = MetricSystem.Kilo
   val symbol: String = "k" + OhmsPerKilometer.symbol
+}
+
+object OhmsPerMeter extends SpecificResistanceUnit with SiUnit {
+  val symbol: String = Ohms.symbol + "/m"
+  val conversionFactor: Double = 1.0 / MetricSystem.Kilo
+}
+
+object MilliohmsPerMeter extends SpecificResistanceUnit with SiUnit {
+  val symbol: String = "m" + OhmsPerMeter.symbol
+  val conversionFactor: Double = MetricSystem.Milli / MetricSystem.Kilo
+}
+
+object MicroohmsPerMeter extends SpecificResistanceUnit with SiUnit {
+  val symbol: String = "µ" + OhmsPerMeter.symbol
+  val conversionFactor: Double =
+    MetricSystem.Micro / MetricSystem.Kilo
 }
