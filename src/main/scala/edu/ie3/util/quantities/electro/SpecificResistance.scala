@@ -90,16 +90,15 @@ object KiloohmsPerKilometer extends SpecificResistanceUnit with SiUnit {
 
 object OhmsPerMeter extends SpecificResistanceUnit with SiUnit {
   val symbol: String = Ohms.symbol + "/m"
-  val conversionFactor: Double = 1.0 / MetricSystem.Kilo
+  val conversionFactor: Double = MetricSystem.Kilo
 }
 
 object MilliohmsPerMeter extends SpecificResistanceUnit with SiUnit {
   val symbol: String = "m" + OhmsPerMeter.symbol
-  val conversionFactor: Double = MetricSystem.Milli / MetricSystem.Kilo
+  val conversionFactor: Double = 1.0
 }
 
 object MicroohmsPerMeter extends SpecificResistanceUnit with SiUnit {
   val symbol: String = "µ" + OhmsPerMeter.symbol
-  val conversionFactor: Double =
-    MetricSystem.Micro / MetricSystem.Kilo
+  val conversionFactor: Double = MetricSystem.Milli
 }

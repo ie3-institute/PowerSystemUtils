@@ -52,6 +52,17 @@ class SpecificResistanceSpec extends AnyFlatSpec with Matchers {
     MicroohmsPerMeter(1000).toOhmsPerMeter should be(0.001d)
   }
 
+  it should "treat per-kilometer and per-meter units that are physically equal as equal" in {
+    KiloohmsPerKilometer(1).toOhmsPerMeter should be(1d)
+    OhmsPerMeter(1).toKiloohmsPerKilometer should be(1d)
+
+    MilliohmsPerMeter(1000).toOhmsPerMeter should be(1d)
+    OhmsPerMeter(1).toMilliohmsPerMeter should be(1000d)
+
+    MicroohmsPerMeter(1000).toMilliohmsPerMeter should be(1d)
+    MilliohmsPerMeter(1).toMicroohmsPerMeter should be(1000d)
+  }
+
   it should "calculate absolute electrical resistance when multiplied by length" in {
     (OhmsPerMeter(0.5) * Meters(10)) should be(Ohms(5.0))
     (OhmsPerKilometer(200) * Kilometers(2)) should be(Ohms(400.0))
