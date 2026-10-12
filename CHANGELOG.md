@@ -6,10 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased/Snapshot]
 
+### Added
+- Introduced squants [#740](https://github.com/ie3-institute/PowerSystemUtils/issues/740)
+
 ### Fixed
 - Renormalized line endings of `gradlew.bat` so it no longer shows up as modified [#750](https://github.com/ie3-institute/PowerSystemUtils/issues/750)
 - Fixed building jars with `Gradle` [#703](https://github.com/ie3-institute/PowerSystemUtils/issues/703)
-
 ## [3.2.3]
 
 ### Changed

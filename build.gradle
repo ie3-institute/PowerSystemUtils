@@ -12,13 +12,25 @@ plugins {
 	id "org.scoverage" version "9.1" // scala code coverage scoverage
 	id "com.github.maiflai.scalatest" version "0.33" // run scalatest without specific spec task
 	id 'net.thauvin.erik.gradle.semver' version '1.0.4' // semantic versioning
+	id 'com.gradleup.shadow' version '9.6.1' // fat jar
 }
 
 ext {
 	javaVersion = JavaVersion.VERSION_21
 	scalaVersion = '3'
 	scalaBinaryVersion = '3.9.0'
+
 	scriptsLocation = 'gradle' + File.separator + 'scripts' + File.separator //location of script plugins
+
+	scala3compilerOptions = [
+		"-print-tasty",
+		"-feature",
+		"-language:implicitConversions",
+		"-language:existentials",
+		"-Wunused:all",
+		"-Xmax-inlines:128",
+		"-Xunchecked-java-output-version:21"
+	]
 }
 
 group = 'com.github.ie3-institute'
@@ -52,7 +64,7 @@ pmd {
 }
 
 configurations {
-	create('scalaCompiler')
+	scalaCompilerPlugin
 }
 
 dependencies {
@@ -66,6 +78,7 @@ dependencies {
 	implementation 'org.apache.logging.log4j:log4j-slf4j-impl' // log4j -> slf4j
 
 	implementation "com.typesafe.scala-logging:scala-logging_$scalaVersion:3.9.6" // slf4j wrapper
+	implementation "org.typelevel:squants_${scalaVersion}:1.8.3"
 
 	implementation 'javax.measure:unit-api:2.2' // quantities
 	implementation 'tech.units:indriya:2.2.4' // quantities
@@ -94,18 +107,26 @@ dependencies {
 	implementation "org.scala-lang.modules:scala-parallel-collections_${scalaVersion}:1.2.0"
 	implementation "org.typelevel:cats-core_${scalaVersion}:2.13.0" // advanced functional programming
 
-	scalaCompiler "org.scala-lang:scala3-compiler_3:${scalaBinaryVersion}"
-
 	// TEST Scala //
 	implementation "org.scalatest:scalatest_$scalaVersion:3.2.20"
 	testRuntimeOnly 'com.vladsch.flexmark:flexmark-all:0.64.8'
 }
 
-tasks.withType(org.gradle.api.tasks.scala.ScalaCompile).configureEach {
-	scalaClasspath = scalaClasspath + configurations.scalaCompiler
-	scalaCompileOptions.additionalParameters = [
-		'-Xunchecked-java-output-version',
-		'21'
+tasks.withType(ScalaCompile).configureEach {
+	scalaCompileOptions.additionalParameters = scala3compilerOptions
+	scalaCompileOptions.forkOptions.jvmArgs = [
+		'-Xss2m',
+		'-XX:-UseGCOverheadLimit',
+		'-Xmx4g'
+	]
+}
+
+compileTestScala {
+	scalaCompileOptions.additionalParameters = scalaCompileOptions.additionalParameters
+	scalaCompileOptions.forkOptions.jvmArgs = [
+		'-Xss2m',
+		'-XX:-UseGCOverheadLimit',
+		'-Xmx4g'
 	]
 }
 
