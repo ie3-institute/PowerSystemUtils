@@ -19,8 +19,6 @@ import squants.{
 /** Class that represents the power per unit of length, e.g. the thermal losses
   * of a cable expressed per meter of cable length.
   *
-  * In W/m
-  *
   * @param value
   *   power per length value
   * @param unit
