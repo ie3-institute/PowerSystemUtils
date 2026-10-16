@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Renormalized line endings of `gradlew.bat` so it no longer shows up as modified [#750](https://github.com/ie3-institute/PowerSystemUtils/issues/750)
+- Fixed building jars with `Gradle` [#703](https://github.com/ie3-institute/PowerSystemUtils/issues/703)
 
 ## [3.2.3]
 
@@ -29,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.2.1]
 
 ### Fixed
-- Make getters of `Interval` public again [#694](https://github.com/ie3-institute/PowerSystemUtils/issues/694) 
+- Make getters of `Interval` public again [#694](https://github.com/ie3-institute/PowerSystemUtils/issues/694)
 
 ## [3.2.0]
 
