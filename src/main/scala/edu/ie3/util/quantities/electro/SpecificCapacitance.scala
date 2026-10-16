@@ -5,7 +5,7 @@
 */
 package edu.ie3.util.quantities.electro
 
-import squants.electro.Farads
+import squants.electro.{Capacitance, Farads}
 import squants.{
   Dimension,
   MetricSystem,
@@ -15,6 +15,7 @@ import squants.{
   UnitConverter,
   UnitOfMeasure
 }
+import squants.space.Length
 
 /** Class that represents a specific electrical capacitance.
   *
@@ -35,6 +36,12 @@ final class SpecificCapacitance private (
   def toMillifaradsPerKilometer: Double = to(MillifaradsPerKilometer)
   def toFaradsPerKilometer: Double = to(FaradsPerKilometer)
   def toKilofaradsPerKilometer: Double = to(KilofaradsPerKilometer)
+
+  /** Multiplies this specific capacitance by a length to obtain a total
+    * capacitance.
+    */
+  def *(that: Length): Capacitance =
+    Farads(this.toFaradPerMeter * that.toMeters)
 }
 
 object SpecificCapacitance extends Dimension[SpecificCapacitance] {
