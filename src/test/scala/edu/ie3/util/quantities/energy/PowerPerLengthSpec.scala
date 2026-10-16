@@ -12,11 +12,11 @@ import squants.space.Kilometers
 class PowerPerLengthSpec extends AnyFlatSpec with Matchers {
   behavior of "PowerPerLength and its Units of Measure"
   it should "create values using UOM factories" in {
-    WattsPerMeter(1).toWattsPerMeter should be(1d)
+    WattsPerMeter(1).toWattsPerMeter shouldBe 1d
   }
   it should "calculate absolute power when multiplied by length" in {
-    (WattsPerMeter(0.5) * Meters(10)) should be(Watts(5.0))
-    (WattsPerMeter(200) * Kilometers(2)) should be(Watts(400000.0))
-    (WattsPerMeter(1) * Meters(100)) should be(Watts(100.0))
+    (WattsPerMeter(0.5) * Meters(10)) shouldBe Watts(5.0)
+    (WattsPerMeter(200) * Kilometers(2)) shouldBe Watts(400000.0)
+    (WattsPerMeter(1) * Meters(100)) shouldBe Watts(100.0)
   }
 }
