@@ -214,13 +214,13 @@ public class PowerSystemUnits extends Units {
       new TransformedUnit<>(
           "µF/km", FARAD_PER_KILOMETRE, DoubleConverterFactory.withFactor(1 / 1E6));
 
-  /* ==== Thermal Capacity ==== */
+  /* ==== Heat Capacity ==== */
   /** kWh/K */
-  public static final Unit<ThermalCapacity> KILOWATTHOUR_PER_KELVIN =
+  public static final Unit<HeatCapacity> KILOWATTHOUR_PER_KELVIN =
       new ProductUnit<>(KILOWATTHOUR.divide(KELVIN));
 
   /** kWh/K*m³ */
-  public static final Unit<ThermalCapacitance> KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE =
+  public static final Unit<SpecificHeatCapacity> KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE =
       new ProductUnit<>(KILOWATTHOUR_PER_KELVIN.divide(CUBIC_METRE));
 
   /* ==== Thermal Conductance ==== */

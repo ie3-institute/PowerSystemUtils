@@ -7,5 +7,5 @@ package edu.ie3.util.quantities.interfaces;
 
 import tech.units.indriya.ComparableQuantity;
 
-/** Denoting all physical quantities describing a thermal capacity */
-public interface ThermalCapacity extends ComparableQuantity<ThermalCapacity> {}
+/** Denoting all physical quantities describing a heat capacity */
+public interface HeatCapacity extends ComparableQuantity<HeatCapacity> {}
