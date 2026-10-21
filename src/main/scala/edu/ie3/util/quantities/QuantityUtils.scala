@@ -330,13 +330,14 @@ object QuantityUtils {
 
     def kilowattPerKelvin: ThermalConductance = KilowattsPerKelvin(value)
 
-    def asKiloWattHourPerKelvin: ComparableQuantity[interfaces.HeatCapacity] =
+    def asKiloWattHourPerKelvin
+        : ComparableQuantity[interfaces.ThermalCapacity] =
       as(KILOWATTHOUR_PER_KELVIN)
 
     def kilowattHourPerKelvin: ThermalCapacity = KilowattHoursPerKelvin(value)
 
     def asKiloWattHourPerKelvinTimesCubicMetre
-        : ComparableQuantity[interfaces.SpecificHeatCapacity] =
+        : ComparableQuantity[interfaces.ThermalCapacitance] =
       as(KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE)
 
     def kiloWattHourPerCubicMeterTimesKelvin: ThermalCapacitance =
