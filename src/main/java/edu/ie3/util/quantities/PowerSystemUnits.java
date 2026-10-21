@@ -242,8 +242,8 @@ public class PowerSystemUnits extends Units {
   public static final Unit<ThermalResistivity> KELVIN_METRE_PER_WATT =
       new ProductUnit<>(KELVIN.multiply(METRE).divide(WATT));
 
-  /** Joule / (Cubic Metre * Kelvin) (J/(m³*K)) - Volumetric Thermal Capacitance */
-  public static final Unit<ThermalCapacitance> JOULE_PER_CUBIC_METRE_KELVIN =
+  /** Joule / (Cubic Metre * Kelvin) (J/(m³*K)) - Specific Volumetric Heat Capacity */
+  public static final Unit<SpecificHeatCapacity> JOULE_PER_CUBIC_METRE_KELVIN =
       new ProductUnit<>(JOULE.divide(CUBIC_METRE.multiply(KELVIN)));
 
   static {

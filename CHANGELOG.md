@@ -14,8 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renormalized line endings of `gradlew.bat` so it no longer shows up as modified [#750](https://github.com/ie3-institute/PowerSystemUtils/issues/750)
 - Fixed building jars with `Gradle` [#703](https://github.com/ie3-institute/PowerSystemUtils/issues/703)
 
-### Changed
-- Harmonised thermal and heat measurements [#760](https://github.com/ie3-institute/PowerSystemUtils/issues/760)
+### Removed
+- Removed `ThermalCapacitance` [#760](https://github.com/ie3-institute/PowerSystemUtils/issues/760)
 
 ## [3.2.3]
 
