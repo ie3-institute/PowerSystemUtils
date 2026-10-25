@@ -335,6 +335,12 @@ object QuantityUtils {
 
     def kilowattHourPerKelvin: ThermalCapacity = KilowattHoursPerKelvin(value)
 
+    def joulePerMeterKelvin: ThermalCapacityPerLength =
+      JoulesPerMeterKelvin(value)
+
+    def kilowattHourPerMeterKelvin: ThermalCapacityPerLength =
+      KilowattHoursPerMeterKelvin(value)
+
     def asKiloWattHourPerKelvinTimesCubicMetre
         : ComparableQuantity[interfaces.SpecificHeatCapacity] =
       as(KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE)
