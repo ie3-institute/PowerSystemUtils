@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Renormalized line endings of `gradlew.bat` so it no longer shows up as modified [#750](https://github.com/ie3-institute/PowerSystemUtils/issues/750)
 - Fixed building jars with `Gradle` [#703](https://github.com/ie3-institute/PowerSystemUtils/issues/703)
+- Exclude `shadowJar`-Files from maven-release process [#763](https://github.com/ie3-institute/PowerSystemUtils/issues/763)
 
 ### Removed
 - Removed `ThermalCapacitance` [#760](https://github.com/ie3-institute/PowerSystemUtils/issues/760)
