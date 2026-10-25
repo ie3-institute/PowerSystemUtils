@@ -16,6 +16,7 @@ import edu.ie3.util.quantities.radio.{
   WattHoursPerSquareMeter
 }
 import edu.ie3.util.quantities.thermal.{
+  KelvinMetersPerWatt,
   KilowattHoursPerKelvin,
   KilowattHoursPerCubicMeterKelvin,
   KilowattsPerKelvin
@@ -763,6 +764,21 @@ class QuantityUtilsSpec
         value.kiloWattHourPerCubicMeterTimesKelvin should approximate(
           KilowattHoursPerCubicMeterKelvin(value)
         )(using KilowattHoursPerCubicMeterKelvin(quantityTolerance))
+      }
+
+      "convert a double to a kelvin metre per watt quantity" in {
+        value.asKelvinMetrePerWatt should equalWithTolerance(
+          Quantities.getQuantity(
+            value,
+            KELVIN_METRE_PER_WATT
+          )
+        )
+      }
+
+      "convert a double to a squants kelvin metre per watt quantity" in {
+        value.kelvinMetrePerWatt should approximate(
+          KelvinMetersPerWatt(value)
+        )(using KelvinMetersPerWatt(quantityTolerance))
       }
 
       /* ==== Volume ==== */

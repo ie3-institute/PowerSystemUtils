@@ -342,6 +342,12 @@ object QuantityUtils {
     def kiloWattHourPerCubicMeterTimesKelvin: ThermalCapacitance =
       KilowattHoursPerCubicMeterKelvin(value)
 
+    def asKelvinMetrePerWatt
+        : ComparableQuantity[interfaces.ThermalResistivity] =
+      as(KELVIN_METRE_PER_WATT)
+
+    def kelvinMetrePerWatt: ThermalResistivity = KelvinMetersPerWatt(value)
+
     /* ==== Volume ==== */
 
     def asCubicMetre: ComparableQuantity[jq.Volume] =
