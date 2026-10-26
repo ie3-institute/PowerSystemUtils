@@ -349,7 +349,7 @@ object QuantityUtils {
       JoulesPerCubicMeterKelvin(value)
 
     def kiloWattHourPerKilogramTimesKelvin: SpecificHeatCapacity =
-      JoulesPerKilogramKelvin(value)
+      KilowattHoursPerKilogramKelvin(value)
 
     def joulesPerKilogramTimesKelvin: SpecificHeatCapacity =
       JoulesPerKilogramKelvin(value)

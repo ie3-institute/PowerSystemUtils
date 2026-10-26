@@ -19,7 +19,7 @@ class SpecificHeatCapacitySpec extends AnyFlatSpec with Matchers {
   }
 
   it should "properly convert to all supported Units of Measure" in {
-    val x = JoulesPerKilogramKelvin(1)
+    val x = KilowattHoursPerKilogramKelvin(3600000)
 
     x.toKilowattHoursPerKilogramKelvin shouldBe 3600000
     x.toJoulesPerKilogramKelvin shouldBe 1

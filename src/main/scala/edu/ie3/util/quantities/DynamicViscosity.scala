@@ -18,7 +18,7 @@ final class DynamicViscosity private (
 
   def dimension: DynamicViscosity.type = DynamicViscosity
 
-  def /(that: Time): Pressure = Pascals(toPascalSeconds * that.toSeconds)
+  def /(that: Time): Pressure = Pascals(toPascalSeconds / that.toSeconds)
 
   def toPascalSeconds: Double = to(PascalSeconds)
 }

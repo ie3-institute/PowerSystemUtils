@@ -10,7 +10,7 @@ import squants.energy.Watts
 
 import scala.util.Try
 
-/** Represents the volumetric heat capacity, in W/(m*k) */
+/** Represents the volumetric heat capacity, in W/(m*K) */
 final class ThermalConductivity private (
     val value: Double,
     val unit: ThermalConductivityUnit
