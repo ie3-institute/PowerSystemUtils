@@ -299,7 +299,8 @@ object QuantityUtils {
     def asFarradPerMetre: ComparableQuantity[interfaces.SpecificCapacitance] =
       as(FARAD_PER_METRE)
 
-    def faradPerMeter: SpecificCapacitance = FaradPerMeter(value)
+    def faradsPerMeter: SpecificCapacitance =
+      quantities.electro.FaradsPerMeter(value)
 
     def asMicroFarradPerKilometre
         : ComparableQuantity[interfaces.SpecificCapacitance] =

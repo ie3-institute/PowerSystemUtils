@@ -678,8 +678,12 @@ class QuantityUtilsSpec
       }
 
       "convert a double to a squants farad per metre quantity" in {
-        value.faradPerMeter should approximate(FaradPerMeter(value))(
-          using FaradPerMeter(quantityTolerance)
+        value.faradsPerMeter should approximate(
+          edu.ie3.util.quantities.electro.FaradsPerMeter(value)
+        )(using
+          edu.ie3.util.quantities.electro.FaradsPerMeter(
+            quantityTolerance
+          )
         )
       }
 
