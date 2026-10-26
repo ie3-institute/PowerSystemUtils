@@ -31,7 +31,7 @@ final class SpecificCapacitance private (
 
   def dimension: SpecificCapacitance.type = SpecificCapacitance
 
-  def toFaradPerMeter: Double = to(FaradPerMeter)
+  def toFaradsPerMeter: Double = to(FaradsPerMeter)
   def toMicrofaradsPerKilometer: Double = to(MicrofaradsPerKilometer)
   def toMillifaradsPerKilometer: Double = to(MillifaradsPerKilometer)
   def toFaradsPerKilometer: Double = to(FaradsPerKilometer)
@@ -41,7 +41,7 @@ final class SpecificCapacitance private (
     * capacitance.
     */
   def *(that: Length): Capacitance =
-    Farads(this.toFaradPerMeter * that.toMeters)
+    Farads(this.toFaradsPerMeter * that.toMeters)
 }
 
 object SpecificCapacitance extends Dimension[SpecificCapacitance] {
@@ -55,7 +55,7 @@ object SpecificCapacitance extends Dimension[SpecificCapacitance] {
   def units: Set[UnitOfMeasure[SpecificCapacitance]] =
     Set(
       FaradsPerKilometer,
-      FaradPerMeter,
+      FaradsPerMeter,
       MicrofaradsPerKilometer,
       MillifaradsPerKilometer,
       KilofaradsPerKilometer
@@ -86,7 +86,7 @@ object FaradsPerKilometer
   val symbol: String = Farads.symbol + "/km"
 }
 
-object FaradPerMeter extends SpecificCapacitanceUnit with SiUnit {
+object FaradsPerMeter extends SpecificCapacitanceUnit with SiUnit {
   val symbol: String = Farads.symbol + "/m"
   val conversionFactor: Double = MetricSystem.Kilo
 }
