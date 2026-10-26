@@ -9,17 +9,14 @@ import edu.ie3.util.quantities.PowerSystemUnits.*
 import edu.ie3.util.quantities.QuantityUtils.*
 import edu.ie3.util.quantities.electro.*
 import edu.ie3.util.quantities.energy.*
+import edu.ie3.util.quantities.motion.PascalSeconds
 import edu.ie3.util.quantities.prices.*
 import edu.ie3.util.quantities.radio.{
   KilowattHoursPerSquareMeter,
   KilowattsPerSquareMeter,
   WattHoursPerSquareMeter
 }
-import edu.ie3.util.quantities.thermal.{
-  KilowattHoursPerKelvin,
-  KilowattHoursPerCubicMeterKelvin,
-  KilowattsPerKelvin
-}
+import edu.ie3.util.quantities.thermal.*
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -28,6 +25,7 @@ import squants.electro.*
 import squants.energy.*
 import squants.market.EUR
 import squants.mass.KilogramsPerCubicMeter
+import squants.motion.KilogramsPerSecond
 import squants.radio.WattsPerSquareMeter
 import squants.space.*
 import squants.thermal.Celsius
@@ -769,6 +767,66 @@ class QuantityUtilsSpec
         )(using KilowattHoursPerCubicMeterKelvin(quantityTolerance))
       }
 
+      "convert a double to a joules per kelvin times cubic metre quantity" in {
+        value.asJoulesPerCubicMeterTimesKelvin should equalWithTolerance(
+          Quantities.getQuantity(
+            value,
+            JOULE_PER_CUBIC_METRE_KELVIN
+          )
+        )
+      }
+
+      "convert a double to a squants joules per kelvin times cubic metre quantity" in {
+        value.joulesPerCubicMeterTimesKelvin should approximate(
+          JoulesPerCubicMeterKelvin(value)
+        )(using JoulesPerCubicMeterKelvin(quantityTolerance))
+      }
+
+      "convert a double to a kilowatthour per kelvin times cubic metre quantity" in {
+        value.asKilowattHourPerKilogramTimesKelvin should equalWithTolerance(
+          Quantities.getQuantity(
+            value,
+            KILOWATTHOUR_PER_KELVIN_TIMES_KILOGRAM
+          )
+        )
+      }
+
+      "convert a double to a squants kilowatthour per kelvin times cubic metre quantity" in {
+        value.kiloWattHourPerKilogramTimesKelvin should approximate(
+          KilowattHoursPerKilogramKelvin(value)
+        )(using KilowattHoursPerKilogramKelvin(quantityTolerance))
+      }
+
+      "convert a double to a joules per kelvin times cubic metre quantity" in {
+        value.asJoulesPerKilogramTimesKelvin should equalWithTolerance(
+          Quantities.getQuantity(
+            value,
+            JOULE_PER_KILOGRAM_KELVIN
+          )
+        )
+      }
+
+      "convert a double to a squants joules per kelvin times cubic metre quantity" in {
+        value.joulesPerKilogramTimesKelvin should approximate(
+          JoulesPerKilogramKelvin(value)
+        )(using JoulesPerKilogramKelvin(quantityTolerance))
+      }
+
+      "convert a double to a watt per kelvin times metre quantity" in {
+        value.asWattPerMeterKelvin should equalWithTolerance(
+          Quantities.getQuantity(
+            value,
+            WATT_PER_METER_KELVIN
+          )
+        )
+      }
+
+      "convert a double to a squants watt per kelvin times metre quantity" in {
+        value.wattPerMeterKelvin should approximate(
+          WattsPerMeterKelvin(value)
+        )(using WattsPerMeterKelvin(quantityTolerance))
+      }
+
       /* ==== Volume ==== */
 
       "convert a double to a cubic metre quantity" in {
@@ -800,6 +858,39 @@ class QuantityUtilsSpec
           Litres(quantityTolerance)
         )
       }
+
+      /* ==== Motion ==== */
+
+      "convert a double to a kilogram per second quantity" in {
+        value.asKilogramsPerSecond should equalWithTolerance(
+          Quantities.getQuantity(
+            value,
+            KILOGRAM_PER_SECOND
+          )
+        )
+      }
+
+      "convert a double to a squants kilogram per second quantity" in {
+        value.kilogramsPerSecond should approximate(KilogramsPerSecond(value))(
+          using KilogramsPerSecond(quantityTolerance)
+        )
+      }
+
+      "convert a double to a pascal times second quantity" in {
+        value.asPascalSeconds should equalWithTolerance(
+          Quantities.getQuantity(
+            value,
+            PASCAL_SECONDS
+          )
+        )
+      }
+
+      "convert a double to a squants pascal times second quantity" in {
+        value.pascalSeconds should approximate(PascalSeconds(value))(using
+          PascalSeconds(quantityTolerance)
+        )
+      }
+
     }
 
     "extend the quantity functionality" should {

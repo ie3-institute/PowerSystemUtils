@@ -339,20 +339,36 @@ object QuantityUtils {
     def kilowattHourPerKelvin: ThermalCapacity = KilowattHoursPerKelvin(value)
 
     def asKiloWattHourPerKelvinTimesCubicMetre
-        : ComparableQuantity[interfaces.SpecificHeatCapacity] =
+        : ComparableQuantity[interfaces.VolumetricHeatCapacity] =
       as(KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE)
 
     def kiloWattHourPerCubicMeterTimesKelvin: VolumetricHeatCapacity =
       KilowattHoursPerCubicMeterKelvin(value)
 
+    def asJoulesPerCubicMeterTimesKelvin
+        : ComparableQuantity[interfaces.VolumetricHeatCapacity] =
+      as(JOULE_PER_CUBIC_METRE_KELVIN)
+
     def joulesPerCubicMeterTimesKelvin: VolumetricHeatCapacity =
       JoulesPerCubicMeterKelvin(value)
+
+    def asKilowattHourPerKilogramTimesKelvin
+        : ComparableQuantity[interfaces.SpecificHeatCapacity] =
+      as(KILOWATTHOUR_PER_KELVIN_TIMES_KILOGRAM)
 
     def kiloWattHourPerKilogramTimesKelvin: SpecificHeatCapacity =
       KilowattHoursPerKilogramKelvin(value)
 
+    def asJoulesPerKilogramTimesKelvin
+        : ComparableQuantity[interfaces.SpecificHeatCapacity] =
+      as(JOULE_PER_KILOGRAM_KELVIN)
+
     def joulesPerKilogramTimesKelvin: SpecificHeatCapacity =
       JoulesPerKilogramKelvin(value)
+
+    def asWattPerMeterKelvin
+        : ComparableQuantity[interfaces.ThermalConductivity] =
+      as(WATT_PER_METER_KELVIN)
 
     def wattPerMeterKelvin: ThermalConductivity = WattsPerMeterKelvin(value)
 
@@ -370,9 +386,13 @@ object QuantityUtils {
 
     /* ==== Motion ==== */
 
+    def asKilogramsPerSecond: ComparableQuantity[interfaces.MassFlow] =
+      as(KILOGRAM_PER_SECOND)
+
     def kilogramsPerSecond: MassFlow = KilogramsPerSecond(value)
 
-    /* ==== Friction ==== */
+    def asPascalSeconds: ComparableQuantity[interfaces.DynamicViscosity] =
+      as(PASCAL_SECONDS)
 
     def pascalSeconds: DynamicViscosity = PascalSeconds(value)
 
