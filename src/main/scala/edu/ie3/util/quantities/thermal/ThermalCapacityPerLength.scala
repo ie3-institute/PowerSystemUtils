@@ -5,10 +5,11 @@
 */
 package edu.ie3.util.quantities.thermal
 
+import edu.ie3.util.quantities.energy.KilowattHoursPerJoules
+import squants.*
 import squants.energy.{Joules, KilowattHours}
 import squants.space.{Length, Meters}
 import squants.thermal.{JoulesPerKelvin, Kelvin, ThermalCapacity}
-import squants.*
 
 import scala.util.Try
 
@@ -34,7 +35,7 @@ final class ThermalCapacityPerLength private (
     KilowattHours(
       this.toJoulesPerMeterKelvin * math.abs(
         temperatureA.toKelvinScale - temperatureB.toKelvinScale
-      ) * length.toMeters / 3600000.0
+      ) * length.toMeters / KilowattHoursPerJoules
     )
 
   /** Multiplies this thermal capacity per length (J/(m*K)) with a given length.
@@ -44,8 +45,8 @@ final class ThermalCapacityPerLength private (
     * @return
     *   The resulting thermal capacity in J/K.
     */
-  def *(that: Length): ThermalCapacity =
-    JoulesPerKelvin(this.toJoulesPerMeterKelvin * that.toMeters)
+  def *(length: Length): ThermalCapacity =
+    JoulesPerKelvin(this.toJoulesPerMeterKelvin * length.toMeters)
 }
 
 object ThermalCapacityPerLength extends Dimension[ThermalCapacityPerLength] {
@@ -79,7 +80,7 @@ object JoulesPerMeterKelvin
 }
 
 object KilowattHoursPerMeterKelvin extends ThermalCapacityPerLengthUnit {
-  val conversionFactor: Double = 3600000.0
+  val conversionFactor: Double = KilowattHoursPerJoules
   val symbol: String =
     KilowattHours.symbol + "/(" + Meters.symbol + Kelvin.symbol + ")"
 }
