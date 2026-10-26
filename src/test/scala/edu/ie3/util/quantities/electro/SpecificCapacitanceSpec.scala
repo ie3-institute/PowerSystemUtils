@@ -13,7 +13,7 @@ class SpecificCapacitanceSpec extends AnyFlatSpec with Matchers {
   behavior of "SpecificCapacitance and its Units of Measure"
   it should "create values using UOM factories" in {
     FaradsPerKilometer(1).toFaradsPerKilometer shouldBe 1d
-    FaradPerMeter(1).toFaradPerMeter shouldBe 1d
+    FaradsPerMeter(1).toFaradsPerMeter shouldBe 1d
     MicrofaradsPerKilometer(1).toMicrofaradsPerKilometer shouldBe 1d
     MillifaradsPerKilometer(1).toMillifaradsPerKilometer shouldBe 1d
     KilofaradsPerKilometer(1).toKilofaradsPerKilometer shouldBe 1d
@@ -27,11 +27,11 @@ class SpecificCapacitanceSpec extends AnyFlatSpec with Matchers {
     MicrofaradsPerKilometer(500).toFaradsPerKilometer shouldBe 5e-4
   }
   it should "properly convert between per-kilometer and per-meter units" in {
-    FaradsPerKilometer(1).toFaradPerMeter shouldBe 0.001d
-    FaradPerMeter(1).toFaradsPerKilometer shouldBe 1000d
+    FaradsPerKilometer(1).toFaradsPerMeter shouldBe 0.001d
+    FaradsPerMeter(1).toFaradsPerKilometer shouldBe 1000d
   }
   it should "calculate absolute capacitance when multiplied by length" in {
-    (FaradPerMeter(0.5) * Meters(10)) shouldBe Farads(5.0)
+    (FaradsPerMeter(0.5) * Meters(10)) shouldBe Farads(5.0)
     (FaradsPerKilometer(200) * Kilometers(2)) shouldBe Farads(400.0)
     (MicrofaradsPerKilometer(1000) * Kilometers(2)) shouldBe Farads(0.002)
   }
