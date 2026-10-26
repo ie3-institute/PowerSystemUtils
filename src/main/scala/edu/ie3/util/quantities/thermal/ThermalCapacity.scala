@@ -5,9 +5,8 @@
 */
 package edu.ie3.util.quantities.thermal
 
-import squants.{Mass, Volume}
 import squants.thermal.{ThermalCapacity, ThermalCapacityUnit}
-import squants.time.Time
+import squants.{Mass, Volume}
 
 /** Additional unit for [[ThermalCapacity]].
   */

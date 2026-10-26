@@ -9,10 +9,7 @@ import squants.*
 
 import scala.util.Try
 
-/** Represents the thermal conductance as the time rate of steady state heat
-  * flow through a unit area of a material or construction induced by a unit
-  * temperature difference between the body surfaces, in W/K.
-  */
+/** Represents the mass flow, in kg*s. */
 final class MassFlow private (
     val value: Double,
     val unit: MassFlowUnit

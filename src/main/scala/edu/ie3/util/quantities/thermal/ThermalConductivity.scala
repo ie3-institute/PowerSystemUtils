@@ -6,14 +6,11 @@
 package edu.ie3.util.quantities.thermal
 
 import squants.*
-import squants.energy.{WattHours, Watts}
+import squants.energy.Watts
 
 import scala.util.Try
 
-/** Represents the thermal conductance as the time rate of steady state heat
-  * flow through a unit area of a material or construction induced by a unit
-  * temperature difference between the body surfaces, in W/K.
-  */
+/** Represents the volumetric heat capacity, in W/(m*k) */
 final class ThermalConductivity private (
     val value: Double,
     val unit: ThermalConductivityUnit
