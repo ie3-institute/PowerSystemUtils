@@ -10,7 +10,7 @@ import squants.energy.Watts
 
 import scala.util.Try
 
-/** Represents the volumetric heat capacity, in W/(m*K) */
+/** Represents the thermal conductivity, in W/(m*K) */
 final class ThermalConductivity private (
     val value: Double,
     val unit: ThermalConductivityUnit
@@ -23,6 +23,7 @@ final class ThermalConductivity private (
   )
 
   def toWattsPerMeterKelvin: Double = to(WattsPerMeterKelvin)
+  def toKilowattsPerMeterKelvin: Double = to(KilowattsPerMeterKelvin)
 }
 
 object ThermalConductivity extends Dimension[ThermalConductivity] {
@@ -35,7 +36,8 @@ object ThermalConductivity extends Dimension[ThermalConductivity] {
   def primaryUnit: WattsPerMeterKelvin.type = WattsPerMeterKelvin
   def siUnit: WattsPerMeterKelvin.type = WattsPerMeterKelvin
   def units: Set[UnitOfMeasure[ThermalConductivity]] = Set(
-    WattsPerMeterKelvin
+    WattsPerMeterKelvin,
+    KilowattsPerMeterKelvin
   )
 }
 

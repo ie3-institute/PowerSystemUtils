@@ -5,6 +5,7 @@
 */
 package edu.ie3.util.quantities.thermal
 
+import edu.ie3.util.quantities.energy.KilowattHoursPerJoules
 import squants.thermal.{ThermalCapacity, ThermalCapacityUnit}
 import squants.{Mass, Volume}
 
@@ -12,7 +13,7 @@ import squants.{Mass, Volume}
   */
 object KilowattHoursPerKelvin extends ThermalCapacityUnit {
   val symbol = "kWh/K"
-  val conversionFactor: Double = 3.6e6
+  val conversionFactor: Double = KilowattHoursPerJoules
 }
 
 extension (thermalCapacity: ThermalCapacity) {

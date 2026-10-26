@@ -20,9 +20,10 @@ class ThermalConductivitySpec extends AnyFlatSpec with Matchers {
   }
 
   it should "properly convert to all supported Units of Measure" in {
-    val x = WattsPerMeterKelvin(1)
+    val x = WattsPerMeterKelvin(1000)
 
-    x.toWattsPerMeterKelvin shouldBe 1
+    x.toWattsPerMeterKelvin shouldBe 1000
+    x.toKilowattsPerMeterKelvin shouldBe 1
   }
 
   it should "return properly formatted strings for all supported Units of Measure" in {

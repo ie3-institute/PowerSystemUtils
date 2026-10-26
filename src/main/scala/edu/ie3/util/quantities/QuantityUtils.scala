@@ -9,10 +9,10 @@ import edu.ie3.util.quantities
 import edu.ie3.util.quantities.PowerSystemUnits.*
 import edu.ie3.util.quantities.electro.*
 import edu.ie3.util.quantities.energy.*
+import edu.ie3.util.quantities.motion.*
 import edu.ie3.util.quantities.prices.*
 import edu.ie3.util.quantities.radio.*
 import edu.ie3.util.quantities.thermal.*
-import edu.ie3.util.quantities.{DynamicViscosity, PascalSeconds}
 import squants.*
 import squants.electro.*
 import squants.energy.*

@@ -3,7 +3,7 @@
  * Institute of Energy Systems, Energy Efficiency and Energy Economics,
  * Research group Distribution grid planning and operation
 */
-package edu.ie3.util.quantities
+package edu.ie3.util.quantities.motion
 
 import squants.*
 import squants.motion.{Pascals, Pressure}
@@ -24,7 +24,7 @@ final class DynamicViscosity private (
 }
 
 object DynamicViscosity extends Dimension[DynamicViscosity] {
-  private[quantities] def apply[A](n: A, unit: ViscosityUnit)(using
+  private[motion] def apply[A](n: A, unit: ViscosityUnit)(using
       num: Numeric[A]
   ) = new DynamicViscosity(num.toDouble(n), unit)
   def apply(value: Any): Try[DynamicViscosity] = parse(value)

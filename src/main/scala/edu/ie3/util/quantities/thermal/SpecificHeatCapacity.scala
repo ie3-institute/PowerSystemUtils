@@ -5,6 +5,7 @@
 */
 package edu.ie3.util.quantities.thermal
 
+import edu.ie3.util.quantities.energy.KilowattHoursPerJoules
 import squants.*
 import squants.thermal.{JoulesPerKelvin, ThermalCapacity}
 
@@ -23,7 +24,7 @@ final class SpecificHeatCapacity private (
 
   /** Returns the value of this quantity in kWh / (kg * K) */
   def toKilowattHoursPerKilogramKelvin: Double =
-    this.toJoulesPerKilogramKelvin / 3600000.0
+    this.toJoulesPerKilogramKelvin / KilowattHoursPerJoules
 
   def *(that: Mass): ThermalCapacity = JoulesPerKelvin(
     toJoulesPerKilogramKelvin * that.toKilograms
@@ -35,7 +36,9 @@ final class SpecificHeatCapacity private (
 }
 
 object SpecificHeatCapacity extends Dimension[SpecificHeatCapacity] {
-  def apply[A](n: A, unit: SpecificHeatCapacityUnit)(implicit num: Numeric[A]) =
+  private[thermal] def apply[A](n: A, unit: SpecificHeatCapacityUnit)(implicit
+      num: Numeric[A]
+  ) =
     new SpecificHeatCapacity(num.toDouble(n), unit)
   def apply(value: Any): Try[SpecificHeatCapacity] = parse(value)
   def name = "SpecificHeatCapacity"
