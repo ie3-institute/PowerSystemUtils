@@ -9,7 +9,7 @@ import edu.ie3.util.quantities.energy.KilowattHoursPerCubicMeter
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import squants.energy.KilowattHours
-import squants.space.CubicMeters
+import squants.space.{CubicMeters, SquareMeters}
 import squants.thermal.{Celsius, Kelvin}
 
 class ThermalCapacitanceSpec extends AnyFlatSpec with Matchers {
@@ -55,5 +55,10 @@ class ThermalCapacitanceSpec extends AnyFlatSpec with Matchers {
       Kelvin(10),
       Kelvin(20)
     ) shouldBe KilowattHoursPerCubicMeter(10000.0)
+  }
+
+  it should "return ThermalCapacityPerLength when multiplied by Area" in {
+    JoulesPerCubicMeterKelvin(1000.0) * SquareMeters(5) shouldBe
+      JoulesPerMeterKelvin(5000.0)
   }
 }
