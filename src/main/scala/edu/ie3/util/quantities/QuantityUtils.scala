@@ -12,11 +12,13 @@ import edu.ie3.util.quantities.energy.*
 import edu.ie3.util.quantities.prices.*
 import edu.ie3.util.quantities.radio.*
 import edu.ie3.util.quantities.thermal.*
+import edu.ie3.util.quantities.{DynamicViscosity, PascalSeconds}
 import squants.*
 import squants.electro.*
 import squants.energy.*
 import squants.market.EUR
 import squants.mass.KilogramsPerCubicMeter
+import squants.motion.KilogramsPerSecond
 import squants.radio.{Irradiance, WattsPerSquareMeter}
 import squants.space.*
 import squants.thermal.{Celsius, ThermalCapacity}
@@ -339,8 +341,19 @@ object QuantityUtils {
         : ComparableQuantity[interfaces.SpecificHeatCapacity] =
       as(KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE)
 
-    def kiloWattHourPerCubicMeterTimesKelvin: ThermalCapacitance =
+    def kiloWattHourPerCubicMeterTimesKelvin: VolumetricHeatCapacity =
       KilowattHoursPerCubicMeterKelvin(value)
+
+    def joulesPerCubicMeterTimesKelvin: VolumetricHeatCapacity =
+      JoulesPerCubicMeterKelvin(value)
+
+    def kiloWattHourPerKilogramTimesKelvin: SpecificHeatCapacity =
+      JoulesPerKilogramKelvin(value)
+
+    def joulesPerKilogramTimesKelvin: SpecificHeatCapacity =
+      JoulesPerKilogramKelvin(value)
+
+    def wattPerMeterKelvin: ThermalConductivity = WattsPerMeterKelvin(value)
 
     /* ==== Volume ==== */
 
@@ -353,6 +366,14 @@ object QuantityUtils {
       as(LITRE)
 
     def litre: Volume = Litres(value)
+
+    /* ==== Motion ==== */
+
+    def kilogramsPerSecond: MassFlow = KilogramsPerSecond(value)
+
+    /* ==== Friction ==== */
+
+    def pascalSeconds: DynamicViscosity = PascalSeconds(value)
 
     /** Create a quantity from the double with given unit
       * @param unit

@@ -5,6 +5,7 @@
 */
 package edu.ie3.util.quantities.thermal
 
+import squants.{Mass, Volume}
 import squants.thermal.{ThermalCapacity, ThermalCapacityUnit}
 import squants.time.Time
 
@@ -13,4 +14,16 @@ import squants.time.Time
 object KilowattHoursPerKelvin extends ThermalCapacityUnit {
   val symbol = "kWh/K"
   val conversionFactor: Double = 3.6e6
+}
+
+extension (thermalCapacity: ThermalCapacity) {
+
+  def /(that: Mass): SpecificHeatCapacity = JoulesPerKilogramKelvin(
+    thermalCapacity.toJoulesPerKelvin / that.toKilograms
+  )
+
+  def /(that: Volume): VolumetricHeatCapacity = JoulesPerCubicMeterKelvin(
+    thermalCapacity.toJoulesPerKelvin / that.toCubicMeters
+  )
+
 }

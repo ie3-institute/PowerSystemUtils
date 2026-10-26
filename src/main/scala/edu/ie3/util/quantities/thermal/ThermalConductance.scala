@@ -21,6 +21,10 @@ final class ThermalConductance private (
 
   def dimension: ThermalConductance.type = ThermalConductance
 
+  def /(that: Length): ThermalConductivity = WattsPerMeterKelvin(
+    toWattsPerKelvin / that.toMeters
+  )
+
   /** Calculates the energy gain (temperatureOuter > temperatureInner) or energy
     * loss (temperatureOuter < temperatureInner) based on a given thermal
     * conductance and a temperature delta and the time duration.

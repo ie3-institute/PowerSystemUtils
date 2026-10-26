@@ -12,9 +12,9 @@ import squants.energy.KilowattHours
 import squants.space.CubicMeters
 import squants.thermal.{Celsius, Kelvin}
 
-class ThermalCapacitanceSpec extends AnyFlatSpec with Matchers {
+class VolumetricHeatCapacitySpec extends AnyFlatSpec with Matchers {
 
-  behavior of "ThermalCapacitance and its Units of Measure"
+  behavior of "VolumetricHeatCapacity and its Units of Measure"
 
   it should "create values using UOM factories" in {
     KilowattHoursPerCubicMeterKelvin(
