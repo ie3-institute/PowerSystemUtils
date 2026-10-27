@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Introduced squants [#740](https://github.com/ie3-institute/PowerSystemUtils/issues/740)
 - Enhanced squants with new units and quantity types [#756](https://github.com/ie3-institute/PowerSystemUtils/issues/756)
+- Added squants units for thermal-hydraulic calculations [#762](https://github.com/ie3-institute/PowerSystemUtils/issues/762)
 - Added `ThermalResistivity` and `ThermalCapacityPerLength` to `QuantityUtils` [#767](https://github.com/ie3-institute/PowerSystemUtils/issues/767)
 
 ### Fixed
@@ -16,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed building jars with `Gradle` [#703](https://github.com/ie3-institute/PowerSystemUtils/issues/703)
 - Exclude `shadowJar`-Files from maven-release process [#763](https://github.com/ie3-institute/PowerSystemUtils/issues/763)
 - Harmonised typos at `SpecificCapacitance` [#771](https://github.com/ie3-institute/PowerSystemUtils/issues/771)
+- Fixed silent dropping of scalaTests [#774](https://github.com/ie3-institute/PowerSystemUtils/issues/774)
 
 ### Removed
 - Removed `ThermalCapacitance` [#760](https://github.com/ie3-institute/PowerSystemUtils/issues/760)

@@ -7,7 +7,7 @@ package edu.ie3.util.quantities.thermal
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import squants.Kelvin
+import squants.{Kelvin, Meters}
 import squants.energy.KilowattHours
 import squants.thermal.Celsius
 import squants.time.Hours
@@ -43,5 +43,9 @@ class ThermalConductanceSpec extends AnyFlatSpec with Matchers {
       Celsius(0),
       Hours(5)
     ) shouldBe KilowattHours(50d)
+  }
+
+  it should "return a thermal conductivity when divided by a length" in {
+    WattsPerKelvin(10) / Meters(4) shouldBe WattsPerMeterKelvin(2.5)
   }
 }

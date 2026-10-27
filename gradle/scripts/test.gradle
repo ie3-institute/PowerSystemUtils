@@ -8,6 +8,4 @@ test {
 	testLogging {
 		exceptionFormat "full"
 	}
-
-	dependsOn scalatest
 }

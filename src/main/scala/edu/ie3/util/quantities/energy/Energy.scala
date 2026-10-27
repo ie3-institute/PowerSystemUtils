@@ -8,6 +8,8 @@ package edu.ie3.util.quantities.energy
 import squants.energy.{Energy, EnergyUnit, Watts}
 import squants.{MetricSystem, PrimaryUnit}
 
+/** Conversion factor from kWh to J.
+  */
 val KilowattHoursPerJoules: Double = 3.6e6
 
 /** Additional unit for [[Energy]].
