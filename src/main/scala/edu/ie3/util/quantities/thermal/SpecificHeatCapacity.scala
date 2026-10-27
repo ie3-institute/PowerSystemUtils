@@ -67,6 +67,6 @@ object JoulesPerKilogramKelvin
 object KilowattHoursPerKilogramKelvin
     extends SpecificHeatCapacityUnit
     with SiUnit {
-  val conversionFactor: Double = 3600000.0
+  val conversionFactor: Double = KilowattHoursPerJoules
   val symbol: String = "kWh/(kg*K)"
 }
