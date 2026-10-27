@@ -379,7 +379,7 @@ object QuantityUtils {
     def wattPerMeterKelvin: ThermalConductivity = WattsPerMeterKelvin(value)
 
     def asKelvinMetrePerWatt
-    : ComparableQuantity[interfaces.ThermalResistivity] =
+        : ComparableQuantity[interfaces.ThermalResistivity] =
       as(KELVIN_METRE_PER_WATT)
 
     def kelvinMetrePerWatt: ThermalResistivity = KelvinMetersPerWatt(value)
