@@ -92,12 +92,12 @@ object JoulesPerCubicMeterKelvin
     extends VolumetricHeatCapacityUnit
     with PrimaryUnit
     with SiUnit {
-  val symbol: String = "J/(m³K)"
+  val symbol: String = "J/(m³*K)"
 }
 
 object KilowattHoursPerCubicMeterKelvin
     extends VolumetricHeatCapacityUnit
     with SiUnit {
   val conversionFactor: Double = KilowattHoursPerJoules
-  val symbol: String = "kWh/(m³K)"
+  val symbol: String = "kWh/(m³*K)"
 }

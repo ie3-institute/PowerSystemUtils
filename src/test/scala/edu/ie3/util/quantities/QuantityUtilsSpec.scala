@@ -782,7 +782,7 @@ class QuantityUtilsSpec
         )(using JoulesPerCubicMeterKelvin(quantityTolerance))
       }
 
-      "convert a double to a kilowatthour per kelvin times cubic metre quantity" in {
+      "convert a double to a kilowatthour per kelvin times kilogram quantity" in {
         value.asKilowattHourPerKilogramTimesKelvin should equalWithTolerance(
           Quantities.getQuantity(
             value,
@@ -791,13 +791,13 @@ class QuantityUtilsSpec
         )
       }
 
-      "convert a double to a squants kilowatthour per kelvin times cubic metre quantity" in {
+      "convert a double to a squants kilowatthour per kelvin times kilogram quantity" in {
         value.kiloWattHourPerKilogramTimesKelvin should approximate(
           KilowattHoursPerKilogramKelvin(value)
         )(using KilowattHoursPerKilogramKelvin(quantityTolerance))
       }
 
-      "convert a double to a joules per kelvin times cubic metre quantity" in {
+      "convert a double to a joules per kelvin times kilogram quantity" in {
         value.asJoulesPerKilogramTimesKelvin should equalWithTolerance(
           Quantities.getQuantity(
             value,
@@ -806,7 +806,7 @@ class QuantityUtilsSpec
         )
       }
 
-      "convert a double to a squants joules per kelvin times cubic metre quantity" in {
+      "convert a double to a squants joules per kelvin times kilogram quantity" in {
         value.joulesPerKilogramTimesKelvin should approximate(
           JoulesPerKilogramKelvin(value)
         )(using JoulesPerKilogramKelvin(quantityTolerance))

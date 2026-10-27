@@ -5,7 +5,10 @@
 */
 package edu.ie3.util.quantities.thermal
 
-import edu.ie3.util.quantities.energy.KilowattHoursPerCubicMeter
+import edu.ie3.util.quantities.energy.{
+  KilowattHoursPerCubicMeter,
+  KilowattHoursPerJoules
+}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import squants.energy.KilowattHours
@@ -26,12 +29,13 @@ class VolumetricHeatCapacitySpec extends AnyFlatSpec with Matchers {
     val x = KilowattHoursPerCubicMeterKelvin(1)
 
     x.toKilowattHoursPerCubicMeterKelvin shouldBe 1
+    x.toJoulesPerCubicMeterKelvin shouldBe KilowattHoursPerJoules
   }
 
   it should "return properly formatted strings for all supported Units of Measure" in {
     KilowattHoursPerCubicMeterKelvin(1).toString(
       KilowattHoursPerCubicMeterKelvin
-    ) shouldBe "1.0 kWh/(m³K)"
+    ) shouldBe "1.0 kWh/(m³*K)"
   }
 
   it should "return Energy when multiplied by Temperature delta of 1 Kelvin and Volume" in {
