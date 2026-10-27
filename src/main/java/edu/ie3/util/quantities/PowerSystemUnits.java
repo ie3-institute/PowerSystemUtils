@@ -246,8 +246,6 @@ public class PowerSystemUnits extends Units {
   public static final Unit<VolumetricFlowRate> CUBIC_METRE_PER_SECOND =
       new ProductUnit<>(CUBIC_METRE.divide(SECOND));
 
-  private static final HashSet<String> REGISTERED_LABELS = new HashSet<>();
-
   /* ==== Thermal Cable Modeling Units ==== */
 
   /** Kelvin * Metre / Watt (K*m/W) - Thermal Resistivity */
@@ -262,8 +260,19 @@ public class PowerSystemUnits extends Units {
   public static final Unit<SpecificHeatCapacity> JOULE_PER_KILOGRAM_KELVIN =
       new ProductUnit<>(JOULE.divide(KILOGRAM.multiply(KELVIN)));
 
+  /** W/(m*K) - Thermal Conductivity */
   public static final Unit<ThermalConductivity> WATT_PER_METER_KELVIN =
       new ProductUnit<>(WATT.divide(METRE.multiply(KELVIN)));
+
+  /** J/(m*K) - Thermal Capacity Per Length */
+  public static final Unit<ThermalCapacityPerLength> JOULE_PER_METER_KELVIN =
+      new ProductUnit<>(JOULE.divide(METRE.multiply(KELVIN)));
+
+  /** kWh/(m*K) - Thermal Capacity Per Length */
+  public static final Unit<ThermalCapacityPerLength> KILOWATTHOUR_PER_METER_KELVIN =
+      new ProductUnit<>(KILOWATTHOUR.divide(METRE.multiply(KELVIN)));
+
+  private static final HashSet<String> REGISTERED_LABELS = new HashSet<>();
 
   static {
     // varh, kvarh, Mvarh are kept out of this because they register for the same units as Wh, kWh,
@@ -304,6 +313,8 @@ public class PowerSystemUnits extends Units {
     registerUnit(SQUARE_MILLIMETRE, "mm²");
     registerUnit(KILOGRAM_PER_SECOND, "kg/s");
     registerUnit(PASCAL_SECONDS, "Pa*s");
+    registerUnit(JOULE_PER_METER_KELVIN, "J/(m*K)");
+    registerUnit(KILOWATTHOUR_PER_METER_KELVIN, "kWh/(m*K)");
   }
 
   /**

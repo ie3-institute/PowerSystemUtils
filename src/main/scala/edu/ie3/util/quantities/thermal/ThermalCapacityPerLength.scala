@@ -23,6 +23,7 @@ final class ThermalCapacityPerLength private (
   def dimension: ThermalCapacityPerLength.type = ThermalCapacityPerLength
 
   def toJoulesPerMeterKelvin: Double = to(JoulesPerMeterKelvin)
+  def toKilowattHoursPerMeterKelvin: Double = to(KilowattHoursPerMeterKelvin)
 
   /** Calculates the Energy of a medium with a given thermal capacity per length
     * based on the temperature delta, and its length. Returned energy is in kWh.
@@ -33,9 +34,9 @@ final class ThermalCapacityPerLength private (
       length: Length
   ): Energy =
     KilowattHours(
-      this.toJoulesPerMeterKelvin * math.abs(
+      this.toKilowattHoursPerMeterKelvin * math.abs(
         temperatureA.toKelvinScale - temperatureB.toKelvinScale
-      ) * length.toMeters / KilowattHoursPerJoules
+      ) * length.toMeters
     )
 
   /** Multiplies this thermal capacity per length (J/(m*K)) with a given length.
@@ -76,7 +77,7 @@ object JoulesPerMeterKelvin
     with PrimaryUnit
     with SiUnit {
   val symbol: String =
-    Joules.symbol + "/(" + Meters.symbol + Kelvin.symbol + ")"
+    Joules.symbol + "/(" + Meters.symbol + "*" + Kelvin.symbol + ")"
 }
 
 object KilowattHoursPerMeterKelvin extends ThermalCapacityPerLengthUnit {

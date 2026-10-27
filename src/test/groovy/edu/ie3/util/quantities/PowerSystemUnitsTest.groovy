@@ -25,17 +25,18 @@ class PowerSystemUnitsTest extends Specification {
 		QuantityUtil.equals(expectedQuantity, actualQuantity, testingTolerance)
 
 		where:
-		quantity                                               | baseUnit            || expectedQuantity
-		Quantities.getQuantity(1d, EURO_PER_KILOWATTHOUR)      | EURO_PER_WATTHOUR   || Quantities.getQuantity(1E-3, EURO_PER_WATTHOUR)
-		Quantities.getQuantity(1d, EURO_PER_MEGAWATTHOUR)      | EURO_PER_WATTHOUR   || Quantities.getQuantity(1E-6, EURO_PER_WATTHOUR)
-		Quantities.getQuantity(1d, DEGREE_GEOM)                | RADIAN              || Quantities.getQuantity(0.017453292, RADIAN)
-		Quantities.getQuantity(1d, WATTHOUR)                   | JOULE               || Quantities.getQuantity(3600d, JOULE)
-		Quantities.getQuantity(1d, VARHOUR)                    | JOULE               || Quantities.getQuantity(3600d, JOULE)
-		Quantities.getQuantity(1d, KILOWATTHOUR_PER_KILOMETRE) | WATTHOUR_PER_METRE  || Quantities.getQuantity(1d, WATTHOUR_PER_METRE)
-		Quantities.getQuantity(1d, PU_PER_HOUR)                | PERCENT_PER_HOUR    || Quantities.getQuantity(100d, PERCENT_PER_HOUR)
-		Quantities.getQuantity(1d, FARAD_PER_KILOMETRE)        | FARAD_PER_METRE     || Quantities.getQuantity(1E-3, FARAD_PER_METRE)
-		Quantities.getQuantity(1d, MICROFARAD_PER_KILOMETRE)   | FARAD_PER_KILOMETRE || Quantities.getQuantity(1E-6, FARAD_PER_KILOMETRE)
-		Quantities.getQuantity(1d, MICROFARAD_PER_KILOMETRE)   | FARAD_PER_METRE     || Quantities.getQuantity(1E-9, FARAD_PER_METRE)
+		quantity                                                  | baseUnit               || expectedQuantity
+		Quantities.getQuantity(1d, EURO_PER_KILOWATTHOUR)         | EURO_PER_WATTHOUR      || Quantities.getQuantity(1E-3, EURO_PER_WATTHOUR)
+		Quantities.getQuantity(1d, EURO_PER_MEGAWATTHOUR)         | EURO_PER_WATTHOUR      || Quantities.getQuantity(1E-6, EURO_PER_WATTHOUR)
+		Quantities.getQuantity(1d, DEGREE_GEOM)                   | RADIAN                 || Quantities.getQuantity(0.017453292, RADIAN)
+		Quantities.getQuantity(1d, WATTHOUR)                      | JOULE                  || Quantities.getQuantity(3600d, JOULE)
+		Quantities.getQuantity(1d, VARHOUR)                       | JOULE                  || Quantities.getQuantity(3600d, JOULE)
+		Quantities.getQuantity(1d, KILOWATTHOUR_PER_KILOMETRE)    | WATTHOUR_PER_METRE     || Quantities.getQuantity(1d, WATTHOUR_PER_METRE)
+		Quantities.getQuantity(1d, PU_PER_HOUR)                   | PERCENT_PER_HOUR       || Quantities.getQuantity(100d, PERCENT_PER_HOUR)
+		Quantities.getQuantity(1d, FARAD_PER_KILOMETRE)           | FARAD_PER_METRE        || Quantities.getQuantity(1E-3, FARAD_PER_METRE)
+		Quantities.getQuantity(1d, MICROFARAD_PER_KILOMETRE)      | FARAD_PER_KILOMETRE    || Quantities.getQuantity(1E-6, FARAD_PER_KILOMETRE)
+		Quantities.getQuantity(1d, MICROFARAD_PER_KILOMETRE)      | FARAD_PER_METRE        || Quantities.getQuantity(1E-9, FARAD_PER_METRE)
+		Quantities.getQuantity(1d, KILOWATTHOUR_PER_METER_KELVIN) | JOULE_PER_METER_KELVIN || Quantities.getQuantity(3600000d, JOULE_PER_METER_KELVIN)
 	}
 
 	def "Angle quantities are transferred from degrees to radians correctly"() {
