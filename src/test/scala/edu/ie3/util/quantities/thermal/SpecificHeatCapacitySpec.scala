@@ -5,7 +5,6 @@
 */
 package edu.ie3.util.quantities.thermal
 
-import edu.ie3.util.quantities.energy.KilowattHoursPerJoules
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -23,7 +22,7 @@ class SpecificHeatCapacitySpec extends AnyFlatSpec with Matchers {
     val x = KilowattHoursPerKilogramKelvin(1)
 
     x.toKilowattHoursPerKilogramKelvin shouldBe 1
-    x.toJoulesPerKilogramKelvin shouldBe KilowattHoursPerJoules
+    x.toJoulesPerKilogramKelvin shouldBe 3.6e6
   }
 
   it should "return properly formatted strings for all supported Units of Measure" in {
