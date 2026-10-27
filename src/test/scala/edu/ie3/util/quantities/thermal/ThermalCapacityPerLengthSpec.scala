@@ -27,10 +27,12 @@ class ThermalCapacityPerLengthSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "return properly formatted strings for all supported Units of Measure" in {
-    JoulesPerMeterKelvin(1).toString(JoulesPerMeterKelvin) shouldBe "1.0 J/(mK)"
+    JoulesPerMeterKelvin(1).toString(
+      JoulesPerMeterKelvin
+    ) shouldBe "1.0 J/(m*K)"
     KilowattHoursPerMeterKelvin(1).toString(
       KilowattHoursPerMeterKelvin
-    ) shouldBe "1.0 kWh/(mK)"
+    ) shouldBe "1.0 kWh/(m*K)"
   }
 
   it should "return Energy when multiplied by Temperature delta of 1 Kelvin and Length" in {
