@@ -13,7 +13,7 @@ import squants.thermal.{JoulesPerKelvin, Kelvin, ThermalCapacity}
 
 import scala.util.Try
 
-/** Represents the thermal capacity per unit of length, in J/(m*K).
+/** Represents the thermal capacity per unit of length, e.g. in J/(m*K).
   */
 final class ThermalCapacityPerLength private (
     val value: Double,
