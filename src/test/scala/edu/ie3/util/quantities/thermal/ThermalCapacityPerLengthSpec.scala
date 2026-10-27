@@ -34,11 +34,11 @@ class ThermalCapacityPerLengthSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "return Energy when multiplied by Temperature delta of 1 Kelvin and Length" in {
-    JoulesPerMeterKelvin(3600000.0).calcEnergy(
+    KilowattHoursPerMeterKelvin(1).calcEnergy(
       Kelvin(10),
       Kelvin(20),
       Meters(5)
-    ) shouldBe KilowattHours(5.0)
+    ) shouldBe KilowattHours(50.0)
   }
 
   it should "return Energy when multiplied by Temperature delta of 1 degree Celsius and Length" in {
