@@ -6,7 +6,7 @@
 package edu.ie3.util.osm.model
 
 import com.typesafe.scalalogging.LazyLogging
-import edu.ie3.util.geo.RichGeometries._
+import edu.ie3.util.geo.RichGeometries.*
 import edu.ie3.util.osm.OsmUtils
 import edu.ie3.util.osm.model.OsmEntity.Way
 import edu.ie3.util.osm.model.OsmEntity.Way.ClosedWay

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Introduced squants [#740](https://github.com/ie3-institute/PowerSystemUtils/issues/740)
 - Enhanced squants with new units and quantity types [#756](https://github.com/ie3-institute/PowerSystemUtils/issues/756)
 - Added squants units for thermal-hydraulic calculations [#762](https://github.com/ie3-institute/PowerSystemUtils/issues/762)
+- Added `ThermalResistivity` and `ThermalCapacityPerLength` to `QuantityUtils` [#767](https://github.com/ie3-institute/PowerSystemUtils/issues/767)
 
 ### Fixed
 - Renormalized line endings of `gradlew.bat` so it no longer shows up as modified [#750](https://github.com/ie3-institute/PowerSystemUtils/issues/750)

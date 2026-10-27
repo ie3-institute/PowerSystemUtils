@@ -752,6 +752,30 @@ class QuantityUtilsSpec
         )(using KilowattHoursPerKelvin(quantityTolerance))
       }
 
+      "convert a double to a joule per metre kelvin quantity" in {
+        value.asJoulePerMeterKelvin should equalWithTolerance(
+          Quantities.getQuantity(value, JOULE_PER_METER_KELVIN)
+        )
+      }
+
+      "convert a double to a squants joule per metre kelvin quantity" in {
+        value.joulePerMeterKelvin should approximate(
+          JoulesPerMeterKelvin(value)
+        )(using JoulesPerMeterKelvin(quantityTolerance))
+      }
+
+      "convert a double to a kilowatthour per metre kelvin quantity" in {
+        value.asKilowattHourPerMeterKelvin should equalWithTolerance(
+          Quantities.getQuantity(value, KILOWATTHOUR_PER_METER_KELVIN)
+        )
+      }
+
+      "convert a double to a squants kilowatthour per metre kelvin quantity" in {
+        value.kilowattHourPerMeterKelvin should approximate(
+          KilowattHoursPerMeterKelvin(value)
+        )(using KilowattHoursPerMeterKelvin(quantityTolerance))
+      }
+
       "convert a double to a kilowatthour per kelvin times cubic metre quantity" in {
         value.asKiloWattHourPerKelvinTimesCubicMetre should equalWithTolerance(
           Quantities.getQuantity(
@@ -827,6 +851,20 @@ class QuantityUtilsSpec
         )(using WattsPerMeterKelvin(quantityTolerance))
       }
 
+      "convert a double to a kelvin metre per watt quantity" in {
+        value.asKelvinMetrePerWatt should equalWithTolerance(
+          Quantities.getQuantity(
+            value,
+            KELVIN_METRE_PER_WATT
+          )
+        )
+      }
+
+      "convert a double to a squants kelvin metre per watt quantity" in {
+        value.kelvinMeterPerWatt should approximate(
+          KelvinMetersPerWatt(value)
+        )(using KelvinMetersPerWatt(quantityTolerance))
+      }
       /* ==== Volume ==== */
 
       "convert a double to a cubic metre quantity" in {

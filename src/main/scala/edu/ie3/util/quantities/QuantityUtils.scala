@@ -338,6 +338,20 @@ object QuantityUtils {
 
     def kilowattHourPerKelvin: ThermalCapacity = KilowattHoursPerKelvin(value)
 
+    def asJoulePerMeterKelvin
+        : ComparableQuantity[interfaces.ThermalCapacityPerLength] =
+      as(JOULE_PER_METER_KELVIN)
+
+    def joulePerMeterKelvin: ThermalCapacityPerLength =
+      JoulesPerMeterKelvin(value)
+
+    def asKilowattHourPerMeterKelvin
+        : ComparableQuantity[interfaces.ThermalCapacityPerLength] =
+      as(KILOWATTHOUR_PER_METER_KELVIN)
+
+    def kilowattHourPerMeterKelvin: ThermalCapacityPerLength =
+      KilowattHoursPerMeterKelvin(value)
+
     def asKiloWattHourPerKelvinTimesCubicMetre
         : ComparableQuantity[interfaces.VolumetricHeatCapacity] =
       as(KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE)
@@ -371,6 +385,12 @@ object QuantityUtils {
       as(WATT_PER_METER_KELVIN)
 
     def wattPerMeterKelvin: ThermalConductivity = WattsPerMeterKelvin(value)
+
+    def asKelvinMetrePerWatt
+        : ComparableQuantity[interfaces.ThermalResistivity] =
+      as(KELVIN_METRE_PER_WATT)
+
+    def kelvinMeterPerWatt: ThermalResistivity = KelvinMetersPerWatt(value)
 
     /* ==== Volume ==== */
 

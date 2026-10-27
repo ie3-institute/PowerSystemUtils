@@ -64,6 +64,17 @@ final class VolumetricHeatCapacity private (
         temperatureA.toKelvinScale - temperatureB.toKelvinScale
       ) * volume.toCubicMeters
     )
+
+  /** Multiplies this thermal capacitance (J/(m³*K)) with a given
+    * cross-sectional area to obtain the thermal capacity per unit length.
+    *
+    * @param area
+    *   The cross-sectional area of the medium.
+    * @return
+    *   The resulting thermal capacity per length in J/(m*K).
+    */
+  def *(area: Area): ThermalCapacityPerLength =
+    JoulesPerMeterKelvin(this.toJoulesPerCubicMeterKelvin * area.toSquareMeters)
 }
 
 object VolumetricHeatCapacity extends Dimension[VolumetricHeatCapacity] {
