@@ -5,26 +5,38 @@
 */
 package edu.ie3.util.quantities.thermal
 
-import edu.ie3.util.quantities.energy.KilowattHoursPerCubicMeter
+import edu.ie3.util.quantities.energy.{
+  KilowattHoursPerCubicMeter,
+  KilowattHoursPerJoules
+}
 import squants.*
 import squants.energy.{EnergyDensity, KilowattHours}
+import squants.thermal.{JoulesPerKelvin, ThermalCapacity}
 
 import scala.util.Try
 
-/** Represents the thermal capacitance, in J/(m³*K) or kWh/(m³*K). */
-final class ThermalCapacitance private (
+/** Represents the volumetric heat capacity, in J/(m³*K) or kWh/(m³*K). */
+final class VolumetricHeatCapacity private (
     val value: Double,
-    val unit: ThermalCapacitanceUnit
-) extends Quantity[ThermalCapacitance] {
+    val unit: VolumetricHeatCapacityUnit
+) extends Quantity[VolumetricHeatCapacity] {
 
-  def dimension: ThermalCapacitance.type = ThermalCapacitance
+  def dimension: VolumetricHeatCapacity.type = VolumetricHeatCapacity
 
   /** Returns the value of this quantity in J / (m³ * K) */
   def toJoulesPerCubicMeterKelvin: Double = to(JoulesPerCubicMeterKelvin)
 
   /** Returns the value of this quantity in kWh / (m³ * K) */
   def toKilowattHoursPerCubicMeterKelvin: Double =
-    this.toJoulesPerCubicMeterKelvin / 3600000.0
+    this.toJoulesPerCubicMeterKelvin / KilowattHoursPerJoules
+
+  def *(that: Volume): ThermalCapacity = JoulesPerKelvin(
+    toJoulesPerCubicMeterKelvin * that.toCubicMeters
+  )
+
+  def /(that: Density): SpecificHeatCapacity = JoulesPerKilogramKelvin(
+    toJoulesPerCubicMeterKelvin / that.toKilogramsPerCubicMeter
+  )
 
   /** Calculates the EnergyDensity of a medium with a given thermal capacitance
     * based on the temperature delta. Returned energy density is in kWh/m³.
@@ -54,36 +66,38 @@ final class ThermalCapacitance private (
     )
 }
 
-object ThermalCapacitance extends Dimension[ThermalCapacitance] {
-  def apply[A](n: A, unit: ThermalCapacitanceUnit)(implicit num: Numeric[A]) =
-    new ThermalCapacitance(num.toDouble(n), unit)
-  def apply(value: Any): Try[ThermalCapacitance] = parse(value)
-  def name = "ThermalCapacitance"
+object VolumetricHeatCapacity extends Dimension[VolumetricHeatCapacity] {
+  private[thermal] def apply[A](n: A, unit: VolumetricHeatCapacityUnit)(implicit
+      num: Numeric[A]
+  ) =
+    new VolumetricHeatCapacity(num.toDouble(n), unit)
+  def apply(value: Any): Try[VolumetricHeatCapacity] = parse(value)
+  def name = "VolumetricHeatCapacity"
   def primaryUnit: JoulesPerCubicMeterKelvin.type = JoulesPerCubicMeterKelvin
   def siUnit: JoulesPerCubicMeterKelvin.type = JoulesPerCubicMeterKelvin
-  def units: Set[UnitOfMeasure[ThermalCapacitance]] = Set(
+  def units: Set[UnitOfMeasure[VolumetricHeatCapacity]] = Set(
     JoulesPerCubicMeterKelvin,
     KilowattHoursPerCubicMeterKelvin
   )
 }
 
-trait ThermalCapacitanceUnit
-    extends UnitOfMeasure[ThermalCapacitance]
+trait VolumetricHeatCapacityUnit
+    extends UnitOfMeasure[VolumetricHeatCapacity]
     with UnitConverter {
-  def apply[A](n: A)(implicit num: Numeric[A]): ThermalCapacitance =
-    ThermalCapacitance(n, this)
+  def apply[A](n: A)(implicit num: Numeric[A]): VolumetricHeatCapacity =
+    VolumetricHeatCapacity(n, this)
 }
 
 object JoulesPerCubicMeterKelvin
-    extends ThermalCapacitanceUnit
+    extends VolumetricHeatCapacityUnit
     with PrimaryUnit
     with SiUnit {
-  val symbol: String = "J/(m³K)"
+  val symbol: String = "J/(m³*K)"
 }
 
 object KilowattHoursPerCubicMeterKelvin
-    extends ThermalCapacitanceUnit
+    extends VolumetricHeatCapacityUnit
     with SiUnit {
-  val conversionFactor: Double = 3600000.0
-  val symbol: String = "kWh/(m³K)"
+  val conversionFactor: Double = KilowattHoursPerJoules
+  val symbol: String = "kWh/(m³*K)"
 }

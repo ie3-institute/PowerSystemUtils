@@ -50,6 +50,14 @@ public class PowerSystemUnits extends Units {
   /** Per Unit */
   public static final Unit<Dimensionless> PU = new AlternateUnit<>(ONE, "p.u.");
 
+  /** kg/s */
+  public static final Unit<MassFlow> KILOGRAM_PER_SECOND =
+      new ProductUnit<>(KILOGRAM.divide(SECOND));
+
+  /** Pa*s */
+  public static final Unit<DynamicViscosity> PASCAL_SECONDS =
+      new ProductUnit<>(PASCAL.multiply(SECOND));
+
   /** Euro */
   public static final Unit<Currency> EURO = new BaseUnit<>("€", UnitDimension.NONE);
 
@@ -219,9 +227,13 @@ public class PowerSystemUnits extends Units {
   public static final Unit<HeatCapacity> KILOWATTHOUR_PER_KELVIN =
       new ProductUnit<>(KILOWATTHOUR.divide(KELVIN));
 
-  /** kWh/K*m³ */
-  public static final Unit<SpecificHeatCapacity> KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE =
+  /** kWh/(m³*K) */
+  public static final Unit<VolumetricHeatCapacity> KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE =
       new ProductUnit<>(KILOWATTHOUR_PER_KELVIN.divide(CUBIC_METRE));
+
+  /** kWh/(kg*K) */
+  public static final Unit<SpecificHeatCapacity> KILOWATTHOUR_PER_KELVIN_TIMES_KILOGRAM =
+      new ProductUnit<>(KILOWATTHOUR_PER_KELVIN.divide(KILOGRAM));
 
   /* ==== Thermal Conductance ==== */
 
@@ -242,9 +254,16 @@ public class PowerSystemUnits extends Units {
   public static final Unit<ThermalResistivity> KELVIN_METRE_PER_WATT =
       new ProductUnit<>(KELVIN.multiply(METRE).divide(WATT));
 
-  /** Joule / (Cubic Metre * Kelvin) (J/(m³*K)) - Specific Volumetric Heat Capacity */
-  public static final Unit<SpecificHeatCapacity> JOULE_PER_CUBIC_METRE_KELVIN =
+  /** Joule / (Cubic Metre * Kelvin) (J/(m³*K)) - Volumetric Heat Capacity */
+  public static final Unit<VolumetricHeatCapacity> JOULE_PER_CUBIC_METRE_KELVIN =
       new ProductUnit<>(JOULE.divide(CUBIC_METRE.multiply(KELVIN)));
+
+  /** J/(kg*K) - Specific Heat Capacity */
+  public static final Unit<SpecificHeatCapacity> JOULE_PER_KILOGRAM_KELVIN =
+      new ProductUnit<>(JOULE.divide(KILOGRAM.multiply(KELVIN)));
+
+  public static final Unit<ThermalConductivity> WATT_PER_METER_KELVIN =
+      new ProductUnit<>(WATT.divide(METRE.multiply(KELVIN)));
 
   static {
     // varh, kvarh, Mvarh are kept out of this because they register for the same units as Wh, kWh,
@@ -272,14 +291,19 @@ public class PowerSystemUnits extends Units {
     registerUnit(MICROFARAD_PER_KILOMETRE, "µF/km");
     registerUnit(FARAD_PER_KILOMETRE, "F/km");
     registerUnit(DEGREE_GEOM, "°");
-    registerUnit(KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE, "kWh/K*m³");
+    registerUnit(KILOWATTHOUR_PER_KELVIN_TIMES_CUBICMETRE, "kWh/(m³*K)");
+    registerUnit(KILOWATTHOUR_PER_KELVIN_TIMES_KILOGRAM, "kWh/(kg*K)");
     registerUnit(KILOWATT_PER_KELVIN, "kW/K");
     registerUnit(KILOGRAM_PER_CUBIC_METRE, "kg/m³");
     registerUnit(CUBIC_METRE_PER_SECOND, "m³/s");
     registerUnit(KELVIN_METRE_PER_WATT, "K*m/W");
-    registerUnit(JOULE_PER_CUBIC_METRE_KELVIN, "J/m³*K");
+    registerUnit(JOULE_PER_CUBIC_METRE_KELVIN, "J/(m³*K)");
+    registerUnit(JOULE_PER_KILOGRAM_KELVIN, "J/(kg*K)");
+    registerUnit(WATT_PER_METER_KELVIN, "W/(m*K)");
     registerUnit(OHM_METRE, "Ωm");
     registerUnit(SQUARE_MILLIMETRE, "mm²");
+    registerUnit(KILOGRAM_PER_SECOND, "kg/s");
+    registerUnit(PASCAL_SECONDS, "Pa*s");
   }
 
   /**
