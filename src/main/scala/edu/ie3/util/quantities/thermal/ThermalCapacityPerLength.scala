@@ -83,5 +83,5 @@ object JoulesPerMeterKelvin
 object KilowattHoursPerMeterKelvin extends ThermalCapacityPerLengthUnit {
   val conversionFactor: Double = KilowattHoursPerJoules
   val symbol: String =
-    KilowattHours.symbol + "/(" + Meters.symbol + Kelvin.symbol + ")"
+    KilowattHours.symbol + "/(" + Meters.symbol + "*" + Kelvin.symbol + ")"
 }
