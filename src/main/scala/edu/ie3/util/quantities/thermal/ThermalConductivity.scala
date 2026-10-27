@@ -52,7 +52,7 @@ object WattsPerMeterKelvin
     extends ThermalConductivityUnit
     with PrimaryUnit
     with SiUnit {
-  val symbol: String = Watts.symbol + "/(m *" + Kelvin.symbol + ")"
+  val symbol: String = Watts.symbol + "/(m*" + Kelvin.symbol + ")"
 }
 
 object KilowattsPerMeterKelvin extends ThermalConductivityUnit {
