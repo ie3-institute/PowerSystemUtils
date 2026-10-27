@@ -85,7 +85,7 @@ trait VolumetricHeatCapacityUnit
     extends UnitOfMeasure[VolumetricHeatCapacity]
     with UnitConverter {
   def apply[A](n: A)(implicit num: Numeric[A]): VolumetricHeatCapacity =
-    VolumetricHeatCapacity(num.toDouble(n), this)
+    VolumetricHeatCapacity(n, this)
 }
 
 object JoulesPerCubicMeterKelvin
