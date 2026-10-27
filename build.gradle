@@ -10,7 +10,6 @@ plugins {
 	id 'jacoco' // java code coverage plugin
 	id "org.sonarqube" version "7.5.0.8588" // sonarqube
 	id "org.scoverage" version "9.1" // scala code coverage scoverage
-	id "com.github.maiflai.scalatest" version "0.33" // run scalatest without specific spec task
 	id 'net.thauvin.erik.gradle.semver' version '1.0.4' // semantic versioning
 	id 'com.gradleup.shadow' version '9.6.1' // fat jar
 }
@@ -109,6 +108,7 @@ dependencies {
 
 	// TEST Scala //
 	implementation "org.scalatest:scalatest_$scalaVersion:3.2.20"
+	testRuntimeOnly "org.scalatestplus:junit-5-14_$scalaVersion:3.2.20.0"
 	testRuntimeOnly 'com.vladsch.flexmark:flexmark-all:0.64.8'
 }
 
@@ -136,8 +136,4 @@ tasks.withType(JavaCompile) {
 
 tasks.withType(Jar) {
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-tasks.test {
-	useJUnitPlatform() // Gradle using JUnit Platform
 }
